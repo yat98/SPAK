@@ -15,10 +15,10 @@ class AddRelationshipsToProdiTable extends Migration
     {
         Schema::table('prodi', function (Blueprint $table) {
             // Menambahkan  kode_jurusan dengan format index
-            $table->char('kode_jurusan',2)->index();
+            $table->integer('id_jurusan')->unsigned();
             // Menambahkan foreign key pada tabel prodi
-            $table->foreign('kode_jurusan')
-                  ->references('kode_jurusan')
+            $table->foreign('id_jurusan')
+                  ->references('id')
                   ->on('jurusan')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
@@ -34,7 +34,7 @@ class AddRelationshipsToProdiTable extends Migration
     {
         Schema::table('prodi', function (Blueprint $table) {
             //Menghapus foreign key
-            $table->dropForeign(['kode_jurusan']);
+            $table->dropForeign(['id_jurusan']);
         });
     }
 }

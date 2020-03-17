@@ -16,8 +16,7 @@ class CreateTahunAkademikTable extends Migration
         Schema::create('tahun_akademik', function (Blueprint $table) {
             $table->increments('id');
             $table->string('tahun_akademik');
-            $table->string('semester');
-            $table->enum('status_aktif',['aktif','non-aktif']);
+            $table->enum('status_aktif',['aktif','non aktif']);
             $table->timestamps();
         });
     }

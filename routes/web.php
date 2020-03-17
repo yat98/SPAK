@@ -14,5 +14,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login.login');
+});
+
+Route::group(['prefix' => 'admin'], function () {
+    Route::get('dashboard', function(){
+        return view('user.admin.dashboard');
+    });
+    Route::resource('jurusan', 'JurusanController')->except(['show']);
+    Route::resource('program-studi', 'ProgramStudiController')->except(['show']);
+    Route::resource('tahun-akademik', 'TahunAkademikController')->except(['show']);
 });

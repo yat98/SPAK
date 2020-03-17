@@ -14,7 +14,7 @@ class CreateSuratKeteranganAktifKuliahTable extends Migration
     public function up()
     {
         Schema::create('surat_keterangan_aktif_kuliah', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('nomor_surat');
             $table->integer('jumlah_cetak');
             $table->timestamps();

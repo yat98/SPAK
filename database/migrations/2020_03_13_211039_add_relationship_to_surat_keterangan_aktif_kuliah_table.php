@@ -46,7 +46,9 @@ class AddRelationshipToSuratKeteranganAktifKuliahTable extends Migration
     public function down()
     {
         Schema::table('surat_keterangan_aktif_kuliah', function (Blueprint $table) {
-            $table->dropForeign(['nim','nip','id_tahun_akademik']);
+            $table->dropForeign(['nim']);
+            $table->dropForeign(['nip']);
+            $table->dropForeign(['id_tahun_akademik']);
         });
     }
 }
