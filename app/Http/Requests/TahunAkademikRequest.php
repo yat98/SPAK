@@ -44,12 +44,12 @@ class TahunAkademikRequest extends FormRequest
     {
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif');
         $validator->after(function($validator) use($tahunAkademikAktif) {
-                if($this->method == 'PATCH' || $this->method == 'PUT'){
-                    if($this->get('id') != $tahunAkademikAktif->first()->id){
-                        $validator->errors()->add('status_aktif',$this->errorStatusAktif);
-                    }
-                }else{
-                    if($tahunAkademikAktif->exists() && $this->get('status_aktif') == 'aktif'){
+                if($tahunAkademikAktif->exists() && $this->get('status_aktif') == 'aktif'){
+                    if($this->method == 'PATCH' || $this->method == 'PUT'){
+                        if($this->get('id') != $tahunAkademikAktif->first()->id){
+                            $validator->errors()->add('status_aktif',$this->errorStatusAktif);
+                        }
+                    }else{
                         $validator->errors()->add('status_aktif',$this->errorStatusAktif);
                     }
                 }
