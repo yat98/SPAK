@@ -176,6 +176,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         // Laravel Collective
         Collective\Html\HtmlServiceProvider::class,
+        // Unique Validator
+        Felixkiss\UniqueWithValidator\ServiceProvider::class,
     ],
 
     /*

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="{{ asset('image/logo/logo_ung.png') }}" type="image">
     <title>SPAK | Sistem Pengelolaan Administrasi Kemahasiswaan</title>
     {{-- CSS --}}
     <link rel="stylesheet" href="{{ asset('vendors/mdi/css/materialdesignicons.min.css') }}">

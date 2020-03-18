@@ -24,4 +24,5 @@ Route::group(['prefix' => 'admin'], function () {
     Route::resource('jurusan', 'JurusanController')->except(['show']);
     Route::resource('program-studi', 'ProgramStudiController')->except(['show']);
     Route::resource('tahun-akademik', 'TahunAkademikController')->except(['show']);
+    Route::resource('mahasiswa', 'MahasiswaController');
 });
