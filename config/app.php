@@ -178,6 +178,8 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         // Unique Validator
         Felixkiss\UniqueWithValidator\ServiceProvider::class,
+        // LaravelExcel
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -232,6 +234,8 @@ return [
         // Laravel Collective
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
+        // LaravelExcel
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];
