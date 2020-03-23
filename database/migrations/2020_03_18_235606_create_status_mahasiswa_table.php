@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProdiTable extends Migration
+class CreateStatusMahasiswaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateProdiTable extends Migration
      */
     public function up()
     {
-        Schema::create('prodi', function (Blueprint $table) {
-            $table->increments('id');
-            $table->enum('strata',['D3','S1','S2','S3']);
-            $table->string('nama_prodi');
+        Schema::create('status_mahasiswa', function (Blueprint $table) {
+            $table->char('nim',9)->index();
+            $table->integer('id_tahun_akademik')->unsigned()->index();
+            $table->enum('status',['aktif','non aktif','cuti','drop out','lulus','keluar']);
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateProdiTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prodi');
+        Schema::dropIfExists('status_mahasiswa');
     }
 }

@@ -13,11 +13,11 @@
                         <h4 class="text-center mb-5">Sistem Pengelolaan Administrasi Kemahasiswaan</h4>
                         {{ Form::open(['class'=>'pt-3']) }}
                         <div class="form-group">
-                            {{ Form::label('jenis_user','Jenis User') }}
-                            {{ Form::select('jenis_user',['mahasiswa'=>'Mahasiswa','pegawai'=>'Pegawai','pimpinan'=>'Pimpinan'],null,['class'=>'form-control form-control-lg','id'=>'jenis_user']) }}
+                            {{ Form::label('jenis-user','Jenis User') }}
+                            {{ Form::select('jenis_user',['mahasiswa'=>'Mahasiswa','pegawai'=>'Pegawai','pimpinan'=>'Pimpinan'],null,['class'=>'form-control form-control-lg','id'=>'jenis-user']) }}
                         </div>
                         <div class="form-group">
-                            {{ Form::label('username','NIM') }}
+                            {{ Form::label('username','NIM',['id'=>'username-id']) }}
                             {{ Form::text('nim',null,['class'=>'form-control form-control-lg','placeholder'=>'NIM','id'=>'username']) }}
                         </div>
                         <div class="form-group">

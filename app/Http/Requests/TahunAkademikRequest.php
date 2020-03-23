@@ -30,12 +30,14 @@ class TahunAkademikRequest extends FormRequest
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
             $tahunAkademikRules = 'required|string|unique_with:tahun_akademik,semester,'.$this->get('id');
+            $semesterRules = 'required|string|in:genap,ganjil|unique_with:tahun_akademik,tahun_akademik,'.$this->get('id');
         }else{
             $tahunAkademikRules = 'required|string|unique_with:tahun_akademik,semester';
+            $semesterRules = 'required|string|in:genap,ganjil|unique_with:tahun_akademik,tahun_akademik';
         }
         return [
             'tahun_akademik'=>$tahunAkademikRules,
-            'semester'=>'required|string|in:genap,ganjil',
+            'semester'=>$semesterRules,
             'status_aktif'=>'required|string|in:aktif,non aktif'
         ];
     }

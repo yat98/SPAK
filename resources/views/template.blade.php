@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('vendors/mdi/css/materialdesignicons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/css/vendor.bundle.base.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/sweetalert2/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom-css.css') }}">
 </head>
 
@@ -24,7 +25,20 @@
     <script src="{{ asset('js/misc.js') }}"></script>
     <script src="{{ asset('js/dashboard.js') }}"></script>
     <script src="{{ asset('js/todolist.js') }}"></script>
+    <script src="{{ asset('vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('js/script.js') }}"></script>
+
+    @if(Session::has('info') && Session::has('info-title'))
+    <script>
+        infoMessage("{{ Session::get('info-title') }}","{{ Session::get('info') }}");
+    </script>
+    @endif
+
+    @if(Session::has('success') && Session::has('success-title'))
+    <script>
+        successMessage("{{ Session::get('success-title') }}","{{ Session::get('success') }}");
+    </script>
+    @endif
 </body>
 
 </html>

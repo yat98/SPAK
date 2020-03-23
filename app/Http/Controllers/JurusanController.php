@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Jurusan;
 use Illuminate\Http\Request;
 use App\Http\Requests\JurusanRequest;
+use Session;
 
 class JurusanController extends Controller
 {
@@ -24,6 +25,8 @@ class JurusanController extends Controller
     {
         $input = $request->all();
         Jurusan::create($input);
+        Session::flash('success-title','Berhasil');
+        Session::flash('success','Data jurusan '.strtolower($input['nama_jurusan']).' berhasil ditambahkan');
         return redirect($this->segmentUser.'/jurusan');
     }
 
@@ -33,13 +36,18 @@ class JurusanController extends Controller
     }
 
     public function update(JurusanRequest $request, Jurusan $jurusan)
-    {
-        $jurusan->update($request->all());
+    {   
+        $input = $request->all();
+        Session::flash('success-title','Berhasil');
+        Session::flash('success','Data jurusan '.strtolower($jurusan->nama_jurusan).' Berhasil Diubah');
+        $jurusan->update($input);
         return redirect($this->segmentUser.'/jurusan');
     }
 
     public function destroy(Jurusan $jurusan)
     {
+        Session::flash('success-title','Berhasil');
+        Session::flash('success','Data jurusan '.$jurusan->nama_jurusan.' Berhasil Dihapus');
         $jurusan->delete();
         return redirect($this->segmentUser.'/jurusan');
     }

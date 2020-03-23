@@ -40,7 +40,7 @@
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
                                         <a href="{{ url('admin/jurusan/create')}}"
-                                            class="btn-sm btn btn-info btn-tambah">+
+                                            class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">+
                                             Tambah Jurusan</a>
                                     </div>
                                 </div>
@@ -83,7 +83,7 @@
                                                         Edit
                                                     </a>
                                                     {{ Form::open(['method'=>'DELETE','action'=>['JurusanController@destroy',$jurusan->id],'class'=>'d-inline-block']) }}
-                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                    <button type="submit" class="btn btn-danger btn-sm sweet-delete">
                                                         <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
                                                         Hapus
                                                     </button>

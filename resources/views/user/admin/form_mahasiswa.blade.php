@@ -3,11 +3,11 @@
         <div class="form-group">
             {{ Form::label('nim','Nim') }}
             @if ($errors->any())
-            @if ($errors->has('id_jurusan'))
+            @if ($errors->has('nim'))
             {{ Form::text('nim',null,['class'=>'form-control form-control-lg is-invalid','id'=>'nim']) }}
             <div class="invalid-feedback">{{ $errors->first('nim') }}</div>
             @else
-            {{ Form::text('nim',$jurusanList,null,['class'=>'form-control form-control-lg is-valid','id'=>'nim']) }}
+            {{ Form::text('nim',null,['class'=>'form-control form-control-lg is-valid','id'=>'nim']) }}
             @endif
             @else
             {{ Form::text('nim',null,['class'=>'form-control form-control-lg','id'=>'nim']) }}
@@ -53,24 +53,11 @@
             @endif
         </div>
         <div class="form-group">
-            {{ Form::label('strata','Strata') }}
-            @if ($errors->any())
-            @if ($errors->has('strata'))
-            {{ Form::select('strata',['D3'=>'D3','S1'=>'S1'],null,['class'=>'form-control form-control-lg is-invalid','id'=>'strata']) }}
-            <div class="invalid-feedback">{{ $errors->first('strata') }}</div>
-            @else
-            {{ Form::select('strata',['D3'=>'D3','S1'=>'S1'],null,['class'=>'form-control form-control-lg is-valid','id'=>'strata']) }}
-            @endif
-            @else
-            {{ Form::select('strata',['D3'=>'D3','S1'=>'S1'],null,['class'=>'form-control form-control-lg','id'=>'strata']) }}
-            @endif
-        </div>
-        <div class="form-group">
             {{ Form::label('ipk','IPK') }}
             @if ($errors->any())
             @if ($errors->has('ipk'))
             {{ Form::text('ipk',null,['class'=>'form-control form-control-lg is-invalid','id'=>'strata']) }}
-            <div class="invalid-feedback">{{ $errors->first('strata') }}</div>
+            <div class="invalid-feedback">{{ $errors->first('ipk') }}</div>
             @else
             {{ Form::text('ipk',null,['class'=>'form-control form-control-lg is-valid','id'=>'strata']) }}
             @endif
@@ -79,16 +66,29 @@
             @endif
         </div>
         <div class="form-group">
-            {{ Form::label('status_aktif','Status Aktif') }}
+            {{ Form::label('id_prodi','Program Studi') }}
             @if ($errors->any())
-            @if ($errors->has('status_aktif'))
-            {{ Form::select('status_aktif',['aktif'=>'Aktif','non aktif'=>'Non Aktif'],null,['class'=>'form-control form-control-lg is-invalid','id'=>'status_aktif']) }}
-            <div class="invalid-feedback">{{ $errors->first('status_aktif') }}</div>
+            @if ($errors->has('id_prodi'))
+            {{ Form::select('id_prodi',$prodiList,null,['class'=>'form-control form-control-lg is-invalid','id'=>'id_prodi']) }}
+            <div class="invalid-feedback">{{ $errors->first('id_prodi') }}</div>
             @else
-            {{ Form::select('status_aktif',['aktif'=>'Aktif','non aktif'=>'Non Aktif'],null,['class'=>'form-control form-control-lg is-valid','id'=>'status_aktif']) }}
+            {{ Form::select('id_prodi',$prodiList,null,['class'=>'form-control form-control-lg is-valid','id'=>'id_prodi']) }}
             @endif
             @else
-            {{ Form::select('status_aktif',['aktif'=>'Aktif','non aktif'=>'Non Aktif'],null,['class'=>'form-control form-control-lg','id'=>'status_aktif']) }}
+            {{ Form::select('id_prodi',$prodiList,null,['class'=>'form-control form-control-lg','id'=>'id_prodi']) }}
+            @endif
+        </div>
+        <div class="form-group">
+            {{ Form::label('password','password') }}
+            @if ($errors->any())
+            @if ($errors->has('password'))
+            {{ Form::password('password',['class'=>'form-control form-control-lg is-invalid','id'=>'password']) }}
+            <div class="invalid-feedback">{{ $errors->first('password') }}</div>
+            @else
+            {{ Form::password('password',['class'=>'form-control form-control-lg is-valid','id'=>'password']) }}
+            @endif
+            @else
+            {{ Form::password('password',['class'=>'form-control form-control-lg','id'=>'password']) }}
             @endif
         </div>
         <div class="form-group">

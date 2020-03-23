@@ -19,10 +19,9 @@
         <div class="form-group">
             {{ Form::label('semester','Semester') }}
             @if ($errors->any())
-            @if ($errors->has('semester') || $errors->has('tahun_akademik'))
+            @if ($errors->has('semester'))
             {{ Form::select('semester',['ganjil'=>'Ganjil','genap'=>'Genap'],null,['class'=>'form-control form-control-lg is-invalid','id'=>'semester']) }}
             <div class="invalid-feedback">{{ $errors->first('semester') }}</div>
-            <div class="invalid-feedback">{{ $errors->first('tahun_akademik') }}</div>
             @else
             {{ Form::select('semester',['ganjil'=>'Ganjil','genap'=>'Genap'],null,['class'=>'form-control form-control-lg is-valid','id'=>'semester']) }}
             @endif

@@ -15,6 +15,21 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4 stretch-card grid-margin">
+                        <div class="card bg-gradient-success card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Data Jurusan <i
+                                        class="mdi mdi-bank mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countJurusan > 0 ? $countJurusan.' Jurusan' : 'Data Jurusan Kosong' }}
+                                </h2>
+                                <h6 class="card-text"></h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 stretch-card grid-margin">
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
@@ -40,7 +55,7 @@
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
                                         <a href="{{ url('admin/program-studi/create')}}"
-                                            class="btn-sm btn btn-info btn-tambah">+
+                                            class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">+
                                             Tambah Program Studi</a>
                                     </div>
                                 </div>
@@ -67,8 +82,9 @@
                                         <thead>
                                             <tr>
                                                 <th> No. </th>
-                                                <th> Nama Program Studi</th>
                                                 <th> Jurusan</th>
+                                                <th> Strata</th>
+                                                <th> Nama Program Studi</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -76,8 +92,9 @@
                                             @foreach ($prodiList as $prodi)
                                             <tr>
                                                 <td> {{ $loop->iteration }}</td>
-                                                <td> {{ $prodi->nama_prodi  }}</td>
                                                 <td> {{ $prodi->jurusan->nama_jurusan}}</td>
+                                                <td> {{ $prodi->strata  }}</td>
+                                                <td> {{ $prodi->nama_prodi  }}</td>
                                                 <td>
                                                     <a href="{{ url('admin/program-studi/'.$prodi->id.'/edit') }}"
                                                         class="btn btn-warning btn-sm text-dark">
@@ -85,7 +102,7 @@
                                                         Edit
                                                     </a>
                                                     {{ Form::open(['method'=>'DELETE','action'=>['ProgramStudiController@destroy',$prodi->id],'class'=>'d-inline-block']) }}
-                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                    <button type="submit" class="btn btn-danger btn-sm sweet-delete">
                                                         <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
                                                         Hapus
                                                     </button>

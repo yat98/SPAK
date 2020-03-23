@@ -6,6 +6,7 @@ use Validator;
 use App\TahunAkademik;
 use Illuminate\Http\Request;
 use App\Http\Requests\TahunAkademikRequest;
+use Session;
 
 class TahunAkademikController extends Controller
 {
@@ -28,6 +29,8 @@ class TahunAkademikController extends Controller
     public function store(TahunAkademikRequest $request)
     {
         $input = $request->all();
+        Session::flash('success-title','Berhasil');
+        Session::flash('success','Data tahun akademik '.strtolower($input['tahun_akademik'].' - '.$input['semester']).' berhasil ditambahkan');
         TahunAkademik::create($request->all());
         return redirect($this->segmentUser.'/tahun-akademik');
     }
@@ -41,12 +44,16 @@ class TahunAkademikController extends Controller
     public function update(TahunAkademikRequest $request, TahunAkademik $tahunAkademik)
     {  
         $input = $request->all();
+        Session::flash('success-title','Berhasil');
+        Session::flash('success','Data tahun akademik '.strtolower($input['tahun_akademik'].' - '.$input['semester']).' berhasil diubah');
         $tahunAkademik->update($request->all());
         return redirect($this->segmentUser.'/tahun-akademik');
     }
 
     public function destroy(TahunAkademik $tahunAkademik)
     {
+        Session::flash('success-title','Berhasil');
+        Session::flash('success','Data tahun akademik '.strtolower($tahunAkademik->tahun_akademik.' - '.$tahunAkademik->semester).' berhasil dihapus');
         $tahunAkademik->delete();
         return redirect($this->segmentUser.'/tahun-akademik');
     }

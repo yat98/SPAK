@@ -17,6 +17,19 @@
             @endif
         </div>
         <div class="form-group">
+            {{ Form::label('strata','Strata') }}
+            @if ($errors->any())
+            @if ($errors->has('strata'))
+            {{ Form::select('strata',['D3'=>'D3','S1'=>'S1','S2'=>'S2','S3'=>'S3'],null,['class'=>'form-control form-control-lg is-invalid','id'=>'strata']) }}
+            <div class="invalid-feedback">{{ $errors->first('nama_prodi') }}</div>
+            @else
+            {{ Form::select('strata',['D3'=>'D3','S1'=>'S1','S2'=>'S2','S3'=>'S3'],null,['class'=>'form-control form-control-lg is-valid','id'=>'strata']) }}
+            @endif
+            @else
+            {{ Form::select('strata',['D3'=>'D3','S1'=>'S1','S2'=>'S2','S3'=>'S3'],null,['class'=>'form-control form-control-lg','id'=>'strata']) }}
+            @endif
+        </div>
+        <div class="form-group">
             {{ Form::label('nama_prodi','Nama Program Studi') }}
             @if ($errors->any())
             @if ($errors->has('nama_prodi'))

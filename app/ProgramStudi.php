@@ -10,6 +10,7 @@ class ProgramStudi extends Model
 
     protected $fillable = [
         'nama_prodi',
+        'strata',
         'id_jurusan',
     ];
 

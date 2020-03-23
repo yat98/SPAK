@@ -24,12 +24,15 @@ class ProgramStudiRequest extends FormRequest
     public function rules()
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
-            $namaProdiRules = 'required|string|unique:prodi,nama_prodi,'.$this->get('id');
+            $namaProdiRules = 'required|string|unique_with:prodi,strata,'.$this->get('id');
+            $strataRules = 'required|in:D3,S1,S2,S3|unique_with:prodi,nama_prodi,'.$this->get('id');
         }else{
-            $namaProdiRules = 'required|string|unique:prodi,nama_prodi';
+            $namaProdiRules = 'required|string|unique_with:prodi,strata';
+            $strataRules = 'required|in:D3,S1,S2,S3|unique_with:prodi,nama_prodi';
         }
         return [
-            'nama_prodi'=>$namaProdiRules
+            'nama_prodi'=>$namaProdiRules,
+            'strata'=>$strataRules,
         ];
     }
 }

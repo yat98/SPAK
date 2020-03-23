@@ -4,8 +4,9 @@
 }
 
 .illustration-no-data {
-    width: 350px;
-    height: 350px;
+    margin-top: 50px;
+    width: 200px;
+    height: 200px;
 }
 
 @media (max-width: 575px) {
