@@ -27,6 +27,7 @@
     <script src="{{ asset('js/todolist.js') }}"></script>
     <script src="{{ asset('vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('js/script.js') }}"></script>
+    <script src="{{ asset('js/form-upload.js') }}"></script>
 
     @if(Session::has('info') && Session::has('info-title'))
     <script>

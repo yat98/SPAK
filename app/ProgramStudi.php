@@ -17,4 +17,8 @@ class ProgramStudi extends Model
     public function jurusan(){
         return $this->belongsTo('App\Jurusan','id_jurusan');
     }
+
+    public function mahasiswa(){
+        return $this->hasMany('App\Mahasiswa','id_prodi');
+    }
 }

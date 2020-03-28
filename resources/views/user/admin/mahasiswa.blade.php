@@ -65,16 +65,17 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row mb-3">
-                                    <div class="col-12 col-md-6">
+                                    <div class="col-12 col-md-4">
                                         <h4>Data Mahasiswa</h4>
                                     </div>
-                                    <div class="col-12 col-md-6 text-right mt-4 mt-md-0 mt-lg-0">
+                                    <div class="col-12 col-md-8 text-right mt-4 mt-md-0 mt-lg-0">
                                         <a href="{{ url('admin/mahasiswa/create')}}"
                                             class="btn-sm btn btn-info btn-tambah">+
                                             Tambah Mahasiswa</a>
-                                        <a href="{{ url('admin/mahasiswa/create')}}"
-                                            class="btn-sm btn btn-success btn-tambah mt-3 mt-md-0 mt-lg-0">+
-                                            Export Data Mahasiswa</a>
+                                        <a href="{{ url('admin/mahasiswa/import-mahasiswa')}}"
+                                            class="btn-sm btn btn-success btn-tambah mt-3 mt-md-0 mt-lg-0 btn-margin">
+                                            <i class="mdi mdi-file-excel btn-icon-prepend"></i>
+                                            Import Data Mahasiswa</a>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -103,23 +104,36 @@
                                                 <th> Nim</th>
                                                 <th> Nama</th>
                                                 <th> Angkatan</th>
+                                                <th> Jurusan</th>
+                                                <th> Program Studi</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($mahasiswaList as $mahasiswa)
                                             <tr>
-                                                <td> {{ $loop->iteration }}</td>
+                                                <td> {{ $loop->iteration + 20 * ($mahasiswaList->currentPage() - 1)  }}
+                                                </td>
                                                 <td> {{ $mahasiswa->nim  }}</td>
                                                 <td> {{ $mahasiswa->nama  }}</td>
                                                 <td>{{ $mahasiswa->angkatan}}</td>
+                                                <td>{{ $mahasiswa->nama_jurusan }}</td>
+                                                <td>{{ $mahasiswa->strata}} -
+                                                    {{ ucwords($mahasiswa->nama_prodi) }}
+                                                </td>
                                                 <td>
+                                                    <a href="{{ url('admin/mahasiswa/'.$mahasiswa->nim) }}"
+                                                        class="btn btn-outline-info btn-sm btn-detail"
+                                                        data-toggle="modal" data-target="#exampleModal">
+                                                        <i class="mdi mdi-account btn-icon-prepend"></i>
+                                                        Detail
+                                                    </a>
                                                     <a href="{{ url('admin/mahasiswa/'.$mahasiswa->nim.'/edit') }}"
                                                         class="btn btn-warning btn-sm text-dark">
                                                         <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>
                                                         Edit
                                                     </a>
-                                                    {{ Form::open(['method'=>'DELETE','action'=>['MahasiswaController@destroy',$mahasiswa->nim],'class'=>'d-inline-block sweet-delete']) }}
+                                                    {{ Form::open(['method'=>'DELETE','action'=>['MahasiswaController@destroy',$mahasiswa->nim],'class'=>'d-inline-block']) }}
                                                     <button type="submit" class="btn btn-danger btn-sm sweet-delete">
                                                         <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
                                                         Hapus
@@ -130,6 +144,9 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    <div class="col">
+                                        {{ $mahasiswaList->links() }}
+                                    </div>
                                 </div>
                                 @else
                                 <div class="row">
@@ -147,6 +164,24 @@
                 </div>
             </div>
             @include('layout.footer')
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail Mahasiswa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='mahasiswa-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>

@@ -26,4 +26,8 @@ class Mahasiswa extends Model
     public function getNamaAttribute($nama){
         return ucwords($nama);
     }
+
+    public function prodi(){
+        return $this->belongsTo('App\ProgramStudi','id_prodi');
+    }
 }

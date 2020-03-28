@@ -24,9 +24,9 @@ class MahasiswaRequest extends FormRequest
     public function rules()
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
-            $nimRules = 'required|numeric|digits:9|unique:mahasiswa,nim,null,nim,'.$this->get('nim');
+            $nimRules = 'required|numeric|unique:mahasiswa,nim,null,nim,'.$this->get('nim');
         }else{
-            $nimRules = 'required|numeric|digits:9|unique:mahasiswa,nim';
+            $nimRules = 'required|numeric|unique:mahasiswa,nim';
         }
         return [
             'nim'=>$nimRules,

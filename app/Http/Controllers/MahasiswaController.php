@@ -9,32 +9,48 @@ use App\ProgramStudi;
 use App\TahunAkademik;
 use App\StatusMahasiswa;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Imports\MahasiswaImport;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\MahasiswaRequest;
+use Maatwebsite\Excel\Validators\ValidationException;
+use Validator;
 
 class MahasiswaController extends Controller
 {
     public function index()
     {
-        $mahasiswaList = Mahasiswa::all()->sortBy('angkatan');
-        $countMahasiswa = $mahasiswaList->count();
+        $perPage = 20;
+        $mahasiswaList = Mahasiswa::select('*')
+                            ->join('prodi', 'mahasiswa.id_prodi', '=', 'prodi.id')
+                            ->join('jurusan', 'jurusan.id', '=', 'prodi.id_jurusan')
+                            ->orderBy('nama_jurusan')
+                            ->orderBy('id_prodi')
+                            ->orderBy('angkatan')
+                            ->paginate($perPage);
+        $countMahasiswa = Mahasiswa::count();
         $countProdi = ProgramStudi::all()->count();
         $countJurusan = Jurusan::all()->count();
-        return view('user.'.$this->segmentUser.'.mahasiswa',compact('mahasiswaList','countMahasiswa','countProdi','countJurusan'));
+        return view('user.'.$this->segmentUser.'.mahasiswa',compact('perPage','mahasiswaList','countMahasiswa','countProdi','countJurusan'));
     }
 
     public function create()
     {
-        $countProdi = ProgramStudi::all()->count();
-        if($countProdi < 1){
-            Session::flash('info-title','Data Program Studi Kosong');
-            Session::flash('info','Tambahkan data program studi terlebih dahulu sebelum menambahkan data mahasiswa!');
+        if(!$this->isProdiExists()){
             return redirect($this->segmentUser.'/mahasiswa');
         }
         $prodiList = $this->generateProdi();
         $angkatan = $this->generateAngkatan();
         return view('user.'.$this->segmentUser.'.tambah_mahasiswa',compact('prodiList','angkatan'));
+    }
+
+    public function show($nim){
+        $mahasiswa = Mahasiswa::select('*')
+                                ->join('prodi', 'mahasiswa.id_prodi', '=', 'prodi.id')
+                                ->join('jurusan', 'jurusan.id', '=', 'prodi.id_jurusan')
+                                ->where('nim',$nim)
+                                ->get();
+        return $mahasiswa->toJson();
     }
 
     public function store(MahasiswaRequest $request)
@@ -66,8 +82,30 @@ class MahasiswaController extends Controller
         return redirect($this->segmentUser.'/mahasiswa');
     }
 
-    public function importData(){
-        
+    public function createImport()
+    {
+        if(!$this->isProdiExists()){
+            return redirect($this->segmentUser.'/mahasiswa');
+        }
+        return view('user.'.$this->segmentUser.'.import_mahasiswa');
+    }
+
+    public function storeImport(Request $request)
+    {
+        $begin = memory_get_usage();
+        $this->validate($request,[
+            'data_mahasiswa'=>'required|mimes:csv,xls,xlsx'
+        ]);
+        $import = new MahasiswaImport();
+        try {
+            $import->import($request->data_mahasiswa);
+            Session::flash('success-title','Berhasil');
+            Session::flash('success','Import Data mahasiswa berhasil');
+            return redirect($this->segmentUser.'/mahasiswa');
+        } catch (ValidationException $e) {
+             $failures = $e->failures();
+             return view('user.'.$this->segmentUser.'.import_mahasiswa',compact('failures'));
+        }
     }
 
     private function generateAngkatan(){
@@ -85,5 +123,15 @@ class MahasiswaController extends Controller
             $prodiList[$value->id] = $value->strata.' - '.$value->nama_prodi;
         }
         return $prodiList;
+    }
+
+    private function isProdiExists(){
+        $countProdi = ProgramStudi::all()->count();
+        if($countProdi < 1){
+            Session::flash('info-title','Data Program Studi Kosong');
+            Session::flash('info','Tambahkan data program studi terlebih dahulu sebelum menambahkan data mahasiswa!');
+            return false;
+        }
+        return true;
     }
 }

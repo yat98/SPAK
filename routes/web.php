@@ -24,5 +24,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::resource('jurusan', 'JurusanController')->except(['show']);
     Route::resource('program-studi', 'ProgramStudiController')->except(['show']);
     Route::resource('tahun-akademik', 'TahunAkademikController')->except(['show']);
+    Route::get('mahasiswa/import-mahasiswa','MahasiswaController@createImport');
+    Route::post('mahasiswa/import-mahasiswa','MahasiswaController@storeImport');
     Route::resource('mahasiswa', 'MahasiswaController');
 });
