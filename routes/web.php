@@ -18,13 +18,20 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'admin'], function () {
-    Route::get('dashboard', function(){
-        return view('user.admin.dashboard');
-    });
+    // Dashbord
+    Route::get('dashboard', 'AdminController@index');
+    // Jurusan
+    Route::get('jurusan/search', 'JurusanController@search');
     Route::resource('jurusan', 'JurusanController')->except(['show']);
+    // Program Studi
+    Route::get('program-studi/search', 'ProgramStudiController@search');
     Route::resource('program-studi', 'ProgramStudiController')->except(['show']);
+    // Tahun Akademik
+    Route::get('tahun-akademik/search', 'TahunAkademikController@search');
     Route::resource('tahun-akademik', 'TahunAkademikController')->except(['show']);
-    Route::get('mahasiswa/import-mahasiswa','MahasiswaController@createImport');
+    // Mahasiswa
+    Route::get('mahasiswa/search', 'MahasiswaController@search');
     Route::post('mahasiswa/import-mahasiswa','MahasiswaController@storeImport');
+    Route::get('mahasiswa/import-mahasiswa','MahasiswaController@createImport');
     Route::resource('mahasiswa', 'MahasiswaController');
 });

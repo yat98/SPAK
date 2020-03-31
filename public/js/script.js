@@ -7,6 +7,8 @@ function infoMessage(title, text) {
 }
 
 function successMessage(title, text) {
+    console.log('ok');
+
     Swal.fire({
         icon: 'success',
         title: title,
@@ -58,7 +60,7 @@ $('#jenis-user').on('click', function () {
     username.attr('placeholder', value.toUpperCase());
 });
 
-$('.sweet-delete').on('click', (e) => {
+$('.sweet-delete').on('click', function (e) {
     e.preventDefault();
     Swal.fire({
         title: 'Yakin?',
@@ -110,11 +112,11 @@ $('.btn-detail').on('click', function (e) {
                                 </tr>
                                 <tr>
                                     <th>Jurusan</th>
-                                    <td>${mahasiswa.nama_jurusan}</td>
+                                    <td>${mahasiswa.prodi.jurusan.nama_jurusan}</td>
                                 </tr>
                                 <tr>
                                     <th>Program Studi</th>
-                                    <td>${mahasiswa.strata+' - '+mahasiswa.nama_prodi}</td>
+                                    <td>${mahasiswa.prodi.strata+' - '+mahasiswa.prodi.nama_prodi}</td>
                                 </tr>
                                 <tr>
                                     <th>IPK</th>

@@ -30,26 +30,26 @@
             {{ Form::label('sex','Jenis Kelamin') }}
             @if ($errors->any())
             @if ($errors->has('sex'))
-            {{ Form::select('sex',['L'=>'Laki-laki','P'=>'Perempuan'],null,['class'=>'form-control form-control-lg is-invalid','id'=>'sex']) }}
+            {{ Form::select('sex',['L'=>'Laki-laki','P'=>'Perempuan'],null,['class'=>'form-control form-control-lg is-invalid','id'=>'sex','placeholder'=> '-- Pilih Jenis Kelamin --']) }}
             <div class="invalid-feedback">{{ $errors->first('sex') }}</div>
             @else
-            {{ Form::select('sex',['L'=>'Laki-laki','P'=>'Perempuan'],null,['class'=>'form-control form-control-lg is-valid','id'=>'sex']) }}
+            {{ Form::select('sex',['L'=>'Laki-laki','P'=>'Perempuan'],null,['class'=>'form-control form-control-lg is-valid','id'=>'sex','placeholder'=> '-- Pilih Jenis Kelamin --']) }}
             @endif
             @else
-            {{ Form::select('sex',['L'=>'Laki-laki','P'=>'Perempuan'],null,['class'=>'form-control form-control-lg','id'=>'sex']) }}
+            {{ Form::select('sex',['L'=>'Laki-laki','P'=>'Perempuan'],null,['class'=>'form-control form-control-lg','id'=>'sex','placeholder'=> '-- Pilih Jenis Kelamin --']) }}
             @endif
         </div>
         <div class="form-group">
             {{ Form::label('angkatan','Angkatan') }}
             @if ($errors->any())
             @if ($errors->has('angkatan'))
-            {{ Form::select('angkatan',$angkatan,null,['class'=>'form-control form-control-lg is-invalid','id'=>'angkatan']) }}
+            {{ Form::select('angkatan',$angkatan,null,['class'=>'form-control form-control-lg is-invalid','id'=>'angkatan','placeholder'=> '-- Pilih Angkatan --']) }}
             <div class="invalid-feedback">{{ $errors->first('angkatan') }}</div>
             @else
-            {{ Form::select('angkatan',$angkatan,null,['class'=>'form-control form-control-lg is-valid','id'=>'angkatan']) }}
+            {{ Form::select('angkatan',$angkatan,null,['class'=>'form-control form-control-lg is-valid','id'=>'angkatan','placeholder'=> '-- Pilih Angkatan --']) }}
             @endif
             @else
-            {{ Form::select('angkatan',$angkatan,null,['class'=>'form-control form-control-lg','id'=>'angkatan']) }}
+            {{ Form::select('angkatan',$angkatan,null,['class'=>'form-control form-control-lg','id'=>'angkatan','placeholder'=> '-- Pilih Angkatan --']) }}
             @endif
         </div>
         <div class="form-group">
@@ -69,13 +69,13 @@
             {{ Form::label('id_prodi','Program Studi') }}
             @if ($errors->any())
             @if ($errors->has('id_prodi'))
-            {{ Form::select('id_prodi',$prodiList,null,['class'=>'form-control form-control-lg is-invalid','id'=>'id_prodi']) }}
+            {{ Form::select('id_prodi',$prodiList,null,['class'=>'form-control form-control-lg is-invalid','id'=>'id_prodi','placeholder'=> '-- Pilih Program Studi --']) }}
             <div class="invalid-feedback">{{ $errors->first('id_prodi') }}</div>
             @else
-            {{ Form::select('id_prodi',$prodiList,null,['class'=>'form-control form-control-lg is-valid','id'=>'id_prodi']) }}
+            {{ Form::select('id_prodi',$prodiList,null,['class'=>'form-control form-control-lg is-valid','id'=>'id_prodi','placeholder'=> '-- Pilih Program Studi --']) }}
             @endif
             @else
-            {{ Form::select('id_prodi',$prodiList,null,['class'=>'form-control form-control-lg','id'=>'id_prodi']) }}
+            {{ Form::select('id_prodi',$prodiList,null,['class'=>'form-control form-control-lg','id'=>'id_prodi','placeholder'=> '-- Pilih Program Studi --']) }}
             @endif
         </div>
         <div class="form-group">

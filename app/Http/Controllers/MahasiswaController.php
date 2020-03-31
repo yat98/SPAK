@@ -11,27 +11,25 @@ use App\StatusMahasiswa;
 use Illuminate\Http\Request;
 use App\Imports\MahasiswaImport;
 use Illuminate\Support\Facades\Hash;
-use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Requests\MahasiswaRequest;
 use Maatwebsite\Excel\Validators\ValidationException;
-use Validator;
 
 class MahasiswaController extends Controller
 {
+    private $perPage = 20;
+    
     public function index()
     {
-        $perPage = 20;
-        $mahasiswaList = Mahasiswa::select('*')
-                            ->join('prodi', 'mahasiswa.id_prodi', '=', 'prodi.id')
-                            ->join('jurusan', 'jurusan.id', '=', 'prodi.id_jurusan')
-                            ->orderBy('nama_jurusan')
-                            ->orderBy('id_prodi')
-                            ->orderBy('angkatan')
-                            ->paginate($perPage);
-        $countMahasiswa = Mahasiswa::count();
+        $perPage = $this->perPage;
+        $prodiList = $this->generateProdi();
+        $jurusanList = $this->generateJurusan();
+        $angkatan = $this->generateAngkatan();
+        $mahasiswaList = Mahasiswa::orderBy('nim')->with('prodi.jurusan')->paginate($perPage);
+        $countAllMahasiswa = Mahasiswa::count();
+        $countMahasiswa = count($mahasiswaList);
         $countProdi = ProgramStudi::all()->count();
         $countJurusan = Jurusan::all()->count();
-        return view('user.'.$this->segmentUser.'.mahasiswa',compact('perPage','mahasiswaList','countMahasiswa','countProdi','countJurusan'));
+        return view('user.'.$this->segmentUser.'.mahasiswa',compact('perPage','mahasiswaList','countMahasiswa','countProdi','countJurusan','prodiList','angkatan','jurusanList','countAllMahasiswa'));
     }
 
     public function create()
@@ -45,20 +43,43 @@ class MahasiswaController extends Controller
     }
 
     public function show($nim){
-        $mahasiswa = Mahasiswa::select('*')
-                                ->join('prodi', 'mahasiswa.id_prodi', '=', 'prodi.id')
-                                ->join('jurusan', 'jurusan.id', '=', 'prodi.id_jurusan')
-                                ->where('nim',$nim)
-                                ->get();
+        $mahasiswa = Mahasiswa::where('nim',$nim)->with('prodi.jurusan')->get();
         return $mahasiswa->toJson();
+    }
+
+    public function search(Request $request){
+        $keyword = $request->all();
+        if(isset($keyword['angkatan']) || isset($keyword['jurusan']) || isset($keyword['prodi']) || isset($keyword['keyword'])){
+            $countAllMahasiswa = Mahasiswa::count();
+            $countProdi = ProgramStudi::all()->count();
+            $countJurusan = Jurusan::all()->count();
+            $perPage = $this->perPage;
+            $prodiList = $this->generateProdi();
+            $jurusanList = $this->generateJurusan();
+            $angkatan = $this->generateAngkatan();
+            $nama = isset($keyword['keyword']) ? $keyword['keyword']:'';
+            $mahasiswaList = Mahasiswa::where('nama','like','%'.$nama.'%')
+                                ->join('prodi','prodi.id','=','mahasiswa.id_prodi')
+                                ->join('jurusan','jurusan.id','=','prodi.id_jurusan');
+            (isset($keyword['angkatan'])) ? $mahasiswaList = $mahasiswaList->where('angkatan',$keyword['angkatan']) : '';
+            (isset($keyword['jurusan'])) ? $mahasiswaList = $mahasiswaList->where('id_jurusan',$keyword['jurusan']) : '';
+            (isset($keyword['prodi'])) ? $mahasiswaList = $mahasiswaList->where('id_prodi',$keyword['prodi']) : '';
+            $mahasiswaList = $mahasiswaList->paginate($perPage)->appends($request->except('page'));
+            $countMahasiswa = count($mahasiswaList);
+            if($countMahasiswa < 1){
+                $this->setFlashData('search','Hasil Pencarian','Data mahasiswa tidak ditemukan!');
+            }
+            return view('user.'.$this->segmentUser.'.mahasiswa',compact('perPage','mahasiswaList','countMahasiswa','countProdi','countJurusan','prodiList','angkatan','jurusanList','countAllMahasiswa'));
+        }else{
+            return redirect($this->segmentUser.'/mahasiswa');
+        }
     }
 
     public function store(MahasiswaRequest $request)
     {
         $input = $request->all();
         $input['password'] = Hash::make($request->password);
-        Session::flash('success-title','Berhasil');
-        Session::flash('success','Data mahasiswa dengan nama '.strtolower($input['nama']).' berhasil ditambahkan');
+        $this->setFlashData('success','Berhasil','Data mahasiswa dengan nama '.strtolower($input['nama']).' berhasil ditambahkan');
         Mahasiswa::create($input);
         return redirect($this->segmentUser.'/mahasiswa');
     }
@@ -73,12 +94,14 @@ class MahasiswaController extends Controller
     public function update(MahasiswaRequest $request, Mahasiswa $mahasiswa)
     {
         $jurusan->update($request->all());
+        $this->setFlashData('success','Berhasil','Data mahasiswa '.strtolower($mahasiswa->nama).' berhasil Diubah');
         return redirect($this->segmentUser.'/mahasiswa');
     }
 
     public function destroy(Mahasiswa $mahasiswa)
     {
         $mahasiswa->delete();
+        $this->setFlashData('success','Berhasil','Data mahasiswa '.strtolower($mahasiswa->nama).' berhasil Dihapus');
         return redirect($this->segmentUser.'/mahasiswa');
     }
 
@@ -99,8 +122,7 @@ class MahasiswaController extends Controller
         $import = new MahasiswaImport();
         try {
             $import->import($request->data_mahasiswa);
-            Session::flash('success-title','Berhasil');
-            Session::flash('success','Import Data mahasiswa berhasil');
+            $this->setFlashData('success','Berhasil','Import Data mahasiswa berhasil');
             return redirect($this->segmentUser.'/mahasiswa');
         } catch (ValidationException $e) {
              $failures = $e->failures();
@@ -108,28 +130,10 @@ class MahasiswaController extends Controller
         }
     }
 
-    private function generateAngkatan(){
-        $tahun = [];
-        for($i = 2000;$i <= 2099;$i++){
-            $tahun[$i] = $i;
-        }
-        return $tahun;
-    }
-
-    private function generateProdi(){
-        $prodi = ProgramStudi::all();
-        $prodiList = [];
-        foreach ($prodi as $value) {
-            $prodiList[$value->id] = $value->strata.' - '.$value->nama_prodi;
-        }
-        return $prodiList;
-    }
-
     private function isProdiExists(){
         $countProdi = ProgramStudi::all()->count();
         if($countProdi < 1){
-            Session::flash('info-title','Data Program Studi Kosong');
-            Session::flash('info','Tambahkan data program studi terlebih dahulu sebelum menambahkan data mahasiswa!');
+            $this->setFlashData('info','Data Program Studi Kosong','Tambahkan data program studi terlebih dahulu sebelum menambahkan data mahasiswa!');
             return false;
         }
         return true;

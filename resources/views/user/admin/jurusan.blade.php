@@ -23,7 +23,7 @@
                                         class="mdi mdi-bank mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countJurusan > 0 ? $countJurusan.' Jurusan' : 'Data Jurusan Kosong' }}
+                                    {{ $countAllJurusan > 0 ? $countAllJurusan.' Jurusan' : 'Data Jurusan Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -46,10 +46,10 @@
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-md-6">
-                                        {{ Form::open(['url'=>'']) }}
+                                        {{ Form::open(['url'=>'admin/jurusan/search','method'=>'get']) }}
                                         <div class="form-group">
                                             <div class="input-group">
-                                                {{ Form::text('keyword',null,['placeholder'=>'Cari jurusan...','class'=>'form-control']) }}
+                                                {{ Form::text('keyword',(request()->get('keyword') != null) ? request()->get('keyword'):null,['placeholder'=>'Cari jurusan...','class'=>'form-control']) }}
                                                 <div class="input-group-append">
                                                     <button class="btn btn-sm btn-success" type="submit">
                                                         <i class="mdi mdi-magnify btn-icon-prepend"></i>
@@ -98,8 +98,11 @@
                                 <div class="row">
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
-                                        <h4 class="display-4 mt-3">Data jurusan kosong!</h4>
-                                        <p class="text-muted">Silahkan mengisi data jurusan terlebih dahulu.
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data jurusan kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data jurusan terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>

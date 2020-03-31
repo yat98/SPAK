@@ -38,7 +38,7 @@
                                         class="mdi mdi-book-multiple mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countProdi > 0 ? $countProdi.' Program Studi' : 'Data Prodi Kosong' }}
+                                    {{ $countAllProdi > 0 ? $countAllProdi.' Program Studi' : 'Data Prodi Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -61,10 +61,10 @@
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-md-6">
-                                        {{ Form::open(['url'=>'']) }}
+                                        {{ Form::open(['url'=>'admin/program-studi/search','method'=>'get']) }}
                                         <div class="form-group">
                                             <div class="input-group">
-                                                {{ Form::text('keyword',null,['placeholder'=>'Cari Program Studi...','class'=>'form-control']) }}
+                                                {{ Form::text('keyword',(request()->get('keyword') != null) ? request()->get('keyword'):null,['placeholder'=>'Cari Program Studi...','class'=>'form-control']) }}
                                                 <div class="input-group-append">
                                                     <button class="btn btn-sm btn-success" type="submit">
                                                         <i class="mdi mdi-magnify btn-icon-prepend"></i>
@@ -117,8 +117,11 @@
                                 <div class="row">
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
-                                        <h4 class="display-4 mt-3">Data Program Studi kosong!</h4>
-                                        <p class="text-muted">Silahkan mengisi data program studi terlebih dahulu.
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Program Studi kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data program studi terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>

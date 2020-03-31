@@ -53,7 +53,7 @@
                                         class="mdi mdi-calendar-text mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countMahasiswa > 0 ? $countMahasiswa.' Mahasiswa' : 'Data Mahasiswa Kosong' }}
+                                    {{ $countAllMahasiswa > 0 ? $countAllMahasiswa.' Mahasiswa' : 'Data Mahasiswa Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -79,17 +79,23 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-sm-12 col-md-6">
-                                        {{ Form::open(['url'=>'']) }}
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                {{ Form::text('keyword',null,['placeholder'=>'Cari Mahasiswa...','class'=>'form-control']) }}
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-sm btn-success" type="submit">
-                                                        <i class="mdi mdi-magnify btn-icon-prepend"></i>
-                                                        Cari
-                                                    </button>
-                                                </div>
+                                    <div class="col-12">
+                                        {{ Form::open(['url'=>'admin/mahasiswa/search','method'=>'GET']) }}
+                                        <div class="form-row">
+                                            <div class="col-sm-12 col-md-6">
+                                                {{ Form::text('keyword',(request()->get('keyword') != null) ? request()->get('keyword'):null,['placeholder'=>'Cari Nama Mahasiswa...','class'=>'form-control']) }}
+                                            </div>
+                                            <div class="col-sm-12 col-md">
+                                                {{ Form::select('jurusan',$jurusanList,(request()->get('jurusan') != null) ? request()->get('jurusan'):null,['class'=>'btn-margin form-control','placeholder'=> '-- Pilih Jurusan --']) }}
+                                            </div>
+                                            <div class="col-sm-12 col-md">
+                                                {{ Form::select('prodi',$prodiList,(request()->get('prodi') != null) ? request()->get('prodi'):null,['class'=>'form-control','placeholder'=> '-- Pilih Program Studi --']) }}
+                                            </div>
+                                            <div class="col-sm-12 col-md mt-xs-2 mt-md-0 btn-margin ">
+                                                {{ Form::select('angkatan',$angkatan,(request()->get('angkatan')!= null) ? request()->get('angkatan'):null,['class'=>'form-control','placeholder'=> '-- Pilih Angkatan --']) }}
+                                            </div>
+                                            <div class="col-sm-12 col-md">
+                                                {{ Form::submit('Cari',['class'=>'btn btn-info btn-tambah']) }}
                                             </div>
                                         </div>
                                         {{ Form::close() }}
@@ -112,14 +118,14 @@
                                         <tbody>
                                             @foreach ($mahasiswaList as $mahasiswa)
                                             <tr>
-                                                <td> {{ $loop->iteration + 20 * ($mahasiswaList->currentPage() - 1)  }}
+                                                <td> {{ $loop->iteration + $perPage * ($mahasiswaList->currentPage() - 1)  }}
                                                 </td>
                                                 <td> {{ $mahasiswa->nim  }}</td>
-                                                <td> {{ $mahasiswa->nama  }}</td>
+                                                <td> {{ ucwords($mahasiswa->nama)  }}</td>
                                                 <td>{{ $mahasiswa->angkatan}}</td>
-                                                <td>{{ $mahasiswa->nama_jurusan }}</td>
-                                                <td>{{ $mahasiswa->strata}} -
-                                                    {{ ucwords($mahasiswa->nama_prodi) }}
+                                                <td>{{ $mahasiswa->prodi->jurusan->nama_jurusan }}</td>
+                                                <td>{{ $mahasiswa->prodi->strata}} -
+                                                    {{ $mahasiswa->prodi->nama_prodi }}
                                                 </td>
                                                 <td>
                                                     <a href="{{ url('admin/mahasiswa/'.$mahasiswa->nim) }}"
@@ -152,8 +158,11 @@
                                 <div class="row">
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
-                                        <h4 class="display-4 mt-3">Data Mahasiswa kosong!</h4>
-                                        <p class="text-muted">Silahkan mengisi data mahasiswa terlebih dahulu.
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search')) ? Session::get('search') : 'Data Mahasiswa kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : 'Silahkan mengisi data mahasiswa terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>

@@ -14,23 +14,6 @@
                         </span> Tahun Akademik </h3>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 stretch-card grid-margin">
-                        <div class="card bg-gradient-danger card-img-holder text-white">
-                            <div class="card-body">
-                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
-                                    alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Data Tahun Akademik <i
-                                        class="mdi mdi-calendar-text mdi-24px float-right"></i>
-                                </h4>
-                                <h2 class="mb-5">
-                                    {{ isset($tahunAkademikAktif) ? $tahunAkademikAktif->tahun_akademik.' - '.ucwords($tahunAkademikAktif->semester) : 'Tidak Ada Tahun Akademik Aktif' }}
-                                </h2>
-                                <h6 class="card-text"></h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
@@ -45,17 +28,20 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-sm-12 col-md-6">
-                                        {{ Form::open(['url'=>'']) }}
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                {{ Form::text('keyword',null,['placeholder'=>'Cari Tahun Akademik...','class'=>'form-control']) }}
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-sm btn-success" type="submit">
-                                                        <i class="mdi mdi-magnify btn-icon-prepend"></i>
-                                                        Cari
-                                                    </button>
-                                                </div>
+                                    <div class="col-12">
+                                        {{ Form::open(['url'=>'admin/tahun-akademik/search','method'=>'GET']) }}
+                                        <div class="form-row">
+                                            <div class="col-sm-12 col-md-2">
+                                                {{ Form::select('tahun_akademik',$tahun,(request()->get('tahun_akademik') != null) ? request()->get('tahun_akademik'):null,['class'=>'btn-margin form-control','placeholder'=> '-- Pilih Tahun Akademik --']) }}
+                                            </div>
+                                            <div class="col-sm-12 col-md-2">
+                                                {{ Form::select('semester',['genap'=>'Genap','ganjil'=>'Ganjil'],(request()->get('semester')!= null) ? request()->get('semester'):null,['class'=>'form-control','placeholder'=> '-- Pilih Semester --']) }}
+                                            </div>
+                                            <div class="col-sm-12 col-md-2">
+                                                {{ Form::select('status_aktif',['aktif'=>'Aktif','non aktif'=>'Non Aktif'],(request()->get('status_aktif') != null) ? request()->get('status_aktif'):null,['class'=>'form-control','placeholder'=> '-- Pilih Status Aktif --']) }}
+                                            </div>
+                                            <div class="col-sm-12 col-md">
+                                                {{ Form::submit('Cari',['class'=>'btn btn-info btn-tambah']) }}
                                             </div>
                                         </div>
                                         {{ Form::close() }}
@@ -76,7 +62,7 @@
                                         <tbody>
                                             @foreach ($tahunAkademikList as $tahunAkademik)
                                             <tr>
-                                                <td> {{ $loop->iteration }}</td>
+                                                <td> {{ $loop->iteration + $perPage * ($tahunAkademikList->currentPage() - 1) }}</td>
                                                 <td> {{ $tahunAkademik->tahun_akademik  }}</td>
                                                 <td> {{ ucwords($tahunAkademik->semester)  }}</td>
                                                 <td>
@@ -105,13 +91,19 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    <div class="col">
+                                        {{ $tahunAkademikList->links() }}
+                                    </div>
                                 </div>
                                 @else
                                 <div class="row">
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
-                                        <h4 class="display-4 mt-3">Data Tahun Akademik kosong!</h4>
-                                        <p class="text-muted">Silahkan mengisi data tahun Akademik terlebih dahulu.
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search')) ? Session::get('search') : 'Data Tahun Akademik kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : 'Silahkan mengisi data tahun Akademik terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>

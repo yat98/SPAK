@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Jurusan;
 use Illuminate\Http\Request;
 use App\Http\Requests\JurusanRequest;
-use Session;
 
 class JurusanController extends Controller
 {
@@ -13,7 +12,8 @@ class JurusanController extends Controller
     {
         $jurusanList = Jurusan::all();
         $countJurusan = $jurusanList->count();
-        return view('user.'.$this->segmentUser.'.jurusan',compact('jurusanList','countJurusan'));
+        $countAllJurusan = $countJurusan;
+        return view('user.'.$this->segmentUser.'.jurusan',compact('jurusanList','countJurusan','countAllJurusan'));
     }
 
     public function create()
@@ -21,12 +21,27 @@ class JurusanController extends Controller
         return view('user.'.$this->segmentUser.'.tambah_jurusan');
     }
 
+    public function search(Request $request){
+        $keyword = $request->all();
+        if(isset($keyword['keyword'])){
+            $nama = $keyword['keyword'] != null ? $keyword['keyword'] : '';
+            $jurusanList = Jurusan::where('nama_jurusan','like','%'.$nama.'%')->get();
+            $countJurusan = count($jurusanList);
+            $countAllJurusan = Jurusan::all()->count();
+            if($countJurusan < 1){
+                $this->setFlashData('search','Hasil Pencarian','Data jurusan tidak ditemukan!');
+            }
+            return view('user.'.$this->segmentUser.'.jurusan',compact('jurusanList','countJurusan','countAllJurusan'));
+        }else{
+            return redirect($this->segmentUser.'/jurusan');
+        }
+    }
+
     public function store(JurusanRequest $request)
     {
         $input = $request->all();
         Jurusan::create($input);
-        Session::flash('success-title','Berhasil');
-        Session::flash('success','Data jurusan '.strtolower($input['nama_jurusan']).' berhasil ditambahkan');
+        $this->setFlashData('success','Berhasil','Data jurusan '.strtolower($input['nama_jurusan']).' berhasil ditambahkan');
         return redirect($this->segmentUser.'/jurusan');
     }
 
@@ -38,17 +53,15 @@ class JurusanController extends Controller
     public function update(JurusanRequest $request, Jurusan $jurusan)
     {   
         $input = $request->all();
-        Session::flash('success-title','Berhasil');
-        Session::flash('success','Data jurusan '.strtolower($jurusan->nama_jurusan).' Berhasil Diubah');
+        $this->setFlashData('success','Berhasil','Data jurusan '.strtolower($jurusan->nama_jurusan).' berhasil diubah');
         $jurusan->update($input);
         return redirect($this->segmentUser.'/jurusan');
     }
 
     public function destroy(Jurusan $jurusan)
     {
-        Session::flash('success-title','Berhasil');
-        Session::flash('success','Data jurusan '.$jurusan->nama_jurusan.' Berhasil Dihapus');
         $jurusan->delete();
+        $this->setFlashData('success','Berhasil','Data jurusan '.$jurusan->nama_jurusan.' berhasil dihapus');
         return redirect($this->segmentUser.'/jurusan');
     }
 }

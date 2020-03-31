@@ -6,7 +6,6 @@ use App\Jurusan;
 use App\ProgramStudi;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProgramStudiRequest;
-use Session;
 
 class ProgramStudiController extends Controller
 {
@@ -14,27 +13,43 @@ class ProgramStudiController extends Controller
     {
         $prodiList = ProgramStudi::all()->sortBy('id_jurusan');
         $countProdi = $prodiList->count();
+        $countAllProdi = $countProdi;
         $countJurusan = Jurusan::all()->count();
-        return view('user.'.$this->segmentUser.'.program_studi',compact('prodiList','countProdi','countJurusan'));
+        return view('user.'.$this->segmentUser.'.program_studi',compact('prodiList','countProdi','countJurusan','countAllProdi'));
     }
 
     public function create()
     {
         $countJurusan = Jurusan::all()->count();
         if($countJurusan < 1){
-            Session::flash('info-title','Data Jurusan Kosong');
-            Session::flash('info','Tambahkan data jurusan terlebih dahulu sebelum menambahkan data program studi!');
+            $this->setFlashData('info','Data Jurusan Kosong','Tambahkan data jurusan terlebih dahulu sebelum menambahkan data program studi!');
             return redirect($this->segmentUser.'/program-studi');
         }
-        $jurusanList = Jurusan::pluck('nama_jurusan','id')->toArray();
+        $jurusanList = $this->generateJurusan();
         return view('user.'.$this->segmentUser.'.tambah_prodi',compact('jurusanList'));
+    }
+
+    public function search(Request $request){
+        $keyword = $request->all();
+        if(isset($keyword['keyword'])){
+            $nama = $keyword['keyword'] != null ? $keyword['keyword'] : '';
+            $prodiList = ProgramStudi::where('nama_prodi','like','%'.$nama.'%')->get();
+            $countProdi = count($prodiList);
+            $countAllProdi = ProgramStudi::all()->count();
+            $countJurusan = Jurusan::all()->count();
+            if($countProdi < 1){
+                $this->setFlashData('search','Hasil Pencarian','Data program studi tidak ditemukan!');
+            }
+            return view('user.'.$this->segmentUser.'.program_studi',compact('prodiList','countProdi','countJurusan','countAllProdi'));
+        }else{
+            return redirect($this->segmentUser.'/program-studi');
+        }
     }
     
     public function store(ProgramStudiRequest $request)
     {
         $input = $request->all();
-        Session::flash('success-title','Berhasil');
-        Session::flash('success','Data program studi '.strtolower($input['nama_prodi']).' berhasil ditambahkan');
+        $this->setFlashData('success','Berhasil','Data program studi '.strtolower($input['nama_prodi']).' berhasil ditambahkan');
         ProgramStudi::create($input);
         return redirect($this->segmentUser.'/program-studi');
     }
@@ -48,17 +63,15 @@ class ProgramStudiController extends Controller
     public function update(ProgramStudiRequest $request, ProgramStudi $prodi)
     {
         $input = $request->all();
-        Session::flash('success-title','Berhasil');
-        Session::flash('success','Data program studi '.strtolower($prodi->nama_prodi).' berhasil diubah');
+        $this->setFlashData('success','Berhasil','Data program studi '.strtolower($prodi->nama_prodi).' berhasil diubah');
         $prodi->update($request->all());
         return redirect($this->segmentUser.'/program-studi');
     }
 
     public function destroy(ProgramStudi $prodi)
     {
-        Session::flash('success-title','Berhasil');
-        Session::flash('success','Data program studi '.strtolower($prodi->nama_jurusan).' berhasil dihapus');
         $prodi->delete();
+        $this->setFlashData('success','Berhasil','Data program studi '.strtolower($prodi->nama_prodi).' berhasil dihapus');
         return redirect($this->segmentUser.'/program-studi');
     }
 }

@@ -14,6 +14,13 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 
 class MahasiswaImport implements ToModel, WithValidation, WithBatchInserts, WithChunkReading, WithHeadingRow
 {
+    private $prodi;
+
+    public function __construct()
+    {
+       set_time_limit(0);
+       $this->prodi = ProgramStudi::all();
+    }
     use Importable;
     /**
     * @param array $row
@@ -41,7 +48,7 @@ class MahasiswaImport implements ToModel, WithValidation, WithBatchInserts, With
             '*.prodi' => function($attribute, $value, $onFailure) {
                 $idProdi = $this->getIDProdi($value);
                 if ($idProdi == null) {
-                     $onFailure('Terdapat data program studi yang belum terinput');
+                     $onFailure('Data program studi '.$value.' belum terinput');
                 }
             },
         ];
@@ -49,18 +56,20 @@ class MahasiswaImport implements ToModel, WithValidation, WithBatchInserts, With
 
     public function chunkSize(): int
     {
-        return 500;
+        return 100;
     }
 
     public function batchSize():int
     {
-        return 500;
+        return 100;
     }
 
     private function getIDProdi($namaProdi){
         $namaProdi = trim($namaProdi,"0xC2".chr(0xC2).chr(0xA0));
-        $prodi = ProgramStudi::where('nama_prodi',$namaProdi)->first();
-        $idProdi = ($prodi) ? $prodi->id : null;
+        $prodi = $this->prodi->filter(function ($prodi) use ($namaProdi) {
+            return strtolower($prodi->nama_prodi) == strtolower($namaProdi);
+        });
+        $idProdi = (count($prodi) > 0) ? $prodi->first()->id : null;
         return $idProdi;
     }
 }
