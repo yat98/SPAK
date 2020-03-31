@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'admin'], function () {
     // Dashbord
-    Route::get('dashboard', 'AdminController@index');
+    Route::get('/', 'AdminController@index');
     // Jurusan
     Route::get('jurusan/search', 'JurusanController@search');
     Route::resource('jurusan', 'JurusanController')->except(['show']);

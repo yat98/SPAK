@@ -13,6 +13,24 @@
                             <i class="mdi mdi-calendar-text"></i>
                         </span> Tahun Akademik </h3>
                 </div>
+                <div class="col-md-4 stretch-card grid-margin">
+                    <div class="card bg-gradient-danger card-img-holder text-white">
+                        <div class="card-body">
+                            <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                alt="circle-image" />
+                            <h4 class="font-weight-normal mb-3">Tahun Akademik<i
+                                    class="mdi mdi-calendar-text mdi-24px float-right"></i>
+                            </h4>
+                            <h2 class="mb-5">
+                                {{ isset($tahunAkademikAktif) ? $tahunAkademikAktif->tahun_akademik.' - '.ucwords($tahunAkademikAktif->semester) : 'Tidak Ada Tahun Akademik Aktif' }}
+                            </h2>
+                            <h6 class="card-text">
+                                <a href="{{ url('admin/tahun-akademik') }}" class="text-white">Lihat data tahun
+                                    akademik</a>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
@@ -56,6 +74,8 @@
                                                 <th> Tahun Akademik</th>
                                                 <th> Semester</th>
                                                 <th> Status</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -74,6 +94,8 @@
                                                         class="badge badge-gradient-dark">{{ ucwords($tahunAkademik->status_aktif) }}</label>
                                                     @endif
                                                 </td>
+                                                <td>{{ $tahunAkademik->created_at->diffForHumans() }}</td>
+                                                <td>{{ $tahunAkademik->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('admin/tahun-akademik/'.$tahunAkademik->id.'/edit') }}"
                                                         class="btn btn-warning btn-sm text-dark">

@@ -50,7 +50,7 @@
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
                                 <h4 class="font-weight-normal mb-3">Data Mahasiswa<i
-                                        class="mdi mdi-calendar-text mdi-24px float-right"></i>
+                                        class="mdi mdi-account-text mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
                                     {{ $countAllMahasiswa > 0 ? $countAllMahasiswa.' Mahasiswa' : 'Data Mahasiswa Kosong' }}
@@ -109,9 +109,9 @@
                                                 <th> No. </th>
                                                 <th> Nim</th>
                                                 <th> Nama</th>
-                                                <th> Angkatan</th>
                                                 <th> Jurusan</th>
-                                                <th> Program Studi</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -122,11 +122,12 @@
                                                 </td>
                                                 <td> {{ $mahasiswa->nim  }}</td>
                                                 <td> {{ ucwords($mahasiswa->nama)  }}</td>
-                                                <td>{{ $mahasiswa->angkatan}}</td>
                                                 <td>{{ $mahasiswa->prodi->jurusan->nama_jurusan }}</td>
                                                 <td>{{ $mahasiswa->prodi->strata}} -
                                                     {{ $mahasiswa->prodi->nama_prodi }}
                                                 </td>
+                                                <td>{{ $mahasiswa->created_at->diffForHumans() }}</td>
+                                                <td>{{ $mahasiswa->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('admin/mahasiswa/'.$mahasiswa->nim) }}"
                                                         class="btn btn-outline-info btn-sm btn-detail"

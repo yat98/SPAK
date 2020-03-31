@@ -68,6 +68,8 @@
                                             <tr>
                                                 <th> No. </th>
                                                 <th> Nama Jurusan</th>
+                                                <th>Di Buat</th>
+                                                <th>Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -76,6 +78,8 @@
                                             <tr>
                                                 <td> {{ $loop->iteration }}</td>
                                                 <td> {{  $jurusan->nama_jurusan  }}</td>
+                                                <td> {{ $jurusan->created_at->diffForHumans() }}</td>
+                                                <td> {{ $jurusan->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('admin/jurusan/'.$jurusan->id.'/edit') }}"
                                                         class="btn btn-warning btn-sm text-dark">

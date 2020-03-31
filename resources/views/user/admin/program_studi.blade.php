@@ -82,9 +82,11 @@
                                         <thead>
                                             <tr>
                                                 <th> No. </th>
-                                                <th> Jurusan</th>
-                                                <th> Strata</th>
                                                 <th> Nama Program Studi</th>
+                                                <th> Strata</th>
+                                                <th> Jurusan</th>
+                                                <th>Di Buat</th>
+                                                <th>Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -92,9 +94,11 @@
                                             @foreach ($prodiList as $prodi)
                                             <tr>
                                                 <td> {{ $loop->iteration }}</td>
-                                                <td> {{ $prodi->jurusan->nama_jurusan}}</td>
-                                                <td> {{ $prodi->strata  }}</td>
                                                 <td> {{ $prodi->nama_prodi  }}</td>
+                                                <td> {{ $prodi->strata  }}</td>
+                                                <td> {{ $prodi->jurusan->nama_jurusan}}</td>
+                                                <td> {{ $prodi->created_at->diffForHumans() }}</td>
+                                                <td> {{ $prodi->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('admin/program-studi/'.$prodi->id.'/edit') }}"
                                                         class="btn btn-warning btn-sm text-dark">

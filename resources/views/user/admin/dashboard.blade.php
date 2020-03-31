@@ -19,8 +19,8 @@
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Data Jurusan <i
-                                        class="mdi mdi-chart-line mdi-24px float-right"></i>
+                                <h4 class="font-weight-normal mb-3">Data Jurusan
+                                    <i class="mdi mdi-bank mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
                                     {{ $countJurusan > 0 ? $countJurusan.' Jurusan' : 'Data Jurusan Kosong' }}
@@ -37,7 +37,7 @@
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
                                 <h4 class="font-weight-normal mb-3">Data Program Studi <i
-                                        class="mdi mdi-chart-line mdi-24px float-right"></i>
+                                    class="mdi mdi-book-multiple mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
                                     {{ $countProdi > 0 ? $countProdi.' Program Studi' : 'Data Prodi Kosong' }}
@@ -55,7 +55,7 @@
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
                                 <h4 class="font-weight-normal mb-3">Tahun Akademik<i
-                                        class="mdi mdi-chart-line mdi-24px float-right"></i>
+                                    class="mdi mdi-calendar-text mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
                                     {{ isset($tahunAkademikAktif) ? $tahunAkademikAktif->tahun_akademik.' - '.ucwords($tahunAkademikAktif->semester) : 'Tidak Ada Tahun Akademik Aktif' }}
@@ -73,7 +73,7 @@
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
                                 <h4 class="font-weight-normal mb-3">Mahasiswa<i
-                                        class="mdi mdi-chart-line mdi-24px float-right"></i>
+                                        class="mdi mdi-account mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
                                     {{ $countMahasiswa > 0 ? $countMahasiswa.' Mahasiswa' : 'Data Mahasiswa Kosong' }}
@@ -90,7 +90,7 @@
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
                                 <h4 class="font-weight-normal mb-3">User<i
-                                        class="mdi mdi-chart-line mdi-24px float-right"></i>
+                                        class="mdi mdi-account mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">6 User</h2>
                                 <h6 class="card-text">
@@ -274,7 +274,6 @@
                                                 <th> No. </th>
                                                 <th> Nim</th>
                                                 <th> Nama</th>
-                                                <th> Angkatan</th>
                                                 <th> Jurusan</th>
                                                 <th> Program Studi</th>
                                                 <th> Di Buat</th>
@@ -287,7 +286,6 @@
                                                 <td> {{ $loop->iteration }}</td>
                                                 <td> {{ $mahasiswa->nim  }}</td>
                                                 <td> {{ ucwords($mahasiswa->nama)  }}</td>
-                                                <td>{{ $mahasiswa->angkatan }}</td>
                                                 <td>{{ $mahasiswa->prodi->jurusan->nama_jurusan }}</td>
                                                 <td>
                                                     {{ $mahasiswa->prodi->strata }} -
