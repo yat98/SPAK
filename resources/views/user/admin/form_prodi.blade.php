@@ -21,7 +21,7 @@
             @if ($errors->any())
             @if ($errors->has('strata'))
             {{ Form::select('strata',['D3'=>'D3','S1'=>'S1','S2'=>'S2','S3'=>'S3'],null,['class'=>'form-control form-control-lg is-invalid','id'=>'strata','placeholder'=> '-- Pilih Strata --']) }}
-            <div class="invalid-feedback">{{ $errors->first('nama_prodi') }}</div>
+            <div class="invalid-feedback">{{ $errors->first('strata') }}</div>
             @else
             {{ Form::select('strata',['D3'=>'D3','S1'=>'S1','S2'=>'S2','S3'=>'S3'],null,['class'=>'form-control form-control-lg is-valid','id'=>'strata','placeholder'=> '-- Pilih Strata --']) }}
             @endif

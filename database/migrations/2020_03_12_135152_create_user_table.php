@@ -16,7 +16,7 @@ class CreateUserTable extends Migration
         Schema::create('user', function (Blueprint $table) {
             $table->char('nip',18)->primary();
             $table->string('nama');
-            $table->string('jabatan');
+            $table->enum('jabatan',['dekan','wakil dekan 1','wakil dekan 2','wakil dekan 3','kasubag kemahasiswaan','kasubag akademik']);
             $table->enum('status_aktif',['aktif','non-aktif']);
             $table->string('tanda_tangan');
             $table->string('password');

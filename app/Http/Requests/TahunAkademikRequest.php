@@ -9,7 +9,7 @@ use Illuminate\Contracts\Validation\Validator;
 class TahunAkademikRequest extends FormRequest
 {
     // Pesan error status_aktif
-    private $errorStatusAktif = 'Tahun akademik dengan status aktif sudah ada';
+    private $errorStatusAktif = 'tahun akademik dengan status aktif sudah ada.';
 
     /**
      * Determine if the user is authorized to make this request.

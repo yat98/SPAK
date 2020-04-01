@@ -25,9 +25,9 @@ class JurusanRequest extends FormRequest
     public function rules()
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
-            $namaJurusanRules = 'required|string|unique:jurusan,nama_jurusan,'.$this->get('id');
+            $namaJurusanRules = 'required|string|alpha_spaces|unique:jurusan,nama_jurusan,'.$this->get('id');
         }else{
-            $namaJurusanRules = 'required|string|unique:jurusan,nama_jurusan';
+            $namaJurusanRules = 'required|string|alpha_spaces|unique:jurusan,nama_jurusan';
         }
         return [
             'nama_jurusan'=>$namaJurusanRules

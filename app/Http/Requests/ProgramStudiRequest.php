@@ -31,6 +31,7 @@ class ProgramStudiRequest extends FormRequest
             $strataRules = 'required|in:D3,S1,S2,S3|unique_with:prodi,nama_prodi';
         }
         return [
+            'id_jurusan'=>'required|numeric',
             'nama_prodi'=>$namaProdiRules,
             'strata'=>$strataRules,
         ];
