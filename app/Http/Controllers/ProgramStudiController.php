@@ -9,6 +9,12 @@ use App\Http\Requests\ProgramStudiRequest;
 
 class ProgramStudiController extends Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware('admin');
+    }
+
     public function index()
     {
         $prodiList = ProgramStudi::all()->sortBy('id_jurusan');

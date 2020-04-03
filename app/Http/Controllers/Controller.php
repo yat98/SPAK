@@ -14,6 +14,8 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    protected $perPage = 20;
+
     protected $segmentUser;
 
     public function __construct(){

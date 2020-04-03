@@ -9,7 +9,7 @@
             <span class="mdi mdi-menu"></span>
         </button>
         <ul class="navbar-nav navbar-nav-right">
-            <li class="nav-item dropdown">
+            {{-- <li class="nav-item dropdown">
                 <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
                     data-toggle="dropdown">
                     <i class="mdi mdi-bell-outline"></i>
@@ -58,7 +58,7 @@
                     <div class="dropdown-divider"></div>
                     <h6 class="p-3 mb-0 text-center">See all notifications</h6>
                 </div>
-            </li>
+            </li> --}}
             <li class="nav-item nav-profile dropdown">
                 <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown"
                     aria-expanded="false">
@@ -67,15 +67,14 @@
                         <span class="availability-status online"></span>
                     </div>
                     <div class="nav-profile-text">
-                        <p class="mb-1 text-black">Hidayat Chandra</p>
+                        <p class="mb-1 text-black">{{ ucwords(Session::get('username')) }}</p>
                     </div>
                 </a>
                 <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-                    <a class="dropdown-item" href="#">
-                        <i class="mdi mdi-cached mr-2 text-success"></i> Activity Log </a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">
-                        <i class="mdi mdi-logout mr-2 text-primary"></i> Signout </a>
+                    <a class="dropdown-item" href="{{ 
+                            ($posisi == 'admin') ? url('admin/logout'):''
+                        }}">
+                        <i class="mdi mdi-logout mr-2 text-primary"></i> Logout </a>
                 </div>
             </li>
         </ul>

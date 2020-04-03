@@ -132,8 +132,16 @@ return [
 
     'custom' => [
         'id_jurusan' => [
-            'required' => 'nama jurusan wajib diisi.',
-            'numeric' => 'nama jurusan harus berupa angka.',
+            'required' => 'jurusan wajib diisi.',
+            'numeric' => 'jurusan harus berupa angka.',
+        ],
+        'id_prodi' => [
+            'required' => 'program studi wajib diisi.',
+            'numeric' => 'program studi harus berupa angka.',
+        ],
+        'sex' => [
+            'required' => 'jenis kelamin wajib diisi.',
+            'in' => 'jenis kelamin yang dipilih tidak valid.',
         ],
     ],
 

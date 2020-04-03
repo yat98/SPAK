@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            {{ Form::label('nim','Nim') }}
+            {{ Form::label('nim','NIM') }}
             @if ($errors->any())
             @if ($errors->has('nim'))
             {{ Form::text('nim',null,['class'=>'form-control form-control-lg is-invalid','id'=>'nim']) }}
@@ -78,8 +78,9 @@
             {{ Form::select('id_prodi',$prodiList,null,['class'=>'form-control form-control-lg','id'=>'id_prodi','placeholder'=> '-- Pilih Program Studi --']) }}
             @endif
         </div>
-        <div class="form-group">
-            {{ Form::label('password','password') }}
+        <div class="form-group password-group">
+            @if($formPassword)
+            {{ Form::label('password','Password') }}
             @if ($errors->any())
             @if ($errors->has('password'))
             {{ Form::password('password',['class'=>'form-control form-control-lg is-invalid','id'=>'password']) }}
@@ -90,9 +91,13 @@
             @else
             {{ Form::password('password',['class'=>'form-control form-control-lg','id'=>'password']) }}
             @endif
+            @endif
         </div>
         <div class="form-group">
             {{ Form::submit($buttonLabel,['class'=>'btn btn-info btn-sm font-weight-medium auth-form-btn']) }}
+            @if(!$formPassword)
+            <a href="" class="btn btn-warning btn-sm btn-password">Ubah Password</a>
+            @endif
             <input type="reset" value="Reset" class="btn btn-danger btn-sm">
         </div>
     </div>

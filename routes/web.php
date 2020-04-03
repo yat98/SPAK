@@ -18,6 +18,10 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'admin'], function () {
+    // Login
+    Route::get('login','LoginController@loginAdmin');
+    Route::post('login','LoginController@checkLoginAdmin');
+    Route::get('logout','AdminController@logout');
     // Dashbord
     Route::get('/', 'AdminController@index');
     // Jurusan
@@ -34,4 +38,13 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('mahasiswa/import-mahasiswa','MahasiswaController@storeImport');
     Route::get('mahasiswa/import-mahasiswa','MahasiswaController@createImport');
     Route::resource('mahasiswa', 'MahasiswaController');
+    // User
+    Route::get('user/search','UserController@search');
+    Route::resource('user','UserController');
+    // Profil
+    Route::get('profil','AdminController@profil');
+    Route::post('profil','AdminController@update');
+    Route::get('profil/password','AdminController@profilPassword');
+    Route::post('profil/password','AdminController@updatePassword');
+    Route::patch('profil/{admin}','AdminController@update');
 });

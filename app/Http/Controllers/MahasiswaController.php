@@ -16,8 +16,12 @@ use Maatwebsite\Excel\Validators\ValidationException;
 
 class MahasiswaController extends Controller
 {
-    private $perPage = 20;
-    
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware('admin');
+    }
+
     public function index()
     {
         $perPage = $this->perPage;
@@ -37,9 +41,10 @@ class MahasiswaController extends Controller
         if(!$this->isProdiExists()){
             return redirect($this->segmentUser.'/mahasiswa');
         }
+        $formPassword = true;
         $prodiList = $this->generateProdi();
         $angkatan = $this->generateAngkatan();
-        return view('user.'.$this->segmentUser.'.tambah_mahasiswa',compact('prodiList','angkatan'));
+        return view('user.'.$this->segmentUser.'.tambah_mahasiswa',compact('prodiList','angkatan','formPassword'));
     }
 
     public function show($nim){
@@ -86,22 +91,29 @@ class MahasiswaController extends Controller
 
     public function edit(Mahasiswa $mahasiswa)
     {   
+        $formPassword = false;
         $angkatan = $this->generateAngkatan();
         $prodiList = $this->generateProdi();
-        return view('user.'.$this->segmentUser.'.edit_mahasiswa',compact('mahasiswa','angkatan','prodiList'));
+        return view('user.'.$this->segmentUser.'.edit_mahasiswa',compact('mahasiswa','angkatan','prodiList','formPassword'));
     }
 
     public function update(MahasiswaRequest $request, Mahasiswa $mahasiswa)
     {
-        $jurusan->update($request->all());
-        $this->setFlashData('success','Berhasil','Data mahasiswa '.strtolower($mahasiswa->nama).' berhasil Diubah');
+        $input = $request->all();
+        if(isset($input['password'])){
+            $input['password'] = Hash::make($request->password);
+        }else{
+            $input['password'] = $mahasiswa->password;
+        }
+        $mahasiswa->update($input);
+        $this->setFlashData('success','Berhasil','Data mahasiswa '.strtolower($mahasiswa->nama).' berhasil diubah');
         return redirect($this->segmentUser.'/mahasiswa');
     }
 
     public function destroy(Mahasiswa $mahasiswa)
     {
         $mahasiswa->delete();
-        $this->setFlashData('success','Berhasil','Data mahasiswa '.strtolower($mahasiswa->nama).' berhasil Dihapus');
+        $this->setFlashData('success','Berhasil','Data mahasiswa '.strtolower($mahasiswa->nama).' berhasil dihapus');
         return redirect($this->segmentUser.'/mahasiswa');
     }
 

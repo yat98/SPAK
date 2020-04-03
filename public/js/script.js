@@ -7,10 +7,16 @@ function infoMessage(title, text) {
 }
 
 function successMessage(title, text) {
-    console.log('ok');
-
     Swal.fire({
         icon: 'success',
+        title: title,
+        text: text,
+    });
+}
+
+function errorMessage(title, text) {
+    Swal.fire({
+        icon: 'error',
         title: title,
         text: text,
     });
@@ -126,4 +132,10 @@ $('.btn-detail').on('click', function (e) {
                         </div>`;
             $('#mahasiswa-detail-content').html(html);
         });
+})
+
+$('.btn-password').on('click',function(e){
+    e.preventDefault();
+    $('.password-group').html(`<label for="password">Password</label>
+    <input class="form-control form-control-lg" id="password" name="password" type="password" value="">`)
 })

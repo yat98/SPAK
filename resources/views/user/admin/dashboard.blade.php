@@ -92,7 +92,9 @@
                                 <h4 class="font-weight-normal mb-3">User<i
                                         class="mdi mdi-account mdi-24px float-right"></i>
                                 </h4>
-                                <h2 class="mb-5">6 User</h2>
+                                <h2 class="mb-5">
+                                    {{ $countUser > 0 ? $countUser.' User' : 'Data User Kosong' }}
+                                </h2>
                                 <h6 class="card-text">
                                     <a href="" class="text-white">Lihat data user</a>
                                 </h6>
@@ -307,6 +309,69 @@
                                         </h4>
                                         <p class="text-muted">
                                             {{ (Session::has('search-title')) ? Session::get('search-title') : 'Silahkan mengisi data mahasiswa terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Data User</h4>
+                                    </div>
+                                </div>
+                                @if ($countUser > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> NIP</th>
+                                                <th> Nama</th>
+                                                <th> Jabatan</th>
+                                                <th> Status Aktif</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($userList as $user)
+                                            <tr>
+                                                <td> {{ $loop->iteration }}</td>
+                                                <td> {{  $user->nip }}</td>
+                                                <td> {{  $user->nama }}</td>
+                                                <td> {{  ucwords($user->jabatan) }}</td>
+                                                <td>
+                                                @if ($user->status_aktif == 'aktif')
+                                                <label
+                                                    class="badge badge-gradient-info">{{ ucwords($user->status_aktif) }}</label>
+                                                @else
+                                                <label
+                                                    class="badge badge-gradient-dark">{{ ucwords($user->status_aktif) }}</label>
+                                                @endif
+                                                </td>
+                                                <td> {{ $user->created_at->diffForHumans() }}</td>
+                                                <td> {{ $user->updated_at->diffForHumans() }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data user kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data user terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>

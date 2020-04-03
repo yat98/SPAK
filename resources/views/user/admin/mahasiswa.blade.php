@@ -10,7 +10,7 @@
                 <div class="page-header">
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
-                            <i class="mdi mdi-bank"></i>
+                            <i class="mdi mdi-account"></i>
                         </span> Mahasiswa</h3>
                 </div>
                 <div class="row">
@@ -20,7 +20,7 @@
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
                                 <h4 class="font-weight-normal mb-3">Data Jurusan <i
-                                        class="mdi mdi-bank mdi-24px float-right"></i>
+                                        class="mdi mdi-account mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
                                     {{ $countJurusan > 0 ? $countJurusan.' Jurusan' : 'Data Jurusan Kosong' }}
@@ -123,9 +123,6 @@
                                                 <td> {{ $mahasiswa->nim  }}</td>
                                                 <td> {{ ucwords($mahasiswa->nama)  }}</td>
                                                 <td>{{ $mahasiswa->prodi->jurusan->nama_jurusan }}</td>
-                                                <td>{{ $mahasiswa->prodi->strata}} -
-                                                    {{ $mahasiswa->prodi->nama_prodi }}
-                                                </td>
                                                 <td>{{ $mahasiswa->created_at->diffForHumans() }}</td>
                                                 <td>{{ $mahasiswa->updated_at->diffForHumans() }}</td>
                                                 <td>

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MahasiswaRequest extends FormRequest
+class UserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,20 +24,20 @@ class MahasiswaRequest extends FormRequest
     public function rules()
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
-            $nimRules = 'required|numeric|unique:mahasiswa,nim,'.$this->get('nim').',nim';
+            $nipRules = 'required|unique:user,nip,'.$this->get('nip').',nip';
             $passwordRules = 'sometimes|string|max:60';
         }else{
-            $nimRules = 'required|numeric|unique:mahasiswa,nim';
+            $nipRules = 'required|unique:user,nip';
             $passwordRules = 'required|string|max:60';
         }
+        
         return [
-            'nim'=>$nimRules,
-            'nama'=>'required|alpha_spaces',
-            'sex'=>'required|in:L,P',
-            'angkatan'=>'required|numeric|digits:4',
-            'ipk'=>'required|numeric|min:0|max:4|regex:/^\d+(\.\d{1,2})?$/',
-            'password'=>$passwordRules,
-            'id_prodi'=>'required|numeric'
+            'nip'=> $nipRules,
+            'nama'=>'required|string|alpha_spaces',
+            'jabatan'=>'required|string|in:dekan,wd1,wd2,wd3,kasubag kemahasiswaan,kasubag pendidikan dan pengajaran',
+            'status_aktif'=>'required|string|in:aktif,non aktif',
+            'tanda_tangan'=>'sometimes|string',
+            'password'=>$passwordRules
         ];
     }
 }

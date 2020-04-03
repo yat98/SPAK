@@ -10,16 +10,16 @@
                 <div class="page-header">
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
-                            <i class="mdi mdi-account"></i>
-                        </span> Mahasiswa </h3>
+                            <i class="mdi mdi-settings"></i>
+                        </span> Ubah Profil</h3>
                 </div>
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Edit Data Mahasiswa</h3>
-                                {{ Form::model($mahasiswa,['method'=>'PATCH','action'=>['MahasiswaController@update',$mahasiswa->nim]]) }}
-                                @include('user.admin.form_mahasiswa',['buttonLabel'=>'Simpan'])
+                                <h3 class="mb-5">Ubah Profil</h3>
+                                {{ Form::model($admin,['method'=>'PATCH','action'=>['AdminController@update',$admin->id]]) }}
+                                @include('user.admin.form_profil',['buttonLabel'=>'Simpan'])
                                 {{ Form::close() }}
                             </div>
                         </div>

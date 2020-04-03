@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Mahasiswa extends Model
 {
     protected $table = 'mahasiswa';
+
     protected $primaryKey = 'nim';
+    
     protected $fillable = [
         'nim',
         'nama',
@@ -26,17 +28,6 @@ class Mahasiswa extends Model
 
     public function getNamaAttribute($nama){
         return ucwords($nama);
-    }
-
-    public function getDetailMahasiswa($nim){
-        return DB::table($this->table)->join('prodi', 'mahasiswa.id_prodi', '=', 'prodi.id')
-                               ->join('jurusan', 'jurusan.id', '=', 'prodi.id_jurusan')
-                               ->where('nim',$nim)
-                               ->get();Mahasiswa::select('*')
-                               ->join('prodi', 'mahasiswa.id_prodi', '=', 'prodi.id')
-                               ->join('jurusan', 'jurusan.id', '=', 'prodi.id_jurusan')
-                               ->where('nim',$nim)
-                               ->get();
     }
 
     public function prodi(){

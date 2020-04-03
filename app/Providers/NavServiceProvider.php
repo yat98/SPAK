@@ -25,8 +25,10 @@ class NavServiceProvider extends ServiceProvider
     public function boot()
     {
         $halaman = '';
+        $posisi = '';
         $segment = request()->segment(2);
-        if(request()->segment(1) == 'admin'){    
+        if(request()->segment(1) == 'admin'){ 
+            $posisi = 'admin'  ;
             if($segment == ''){
                 $halaman = 'dashboard-admin';
             }
@@ -42,7 +44,13 @@ class NavServiceProvider extends ServiceProvider
             if($segment == 'mahasiswa'){
                 $halaman = 'mahasiswa';
             }
+            if($segment == 'user'){
+                $halaman = 'user';
+            }
+            if($segment == 'profil'){
+                $halaman = 'profil';
+            }
         }
-        view()->share('halaman',$halaman);
+        view()->share(['halaman'=>$halaman,'posisi'=>$posisi]);
     }
 }

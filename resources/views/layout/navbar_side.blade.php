@@ -7,8 +7,10 @@
                     <span class="login-status online"></span>
                 </div>
                 <div class="nav-profile-text d-flex flex-column">
-                    <span class="font-weight-bold mb-2">Hidayat Chandra</span>
-                    <span class="text-secondary text-small">Admin</span>
+                    <span class="font-weight-bold mb-2">{{ ucwords(Session::get('username')) }}</span>
+                    <span class="text-secondary text-small">
+                        {{ ($posisi == 'admin') ? 'Admin':'' }}
+                    </span>
                 </div>
             </a>
         </li>
@@ -36,7 +38,7 @@
                 <i class="mdi mdi mdi-calendar-text menu-icon"></i>
             </a>
         </li>
-        <li class="nav-item {{ ($halaman == 'mahasiswa') ? 'active':'' }}">
+        <li class="nav-item {{ ($halaman == 'mahasiswa' || $halaman == 'user') ? 'active':'' }}">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">Pengguna</span>
                 <i class="menu-arrow"></i>
@@ -47,14 +49,14 @@
                     <li class="nav-item">
                         <a class="nav-link {{ ($halaman == 'mahasiswa') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/mahasiswa') }}">Mahasiswa</a></li>
                     <li class="nav-item"> 
-                        <a class="nav-link" href="{{ asset(Request::segment(1).'/user') }}">User</a>
+                        <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/user') }}">User</a>
                     </li>
                 </ul>
             </div>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="pages/tables/basic-table.html">
-                <span class="menu-title">Ubah Password</span>
+        <li class="nav-item {{ ($halaman == 'profil') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/profil') }}">
+                <span class="menu-title">Ubah Profil</span>
                 <i class="mdi mdi mdi mdi-settings menu-icon"></i>
             </a>
         </li>

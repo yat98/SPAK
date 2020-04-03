@@ -9,7 +9,11 @@ use App\Http\Requests\TahunAkademikRequest;
 
 class TahunAkademikController extends Controller
 {
-    private $perPage = 20;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware('admin');
+    }
 
     public function index()
     {

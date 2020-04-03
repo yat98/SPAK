@@ -11,15 +11,15 @@
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
                             <i class="mdi mdi-account"></i>
-                        </span> Mahasiswa </h3>
+                        </span> User </h3>
                 </div>
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Edit Data Mahasiswa</h3>
-                                {{ Form::model($mahasiswa,['method'=>'PATCH','action'=>['MahasiswaController@update',$mahasiswa->nim]]) }}
-                                @include('user.admin.form_mahasiswa',['buttonLabel'=>'Simpan'])
+                                <h3 class="mb-5">Tambah Data User</h3>
+                                {{ Form::open(['url'=>'admin/user']) }}
+                                @include('user.admin.form_user',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>
                         </div>

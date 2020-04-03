@@ -39,6 +39,11 @@
         successMessage("{{ Session::get('success-title') }}","{{ Session::get('success') }}");
     </script>
     @endif
+    @if(Session::has('error') && Session::has('error-title'))
+    <script>
+        errorMessage("{{ Session::get('error-title') }}","{{ Session::get('error') }}");
+    </script>
+    @endif
 </body>
 
 </html>
