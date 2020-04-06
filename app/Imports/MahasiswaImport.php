@@ -14,6 +14,8 @@ use Maatwebsite\Excel\Concerns\WithChunkReading;
 
 class MahasiswaImport implements ToModel, WithValidation, WithBatchInserts, WithChunkReading, WithHeadingRow
 {
+    use Importable;
+    
     private $prodi;
 
     public function __construct()
@@ -21,12 +23,7 @@ class MahasiswaImport implements ToModel, WithValidation, WithBatchInserts, With
        set_time_limit(0);
        $this->prodi = ProgramStudi::all();
     }
-    use Importable;
-    /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+    
     public function model(array $row)
     {  
         $idProdi = $this->getIDProdi($row['prodi']);

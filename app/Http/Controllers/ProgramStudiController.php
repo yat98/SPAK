@@ -31,7 +31,7 @@ class ProgramStudiController extends Controller
             $this->setFlashData('info','Data Jurusan Kosong','Tambahkan data jurusan terlebih dahulu sebelum menambahkan data program studi!');
             return redirect($this->segmentUser.'/program-studi');
         }
-        $jurusanList = $this->generateJurusan();
+        $jurusanList = Jurusan::pluck('nama_jurusan','id')->toArray();
         return view('user.'.$this->segmentUser.'.tambah_prodi',compact('jurusanList'));
     }
 

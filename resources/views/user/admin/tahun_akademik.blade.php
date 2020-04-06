@@ -45,6 +45,7 @@
                                             Tambah Tahun Akademik</a>
                                     </div>
                                 </div>
+                                <hr class="mb-4">
                                 <div class="row mb-3">
                                     <div class="col-12">
                                         {{ Form::open(['url'=>'admin/tahun-akademik/search','method'=>'GET']) }}
@@ -59,7 +60,10 @@
                                                 {{ Form::select('status_aktif',['aktif'=>'Aktif','non aktif'=>'Non Aktif'],(request()->get('status_aktif') != null) ? request()->get('status_aktif'):null,['class'=>'form-control','placeholder'=> '-- Pilih Status Aktif --']) }}
                                             </div>
                                             <div class="col-sm-12 col-md">
-                                                {{ Form::submit('Cari',['class'=>'btn btn-info btn-tambah']) }}
+                                                <button class="btn btn-success btn-tambah" type="submit">
+                                                    <i class="mdi mdi-magnify btn-icon-prepend"></i>
+                                                    Cari
+                                                </button>
                                             </div>
                                         </div>
                                         {{ Form::close() }}
@@ -122,10 +126,10 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search')) ? Session::get('search') : 'Data Tahun Akademik kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : 'Data Tahun Akademik Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : 'Silahkan mengisi data tahun Akademik terlebih dahulu.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : 'Silahkan mengisi data tahun Akademik terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>

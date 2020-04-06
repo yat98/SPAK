@@ -29,8 +29,12 @@ class Mahasiswa extends Model
     public function getNamaAttribute($nama){
         return ucwords($nama);
     }
-
+    
     public function prodi(){
         return $this->belongsTo('App\ProgramStudi','id_prodi');
+    }
+
+    public function tahunAkademik(){
+        return $this->belongsToMany('App\TahunAkademik','status_mahasiswa','nim','id_tahun_akademik')->withTimestamps();
     }
 }

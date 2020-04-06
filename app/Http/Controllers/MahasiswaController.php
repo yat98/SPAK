@@ -26,7 +26,7 @@ class MahasiswaController extends Controller
     {
         $perPage = $this->perPage;
         $prodiList = $this->generateProdi();
-        $jurusanList = $this->generateJurusan();
+        $jurusanList = Jurusan::pluck('nama_jurusan','id')->toArray();
         $angkatan = $this->generateAngkatan();
         $mahasiswaList = Mahasiswa::orderBy('nim')->with('prodi.jurusan')->paginate($perPage);
         $countAllMahasiswa = Mahasiswa::count();
@@ -60,7 +60,7 @@ class MahasiswaController extends Controller
             $countJurusan = Jurusan::all()->count();
             $perPage = $this->perPage;
             $prodiList = $this->generateProdi();
-            $jurusanList = $this->generateJurusan();
+            $jurusanList = Jurusan::pluck('nama_jurusan','id')->toArray();
             $angkatan = $this->generateAngkatan();
             $nama = isset($keyword['keyword']) ? $keyword['keyword']:'';
             $mahasiswaList = Mahasiswa::where('nama','like','%'.$nama.'%')
@@ -85,7 +85,7 @@ class MahasiswaController extends Controller
         $input = $request->all();
         $input['password'] = Hash::make($request->password);
         $this->setFlashData('success','Berhasil','Data mahasiswa dengan nama '.strtolower($input['nama']).' berhasil ditambahkan');
-        Mahasiswa::create($input);
+        $mahasiswa = Mahasiswa::create($input);
         return redirect($this->segmentUser.'/mahasiswa');
     }
 
@@ -127,14 +127,13 @@ class MahasiswaController extends Controller
 
     public function storeImport(Request $request)
     {
-        $begin = memory_get_usage();
         $this->validate($request,[
             'data_mahasiswa'=>'required|mimes:csv,xls,xlsx'
         ]);
         $import = new MahasiswaImport();
         try {
             $import->import($request->data_mahasiswa);
-            $this->setFlashData('success','Berhasil','Import Data mahasiswa berhasil');
+            $this->setFlashData('success','Berhasil','Import data mahasiswa berhasil');
             return redirect($this->segmentUser.'/mahasiswa');
         } catch (ValidationException $e) {
              $failures = $e->failures();

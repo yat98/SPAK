@@ -34,10 +34,11 @@ class LoginController extends Controller
                     'login'=>true
                 ];
                 Session::put($session);
-                $this->setFlashData('success','Login Berhasil','Selamat datang '.$admin->username);
+                $this->setFlashData('success-timer','Login Berhasil','Selamat datang '.$admin->username);
                 return redirect('admin');
             }
         }
+        Session::flash('username',$username);
         $this->setFlashData('error','Login Gagal','Username atau password salah.');
         return redirect('admin/login');
     }

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Session;
 use App\Jurusan;
 use App\ProgramStudi;
+use App\TahunAkademik;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Session;
 
 class Controller extends BaseController
 {
@@ -30,6 +31,24 @@ class Controller extends BaseController
         return $tahun;
     }
 
+    protected function generateTahunAkademikSemester(){
+        $tahunAkademik = TahunAkademik::where('status_aktif','aktif')->get();
+        $tahunAkademikList = [];
+        foreach($tahunAkademik as $value){
+            $tahunAkademikList[$value->id] = $value->tahun_akademik.' - '.ucwords($value->semester);
+        }
+        return $tahunAkademikList;
+    }
+
+    protected function generateAllTahunAkademik(){
+        $tahunAkademik = TahunAkademik::all();
+        $tahunAkademikList = [];
+        foreach($tahunAkademik as $value){
+            $tahunAkademikList[$value->id] = $value->tahun_akademik.' - '.ucwords($value->semester);
+        }
+        return $tahunAkademikList;
+    }
+
     protected function generateProdi(){
         $prodi = ProgramStudi::all();
         $prodiList = [];
@@ -39,13 +58,13 @@ class Controller extends BaseController
         return $prodiList;
     }
 
-    protected function generateJurusan(){
-        $jurusan = Jurusan::pluck('nama_jurusan','id')->toArray();
-        $jurusanList = [];
-        foreach ($jurusan as $key => $value) {
-            $jurusanList[$key] = $value;
-        } 
-        return $jurusanList;
+    protected function generateTahunAkademik(){
+        $tahun = [];
+        for($i = 2019; $i < 2099;$i++){ 
+            $tahunAkhir = $i;
+            $tahun[$i.'/'.++$tahunAkhir]="$i/".$tahunAkhir;
+        }
+        return $tahun; 
     }
 
     protected function setFlashData($flashType,$titleText,$text){

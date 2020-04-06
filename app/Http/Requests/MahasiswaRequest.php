@@ -23,6 +23,7 @@ class MahasiswaRequest extends FormRequest
      */
     public function rules()
     {
+        // dd($this->get('status_mahasiswa'));
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
             $nimRules = 'required|numeric|unique:mahasiswa,nim,'.$this->get('nim').',nim';
             $passwordRules = 'sometimes|string|max:60';

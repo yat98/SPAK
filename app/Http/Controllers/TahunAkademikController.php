@@ -84,13 +84,4 @@ class TahunAkademikController extends Controller
         $tahunAkademik->delete();
         return redirect($this->segmentUser.'/tahun-akademik');
     }
-
-    private function generateTahunAkademik(){
-        $tahun = [];
-        for($i = 2019; $i < 2099;$i++){ 
-            $tahunAkhir = $i;
-            $tahun[$i.'/'.++$tahunAkhir]="$i/".$tahunAkhir;
-        }
-        return $tahun; 
-    }
 }

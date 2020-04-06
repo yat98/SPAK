@@ -13,4 +13,8 @@ class TahunAkademik extends Model
         'semester',
         'status_aktif'
     ];
+
+    public function mahasiswa(){
+        return $this->belongsToMany('App\Mahasiswa','status_mahasiswa','id_tahun_akademik','nim')->withTimeStamps();
+    }
 }

@@ -44,6 +44,7 @@
                                             Tambah Jurusan</a>
                                     </div>
                                 </div>
+                                <hr class="mb-4">
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-md-6">
                                         {{ Form::open(['url'=>'admin/jurusan/search','method'=>'get']) }}
@@ -103,7 +104,7 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data jurusan kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data jurusan Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
                                             {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data jurusan terlebih dahulu.' }}

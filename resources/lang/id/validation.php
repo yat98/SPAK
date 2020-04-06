@@ -117,7 +117,7 @@ return [
     'url'         => 'Format :attribute tidak valid.',
     'uuid'        => ':attribute harus merupakan UUID yang valid.',
     'alpha_spaces' => ':attribute hanya boleh berisi huruf.',
-
+    'unique_with' => ':fields sudah ada sebelumnya.',
 
     /*
     |---------------------------------------------------------------------------------------

@@ -54,6 +54,12 @@
                 </ul>
             </div>
         </li>
+        <li class="nav-item {{ ($halaman == 'status-mahasiswa') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/status-mahasiswa') }}">
+                <span class="menu-title">Status Mahasiswa</span>
+                <i class="mdi mdi mdi-checkbox-multiple-marked menu-icon"></i>
+            </a>
+        </li>
         <li class="nav-item {{ ($halaman == 'profil') ? 'active':'' }}">
             <a class="nav-link" href="{{ url(Request::segment(1).'/profil') }}">
                 <span class="menu-title">Ubah Profil</span>

@@ -9,6 +9,7 @@ use App\Jurusan;
 use App\Mahasiswa;
 use App\ProgramStudi;
 use App\TahunAkademik;
+use App\StatusMahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -27,6 +28,10 @@ class AdminController extends Controller
         $tahunAkademikList = TahunAkademik::orderBy('status_aktif')->get();
         $mahasiswaList = Mahasiswa::all()->sortBy('updated_at');
         $userList = User::all();
+        $statusMahasiswaList = StatusMahasiswa::join('tahun_akademik','tahun_akademik.id','=','status_mahasiswa.id_tahun_akademik')
+                                    ->join('mahasiswa','mahasiswa.nim','=','status_mahasiswa.nim')
+                                    ->get()
+                                    ->sortByDesc('created_at');
         $countUser = $userList->count();
         $countJurusan = $jurusanList->count();
         $countProdi = $prodiList->count();
@@ -34,12 +39,14 @@ class AdminController extends Controller
         $countMahasiswa = $mahasiswaList->count();
         $countTahunAkademik = $tahunAkademikList->count();
         $countTahunAkademik = $tahunAkademikList->count();
+        $countStatusMahasiswa = $statusMahasiswaList->count();
         $jurusanList = $jurusanList->take(5);
         $prodiList = $prodiList->take(5);
         $userList = $userList->take(5);
         $tahunAkademikList = $tahunAkademikList->take(5);
         $mahasiswaList = $mahasiswaList->take(5);
-        return view('user.'.$this->segmentUser.'.dashboard',compact('countJurusan','countProdi','countMahasiswa','tahunAkademikAktif','jurusanList','prodiList','tahunAkademikList','mahasiswaList','countTahunAkademik','userList','countUser'));
+        $statusMahasiswaList = $statusMahasiswaList->take(5);
+        return view('user.'.$this->segmentUser.'.dashboard',compact('countJurusan','countProdi','countMahasiswa','tahunAkademikAktif','jurusanList','prodiList','tahunAkademikList','mahasiswaList','countTahunAkademik','userList','countUser','countStatusMahasiswa','statusMahasiswaList'));
     }
 
     public function profil(){

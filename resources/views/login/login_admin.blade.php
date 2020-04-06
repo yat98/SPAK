@@ -14,7 +14,7 @@
                         {{ Form::open(['url'=>'admin/login','class'=>'pt-3']) }}
                         <div class="form-group">
                             {{ Form::label('username','Username') }}
-                            {{ Form::text('username',null,['class'=>'form-control form-control-lg','placeholder'=>'Username','id'=>'username']) }}
+                            {{ Form::text('username',(Session::has('username')) ? Session::get('username') : null,['class'=>'form-control form-control-lg','placeholder'=>'Username','id'=>'username']) }}
                         </div>
                         <div class="form-group">
                             {{ Form::label('password','Password') }}

@@ -14,7 +14,7 @@ class CreateStatusMahasiswaTable extends Migration
     public function up()
     {
         Schema::create('status_mahasiswa', function (Blueprint $table) {
-            $table->char('nim',9)->index();
+            $table->string('nim')->index();
             $table->integer('id_tahun_akademik')->unsigned()->index();
             $table->enum('status',['aktif','non aktif','cuti','drop out','lulus','keluar']);
             $table->timestamps();

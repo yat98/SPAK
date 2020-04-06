@@ -41,6 +41,16 @@ Route::group(['prefix' => 'admin'], function () {
     // User
     Route::get('user/search','UserController@search');
     Route::resource('user','UserController');
+    // Status Mahasiswa
+    Route::post('status-mahasiswa/import-status-mahasiswa','StatusMahasiswaController@storeImport');
+    Route::get('status-mahasiswa/import-status-mahasiswa','StatusMahasiswaController@createImport');
+    Route::get('status-mahasiswa/search','StatusMahasiswaController@search');
+    Route::post('status-mahasiswa','StatusMahasiswaController@store');
+    Route::get('status-mahasiswa','StatusMahasiswaController@index');
+    Route::get('status-mahasiswa/create','StatusMahasiswaController@create');
+    Route::patch('status-mahasiswa','StatusMahasiswaController@update');
+    Route::delete('status-mahasiswa','StatusMahasiswaController@destroy');
+    Route::get('status-mahasiswa/{id_tahun_akademik}/{nim}/edit','StatusMahasiswaController@edit');
     // Profil
     Route::get('profil','AdminController@profil');
     Route::post('profil','AdminController@update');

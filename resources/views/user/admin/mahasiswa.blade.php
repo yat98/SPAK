@@ -50,7 +50,7 @@
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
                                 <h4 class="font-weight-normal mb-3">Data Mahasiswa<i
-                                        class="mdi mdi-account-text mdi-24px float-right"></i>
+                                        class="mdi mdi-account mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
                                     {{ $countAllMahasiswa > 0 ? $countAllMahasiswa.' Mahasiswa' : 'Data Mahasiswa Kosong' }}
@@ -78,6 +78,7 @@
                                             Import Data Mahasiswa</a>
                                     </div>
                                 </div>
+                                <hr class="mb-4">
                                 <div class="row mb-3">
                                     <div class="col-12">
                                         {{ Form::open(['url'=>'admin/mahasiswa/search','method'=>'GET']) }}
@@ -95,7 +96,10 @@
                                                 {{ Form::select('angkatan',$angkatan,(request()->get('angkatan')!= null) ? request()->get('angkatan'):null,['class'=>'form-control','placeholder'=> '-- Pilih Angkatan --']) }}
                                             </div>
                                             <div class="col-sm-12 col-md">
-                                                {{ Form::submit('Cari',['class'=>'btn btn-info btn-tambah']) }}
+                                                <button class="btn btn-success btn-tambah" type="submit">
+                                                    <i class="mdi mdi-magnify btn-icon-prepend"></i>
+                                                    Cari
+                                                </button>
                                             </div>
                                         </div>
                                         {{ Form::close() }}
@@ -107,7 +111,7 @@
                                         <thead>
                                             <tr>
                                                 <th> No. </th>
-                                                <th> Nim</th>
+                                                <th> NIM</th>
                                                 <th> Nama</th>
                                                 <th> Jurusan</th>
                                                 <th> Di Buat</th>
@@ -157,10 +161,10 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search')) ? Session::get('search') : 'Data Mahasiswa kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : 'Data Mahasiswa Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : 'Silahkan mengisi data mahasiswa terlebih dahulu.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : 'Silahkan mengisi data mahasiswa terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -174,7 +178,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">

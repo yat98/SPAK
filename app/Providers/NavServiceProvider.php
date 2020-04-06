@@ -47,6 +47,9 @@ class NavServiceProvider extends ServiceProvider
             if($segment == 'user'){
                 $halaman = 'user';
             }
+            if($segment == 'status-mahasiswa'){
+                $halaman = 'status-mahasiswa';
+            }
             if($segment == 'profil'){
                 $halaman = 'profil';
             }

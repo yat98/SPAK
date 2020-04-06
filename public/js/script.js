@@ -14,6 +14,16 @@ function successMessage(title, text) {
     });
 }
 
+function successMessageTimer(title, text) {
+    Swal.fire({
+        icon: 'success',
+        title: title,
+        text: text,
+        showConfirmButton: false,
+        timer: 3500
+    });
+}
+
 function errorMessage(title, text) {
     Swal.fire({
         icon: 'error',
@@ -139,3 +149,8 @@ $('.btn-password').on('click',function(e){
     $('.password-group').html(`<label for="password">Password</label>
     <input class="form-control form-control-lg" id="password" name="password" type="password" value="">`)
 })
+
+$("#mahasiswa_list").select2();
+$('.search').select2({
+    width: '100%'
+});

@@ -8,6 +8,7 @@
     <link rel="icon" href="{{ asset('image/logo/logo_ung.png') }}" type="image">
     <title>SPAK | Sistem Pengelolaan Administrasi Kemahasiswaan</title>
     {{-- CSS --}}
+    <link rel="stylesheet" href="{{ asset('vendors/select2/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/mdi/css/materialdesignicons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/css/vendor.bundle.base.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -26,6 +27,7 @@
     <script src="{{ asset('js/dashboard.js') }}"></script>
     <script src="{{ asset('js/todolist.js') }}"></script>
     <script src="{{ asset('vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('vendors/select2/select2.min.js') }}"></script>
     <script src="{{ asset('js/form-upload.js') }}"></script>
     <script src="{{ asset('js/script.js') }}"></script>
 
@@ -37,6 +39,11 @@
     @if(Session::has('success') && Session::has('success-title'))
     <script>
         successMessage("{{ Session::get('success-title') }}","{{ Session::get('success') }}");
+    </script>
+    @endif
+    @if(Session::has('success-timer') && Session::has('success-timer-title'))
+    <script>
+        successMessageTimer("{{ Session::get('success-timer-title') }}","{{ Session::get('success-timer') }}");
     </script>
     @endif
     @if(Session::has('error') && Session::has('error-title'))

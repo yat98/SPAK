@@ -14,6 +14,8 @@ class AddRelationshipToStatusMahasiswa extends Migration
     public function up()
     {
         Schema::table('status_mahasiswa', function (Blueprint $table) {
+            // Set primarykey
+            $table->primary(['nim','id_tahun_akademik']);
            // Menambahkan foreign key pada tabel mahasiswa
             $table->foreign('nim')
                   ->references('nim')
@@ -22,10 +24,10 @@ class AddRelationshipToStatusMahasiswa extends Migration
                   ->onDelete('cascade');
             // Menambahkan foreign key pada tabel tahun_akademik
             $table->foreign('id_tahun_akademik')
-            ->references('id')
-            ->on('tahun_akademik')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
+                  ->references('id')
+                  ->on('tahun_akademik')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
         });
     }
 

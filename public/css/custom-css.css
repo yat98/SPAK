@@ -13,6 +13,10 @@
     background-color: white !important;
 }
 
+.text-danger-red{
+    color: red;
+}
+
 @media (min-width: 1025px) and (max-width: 1280px) {
     .btn-margin {
         margin-top: 20px !important;
