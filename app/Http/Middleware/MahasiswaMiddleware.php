@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Session;
 
-class AdminMiddleware
+class MahasiswaMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,8 +16,8 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(Session::get('status') != 'admin'){
-            return redirect('admin/login');
+        if(Session::get('status') != 'mahasiswa'){
+            return redirect('/');
         }
         return $next($request);
     }

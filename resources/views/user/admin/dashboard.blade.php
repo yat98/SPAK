@@ -40,7 +40,7 @@
                                     class="mdi mdi-book-multiple mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countProdi > 0 ? $countProdi.' Program Studi' : 'Data Prodi Kosong' }}
+                                    {{ $countProdi > 0 ? $countProdi.' Program Studi' : 'Data Program Studi Kosong' }}
                                 </h2>
                                 <h6 class="card-text">
                                     <a href="{{ url('admin/program-studi') }}" class="text-white">Lihat data program
@@ -157,7 +157,7 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data jurusan kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Jurusan kosong!' }}
                                         </h4>
                                         <p class="text-muted">
                                             {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data jurusan terlebih dahulu.' }}
@@ -326,7 +326,7 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search')) ? Session::get('search') : 'Data Mahasiswa kosong!' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : 'Data Mahasiswa Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
                                             {{ (Session::has('search-title')) ? Session::get('search-title') : 'Silahkan mengisi data mahasiswa terlebih dahulu.' }}

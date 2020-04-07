@@ -12,7 +12,6 @@ class TahunAkademikController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('admin');
     }
 
     public function index()
@@ -60,7 +59,7 @@ class TahunAkademikController extends Controller
     {
         $input = $request->all();
         $this->setFlashData('success','Berhasil','Data tahun akademik '.strtolower($input['tahun_akademik'].' - '.$input['semester']).' berhasil ditambahkan');
-        TahunAkademik::create($request->all());
+        TahunAkademik::create($input);
         return redirect($this->segmentUser.'/tahun-akademik');
     }
 
@@ -74,7 +73,7 @@ class TahunAkademikController extends Controller
     {  
         $input = $request->all();
         $this->setFlashData('success','Berhasil','Data tahun akademik '.strtolower($tahunAkademik->tahun_akademik.' - '.$tahunAkademik->semester.' berhasil diubah'));
-        $tahunAkademik->update($request->all());
+        $tahunAkademik->update($input);
         return redirect($this->segmentUser.'/tahun-akademik');
     }
 

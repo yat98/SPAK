@@ -17,9 +17,6 @@ class AdminController extends Controller
 {
     public function __construct(){
         parent::__construct();
-        $this->middleware('admin',['except'=>[
-            'logout'
-        ]]);
     }
     
     public function index(){
@@ -96,6 +93,6 @@ class AdminController extends Controller
 
     public function logout(){
         Session::flush();
-        return redirect('/');
+        return redirect('admin');
     }
 }

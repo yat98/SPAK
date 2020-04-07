@@ -38,7 +38,7 @@
                                         class="mdi mdi-book-multiple mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countProdi > 0 ? $countProdi.' Program Studi' : 'Data Prodi Kosong' }}
+                                    {{ $countProdi > 0 ? $countProdi.' Program Studi' : 'Data Program Studi Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>

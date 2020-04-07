@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Session;
 use App\User;
+use App\TahunAkademik;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +15,6 @@ class UserController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('admin');
     }
 
     public function index()
@@ -86,5 +87,15 @@ class UserController extends Controller
         $user->delete();
         $this->setFlashData('success','Berhasil','Data user '.strtolower($user->nama).' berhasil dihapus');
         return redirect($this->segmentUser.'/user');
+    }
+
+    public function pegawaiDashboard(){
+        $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
+        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif'));
+    }
+
+    public function logout(){
+        Session::flush();
+        return redirect('/');
     }
 }

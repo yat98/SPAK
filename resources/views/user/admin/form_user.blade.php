@@ -30,13 +30,13 @@
             {{ Form::label('jabatan','Jabatan') }}
             @if ($errors->any())
             @if ($errors->has('jabatan'))
-            {{ Form::select('jabatan',['dekan'=>'Dekan','wd1'=>'Wakil Dekan 1','wd2'=>'Wakil Dekan 2','wd3'=>'Wakil Dekan 3','kasubag akademik'=>'Kasubag Akademik','kasubag pendidikan dan pengajaran'=>'Kasubag Pendidikan Dan Pengajaran'],null,['class'=>'form-control form-control-lg is-invalid','id'=>'jabatan','placeholder'=> '-- Pilih Jabatan --']) }}
+            {{ Form::select('jabatan',['dekan'=>'Dekan','wd1'=>'Wakil Dekan 1','wd2'=>'Wakil Dekan 2','wd3'=>'Wakil Dekan 3','kasubag kemahasiswaan'=>'Kasubag Kemahasiswaan','kasubag pendidikan dan pengajaran'=>'Kasubag Pendidikan Dan Pengajaran'],null,['class'=>'form-control form-control-lg is-invalid','id'=>'jabatan','placeholder'=> '-- Pilih Jabatan --']) }}
             <div class="invalid-feedback">{{ $errors->first('jabatan') }}</div>
             @else
-            {{ Form::select('jabatan',['dekan'=>'Dekan','wd1'=>'Wakil Dekan 1','wd2'=>'Wakil Dekan 2','wd3'=>'Wakil Dekan 3','kasubag akademik'=>'Kasubag Akademik','kasubag pendidikan dan pengajaran'=>'Kasubag Pendidikan Dan Pengajaran'],null,['class'=>'form-control form-control-lg is-valid','id'=>'jabatan','placeholder'=> '-- Pilih Jabatan --']) }}
+            {{ Form::select('jabatan',['dekan'=>'Dekan','wd1'=>'Wakil Dekan 1','wd2'=>'Wakil Dekan 2','wd3'=>'Wakil Dekan 3','kasubag kemahasiswaan'=>'Kasubag Kemahasiswaan','kasubag pendidikan dan pengajaran'=>'Kasubag Pendidikan Dan Pengajaran'],null,['class'=>'form-control form-control-lg is-valid','id'=>'jabatan','placeholder'=> '-- Pilih Jabatan --']) }}
             @endif
             @else
-            {{ Form::select('jabatan',['dekan'=>'Dekan','wd1'=>'Wakil Dekan 1','wd2'=>'Wakil Dekan 2','wd3'=>'Wakil Dekan 3','kasubag akademik'=>'Kasubag Akademik','kasubag pendidikan dan pengajaran'=>'Kasubag Pendidikan Dan Pengajaran'],null,['class'=>'form-control form-control-lg','id'=>'jabatan','placeholder'=> '-- Pilih Jabatan --']) }}
+            {{ Form::select('jabatan',['dekan'=>'Dekan','wd1'=>'Wakil Dekan 1','wd2'=>'Wakil Dekan 2','wd3'=>'Wakil Dekan 3','kasubag kemahasiswaan'=>'Kasubag Kemahasiswaan','kasubag pendidikan dan pengajaran'=>'Kasubag Pendidikan Dan Pengajaran'],null,['class'=>'form-control form-control-lg','id'=>'jabatan','placeholder'=> '-- Pilih Jabatan --']) }}
             @endif
         </div>
         <div class="form-group">

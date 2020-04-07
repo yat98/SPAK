@@ -19,7 +19,6 @@ class MahasiswaController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('admin');
     }
 
     public function index()
@@ -139,6 +138,15 @@ class MahasiswaController extends Controller
              $failures = $e->failures();
              return view('user.'.$this->segmentUser.'.import_mahasiswa',compact('failures'));
         }
+    }
+
+    public function dashboard(){
+        return view('mahasiswa.dashboard');
+    }
+
+    public function logout(){
+        Session::flush();
+        return redirect('/');
     }
 
     private function isProdiExists(){

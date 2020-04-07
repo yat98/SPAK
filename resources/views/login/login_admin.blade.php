@@ -7,8 +7,8 @@
             <div class="row flex-grow">
                 <div class="col-lg-4 mx-auto">
                     <div class="auth-form-light text-left p-5">
-                        <div class="brand-logo text-center">
-                            <img src="{{ asset('image/logo/logo_ung.png') }}">
+                        <div class="mb-4 text-center">
+                            <img src="{{ asset('image/logo/logo_ung.png') }}" class="logo-size-medium">
                         </div>
                         <h4 class="text-center mb-5">Sistem Pengelolaan Administrasi Kemahasiswaan</h4>
                         {{ Form::open(['url'=>'admin/login','class'=>'pt-3']) }}

@@ -72,7 +72,6 @@ $('#jenis-user').on('click', function () {
             break;
     }
     label.html(value.toUpperCase())
-    username.attr('name', value);
     username.attr('placeholder', value.toUpperCase());
 });
 

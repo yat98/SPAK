@@ -17,6 +17,7 @@ class AddRelationshipToSuratKeteranganAktifKuliahTable extends Migration
             $table->string('nim')->index();
             $table->char('nip',18)->index();
             $table->integer('id_tahun_akademik')->unsigned();
+            $table->integer('id_kode_surat')->unsigned();
 
             $table->foreign('nim')
                   ->references('nim')
@@ -35,6 +36,12 @@ class AddRelationshipToSuratKeteranganAktifKuliahTable extends Migration
                   ->on('tahun_akademik')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
+            
+            $table->foreign('id_kode_surat')
+                  ->references('id')
+                  ->on('kode_surat')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
         });
     }
 
@@ -44,11 +51,12 @@ class AddRelationshipToSuratKeteranganAktifKuliahTable extends Migration
      * @return void
      */
     public function down()
-    {
+    {    
         Schema::table('surat_keterangan_aktif_kuliah', function (Blueprint $table) {
             $table->dropForeign(['nim']);
             $table->dropForeign(['nip']);
             $table->dropForeign(['id_tahun_akademik']);
+            $table->dropForeign(['id_kode_surat']);
         });
     }
 }

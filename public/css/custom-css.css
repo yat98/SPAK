@@ -3,6 +3,11 @@
     width: 60px;
 }
 
+.logo-size-medium{
+    height: 100px;
+    width: 100px;
+}
+
 .illustration-no-data {
     margin-top: 50px;
     width: 200px;

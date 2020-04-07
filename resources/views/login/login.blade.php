@@ -7,18 +7,18 @@
             <div class="row flex-grow">
                 <div class="col-lg-4 mx-auto">
                     <div class="auth-form-light text-left p-5">
-                        <div class="brand-logo text-center">
-                            <img src="{{ asset('image/logo/logo_ung.png') }}">
+                        <div class="text-center mb-4">
+                            <img src="{{ asset('image/logo/logo_ung.png') }}" class="logo-size-medium">
                         </div>
                         <h4 class="text-center mb-5">Sistem Pengelolaan Administrasi Kemahasiswaan</h4>
-                        {{ Form::open(['class'=>'pt-3']) }}
+                        {{ Form::open(['url'=>'login','class'=>'pt-3']) }}
                         <div class="form-group">
                             {{ Form::label('jenis-user','Jenis User') }}
                             {{ Form::select('jenis_user',['mahasiswa'=>'Mahasiswa','pegawai'=>'Pegawai','pimpinan'=>'Pimpinan'],null,['class'=>'form-control form-control-lg','id'=>'jenis-user']) }}
                         </div>
                         <div class="form-group">
                             {{ Form::label('username','NIM',['id'=>'username-id']) }}
-                            {{ Form::text('nim',null,['class'=>'form-control form-control-lg','placeholder'=>'NIM','id'=>'username']) }}
+                            {{ Form::text('username',(Session::has('username')) ? Session::get('username') : null,['class'=>'form-control form-control-lg','placeholder'=>'NIM','id'=>'username']) }}
                         </div>
                         <div class="form-group">
                             {{ Form::label('password','Password') }}

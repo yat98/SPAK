@@ -53,6 +53,16 @@ class NavServiceProvider extends ServiceProvider
             if($segment == 'profil'){
                 $halaman = 'profil';
             }
+        }else if(request()->segment(1) == 'mahasiswa'){
+            $posisi = 'mahasiswa';
+        }else if(request()->segment(1) == 'pegawai'){
+            $posisi = 'pegawai';
+            if($segment == ''){
+                $halaman = 'dashboard-pegawai';
+            }
+            if($segment == 'kode-surat'){
+                $halaman = 'kode-surat';
+            }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi]);
     }

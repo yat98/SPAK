@@ -71,9 +71,12 @@
                     </div>
                 </a>
                 <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-                    <a class="dropdown-item" href="{{ 
-                            ($posisi == 'admin') ? url('admin/logout'):''
-                        }}">
+                    <a class="dropdown-item" href="
+                    {{($posisi == 'admin') ? url('admin/logout'):''}}
+                    {{($posisi == 'mahasiswa') ? url('mahasiswa/logout'):''}}
+                    {{($posisi == 'pegawai') ? url('pegawai/logout'):''}}
+                    {{($posisi == 'pimpinan') ? url('pimpinan/logout'):''}}
+                    ">
                         <i class="mdi mdi-logout mr-2 text-primary"></i> Logout </a>
                 </div>
             </li>
