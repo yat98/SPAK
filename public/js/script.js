@@ -153,3 +153,53 @@ $("#mahasiswa_list").select2();
 $('.search').select2({
     width: '100%'
 });
+
+let wrapper = document.getElementById("signature-pad");
+var canvas = wrapper.querySelector("canvas");
+var signaturePad = new SignaturePad(canvas, {
+    backgroundColor: 'white',
+    minWidth: 0.5,
+    maxWidth:  3.5,
+    penColor: "blue"
+});
+
+function resizeCanvas() {
+    var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+    canvas.width = canvas.offsetWidth * ratio;
+    canvas.height = canvas.offsetHeight * ratio;
+    canvas.getContext("2d").scale(ratio, ratio);
+    signaturePad.clear();
+}
+
+window.onresize = resizeCanvas;
+resizeCanvas();
+
+var reset = document.getElementById("reset");
+reset.addEventListener('click',function(e){
+    e.preventDefault();
+    signaturePad.clear();
+})
+
+let simpan = $('#simpan');
+simpan.on('click',function(e){
+    e.preventDefault();
+    Swal.fire({
+        title: 'Yakin?',
+        text: "Data akan disimpan",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Simpan',
+        cancelButtonText: 'Tidak'
+    }).then((result) => {
+        if (result.value) {
+            if (signaturePad.isEmpty()) {
+                errorMessage('Tanda Tangan Kosong!','Gambarkan tanda tangan anda terlebih dahulu.');
+            } else {
+                document.body.innerHTML += '<form id="form_tanda_tangan" action="'+window.location.href+'" method="post"><input type="hidden" name="tanda_tangan" value="'+signaturePad.toDataURL()+'"></form>';
+                document.getElementById("form_tanda_tangan").submit();
+            }
+        }
+    })
+})

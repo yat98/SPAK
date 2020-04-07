@@ -82,8 +82,8 @@
                 <i class="mdi mdi mdi-format-list-numbered menu-icon"></i>
             </a>
         </li>
-        <li class="nav-item {{ ($halaman == 'profil') ? 'active':'' }}">
-            <a class="nav-link" href="{{ url(Request::segment(1).'/profil') }}">
+        <li class="nav-item {{ ($halaman == 'tanda-tangan') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/tanda-tangan') }}">
                 <span class="menu-title">Tanda Tangan</span>
                 <i class="mdi mdi mdi mdi-border-color menu-icon"></i>
             </a>

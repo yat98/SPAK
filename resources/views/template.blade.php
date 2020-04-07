@@ -28,6 +28,7 @@
     <script src="{{ asset('js/todolist.js') }}"></script>
     <script src="{{ asset('vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('vendors/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('vendors/signatures-pad/js/signature_pad.umd.js') }}"></script>
     <script src="{{ asset('js/form-upload.js') }}"></script>
     <script src="{{ asset('js/script.js') }}"></script>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Session;
 use App\User;
+use App\KodeSurat;
 use App\TahunAkademik;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
@@ -90,8 +91,28 @@ class UserController extends Controller
     }
 
     public function pegawaiDashboard(){
+        $kodeSuratList = KodeSurat::all();
+        $countAllKodeSurat = $kodeSuratList->count();
+        $kodeSuratList = $kodeSuratList->take(5);
+        $countKodeSurat = count($kodeSuratList);
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
-        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif'));
+        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','countAllKodeSurat','countKodeSurat','kodeSuratList'));
+    }
+
+    public function indexTandaTangan(){
+        $nip = Session::get('nip');
+        $user = User::where('nip',$nip)->first();
+        return view('user.'.$this->segmentUser.'.tanda_tangan',compact('user'));
+    }
+
+    public function updateTandaTangan(Request $request){
+        $nip = Session::get('nip');
+        $user = User::where('nip',$nip)->first();
+        $user->update([
+            'tanda_tangan'=>$request->tanda_tangan
+        ]);
+        $this->setFlashData('success','Berhasil','Data tanda tangan berhasil ditambahkan');
+        return redirect($this->segmentUser.'/tanda-tangan');
     }
 
     public function logout(){

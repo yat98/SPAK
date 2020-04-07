@@ -18,7 +18,7 @@ class CreateUserTable extends Migration
             $table->string('nama');
             $table->enum('jabatan',['dekan','wd1','wd2','wd3','kasubag kemahasiswaan','kasubag pendidikan dan pengajaran']);
             $table->enum('status_aktif',['aktif','non aktif']);
-            $table->string('tanda_tangan')->nullable();
+            $table->text('tanda_tangan')->nullable();
             $table->string('password');
             $table->timestamps();
         });

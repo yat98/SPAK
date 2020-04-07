@@ -38,6 +38,15 @@ Route::group(['prefix' => 'pegawai'],function(){
         // Kode Surat
         Route::get('kode-surat/search','KodeSuratController@search');
         Route::resource('kode-surat','KodeSuratController')->except(['show']);
+        // Tanda Tangan
+        Route::get('tanda-tangan','UserController@indexTandaTangan');
+        Route::post('tanda-tangan','UserController@updateTandaTangan');
+        // Profil
+        Route::get('profil','UserController@profil');
+        Route::post('profil','UserController@update');
+        Route::get('profil/password','UserController@profilPassword');
+        Route::post('profil/password','UserController@updatePassword');
+        Route::patch('profil/{admin}','UserController@update');
     });
 });
 
