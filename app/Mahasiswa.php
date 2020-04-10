@@ -20,7 +20,7 @@ class Mahasiswa extends Model
         'ipk',
         'password',
         'id_prodi'
-        ];
+    ];
 
     public function setNamaAttribute($value){
         $this->attributes['nama'] = strtolower($value);
@@ -35,6 +35,10 @@ class Mahasiswa extends Model
     }
 
     public function tahunAkademik(){
-        return $this->belongsToMany('App\TahunAkademik','status_mahasiswa','nim','id_tahun_akademik')->withTimestamps();
+        return $this->belongsToMany('App\TahunAkademik','status_mahasiswa','nim','id_tahun_akademik')->withPivot('status')->withTimestamps();
+    }
+
+    public function suratKeterangan(){
+        return $this->hasMany('App\SuratKeterangan','nim');
     }
 }

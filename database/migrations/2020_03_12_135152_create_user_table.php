@@ -14,7 +14,7 @@ class CreateUserTable extends Migration
     public function up()
     {
         Schema::create('user', function (Blueprint $table) {
-            $table->string('nip')->primary();
+            // $table->char('nip',18)->primary();
             $table->string('nama');
             $table->enum('jabatan',['dekan','wd1','wd2','wd3','kasubag kemahasiswaan','kasubag pendidikan dan pengajaran']);
             $table->enum('status_aktif',['aktif','non aktif']);

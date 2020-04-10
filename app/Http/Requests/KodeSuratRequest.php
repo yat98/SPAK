@@ -35,7 +35,7 @@ class KodeSuratRequest extends FormRequest
         }
         return[
             'kode_surat'=>$kodeSuratRules,
-            'jenis_surat'=>'required|string|in:surat keterangan aktif kuliah,surat dispensasi,surat keterangan cuti,surat kelakuan baik',
+            'jenis_surat'=>'required|string|in:surat keterangan,surat dispensasi',
             'status_aktif'=>'required|string|in:aktif,non aktif'
         ];
     }

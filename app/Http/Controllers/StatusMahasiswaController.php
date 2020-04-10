@@ -21,7 +21,7 @@ class StatusMahasiswaController extends Controller
     {
         $perPage = $this->perPage;
         $mahasiswa = $this->generateMahasiswa();
-        $tahunAkademik = $this->generateTahunAkademik();
+        $tahunAkademik = $this->generateAllTahunAkademik();
         $statusMahasiswaList = StatusMahasiswa::join('tahun_akademik','tahun_akademik.id','=','status_mahasiswa.id_tahun_akademik')
                                     ->join('mahasiswa','mahasiswa.nim','=','status_mahasiswa.nim')
                                     ->paginate($perPage);
@@ -87,10 +87,10 @@ class StatusMahasiswaController extends Controller
 
     public function search(Request $request){
         $keyword = $request->all();
-        if(isset($keyword['keywords']) || isset($keyword['semester']) || isset($keyword['tahun_akademik']) || isset($keyword['status'])){
+        if(isset($keyword['keywords']) || isset($keyword['tahun_akademik']) || isset($keyword['status'])){
             $perPage = $this->perPage;
             $mahasiswa = $this->generateMahasiswa();
-            $tahunAkademik = $this->generateTahunAkademik();
+            $tahunAkademik = $this->generateAllTahunAkademik();
 
             $countMahasiswa = Mahasiswa::all()->count();
             $countAllStatusMahasiswa = StatusMahasiswa::all()->count();
@@ -100,8 +100,7 @@ class StatusMahasiswaController extends Controller
             $statusMahasiswaList = StatusMahasiswa::where('status_mahasiswa.nim','like',"%$nama%")
             ->join('tahun_akademik','tahun_akademik.id','=','status_mahasiswa.id_tahun_akademik')
                                     ->join('mahasiswa','mahasiswa.nim','=','status_mahasiswa.nim');
-            (isset($keyword['semester'])) ? $statusMahasiswaList = $statusMahasiswaList->where('semester',$keyword['semester']) : '';
-            (isset($keyword['tahun_akademik'])) ? $statusMahasiswaList = $statusMahasiswaList->where('tahun_akademik',$keyword['tahun_akademik']) : '';
+            (isset($keyword['tahun_akademik'])) ? $statusMahasiswaList = $statusMahasiswaList->where('id_tahun_akademik',$keyword['tahun_akademik']) : '';
             (isset($keyword['status'])) ? $statusMahasiswaList = $statusMahasiswaList->where('status',$keyword['status']) : '';
             $statusMahasiswaList = $statusMahasiswaList->paginate($perPage)->appends($request->except('page'));
             $countStatusMahasiswa = $statusMahasiswaList->count();
@@ -139,15 +138,6 @@ class StatusMahasiswaController extends Controller
              $failures = $e->failures();
              return view('user.'.$this->segmentUser.'.import_status_mahasiswa',compact('failures','tahun'));
         }
-    }
-
-    private function generateMahasiswa(){
-        $mahasiswa = Mahasiswa::all();
-        $mahasiswaList = [];
-        foreach ($mahasiswa as $mhs) {
-            $mahasiswaList[$mhs->nim] = $mhs->nim.' - '.$mhs->nama;
-        }
-        return $mahasiswaList;
     }
 
     private function isMahasiswaExists(){

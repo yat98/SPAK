@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Session;
 use App\Jurusan;
+use App\Mahasiswa;
 use App\ProgramStudi;
 use App\TahunAkademik;
+use App\SuratKeterangan;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -65,6 +67,24 @@ class Controller extends BaseController
             $tahun[$i.'/'.++$tahunAkhir]="$i/".$tahunAkhir;
         }
         return $tahun; 
+    }
+
+    protected function generateMahasiswa(){
+        $mahasiswa = Mahasiswa::all();
+        $mahasiswaList = [];
+        foreach ($mahasiswa as $mhs) {
+            $mahasiswaList[$mhs->nim] = $mhs->nim.' - '.$mhs->nama;
+        }
+        return $mahasiswaList;
+    }
+
+    protected function generateNomorSurat(){
+        $nomorSurat = SuratKeterangan::all();
+        $nomorSuratList = [];
+        foreach ($nomorSurat as $nmr) {
+            $nomorSuratList[$nmr->nomor_surat] = 'B/'.$nmr->nomor_surat.'/'.$nmr->kodeSurat->kode_surat.'/'.$nmr->created_at->year;
+        }
+        return $nomorSuratList;
     }
 
     protected function setFlashData($flashType,$titleText,$text){

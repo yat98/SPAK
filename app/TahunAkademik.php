@@ -15,6 +15,10 @@ class TahunAkademik extends Model
     ];
 
     public function mahasiswa(){
-        return $this->belongsToMany('App\Mahasiswa','status_mahasiswa','id_tahun_akademik','nim')->withTimeStamps();
+        return $this->belongsToMany('App\Mahasiswa','status_mahasiswa','id_tahun_akademik','nim')->withPivot('status')->withTimeStamps();
+    }
+
+    public function suratKeterangan(){
+        return $this->hasMany('App\SuratKeterangan','id_tahun_akademik');
     }
 }

@@ -88,7 +88,7 @@
                 <i class="mdi mdi mdi mdi-border-color menu-icon"></i>
             </a>
         </li>
-        <li class="nav-item {{ ($halaman == 'surat' || $halaman == 'surat') ? 'active':'' }}">
+        <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">Surat</span>
                 <i class="menu-arrow"></i>
@@ -97,9 +97,9 @@
             <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item">
-                        <a class="nav-link {{ ($halaman == 'mahasiswa') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/mahasiswa') }}">Surat Keterangan Aktif <br> Kuliah</a></li>
+                        <a class="nav-link {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-aktif-kuliah') }}">Surat Keterangan Aktif <br> Kuliah</a></li>
                     <li class="nav-item"> 
-                        <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/user') }}">Surat Dispensasi</a>
+                        <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/user') }}">Surat Keterangan Cuti</a>
                     </li>
                     <li class="nav-item"> 
                         <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/user') }}">Surat Keterangan <br> Kelakuan Baik</a>

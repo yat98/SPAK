@@ -66,6 +66,9 @@ class NavServiceProvider extends ServiceProvider
             if($segment == 'tanda-tangan'){
                 $halaman = 'tanda-tangan';
             }
+            if($segment == 'surat-keterangan-aktif-kuliah'){
+                $halaman = 'surat-keterangan-aktif-kuliah';
+            }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi]);
     }

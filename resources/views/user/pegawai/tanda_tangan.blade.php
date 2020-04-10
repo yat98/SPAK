@@ -20,6 +20,7 @@
                           <div class="clearfix">
                             <h4 class="card-title float-left">Tanda Tangan</h4>
                           </div>
+                          <hr class="mb-4">
                           <div class="row">
                             <div class="col text-center">
                                 @if(!empty($user->tanda_tangan))
@@ -47,6 +48,7 @@
                             <div class="clearfix">
                                 <h4 class="card-title float-left">Tambah Tanda Tangan</h4>
                             </div>
+                            <hr class="mb-4">
                             <div class="row mt-5">
                                 <div class="col-12">
                                     <div id="signature-pad" class="signature-pad">

@@ -22,4 +22,14 @@ class User extends Model
         'tanda_tangan',
         'password',
     ];
+
+    public function getNipAttribute($nip){
+        return (string) $nip;
+    }
+
+    public function suratKeterangan(){
+        return $this->hasMany('App\SuratKeterangan','nip');
+    }
+
+    
 }

@@ -14,12 +14,14 @@ class LoginController extends Controller
     public function login(){
         if(Session::get('status') == 'mahasiswa'){
             return redirect('mahasiswa');
+        }else if(Session::get('status') == 'pegawai'){
+            return redirect('pegawai');
         }
         return view('login.login');
     }
 
     public function checkLogin(Request $request){
-        $user = '';
+        $user;
         $username = $request->username;
         $password = $request->password;
         $this->validate($request,[
@@ -27,30 +29,20 @@ class LoginController extends Controller
             'password'=>'required|string|max:60',
         ]);
 
-        if($request->jenis_user == 'mahasiswa'){
-            $user = Mahasiswa::where('nim',$request->username)->first();
-        }
-        else{
-            $user = User::where('nip',$request->username)->first();
-        }
-
+        ($request->jenis_user == 'mahasiswa') ? $user = Mahasiswa::where('nim',$request->username)->first():$user = User::where('nip',$request->username)->first();
+        
         if(!empty($user)){
             if(Hash::check($password,$user->password)){
                 $session = [ 
                     'username'=>$user->nama,
-                    'login'=>true,
                 ];
 
                 if($request->jenis_user == 'mahasiswa'){
                     $session['nim'] = $user->nim; 
                     $session['status'] = 'mahasiswa';
-                }else if($request->jenis_user == 'pimpinan'){
+                }else{
+                    $session['status'] = ($request->jenis_user == 'pimpinan') ? 'pimpinan':'pegawai';
                     $session['nip'] = $user->nip;
-                    $session['status'] = 'pimpinan';
-                    $session['jabatan'] = $user->jabatan;
-                }else if($request->jenis_user == 'pegawai'){
-                    $session['nip'] = $user->nip;
-                    $session['status'] = 'pegawai';
                     $session['jabatan'] = $user->jabatan;
                 }
 

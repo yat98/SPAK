@@ -87,9 +87,6 @@
                                                 {{ Form::select('tahun_akademik',$tahunAkademik,(request()->get('tahun_akademik') != null) ? request()->get('tahun_akademik'):null,['class'=>'search btn-margin form-control','placeholder'=> '-- Pilih Tahun Akademik --']) }}
                                             </div>
                                             <div class="col-sm-12 col-md-2 mt-1">
-                                                {{ Form::select('semester',['ganjil'=>'Ganjil','genap'=>'Genap'],(request()->get('semester') != null) ? request()->get('semester'):null,['class'=>'search btn-margin form-control','placeholder'=> '-- Pilih Semester --']) }}
-                                            </div>
-                                            <div class="col-sm-12 col-md-2 mt-1">
                                                 {{ Form::select('status',['aktif'=>'Aktif','non aktif'=>'Non Aktif','cuti'=>'Cuti','drop out'=>'Drop Out','lulus'=>'Lulus','keluar'=>'Keluar'],(request()->get('status') != null) ? request()->get('status'):null,['class'=>'search btn-margin form-control','placeholder'=> '-- Pilih Status --']) }}
                                             </div>
                                             <div class="col-sm-12 col-md">

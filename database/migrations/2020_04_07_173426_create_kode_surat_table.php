@@ -17,7 +17,7 @@ class CreateKodeSuratTable extends Migration
             $table->increments('id');
             $table->string('kode_surat');
             $table->enum('status_aktif',['aktif','non aktif']);
-            $table->enum('jenis_surat',['surat keterangan aktif kuliah','surat dispensasi','surat keterangan cuti','surat kelakuan baik']);
+            $table->enum('jenis_surat',['surat keterangan','surat dispensasi']);
             $table->timestamps();
         });
     }

@@ -182,6 +182,8 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         // Nav Service Provide
         App\Providers\NavServiceProvider::class,
+        // DomPDF
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -238,6 +240,8 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         // LaravelExcel
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        // DomPDF
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

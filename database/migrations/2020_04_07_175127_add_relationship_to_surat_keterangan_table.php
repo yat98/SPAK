@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRelationshipToSuratKeteranganAktifKuliahTable extends Migration
+class AddRelationshipToSuratKeteranganTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,7 @@ class AddRelationshipToSuratKeteranganAktifKuliahTable extends Migration
      */
     public function up()
     {
-        Schema::table('surat_keterangan_aktif_kuliah', function (Blueprint $table) {
-            $table->string('nim')->index();
-            $table->char('nip',18)->index();
-            $table->integer('id_tahun_akademik')->unsigned();
-            $table->integer('id_kode_surat')->unsigned();
-
+        Schema::table('surat_keterangan', function (Blueprint $table) {
             $table->foreign('nim')
                   ->references('nim')
                   ->on('mahasiswa')
@@ -52,7 +47,7 @@ class AddRelationshipToSuratKeteranganAktifKuliahTable extends Migration
      */
     public function down()
     {    
-        Schema::table('surat_keterangan_aktif_kuliah', function (Blueprint $table) {
+        Schema::table('surat_keterangan', function (Blueprint $table) {
             $table->dropForeign(['nim']);
             $table->dropForeign(['nip']);
             $table->dropForeign(['id_tahun_akademik']);

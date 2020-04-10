@@ -67,13 +67,12 @@
                                                 <th> Status</th>
                                                 <th> Di Buat</th>
                                                 <th> Di Ubah</th>
-                                                <th> Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($kodeSuratList as $kodeSurat)
                                             <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($kodeSuratList->currentPage() - 1) }}</td>
+                                                <td> {{ $loop->iteration }}</td>
                                                 <td> {{ $kodeSurat->kode_surat }}</td>
                                                 <td> {{ ucwords($kodeSurat->jenis_surat) }}</td>
                                                 <td> 

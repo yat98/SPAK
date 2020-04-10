@@ -41,6 +41,17 @@ Route::group(['prefix' => 'pegawai'],function(){
         // Tanda Tangan
         Route::get('tanda-tangan','UserController@indexTandaTangan');
         Route::post('tanda-tangan','UserController@updateTandaTangan');
+        // Surat Keterangan Aktif Kuliah
+        Route::get('surat-keterangan-aktif-kuliah/search/','SuratKeteranganController@searchSuratKeteranganAktifKuliah');
+        Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}/cetak','SuratKeteranganController@cetakSuratKeteranganAktifKuliah');
+        Route::get('surat-keterangan-aktif-kuliah','SuratKeteranganController@indexSuratKeteranganAktifKuliah');
+        Route::post('surat-keterangan-aktif-kuliah','SuratKeteranganController@storeSuratKeteranganAktifKuliah');
+        Route::get('surat-keterangan-aktif-kuliah/create','SuratKeteranganController@createSuratKeteranganAktifKuliah');
+        Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}/edit','SuratKeteranganController@editSuratKeteranganAktifKuliah');
+        Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@showSuratKeteranganAktifKuliah');
+        Route::patch('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@updateSuratKeteranganAktifKuliah');
+        Route::delete('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@destroySuratKeteranganAktifKuliah');
+
         // Profil
         Route::get('profil','UserController@profil');
         Route::post('profil','UserController@update');

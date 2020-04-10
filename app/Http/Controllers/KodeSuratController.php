@@ -15,10 +15,8 @@ class KodeSuratController extends Controller
     public function index()
     {
         $jenisSurat = [
-            'surat keterangan aktif kuliah'=>'Surat Keterangan Aktif Kuliah',
+            'surat keterangan'=>'Surat Keterangan',
             'surat dispensasi'=>'Surat Dispensasi',
-            'surat keterangan cuti'=>'Surat Keterangan Cuti',
-            'surat kelakuan baik'=>'Surat Kelakuan Baik'
         ];
         $perPage=$this->perPage;
         $kodeSuratList = KodeSurat::paginate($perPage);
@@ -30,10 +28,8 @@ class KodeSuratController extends Controller
     public function create()
     {
         $jenisSurat = [
-            'surat keterangan aktif kuliah'=>'Surat Keterangan Aktif Kuliah',
+            'surat keterangan'=>'Surat Keterangan',
             'surat dispensasi'=>'Surat Dispensasi',
-            'surat keterangan cuti'=>'Surat Keterangan Cuti',
-            'surat kelakuan baik'=>'Surat Kelakuan Baik'
         ];
         return view('user.'.$this->segmentUser.'.tambah_kode_surat',compact('jenisSurat'));
     }
@@ -48,10 +44,8 @@ class KodeSuratController extends Controller
 
     public function edit(KodeSurat $kodeSurat){
         $jenisSurat = [
-            'surat keterangan aktif kuliah'=>'Surat Keterangan Aktif Kuliah',
+            'surat keterangan'=>'Surat Keterangan',
             'surat dispensasi'=>'Surat Dispensasi',
-            'surat keterangan cuti'=>'Surat Keterangan Cuti',
-            'surat kelakuan baik'=>'Surat Kelakuan Baik'
         ];
         return view('user.'.$this->segmentUser.'.edit_kode_surat',compact('jenisSurat','kodeSurat'));
     }
@@ -73,10 +67,8 @@ class KodeSuratController extends Controller
         $keywords = $request->all();
         if(isset($keywords['keyword']) || isset($keywords['jenis_surat'])){
             $jenisSurat = [
-                'surat keterangan aktif kuliah'=>'Surat Keterangan Aktif Kuliah',
+                'surat keterangan'=>'Surat Keterangan',
                 'surat dispensasi'=>'Surat Dispensasi',
-                'surat keterangan cuti'=>'Surat Keterangan Cuti',
-                'surat kelakuan baik'=>'Surat Kelakuan Baik'
             ];
             $countAllKodeSurat = KodeSurat::all()->count();
             $perPage=$this->perPage;

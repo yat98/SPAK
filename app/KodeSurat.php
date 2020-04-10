@@ -13,4 +13,8 @@ class KodeSurat extends Model
         'status_aktif',
         'jenis_surat'
     ];
+
+    public function suratKeterangan(){
+        return $this->hasMany('App\SuratKeterangan','id_kode_surat');
+    }
 }
