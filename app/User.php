@@ -9,10 +9,8 @@ class User extends Model
     protected $table = 'user';
 
     protected $primaryKey = 'nip';
-    
-    protected $casts = [
-        'nip' => 'String',
-    ];
+
+    protected $keyType = 'string';
 
     protected $fillable = [
         'nip',
@@ -23,13 +21,7 @@ class User extends Model
         'password',
     ];
 
-    public function getNipAttribute($nip){
-        return (string) $nip;
-    }
-
     public function suratKeterangan(){
-        return $this->hasMany('App\SuratKeterangan','nip');
+        return $this->hasMany('App\SuratKeterangan','nip','nip');
     }
-
-    
 }

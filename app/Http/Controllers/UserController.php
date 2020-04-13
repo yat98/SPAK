@@ -115,6 +115,52 @@ class UserController extends Controller
         return redirect($this->segmentUser.'/tanda-tangan');
     }
 
+    public function profil(){
+        $nip = Session::get('nip');
+        $user = User::where('nip',$nip)->get()->first();
+        $status = $user->status_aktif;
+        return view('user.'.$this->segmentUser.'.profil',compact('user','status'));
+    }
+
+    public function profilPassword(){
+        return view('user.'.$this->segmentUser.'.profil_password');
+    }
+    
+    public function updateProfil(Request $request,User $user){
+        $this->validate($request,[
+            'nip'=>'required|unique:user,nip,'.$request->nip.',nip',
+            'nama'=>'required|string|alpha_spaces'
+        ]);
+        $user->update($request->all());
+        Session::forget(['nip','username']);
+        Session::put([
+            'nip'=>$request->nip,
+            'username'=>$request->nama,
+        ]);
+        $this->setFlashData('success','Berhasil','Profil berhasil diubah');
+        return redirect($this->segmentUser);
+    }
+
+    public function updatePassword(Request $request){
+        $nip = Session::get('nip');
+        $user = User::where('nip',$nip)->first();
+        $this->validate($request,[
+            'password_lama'=>function($attr,$val,$fail) use($user){
+                if (!Hash::check($val, $user->password)) {
+                    $fail('password lama tidak sesuai.');
+                }
+            },
+            'password'=>'required|string|max:60|confirmed',
+            'password_confirmation'=>'required|string|max:60'
+       ]);
+       $user->update([
+           'password'=>Hash::make($request->password)
+       ]);
+       Session::flush();
+       $this->setFlashData('success','Berhasil','Password  berhasil diubah');
+       return redirect($this->segmentUser);
+    }
+
     public function logout(){
         Session::flush();
         return redirect('/');

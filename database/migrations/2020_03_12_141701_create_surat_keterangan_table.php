@@ -14,14 +14,11 @@ class CreateSuratKeteranganTable extends Migration
     public function up()
     {
         Schema::create('surat_keterangan', function (Blueprint $table) {
-            $table->integer('nomor_surat')->unsigned()->primary();
-            $table->string('nim')->index();
-            $table->char('nip',18)->index();
-            $table->integer('id_tahun_akademik')->unsigned();
+            $table->integer('id_pengajuan_surat_keterangan')->unsigned()->primary();
+            $table->char('nomor_surat',6);
+            $table->char('nip',18)->nullable();
             $table->integer('id_kode_surat')->unsigned();
-            $table->enum('jenis_surat',['surat keterangan aktif kuliah','surat keterangan kelakukan baik','surat keterangan cuti']);
             $table->integer('jumlah_cetak');
-            $table->enum('status',['ditolak','diproses','selesai']);
             $table->timestamps();
         });
     }

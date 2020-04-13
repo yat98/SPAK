@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\KodeSurat;
 use App\ProgramStudi;
 use App\TahunAkademik;
+use App\PimpinanOrmawa;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -39,6 +40,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('program_studi', ProgramStudi::class);
         Route::model('tahun_akademik', TahunAkademik::class);
         Route::model('kode_surat', KodeSurat::class);
+        Route::model('pimmpinan_ormawa', PimpinanOrmawa::class);
     }
 
     /**

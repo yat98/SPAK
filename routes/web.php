@@ -54,10 +54,9 @@ Route::group(['prefix' => 'pegawai'],function(){
 
         // Profil
         Route::get('profil','UserController@profil');
-        Route::post('profil','UserController@update');
         Route::get('profil/password','UserController@profilPassword');
         Route::post('profil/password','UserController@updatePassword');
-        Route::patch('profil/{admin}','UserController@update');
+        Route::patch('profil/{user}','UserController@updateProfil');
     });
 });
 
@@ -87,7 +86,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::resource('mahasiswa', 'MahasiswaController');
         // User
         Route::get('user/search','UserController@search');
-        Route::resource('user','UserController');
+        Route::resource('user','UserController')->except(['show']);
         // Status Mahasiswa
         Route::post('status-mahasiswa/import-status-mahasiswa','StatusMahasiswaController@storeImport');
         Route::get('status-mahasiswa/import-status-mahasiswa','StatusMahasiswaController@createImport');
@@ -98,9 +97,14 @@ Route::group(['prefix' => 'admin'], function () {
         Route::patch('status-mahasiswa','StatusMahasiswaController@update');
         Route::delete('status-mahasiswa','StatusMahasiswaController@destroy');
         Route::get('status-mahasiswa/{id_tahun_akademik}/{nim}/edit','StatusMahasiswaController@edit');
+        // Ormawa
+        Route::get('ormawa/search','OrmawaController@search');
+        Route::resource('ormawa','OrmawaController')->except(['show']);
+        // Pimpinan Ormawa
+        Route::get('pimpinan-ormawa/search','PimpinanOrmawaController@search');
+        Route::resource('pimpinan-ormawa','PimpinanOrmawaController')->except(['show']);
         // Profil
         Route::get('profil','AdminController@profil');
-        Route::post('profil','AdminController@update');
         Route::get('profil/password','AdminController@profilPassword');
         Route::post('profil/password','AdminController@updatePassword');
         Route::patch('profil/{admin}','AdminController@update');

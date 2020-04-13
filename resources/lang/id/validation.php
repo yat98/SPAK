@@ -143,6 +143,15 @@ return [
             'required' => 'jenis kelamin wajib diisi.',
             'in' => 'jenis kelamin yang dipilih tidak valid.',
         ],
+        'password_confirmation' => [
+            'required' => 'konfirmasi password wajib diisi.',
+            'string' => 'konfirmasi password harus berisi antara :min sampai :max karakter.',
+            'max' => 'konfirmasi password maksimal berisi :max karakter.'
+        ],
+        'id_ormawa' => [
+            'required' => 'ormawa wajib diisi.',
+            'numeric' => 'ormawa harus berupa angka.',
+        ],
     ],
 
     /*

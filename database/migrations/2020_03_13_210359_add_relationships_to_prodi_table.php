@@ -14,8 +14,6 @@ class AddRelationshipsToProdiTable extends Migration
     public function up()
     {
         Schema::table('prodi', function (Blueprint $table) {
-            // Menambahkan  kode_jurusan dengan format index
-            $table->integer('id_jurusan')->unsigned();
             // Menambahkan foreign key pada tabel prodi
             $table->foreign('id_jurusan')
                   ->references('id')

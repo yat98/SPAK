@@ -50,6 +50,12 @@ class NavServiceProvider extends ServiceProvider
             if($segment == 'status-mahasiswa'){
                 $halaman = 'status-mahasiswa';
             }
+            if($segment == 'ormawa'){
+                $halaman = 'ormawa';
+            }
+            if($segment == 'pimpinan-ormawa'){
+                $halaman = 'pimpinan-ormawa';
+            }
             if($segment == 'profil'){
                 $halaman = 'profil';
             }
@@ -68,6 +74,9 @@ class NavServiceProvider extends ServiceProvider
             }
             if($segment == 'surat-keterangan-aktif-kuliah'){
                 $halaman = 'surat-keterangan-aktif-kuliah';
+            }
+            if($segment == 'profil'){
+                $halaman = 'profil';
             }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi]);

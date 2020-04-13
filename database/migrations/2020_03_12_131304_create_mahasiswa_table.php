@@ -14,12 +14,13 @@ class CreateMahasiswaTable extends Migration
     public function up()
     {
         Schema::create('mahasiswa', function (Blueprint $table) {
-            $table->string('nim')->primary();
-            $table->string('nama');
+            $table->char('nim',25)->primary();
+            $table->integer('id_prodi')->unsigned();
+            $table->string('nama',100);
             $table->enum('sex',['L','P']);
             $table->year('angkatan');
             $table->double('ipk',3,2);
-            $table->string('password');
+            $table->string('password',60);
             $table->timestamps();
         });
     }

@@ -8,37 +8,25 @@ class SuratKeterangan extends Model
 {
     protected $table = 'surat_keterangan';
 
-    protected $primaryKey = 'nomor_surat';
+    protected $primaryKey = 'id_pengajuan_surat_keterangan';
     
     protected $fillable = [
+        'id_pengajuan_surat_keterangan',
         'nomor_surat',
-        'nim',
         'nip',
-        'id_tahun_akademik',
         'id_kode_surat',
-        'jenis_surat',
         'jumlah_cetak',
-        'status'
     ];
-
-    public function getNipAttribute($nip){
-        return (string) $nip;
-    }
     
     public function user(){
-        return $this->belongsTo('App\User','nip');
+        return $this->belongsTo('App\User','nip','nip');
     }
 
     public function kodeSurat(){
         return $this->belongsTo('App\KodeSurat','id_kode_surat');
     }
 
-    public function mahasiswa(){
-        return $this->belongsTo('App\Mahasiswa','nim');
+    public function pengajuanSuratKeterangan(){
+        return $this->belongsTo('App\PengajuanSuratKeterangan','id_pengajuan_surat_keterangan');
     }
-
-    public function tahunAkademik(){
-        return $this->belongsTo('App\TahunAkademik','id_tahun_akademik');
-    }
-
 }

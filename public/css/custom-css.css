@@ -32,6 +32,16 @@
     border:3px dashed #3e4b5b;
 }
 
+.bg-gradient-deep-space-sea{
+    background: -webkit-gradient(linear, left top, right top, from(#2C3E50), to(#4CA1AF)) !important;
+    background: linear-gradient(to right, #2C3E50, #4CA1AF) !important; 
+}
+
+.bg-gradient-bloody-mary{
+    background: -webkit-gradient(linear, left top, right top, from(#FF512F), to(#DD2476)) !important;
+    background: linear-gradient(to right, #FF512F, #DD2476) !important; 
+}
+
 @media (min-width: 1025px) and (max-width: 1280px) {
     .btn-margin {
         margin-top: 20px !important;

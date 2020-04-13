@@ -161,7 +161,7 @@ if(wrapper){
     let signaturePad = new SignaturePad(canvas, {
         backgroundColor: 'white',
         minWidth: 0.5,
-        maxWidth:  3.5,
+        maxWidth:  3,
         penColor: "blue"
     });
     function resizeCanvas() {
@@ -219,23 +219,23 @@ $('.btn-surat-detail').on('click', function (e) {
                             <table class="table">
                                 <tr>
                                     <th>NIM</th>
-                                    <td>${suratDetail.nim}</td>
+                                    <td>${suratDetail.pengajuan_surat_keterangan.nim}</td>
                                 </tr>
                                 <tr>
                                     <th>Nama</th>
-                                    <td>${suratDetail.mahasiswa.nama}</td>
+                                    <td>${suratDetail.pengajuan_surat_keterangan.mahasiswa.nama}</td>
                                 </tr>
                                 <tr>
                                     <th>Angkatan</th>
-                                    <td>${suratDetail.mahasiswa.angkatan}</td>
+                                    <td>${suratDetail.pengajuan_surat_keterangan.mahasiswa.angkatan}</td>
                                 </tr>
                                 <tr>
                                     <th>Jurusan</th>
-                                    <td>${suratDetail.mahasiswa.prodi.jurusan.nama_jurusan}</td>
+                                    <td>${suratDetail.pengajuan_surat_keterangan.mahasiswa.prodi.jurusan.nama_jurusan}</td>
                                 </tr>
                                 <tr>
                                     <th>Program Studi</th>
-                                    <td>${suratDetail.mahasiswa.prodi.strata+' - '+suratDetail.mahasiswa.prodi.nama_prodi}</td>
+                                    <td>${suratDetail.pengajuan_surat_keterangan.mahasiswa.prodi.strata+' - '+suratDetail.pengajuan_surat_keterangan.mahasiswa.prodi.nama_prodi}</td>
                                 </tr>
                                 <tr>
                                 <th>Nomor Surat</th>
@@ -243,11 +243,11 @@ $('.btn-surat-detail').on('click', function (e) {
                                 </tr>
                                 <tr>
                                     <th>Jenis Surat</th>
-                                    <td>${suratDetail.jenis_surat}</td>
+                                    <td>${suratDetail.pengajuan_surat_keterangan.jenis_surat}</td>
                                 </tr>
                                 <tr>
                                     <th>Status</th>
-                                    <td>${suratDetail.status}</td>
+                                    <td>${suratDetail.pengajuan_surat_keterangan.status}</td>
                                 </tr>
                                 <tr>
                                     <th>Di Tandatangani Oleh</th>

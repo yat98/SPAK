@@ -18,7 +18,7 @@ class TahunAkademik extends Model
         return $this->belongsToMany('App\Mahasiswa','status_mahasiswa','id_tahun_akademik','nim')->withPivot('status')->withTimeStamps();
     }
 
-    public function suratKeterangan(){
-        return $this->hasMany('App\SuratKeterangan','id_tahun_akademik');
+    public function pengajuanSuratKeterangan(){
+        return $this->hasMany('App\PengajuanSuratKeterangan','id_tahun_akademik');
     }
 }

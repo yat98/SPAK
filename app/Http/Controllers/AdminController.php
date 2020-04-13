@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Session;
 use App\User;
 use App\Admin;
+use App\Ormawa;
 use App\Jurusan;
 use App\Mahasiswa;
 use App\ProgramStudi;
 use App\TahunAkademik;
+use App\PimpinanOrmawa;
 use App\StatusMahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -25,6 +27,8 @@ class AdminController extends Controller
         $tahunAkademikList = TahunAkademik::orderBy('status_aktif')->get();
         $mahasiswaList = Mahasiswa::all()->sortBy('updated_at');
         $userList = User::all();
+        $ormawaList = Ormawa::all();
+        $pimpinanOrmawaList = PimpinanOrmawa::all();
         $statusMahasiswaList = StatusMahasiswa::join('tahun_akademik','tahun_akademik.id','=','status_mahasiswa.id_tahun_akademik')
                                     ->join('mahasiswa','mahasiswa.nim','=','status_mahasiswa.nim')
                                     ->get()
@@ -37,13 +41,17 @@ class AdminController extends Controller
         $countTahunAkademik = $tahunAkademikList->count();
         $countTahunAkademik = $tahunAkademikList->count();
         $countStatusMahasiswa = $statusMahasiswaList->count();
+        $countOrmawa = $ormawaList->count();
+        $countPimpinanOrmawa = $pimpinanOrmawaList->count();
         $jurusanList = $jurusanList->take(5);
         $prodiList = $prodiList->take(5);
         $userList = $userList->take(5);
         $tahunAkademikList = $tahunAkademikList->take(5);
         $mahasiswaList = $mahasiswaList->take(5);
         $statusMahasiswaList = $statusMahasiswaList->take(5);
-        return view('user.'.$this->segmentUser.'.dashboard',compact('countJurusan','countProdi','countMahasiswa','tahunAkademikAktif','jurusanList','prodiList','tahunAkademikList','mahasiswaList','countTahunAkademik','userList','countUser','countStatusMahasiswa','statusMahasiswaList'));
+        $ormawaList = $ormawaList->take(5);
+        $pimpinanOrmawaListList = $pimpinanOrmawaList->take(5);
+        return view('user.'.$this->segmentUser.'.dashboard',compact('countJurusan','countProdi','countMahasiswa','tahunAkademikAktif','jurusanList','prodiList','tahunAkademikList','mahasiswaList','countTahunAkademik','userList','countUser','countStatusMahasiswa','statusMahasiswaList','ormawaList','countOrmawa','pimpinanOrmawaList','countPimpinanOrmawa'));
     }
 
     public function profil(){
@@ -67,7 +75,7 @@ class AdminController extends Controller
         ]);
         Session::forget('username');
         Session::put('username',$request->username);
-        $this->setFlashData('success','Berhasil','Username  berhasil diubah');
+        $this->setFlashData('success','Berhasil','Username berhasil diubah');
         return redirect($this->segmentUser);
     }
 

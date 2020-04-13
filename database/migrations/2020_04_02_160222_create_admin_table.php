@@ -15,8 +15,8 @@ class CreateAdminTable extends Migration
     {
         Schema::create('admin', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('username');
-            $table->string('password');
+            $table->string('username',100);
+            $table->string('password',60);
             $table->timestamps();
         });
     }

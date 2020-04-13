@@ -118,6 +118,40 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-4 stretch-card grid-margin">
+                        <div class="card bg-gradient-bloody-mary text-white card-img-holder">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Data Ormawa <i
+                                        class="mdi mdi-check-decagram mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countOrmawa > 0 ? $countOrmawa.' Jurusan' : 'Data Ormawa Kosong' }}
+                                </h2>
+                                <h6 class="card-text">
+                                    <a href="{{ url('admin/ormawa') }}" class="text-white">Lihat data ormawa</a>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 stretch-card grid-margin">
+                        <div class="card bg-gradient-deep-space-sea text-white card-img-holder">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Data Pimpinan Ormawa <i
+                                        class="mdi mdi-account-multiple mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countPimpinanOrmawa > 0 ? $countPimpinanOrmawa.' Pimpinan Ormawa' : 'Data Pimpinan Ormawa Kosong' }}
+                                </h2>
+                                <h6 class="card-text">
+                                    <a href="{{ url('admin/pimpinan-ormawa') }}" class="text-white">Lihat data pimpinan ormawa</a>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-12 grid-margin">
@@ -462,6 +496,58 @@
                                         </h4>
                                         <p class="text-muted">
                                             {{ (Session::has('search')) ? Session::get('search') : 'Silahkan mengisi data status mahasiswa terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Data Ormawa</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countOrmawa > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Nama</th>
+                                                <th> Nama Jurusan</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($ormawaList as $ormawa)
+                                            <tr>
+                                                <td> {{ $loop->iteration }}</td>
+                                                <td> {{ $ormawa->nama  }}</td>
+                                                <td> {{ $ormawa->jurusan->nama_jurusan  }}</td>
+                                                <td> {{ $ormawa->created_at->diffForHumans() }}</td>
+                                                <td> {{ $ormawa->updated_at->diffForHumans() }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Ormawa Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data ormawa terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>

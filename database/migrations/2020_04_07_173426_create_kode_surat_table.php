@@ -15,7 +15,7 @@ class CreateKodeSuratTable extends Migration
     {
         Schema::create('kode_surat', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('kode_surat');
+            $table->string('kode_surat',50);
             $table->enum('status_aktif',['aktif','non aktif']);
             $table->enum('jenis_surat',['surat keterangan','surat dispensasi']);
             $table->timestamps();

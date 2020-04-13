@@ -14,8 +14,6 @@ class AddRelationshipsToMahasiswaTable extends Migration
     public function up()
     {
         Schema::table('mahasiswa', function (Blueprint $table) {
-            // Menambahkan kode prodi dengan format index
-            $table->integer('id_prodi')->unsigned();
             // Menambahkan foreign key pada tabel mahasiswa
             $table->foreign('id_prodi')
                   ->references('id')

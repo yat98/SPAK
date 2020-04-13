@@ -15,4 +15,8 @@ class Jurusan extends Model
     public function programStudi(){
         return $this->hasMany('App\ProgramStudi','id_jurusan');
     }
+
+    public function ormawa(){
+        return $this->hasMany('App\Ormawa','id_jurusan');
+    }
 }

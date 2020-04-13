@@ -14,27 +14,21 @@ class AddRelationshipToSuratKeteranganTable extends Migration
     public function up()
     {
         Schema::table('surat_keterangan', function (Blueprint $table) {
-            $table->foreign('nim')
-                  ->references('nim')
-                  ->on('mahasiswa')
-                  ->onUpdate('cascade')
-                  ->onDelete('cascade');
-
             $table->foreign('nip')
                   ->references('nip')
                   ->on('user')
-                  ->onUpdate('cascade')
-                  ->onDelete('cascade');
-
-            $table->foreign('id_tahun_akademik')
-                  ->references('id')
-                  ->on('tahun_akademik')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
             
             $table->foreign('id_kode_surat')
                   ->references('id')
                   ->on('kode_surat')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
+            
+            $table->foreign('id_pengajuan_surat_keterangan')
+                  ->references('id')
+                  ->on('pengajuan_surat_keterangan')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
         });
@@ -48,10 +42,9 @@ class AddRelationshipToSuratKeteranganTable extends Migration
     public function down()
     {    
         Schema::table('surat_keterangan', function (Blueprint $table) {
-            $table->dropForeign(['nim']);
             $table->dropForeign(['nip']);
-            $table->dropForeign(['id_tahun_akademik']);
             $table->dropForeign(['id_kode_surat']);
+            $table->dropForeign(['id_pengajuan_surat_keterangan']);
         });
     }
 }

@@ -63,6 +63,18 @@
                 <i class="mdi mdi mdi-checkbox-multiple-marked menu-icon"></i>
             </a>
         </li>
+        <li class="nav-item {{ ($halaman == 'ormawa') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/ormawa') }}">
+                <span class="menu-title">Ormawa</span>
+                <i class="mdi mdi mdi-check-decagram menu-icon"></i>
+            </a>
+        </li>
+        <li class="nav-item {{ ($halaman == 'pimpinan-ormawa') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/pimpinan-ormawa') }}">
+                <span class="menu-title">Pimpinan Ormawa</span>
+                <i class="mdi mdi mdi mdi-account-multiple menu-icon"></i>
+            </a>
+        </li>
         <li class="nav-item {{ ($halaman == 'profil') ? 'active':'' }}">
             <a class="nav-link" href="{{ url(Request::segment(1).'/profil') }}">
                 <span class="menu-title">Ubah Profil</span>
@@ -97,12 +109,13 @@
             <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item">
-                        <a class="nav-link {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-aktif-kuliah') }}">Surat Keterangan Aktif <br> Kuliah</a></li>
-                    <li class="nav-item"> 
-                        <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/user') }}">Surat Keterangan Cuti</a>
+                        <a class="nav-link {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-aktif-kuliah') }}">Surat Keterangan Aktif <br> Kuliah</a>
                     </li>
                     <li class="nav-item"> 
                         <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/user') }}">Surat Keterangan <br> Kelakuan Baik</a>
+                    </li>
+                    <li class="nav-item"> 
+                        <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/user') }}">Surat Keterangan Cuti</a>
                     </li>
                 </ul>
             </div>

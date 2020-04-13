@@ -10,6 +10,8 @@ class Mahasiswa extends Model
     protected $table = 'mahasiswa';
 
     protected $primaryKey = 'nim';
+
+    protected $keyType = 'string';
     
     protected $fillable = [
         'nim',
@@ -38,7 +40,11 @@ class Mahasiswa extends Model
         return $this->belongsToMany('App\TahunAkademik','status_mahasiswa','nim','id_tahun_akademik')->withPivot('status')->withTimestamps();
     }
 
-    public function suratKeterangan(){
-        return $this->hasMany('App\SuratKeterangan','nim');
+    public function pengajuanSuratKeterangan(){
+        return $this->hasMany('App\PengajuanSuratKeterangan','nim');
+    }
+
+    public function pimpinanOrmawa(){
+        return $this->hasOne('App\PimpinanOrmawa','nim');
     }
 }

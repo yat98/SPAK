@@ -16,6 +16,8 @@ class LoginController extends Controller
             return redirect('mahasiswa');
         }else if(Session::get('status') == 'pegawai'){
             return redirect('pegawai');
+        }else if(Session::get('status') == 'admin'){
+            return redirect('admin');
         }
         return view('login.login');
     }

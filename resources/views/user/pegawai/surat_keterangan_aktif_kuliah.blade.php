@@ -15,7 +15,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4 stretch-card grid-margin">
-                        <div class="card bg-gradient-success card-img-holder text-white">
+                        <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
@@ -86,26 +86,26 @@
                                             <tr>
                                                 <td> {{ $loop->iteration + $perPage * ($suratKeteranganAktifList->currentPage() - 1) }}</td>
                                                 <td> {{ 'B/'.$suratKeteranganAktif->nomor_surat.'/'.$suratKeteranganAktif->kodeSurat->kode_surat.'/'.$suratKeteranganAktif->created_at->year }}</td>
-                                                <td> {{ $suratKeteranganAktif->mahasiswa->nama }}</td>
-                                                <td> {{ $suratKeteranganAktif->tahunAkademik->tahun_akademik.' - '.ucwords($suratKeteranganAktif->tahunAkademik->semester) }}</td>
+                                                <td> {{ $suratKeteranganAktif->pengajuanSuratKeterangan->mahasiswa->nama }}</td>
+                                                <td> {{ $suratKeteranganAktif->pengajuanSuratKeterangan->tahunAkademik->tahun_akademik.' - '.ucwords($suratKeteranganAktif->pengajuanSuratKeterangan->tahunAkademik->semester) }}</td>
                                                 <td> 
                                                     <label class="badge badge-gradient-info">
                                                         {{ ucwords($suratKeteranganAktif->status) }}
                                                     </label>
                                                 </td>
                                                 <td>
-                                                    <a href="{{ url('pegawai/surat-keterangan-aktif-kuliah/'.$suratKeteranganAktif->nomor_surat) }}" class="btn-surat-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                    <a href="{{ url('pegawai/surat-keterangan-aktif-kuliah/'.$suratKeteranganAktif->id_pengajuan_surat_keterangan) }}" class="btn-surat-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
                                                         Detail</a>
-                                                    <a href="{{ url('pegawai/surat-keterangan-aktif-kuliah/'.$suratKeteranganAktif->nomor_surat) }}" class="btn-surat-detail btn btn-info btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                    <a href="{{ url('pegawai/surat-keterangan-aktif-kuliah/'.$suratKeteranganAktif->id_pengajuan_surat_keterangan.'/cetak') }}" class="btn btn-info btn-sm" target="_blank">
                                                         <i class="mdi mdi mdi-printer btn-icon-prepend"></i>
                                                         Cetak</a>
-                                                    <a href="{{ url('pegawai/surat-keterangan-aktif-kuliah/'.$suratKeteranganAktif->nomor_surat.'/edit') }}"
+                                                    <a href="{{ url('pegawai/surat-keterangan-aktif-kuliah/'.$suratKeteranganAktif->id_pengajuan_surat_keterangan.'/edit') }}"
                                                         class="btn btn-warning btn-sm text-dark">
                                                         <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>
                                                         Edit
                                                     </a>
-                                                    {{ Form::open(['method'=>'DELETE','action'=>['SuratKeteranganController@destroySuratKeteranganAktifKuliah',$suratKeteranganAktif->nomor_surat],'class'=>'d-inline-block']) }}
+                                                    {{ Form::open(['method'=>'DELETE','action'=>['SuratKeteranganController@destroySuratKeteranganAktifKuliah',$suratKeteranganAktif->id_pengajuan_surat_keterangan],'class'=>'d-inline-block']) }}
                                                     <button type="submit" class="btn btn-danger btn-sm sweet-delete">
                                                         <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
                                                         Hapus
