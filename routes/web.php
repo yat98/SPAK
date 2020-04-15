@@ -51,7 +51,12 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@showSuratKeteranganAktifKuliah');
         Route::patch('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@updateSuratKeteranganAktifKuliah');
         Route::delete('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@destroySuratKeteranganAktifKuliah');
-
+        Route::group(['prefix'=>'surat-keterangan-aktif-kuliah/pengajuan'],function(){
+            Route::post('tanda-tangan','SuratKeteranganController@tandaTangan');
+            Route::patch('tolak-pengajuan/{pengajuan_surat_keterangan}','SuratKeteranganController@tolakPengajuan');
+        });
+        // Mahasiswa
+        Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Profil
         Route::get('profil','UserController@profil');
         Route::get('profil/password','UserController@profilPassword');

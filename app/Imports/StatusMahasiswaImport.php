@@ -16,17 +16,18 @@ class StatusMahasiswaImport implements ToModel, WithValidation, WithBatchInserts
 {
     use Importable;
     
-    private $mahasiswa,$tahunAkademikAktif;
+    private $mahasiswa,$tahunAkademikAktif,$tahunAkademikTerakhir;
 
     public function __construct()
     {
        set_time_limit(0);
        $this->mahasiswa = Mahasiswa::all();
        $this->tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
+       $this->tahunAkademikTerakhir = TahunAkademik::where('status_aktif','!=','aktif')->orderByDesc('created_at')->first();
     }
 
     public function model(array $row)
-    {
+    {   
         if($row['status'] == 'Non-Aktif'){
             $row['status'] = str_replace("-"," ",$row['status']);
         }
@@ -35,10 +36,21 @@ class StatusMahasiswaImport implements ToModel, WithValidation, WithBatchInserts
             'id_tahun_akademik'=>$this->tahunAkademikAktif->id,
             'status'=>$row['status']
         ];
-        StatusMahasiswa::updateOrCreate([
-            'nim'=>$row['nim'],
-            'id_tahun_akademik'=>$this->tahunAkademikAktif->id
-        ],$statusMahasiswa);
+        if($this->tahunAkademikTerakhir == null){
+            StatusMahasiswa::updateOrCreate([
+                'nim'=>$row['nim'],
+                'id_tahun_akademik'=>$this->tahunAkademikAktif->id
+            ],$statusMahasiswa);
+        }else{
+            $statusTerakhir = StatusMahasiswa::where('nim',$row['nim'])->where('id_tahun_akademik',$this->tahunAkademikTerakhir->id)->first();
+            if($statusTerakhir->status == 'lulus' || $statusTerakhir->status == 'drop out' || $statusTerakhir->status == 'keluar'){
+                return;
+            }
+            StatusMahasiswa::updateOrCreate([
+                'nim'=>$row['nim'],
+                'id_tahun_akademik'=>$this->tahunAkademikAktif->id
+            ],$statusMahasiswa);
+        }
     }
 
     public function chunkSize(): int

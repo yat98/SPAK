@@ -1,3 +1,7 @@
+String.prototype.ucwords = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
 function infoMessage(title, text) {
     Swal.fire({
         icon: 'info',
@@ -107,6 +111,28 @@ $('.btn-detail').on('click', function (e) {
         .then(response => response.json())
         .then(result => {
             let mahasiswa = result[0];
+            let tableStatus = '';
+            if(mahasiswa.tahun_akademik.length > 0){
+                mahasiswa.tahun_akademik.forEach((status)=>{
+                    tableStatus+=`
+                        <tr>
+                            <td>${status.tahun_akademik} - ${status.semester.ucwords()}<td>
+                    `;
+                    if (status.pivot.status == 'aktif'){
+                        tableStatus+=`<td><label class="badge badge-gradient-info">${status.pivot.status.ucwords()}</label><td></tr>`;
+                    }else if(status.pivot.status == 'lulus'){
+                        tableStatus+=`<td><label class="badge badge-gradient-success">${status.pivot.status.ucwords()}</label><td></tr>`;
+                    }else if(status.pivot.status == 'drop out' || status.pivot.status == 'keluar'){
+                        tableStatus+=`<td><label class="badge badge-gradient-danger">${status.pivot.status.ucwords()}</label><td></tr>`;
+                    }else if(status.pivot.status == 'cuti'){
+                        tableStatus+=`<td><label class="badge badge-gradient-warning">${status.pivot.status.ucwords()}</label><td></tr>`;
+                    }else{
+                        tableStatus+=`<td><label class="badge badge-gradient-dark">${status.pivot.status.ucwords()}</label><td></tr>`;
+                    }
+                });
+            }else{
+                tableStatus = 'Data Status Mahasiswa Belum Ada';
+            }
             let html = `<div class="table-responsive">
                             <table class="table">
                                 <tr>
@@ -137,9 +163,20 @@ $('.btn-detail').on('click', function (e) {
                                     <th>IPK</th>
                                     <td>${mahasiswa.ipk.toFixed(2)}</td>
                                 </tr>
+                                <tr>
+                                    <th>Status Mahasiswa</th>
+                                    <td>
+                                       <table>
+                                       ${tableStatus}
+                                       </table>
+                                    </td>
+                                </tr>
                             </table>
                         </div>`;
             $('#mahasiswa-detail-content').html(html);
+            $('#surat-keterangan-aktif-detail-content').html(html);
+            console.log(html);
+            
         });
 })
 
@@ -243,11 +280,11 @@ $('.btn-surat-detail').on('click', function (e) {
                                 </tr>
                                 <tr>
                                     <th>Jenis Surat</th>
-                                    <td>${suratDetail.pengajuan_surat_keterangan.jenis_surat}</td>
+                                    <td>${suratDetail.pengajuan_surat_keterangan.jenis_surat.ucwords()}</td>
                                 </tr>
                                 <tr>
                                     <th>Status</th>
-                                    <td>${suratDetail.pengajuan_surat_keterangan.status}</td>
+                                    <td>${suratDetail.pengajuan_surat_keterangan.status.ucwords()}</td>
                                 </tr>
                                 <tr>
                                     <th>Di Tandatangani Oleh</th>
@@ -268,3 +305,25 @@ $('.btn-surat-detail').on('click', function (e) {
             $('#surat-keterangan-aktif-detail-content').html(html);
         });
 })
+
+let tandaTangan = $('.simpan-tanda-tangan');
+tandaTangan.on('click',function(e){
+    e.preventDefault();
+    Swal.fire({
+        title: 'Yakin?',
+        text: "Surat keterangan aktif kuliah akan ditandatangani",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Tanda tangan',
+        cancelButtonText: 'Tidak'
+    }).then((result) => {
+        if (result.value) {
+            if (result.value) {
+                let form = $(this).parents('form');
+                form.submit();
+            }
+        }
+    })
+});

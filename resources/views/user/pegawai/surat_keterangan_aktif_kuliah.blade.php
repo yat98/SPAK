@@ -15,6 +15,21 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4 stretch-card grid-margin">
+                        <div class="card bg-gradient-warning card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Pengajuan Surat Keterangan<i
+                                        class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countAllPengajuanSuratKeterangan > 0 ? $countAllPengajuanSuratKeterangan.' Pengajuan Surat Keterangan Aktif Kuliah' : 'Pengajuan Surat Keterangan Aktif Kuliah Kosong' }}
+                                </h2>
+                                <h6 class="card-text"></h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 stretch-card grid-margin">
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
@@ -31,6 +46,85 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Pengajuan Surat Keterangan Aktif Kuliah</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countPengajuanSuratKeterangan > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Nama Mahasiswa</th>
+                                                <th> Semester</th>
+                                                <th> Status</th>
+                                                <th> Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($pengajuanSuratKeteranganAktifList as $pengajuanSuratKeteranganAktif)
+                                            <tr>
+                                                <td> {{ $loop->iteration + $perPage * ($pengajuanSuratKeteranganAktifList->currentPage() - 1) }}</td>
+                                                <td> {{ $pengajuanSuratKeteranganAktif->mahasiswa->nama }}</td>
+                                                <td> {{ $pengajuanSuratKeteranganAktif->tahunAkademik->tahun_akademik.' - '.ucwords($pengajuanSuratKeteranganAktif->tahunAkademik->semester) }}</td>
+                                                <td> 
+                                                    @if ($pengajuanSuratKeteranganAktif->status == 'diajukan')
+                                                    <label class="badge badge-gradient-warning text-dark">
+                                                        {{ ucwords($pengajuanSuratKeteranganAktif->status) }}
+                                                    </label>
+                                                    @else
+                                                        
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <a href="{{ url('pegawai/detail/mahasiswa/'.$pengajuanSuratKeteranganAktif->nim) }}" class="btn-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                        <i class="mdi mdi-account btn-icon-prepend"></i>
+                                                        Detail</a>
+
+                                                    {{ Form::open(['url'=>'pegawai/surat-keterangan-aktif-kuliah/pengajuan/tanda-tangan','class'=>'d-inline-block']) }}
+                                                    {{ Form::hidden('id',$pengajuanSuratKeteranganAktif->id)}}
+                                                    <button type="submit" class="btn btn-info btn-sm simpan-tanda-tangan">
+                                                        <i class="mdi mdi mdi-border-color btn-icon-prepend"></i>
+                                                        Tanda Tangan
+                                                    </button>
+                                                    {{ Form::close() }}
+
+                                                    <a href="{{ url('pegawai/surat-keterangan-aktif-kuliah/pengajuan/tolak-pengajuan/'.$pengajuanSuratKeteranganAktif->id) }}"
+                                                        class="btn btn-danger btn-sm">
+                                                        <i class="mdi mdi mdi-close btn-icon-prepend"></i>
+                                                        Tolak
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <div class="col">
+                                        {{ $pengajuanSuratKeteranganAktifList->appends(['page' => $suratKeteranganAktifList->currentPage()])->links() }}
+                                    </div>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Surat Keterangan Aktif Kuliah Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Belum ada pengajuan surat keterangan aktif kuliah.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
@@ -117,7 +211,7 @@
                                         </tbody>
                                     </table>
                                     <div class="col">
-                                        {{ $suratKeteranganAktifList->links() }}
+                                        {{ $suratKeteranganAktifList->appends(['page_pengajuan' => $pengajuanSuratKeteranganAktifList->currentPage()])->links() }}
                                     </div>
                                 </div>
                                 @else
