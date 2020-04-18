@@ -47,4 +47,9 @@ class Mahasiswa extends Model
     public function pimpinanOrmawa(){
         return $this->hasOne('App\PimpinanOrmawa','nim');
     }
+
+    
+    public function notifikasiMahasiswa(){
+        return $this->hasMany('App\Mahasiswa','nim','nim');
+    }
 }

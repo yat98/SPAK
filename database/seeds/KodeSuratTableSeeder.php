@@ -13,7 +13,7 @@ class KodeSuratTableSeeder extends Seeder
     public function run()
     {
         KodeSurat::create([
-            'kode_surat'=>'UN47/KM.00.00',
+            'kode_surat'=>'UN47.B5/KM.00.00',
             'status_aktif'=>'aktif',
             'jenis_surat'=>'surat keterangan'
         ]);

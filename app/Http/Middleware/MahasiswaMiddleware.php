@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Session;
+use App\NotifikasiMahasiswa;
 
 class MahasiswaMiddleware
 {
@@ -19,6 +20,13 @@ class MahasiswaMiddleware
         if(Session::get('status') != 'mahasiswa'){
             return redirect('/');
         }
+
+        $notifikasi = NotifikasiMahasiswa::all()->where('nim',Session::get('nim'))->where('status','belum dilihat');
+        $countNotifikasi = $notifikasi->count();
+        view()->share([
+            'notifikasi'=>$notifikasi,
+            'countNotifikasi'=>$countNotifikasi
+        ]);
         return $next($request);
     }
 }

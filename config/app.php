@@ -180,7 +180,7 @@ return [
         Felixkiss\UniqueWithValidator\ServiceProvider::class,
         // LaravelExcel
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        // Nav Service Provide
+        // Nav Service Provider
         App\Providers\NavServiceProvider::class,
         // DomPDF
         Barryvdh\DomPDF\ServiceProvider::class,

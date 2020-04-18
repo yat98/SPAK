@@ -106,6 +106,8 @@ $('.btn-upload').on('click', showProgress);
 
 $('.btn-detail').on('click', function (e) {
     e.preventDefault();
+    $('#mahasiswa-detail-content').empty();
+    $('#surat-keterangan-aktif-detail-content').empty();
     let url = $(this).attr('href');
     let a = fetch(url)
         .then(response => response.json())
@@ -245,12 +247,12 @@ if(wrapper){
 
 $('.btn-surat-detail').on('click', function (e) {
     e.preventDefault();
+    $('#surat-keterangan-aktif-detail-content').empty();
     let url = $(this).attr('href');
     let a = fetch(url)
         .then(response => response.json())
         .then(result => {
             let suratDetail = result;
-            console.log(suratDetail);
             let tahun = suratDetail.created.toString();
             let html = `<div class="table-responsive">
                             <table class="table">
@@ -311,7 +313,7 @@ tandaTangan.on('click',function(e){
     e.preventDefault();
     Swal.fire({
         title: 'Yakin?',
-        text: "Surat keterangan aktif kuliah akan ditandatangani",
+        text: "Surat akan ditandatangani",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -326,4 +328,114 @@ tandaTangan.on('click',function(e){
             }
         }
     })
+});
+
+let tolakSurat = $('.tolak-surat');
+tolakSurat.on('click',function(e){
+    e.preventDefault();
+    Swal.fire({
+        title: 'Yakin?',
+        text: "pengajuan surat akan ditolak",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Tolak Surat',
+        cancelButtonText: 'Tidak'
+    }).then((result) => {
+        if (result.value) {
+            if (result.value) {
+                let form = $(this).parents('form');
+                form.submit();
+            }
+        }
+    })
+});
+
+$('.btn-surat-progress').on('click', function (e) {
+    e.preventDefault();
+    $('#surat-progress-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let pengajuanSurat = result;
+            if(pengajuanSurat.status == 'selesai'){
+                html = `<div class="row">
+                        <div class="col-6 text-center">
+                            <p class="h6 m-0 mb-1 text-dark">
+                                <i class="mdi mdi-marker-check icon-sm text-success"></i>
+                                Diajukan
+                            </p> 
+                            <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
+                            <div class="bg-gradient-success mx-auto position-progress-round"></div>
+                            <div class="bg-gradient-success mx-auto position-progress-pole"></div>
+                        </div>
+                        <div class="col-6 text-center"></div>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 100%" aria-valuenow="100   " aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-center"></div>
+                        <div class="col-6 text-center">
+                            <div class="bg-gradient-success mx-auto position-progress-pole"></div>
+                            <div class="bg-gradient-success mx-auto position-progress-round"></div>
+                            <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_selesai}</small></p>
+                            <p class="h6 mt-1 text-dark">
+                            <i class="mdi mdi-marker-check icon-sm text-success"></i>
+                            Selesai</p> 
+                        </div>
+                    </div>`;
+            }else if(pengajuanSurat.status == 'diajukan'){
+                html = `<div class="row">
+                            <div class="col-6 text-center">
+                                <p class="h6 m-0 mb-1 text-dark">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    Diajukan
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-6 text-center"></div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 50%" aria-valuenow="50   " aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 text-center"></div>
+                            <div class="col-6 text-center"></div>
+                        </div>`;
+            }else if(pengajuanSurat.status == 'ditolak'){
+                html = `<div class="row">
+                        <div class="col-6 text-center">
+                            <p class="h6 m-0 mb-1 text-dark">
+                                <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                Diajukan
+                            </p> 
+                            <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
+                            <div class="bg-gradient-danger mx-auto position-progress-round"></div>
+                            <div class="bg-gradient-danger mx-auto position-progress-pole"></div>
+                        </div>
+                        <div class="col-6 text-center"></div>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-gradient-danger" role="progressbar" style="width: 100%" aria-valuenow="100   " aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-center"></div>
+                        <div class="col-6 text-center">
+                            <div class="bg-gradient-danger mx-auto position-progress-pole"></div>
+                            <div class="bg-gradient-danger mx-auto position-progress-round"></div>
+                            <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_ditolak}</small></p>
+                            <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi mdi-close-circle icon-sm text-danger"></i>
+                                Di Tolak
+                            </p> 
+                        </div>
+                    </div>`;
+            }
+            $('#surat-progress-content').html(html);
+        });
 });

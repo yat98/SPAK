@@ -39,7 +39,7 @@ class StatusMahasiswaController extends Controller
         }
         $nimReadOnly = false;
         $mahasiswaList = $this->generateMahasiswa();
-        $tahun = $this->generateTahunAkademikSemester();
+        $tahun = $this->generateTahunAkademikAktif();
         return view('user.'.$this->segmentUser.'.tambah_status_mahasiswa',compact('mahasiswaList','tahun','nimReadOnly'));
     }
 
@@ -49,11 +49,6 @@ class StatusMahasiswaController extends Controller
         StatusMahasiswa::create($input);
         $this->setFlashData('success','Berhasil','Data status mahasiswa berhasil ditambahkan');
         return redirect($this->segmentUser.'/status-mahasiswa');
-    }
-
-    public function show($id)
-    {
-        //
     }
 
     public function edit($id,$nim)
@@ -119,7 +114,7 @@ class StatusMahasiswaController extends Controller
         if(!$this->isMahasiswaExists() || !$this->isTahunAkademikAktifExists()){
             return redirect($this->segmentUser.'/status-mahasiswa');
         }
-        $tahun = $this->generateTahunAkademikSemester();
+        $tahun = $this->generateTahunAkademikAktif();
         return view('user.'.$this->segmentUser.'.import_status_mahasiswa',compact('tahun'));
     }
 
@@ -134,7 +129,7 @@ class StatusMahasiswaController extends Controller
             $this->setFlashData('success','Berhasil','Import data status mahasiswa berhasil');
             return redirect($this->segmentUser.'/status-mahasiswa');
         } catch (ValidationException $e) {
-             $tahun = $this->generateTahunAkademikSemester();
+             $tahun = $this->generateTahunAkademikAktif();
              $failures = $e->failures();
              return view('user.'.$this->segmentUser.'.import_status_mahasiswa',compact('failures','tahun'));
         }

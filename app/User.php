@@ -24,4 +24,8 @@ class User extends Model
     public function suratKeterangan(){
         return $this->hasMany('App\SuratKeterangan','nip','nip');
     }
+
+    public function notifikasiUser(){
+        return $this->hasMany('App\NotifikasiUser','nip','nip');
+    }
 }

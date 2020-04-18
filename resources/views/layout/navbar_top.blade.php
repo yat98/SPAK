@@ -9,56 +9,70 @@
             <span class="mdi mdi-menu"></span>
         </button>
         <ul class="navbar-nav navbar-nav-right">
-            {{-- <li class="nav-item dropdown">
+            <li class="nav-item dropdown">
+            @if ($posisi == 'pegawai' || $posisi == 'mahasiswa')
+            @if (isset($notifikasi) && isset($countNotifikasi))
+            @if ($countNotifikasi > 0)
                 <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
-                    data-toggle="dropdown">
-                    <i class="mdi mdi-bell-outline"></i>
-                    <span class="count-symbol bg-danger"></span>
+                data-toggle="dropdown">
+                <i class="mdi mdi-bell-outline"></i>
+                <span class="count-symbol bg-danger"></span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
-                    aria-labelledby="notificationDropdown">
-                    <h6 class="p-3 mb-0">Notifications</h6>
+                aria-labelledby="notificationDropdown">
+                    <h6 class="p-3 mb-0">Notifikasi</h6>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item preview-item">
+                    @foreach ($notifikasi->take(5) as $notif)
+                    <a class="dropdown-item preview-item" href="{{url($posisi.'/notifikasi/'.$notif->id)}}">
                         <div class="preview-thumbnail">
-                            <div class="preview-icon bg-success">
-                                <i class="mdi mdi-calendar"></i>
+                            <div class="preview-icon bg-info">
+                                <i class="mdi mdi mdi-bell-ring"></i>
                             </div>
                         </div>
                         <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                            <h6 class="preview-subject font-weight-normal mb-1">Event today</h6>
-                            <p class="text-gray ellipsis mb-0"> Just a reminder that you have an event today
+                            <h6 class="preview-subject font-weight-normal mb-1">{{$notif->judul_notifikasi}}</h6>
+                            <p class="text-gray ellipsis mb-0"> {{$notif->isi_notifikasi}}
                             </p>
                         </div>
                     </a>
+                    @endforeach
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-warning">
-                                <i class="mdi mdi-settings"></i>
-                            </div>
-                        </div>
-                        <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                            <h6 class="preview-subject font-weight-normal mb-1">Settings</h6>
-                            <p class="text-gray ellipsis mb-0"> Update dashboard </p>
-                        </div>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-info">
-                                <i class="mdi mdi-link-variant"></i>
-                            </div>
-                        </div>
-                        <div class="preview-item-content d-flex align-items-start flex-column justify-content-center">
-                            <h6 class="preview-subject font-weight-normal mb-1">Launch Admin</h6>
-                            <p class="text-gray ellipsis mb-0"> New admin wow! </p>
-                        </div>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <h6 class="p-3 mb-0 text-center">See all notifications</h6>
+                    <h6 class="p-3 mb-0 text-center">
+                        <a href="{{ url($posisi.'/notifikasi') }}" class="text-dark">
+                            Lihat Semua Notifikasi ({{$countNotifikasi}})
+                        </a>
+                    </h6>
                 </div>
-            </li> --}}
+                @else
+                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
+                data-toggle="dropdown">
+                <i class="mdi mdi-bell-outline"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list"
+                aria-labelledby="notificationDropdown">
+                    <h6 class="p-3 mb-0">Notifikasi</h6>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item preview-item p-4">
+                        <div class="row">
+                            <div class="col text-center mx-5">
+                                <img src="{{ asset('image/no_notifikasi.svg')}}" class="illustration-no-notification">
+                                <p class="text-black h4 mt-4">
+                                    Notifikasi Kosong!
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <h6 class="p-3 mb-0 text-center">
+                        <a href="{{ url($posisi.'/notifikasi') }}" class="text-dark">
+                            Lihat Semua Notifikasi
+                        </a>
+                    </h6>
+                </div>
+                @endif
+                @endif
+            </li>
+            @endif
             <li class="nav-item nav-profile dropdown">
                 <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown"
                     aria-expanded="false">

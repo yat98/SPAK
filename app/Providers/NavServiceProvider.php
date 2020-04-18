@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Http\Request;
+use App\PengajuanSuratKeterangan;
 use Illuminate\Support\ServiceProvider;
 
 class NavServiceProvider extends ServiceProvider
@@ -61,7 +62,18 @@ class NavServiceProvider extends ServiceProvider
             }
         }else if(request()->segment(1) == 'mahasiswa'){
             $posisi = 'mahasiswa';
+            if($segment == ''){
+                $halaman = 'dashboard-mahasiswa';
+            }
+            if($segment == 'pengajuan'){
+                $halaman = 'surat-keterangan-aktif-kuliah';
+            }
         }else if(request()->segment(1) == 'pegawai'){
+            $pengajuanSurat = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
+                                ->where('status','diajukan');
+            $jenisSurat = $pengajuanSurat->groupBy('jenis_surat')->pluck('jenis_surat')->toArray();
+            
+            $countAllPengajuanSuratKeterangan= $pengajuanSurat->count();
             $posisi = 'pegawai';
             if($segment == ''){
                 $halaman = 'dashboard-pegawai';
@@ -78,6 +90,10 @@ class NavServiceProvider extends ServiceProvider
             if($segment == 'profil'){
                 $halaman = 'profil';
             }
+            view()->share([
+                'countAllPengajuanSuratKeterangan'=>$countAllPengajuanSuratKeterangan,
+                'jenisSurat'=>$jenisSurat
+            ]);
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi]);
     }

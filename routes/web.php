@@ -24,6 +24,17 @@ Route::group(['prefix' => 'mahasiswa'],function(){
     Route::middleware(['mahasiswa'])->group(function(){
         // Dashboard
         Route::get('/','MahasiswaController@dashboard');
+        // Notifikasi
+        Route::get('notifikasi/{notifikasi_mahasiswa}','NotifikasiMahasiswaController@show');
+        Route::get('notifikasi','NotifikasiMahasiswaController@index');
+        // Pengajuan Surat
+        Route::group(['prefix' => 'pengajuan'],function(){
+            Route::get('surat-keterangan-aktif-kuliah','MahasiswaController@pengajuanSuratKeteranganAktif');
+            Route::get('surat-keterangan-aktif-kuliah/{pengajuan_surat_keterangan}/progress','MahasiswaController@progressPengajuanSuratKeteranganAktif');
+            Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}/cetak','SuratKeteranganController@cetakSuratKeteranganAktifKuliah');
+            Route::get('surat-keterangan-aktif-kuliah/create','MahasiswaController@createPengajuanSuratKeteranganAktif');
+            Route::post('surat-keterangan-aktif-kuliah','MahasiswaController@storePengajuanSuratKeteranganAktif');
+        });
     });
 });
 
@@ -57,6 +68,10 @@ Route::group(['prefix' => 'pegawai'],function(){
         });
         // Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
+        Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
+        // Notifikasi
+        Route::get('notifikasi/{notifikasi_user}','NotifikasiUserController@show');
+        Route::get('notifikasi','NotifikasiUserController@index');
         // Profil
         Route::get('profil','UserController@profil');
         Route::get('profil/password','UserController@profilPassword');

@@ -556,6 +556,72 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Data Pimpinan Ormawa</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countPimpinanOrmawa > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> NIM</th>
+                                                <th> Nama</th>
+                                                <th> Jurusan</th>
+                                                <th> Jabatan</th>
+                                                <th> Status</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($pimpinanOrmawaList as $pimpinanOrmawa)
+                                            <tr>
+                                                <td> {{ $loop->iteration }}</td>
+                                                <td> {{ $pimpinanOrmawa->nim  }}</td>
+                                                <td> {{ $pimpinanOrmawa->mahasiswa->nama  }}</td>
+                                                <td> {{ $pimpinanOrmawa->mahasiswa->prodi->jurusan->nama_jurusan }}</td>
+                                                <td> {{ ucwords($pimpinanOrmawa->jabatan)  }}</td>
+                                                <td>
+                                                    @if ($pimpinanOrmawa->status_aktif == 'aktif')
+                                                    <label
+                                                        class="badge badge-gradient-info">{{ ucwords($pimpinanOrmawa->status_aktif) }}</label>
+                                                    @else
+                                                    <label
+                                                        class="badge badge-gradient-dark">{{ ucwords($pimpinanOrmawa->status_aktif) }}</label>
+                                                    @endif
+                                                </td>
+                                                <td> {{ $pimpinanOrmawa->created_at->diffForHumans() }}</td>
+                                                <td> {{ $pimpinanOrmawa->updated_at->diffForHumans() }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Pimpinan Ormawa Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data pimpinan ormawa terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             @include('layout.footer')
         </div>

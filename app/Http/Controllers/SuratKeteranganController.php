@@ -10,6 +10,7 @@ use App\KodeSurat;
 use App\Mahasiswa;
 use App\StatusMahasiswa;
 use App\SuratKeterangan;
+use App\NotifikasiMahasiswa;
 use Illuminate\Http\Request;
 use App\PengajuanSuratKeterangan;
 use Illuminate\Support\Facades\DB;
@@ -27,20 +28,19 @@ class SuratKeteranganController extends Controller
                                         ->paginate($perPage,['*'],'page');
 
         $pengajuanSuratKeteranganAktifList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
-                                            ->where('status','diajukan')
+                                            ->whereNotIn('status',['selesai'])
+                                            ->orderByDesc('created_at')
+                                            ->orderBy('status')
                                             ->paginate($perPage,['*'],'page_pengajuan');
         
         $countAllSuratKeteranganAktif = $suratKeteranganAktifList->count();
         $countSuratKeteranganAktif = $suratKeteranganAktifList->count();
 
-        $countAllPengajuanSuratKeterangan= PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
-                                                ->where('status','diajukan')
-                                                ->count();
         $countPengajuanSuratKeterangan = $pengajuanSuratKeteranganAktifList->count();
 
         $nomorSurat = $this->generateNomorSurat();
 
-        return view('user.'.$this->segmentUser.'.surat_keterangan_aktif_kuliah',compact('tahunAkademik','suratKeteranganAktifList','countAllSuratKeteranganAktif','countSuratKeteranganAktif','mahasiswa','perPage','nomorSurat','countAllPengajuanSuratKeterangan','countPengajuanSuratKeterangan','pengajuanSuratKeteranganAktifList'));
+        return view('user.'.$this->segmentUser.'.surat_keterangan_aktif_kuliah',compact('tahunAkademik','suratKeteranganAktifList','countAllSuratKeteranganAktif','countSuratKeteranganAktif','mahasiswa','perPage','nomorSurat','countPengajuanSuratKeterangan','pengajuanSuratKeteranganAktifList'));
     }
 
     public function createSuratKeteranganAktifKuliah(){
@@ -52,7 +52,7 @@ class SuratKeteranganController extends Controller
         $nomorSuratBaru = (empty($nomorSuratTerakhir)) ? 1 : ++$nomorSuratTerakhir->nomor_surat;
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->pluck('kode_surat','id');
         $mahasiswa = $this->generateMahasiswa();
-        $tahunAkademik = $this->generateTahunAkademikSemester();
+        $tahunAkademik = $this->generateAllTahunAkademik();
         return view('user.'.$this->segmentUser.'.tambah_surat_keterangan_aktif_kuliah',compact('mahasiswa','tahunAkademik','kodeSurat','nomorSuratBaru'));
     }
 
@@ -71,7 +71,15 @@ class SuratKeteranganController extends Controller
         }])->get()->first();
 
         if(count($statusMahasiswa->tahunAkademik) == 0){
-            $this->setFlashData('info','Data Status Mahasiswa','Data status mahasiswa dengan nim '.$request->nim.' belum ada');
+            $statusMahasiswaTerakhir = Mahasiswa::where('nim',$request->nim)->with(['tahunAkademik'=>function($query){
+                $query->orderByDesc('created_at');
+            }]);
+            if(count($statusMahasiswaTerakhir->first()->tahunAkademik) == 0){
+                $this->setFlashData('info','Data Status Mahasiswa','Data status mahasiswa dengan nim '.$request->nim.' belum ada');
+            }else{
+                $status = $statusMahasiswaTerakhir->first()->tahunAkademik->first()->pivot->status;
+                $this->setFlashData('info','Data Status Mahasiswa','Data status mahasiswa terakhir, mahasiswa dengan nim '.$request->nim.' adalah '.$status);
+            }    
             return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
         }else{
             $status = $statusMahasiswa->tahunAkademik->first()->pivot->status;
@@ -99,6 +107,12 @@ class SuratKeteranganController extends Controller
              $pengajuanSuratKeterangan->update([
                  'status'=>'selesai'
              ]);
+             NotifikasiMahasiswa::create([
+                'nim'=>$request->nim,
+                'judul_notifikasi'=>'Surat Keterangan Aktif Kuliah',
+                'isi_notifikasi'=>'Surat keterangan aktif kuliah telah selesai di buat.',
+                'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah')
+            ]);
         }catch(Exception $e){
             DB::rollback();
             $this->setFlashData('error','Gagal Menambahkan Data','Surat keterangan gagal ditambahkan.');
@@ -123,7 +137,15 @@ class SuratKeteranganController extends Controller
         }])->get()->first();
         
         if(count($statusMahasiswa->tahunAkademik) == 0){
-            $this->setFlashData('info','Data Status Mahasiswa','Data status mahasiswa dengan nim '.$request->nim.' belum ada');
+            $statusMahasiswaTerakhir = Mahasiswa::where('nim',$request->nim)->with(['tahunAkademik'=>function($query){
+                $query->orderByDesc('created_at');
+            }]);
+            if(count($statusMahasiswaTerakhir->first()->tahunAkademik) == 0){
+                $this->setFlashData('info','Data Status Mahasiswa','Data status mahasiswa dengan nim '.$request->nim.' belum ada');
+            }else{
+                $status = $statusMahasiswaTerakhir->first()->tahunAkademik->first()->pivot->status;
+                $this->setFlashData('info','Data Status Mahasiswa','Data status mahasiswa terakhir, mahasiswa dengan nim '.$request->nim.' adalah '.$status);
+            }    
             return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
         }else{
             $status = $statusMahasiswa->tahunAkademik->first()->pivot->status;
@@ -180,7 +202,16 @@ class SuratKeteranganController extends Controller
             if($countSuratKeteranganAktif < 1){
                 $this->setFlashData('search','Hasil Pencarian','Surat keterangan aktif kuliah tidak ditemukan!');
             }
-            return view('user.'.$this->segmentUser.'.surat_keterangan_aktif_kuliah',compact('tahunAkademik','suratKeteranganAktifList','countAllSuratKeteranganAktif','countSuratKeteranganAktif','mahasiswa','perPage','nomorSurat'));
+
+            $pengajuanSuratKeteranganAktifList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
+                                                    ->whereNotIn('status',['selesai'])
+                                                    ->orderByDesc('created_at')
+                                                    ->orderBy('status')
+                                                    ->paginate($perPage,['*'],'page_pengajuan');
+           
+            $countPengajuanSuratKeterangan = $pengajuanSuratKeteranganAktifList->count();
+
+            return view('user.'.$this->segmentUser.'.surat_keterangan_aktif_kuliah',compact('tahunAkademik','suratKeteranganAktifList','countAllSuratKeteranganAktif','countSuratKeteranganAktif','mahasiswa','perPage','nomorSurat','pengajuanSuratKeteranganAktifList','countPengajuanSuratKeterangan'));
         }else{
             return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
         }
@@ -199,7 +230,15 @@ class SuratKeteranganController extends Controller
         }])->get()->first();
 
         if(count($statusMahasiswa->tahunAkademik) == 0){
-            $this->setFlashData('info','Data Status Mahasiswa','Data status mahasiswa dengan nim '.$request->nim.' belum ada');
+            $statusMahasiswaTerakhir = Mahasiswa::where('nim',$pengajuanSuratKeterangan->nim)->with(['tahunAkademik'=>function($query){
+                $query->orderByDesc('created_at');
+            }]);
+            if(count($statusMahasiswaTerakhir->first()->tahunAkademik) == 0){
+                $this->setFlashData('info','Data Status Mahasiswa','Data status mahasiswa dengan nim '.$pengajuanSuratKeterangan->nim.' belum ada');
+            }else{
+                $status = $statusMahasiswaTerakhir->first()->tahunAkademik->first()->pivot->status;
+                $this->setFlashData('info','Data Status Mahasiswa','Data status mahasiswa terakhir, mahasiswa dengan nim '.$pengajuanSuratKeterangan->nim.' adalah '.$status);
+            }    
             return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
         }else{
             $status = $statusMahasiswa->tahunAkademik->first()->pivot->status;
@@ -224,10 +263,28 @@ class SuratKeteranganController extends Controller
         $pengajuanSuratKeterangan->update([
             'status'=>'selesai'
         ]);
+        NotifikasiMahasiswa::create([
+            'nim'=>$pengajuanSuratKeterangan->nim,
+            'judul_notifikasi'=>'Pengajuan Surat Keterangan',
+            'isi_notifikasi'=>'Surat keterangan aktif kuliah telah selesai di buat.',
+            'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah')
+        ]);
+        $this->setFlashData('success','Berhasil','Tanda tangan surat keterangan aktif kuliah mahasiswa dengan nama '.$pengajuanSuratKeterangan->mahasiswa->nama.' berhasil');
+        return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
     }
 
-    public function tolakPengajuan(){
-
+    public function tolakPengajuan(PengajuanSuratKeterangan $pengajuanSuratKeterangan){
+        $pengajuanSuratKeterangan->update([
+            'status'=>'ditolak'
+        ]);
+        NotifikasiMahasiswa::create([
+            'nim'=>$pengajuanSuratKeterangan->nim,
+            'judul_notifikasi'=>'Pengajuan Surat Keterangan',
+            'isi_notifikasi'=>'Pengajuan surat keterangan aktif kuliah di tolak.',
+            'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah')
+        ]);
+        $this->setFlashData('success','Berhasil','Pengajuan surat keterangan aktif kuliah mahasiswa dengan nama '.$pengajuanSuratKeterangan->mahasiswa->nama.' ditolak');
+        return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
     }
 
     public function cetakSuratKeteranganAktifKuliah(SuratKeterangan $suratKeterangan){

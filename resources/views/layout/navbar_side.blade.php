@@ -102,14 +102,28 @@
         </li>
         <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                <span class="menu-title">Surat</span>
+                <span class="menu-title">
+                    Surat
+                    @if (isset($countAllPengajuanSuratKeterangan))
+                        @if ($countAllPengajuanSuratKeterangan > 0)
+                            <span class="notification-badge bg-danger ml-2"></span>
+                        @endif
+                    @endif
+                </span>
                 <i class="menu-arrow"></i>
                 <i class="mdi mdi-file-document-box menu-icon"></i>
             </a>
             <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item">
-                        <a class="nav-link {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-aktif-kuliah') }}">Surat Keterangan Aktif <br> Kuliah</a>
+                        <a class="nav-link {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-aktif-kuliah') }}">
+                            Surat Keterangan <br> Aktif Kuliah
+                            @if (isset($jenisSurat))
+                                @if (in_array('surat keterangan aktif kuliah',$jenisSurat))
+                                    <span class="notification-badge bg-danger ml-2"></span>
+                                @endif
+                            @endif
+                        </a>
                     </li>
                     <li class="nav-item"> 
                         <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/user') }}">Surat Keterangan <br> Kelakuan Baik</a>
@@ -127,11 +141,35 @@
             </a>
         </li>
         @elseif($posisi == 'mahasiswa')
-        <li class="nav-item {{ ($halaman == 'dashboard-admin') ? 'active':'' }}">
+        <li class="nav-item {{ ($halaman == 'dashboard-mahasiswa') ? 'active':'' }}">
             <a class="nav-link" href="{{ url(Request::segment(1).'/') }}">
                 <span class="menu-title">Dashboard</span>
                 <i class="mdi mdi-home menu-icon"></i>
             </a>
+        </li>
+        <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                <span class="menu-title">
+                    Pengajuan Surat
+                </span>
+                <i class="menu-arrow"></i>
+                <i class="mdi mdi-file-document-box menu-icon"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <a class="nav-link {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/pengajuan/surat-keterangan-aktif-kuliah') }}">
+                            Surat Keterangan <br> Aktif Kuliah
+                        </a>
+                    </li>
+                    <li class="nav-item"> 
+                        <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/user') }}">Surat Keterangan <br> Kelakuan Baik</a>
+                    </li>
+                    <li class="nav-item"> 
+                        <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/user') }}">Surat Keterangan Cuti</a>
+                    </li>
+                </ul>
+            </div>
         </li>
         <li class="nav-item {{ ($halaman == 'profil') ? 'active':'' }}">
             <a class="nav-link" href="{{ url(Request::segment(1).'/profil') }}">

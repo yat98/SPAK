@@ -78,8 +78,10 @@
                                                     <label class="badge badge-gradient-warning text-dark">
                                                         {{ ucwords($pengajuanSuratKeteranganAktif->status) }}
                                                     </label>
-                                                    @else
-                                                        
+                                                    @elseif($pengajuanSuratKeteranganAktif->status == 'ditolak')
+                                                    <label class="badge badge-gradient-danger">
+                                                        {{ ucwords($pengajuanSuratKeteranganAktif->status) }}
+                                                    </label>
                                                     @endif
                                                 </td>
                                                 <td>
@@ -87,6 +89,7 @@
                                                         <i class="mdi mdi-account btn-icon-prepend"></i>
                                                         Detail</a>
 
+                                                    @if ($pengajuanSuratKeteranganAktif->status == 'diajukan')
                                                     {{ Form::open(['url'=>'pegawai/surat-keterangan-aktif-kuliah/pengajuan/tanda-tangan','class'=>'d-inline-block']) }}
                                                     {{ Form::hidden('id',$pengajuanSuratKeteranganAktif->id)}}
                                                     <button type="submit" class="btn btn-info btn-sm simpan-tanda-tangan">
@@ -95,11 +98,13 @@
                                                     </button>
                                                     {{ Form::close() }}
 
-                                                    <a href="{{ url('pegawai/surat-keterangan-aktif-kuliah/pengajuan/tolak-pengajuan/'.$pengajuanSuratKeteranganAktif->id) }}"
-                                                        class="btn btn-danger btn-sm">
+                                                    {{ Form::open(['url'=>'pegawai/surat-keterangan-aktif-kuliah/pengajuan/tolak-pengajuan/'.$pengajuanSuratKeteranganAktif->id,'class'=>'d-inline-block','method'=>'PATCH']) }}
+                                                    <button type="submit" class="btn btn-danger btn-sm tolak-surat">
                                                         <i class="mdi mdi mdi-close btn-icon-prepend"></i>
                                                         Tolak
-                                                    </a>
+                                                    </button>
+                                                    {{ Form::close() }}
+                                                    @endif
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -149,7 +154,7 @@
                                             <div class="col-sm-4 col-md-4 mt-1">
                                                 {{ Form::select('keywords',$mahasiswa,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> 'Cari mahasiswa...']) }}
                                             </div>
-                                            <div class="col-sm-4 col-md-3 mt-1">
+                                            <div class="col-sm-4 col-md-2 mt-1">
                                                 {{ Form::select('tahun_akademik',$tahunAkademik,(request()->get('tahun_akademik') != null) ? request()->get('tahun_akademik'):null,['class'=>'search btn-margin form-control','placeholder'=> '-- Pilih Tahun Akademik --']) }}
                                             </div>
                                             <div class="col-sm-12 col-md">

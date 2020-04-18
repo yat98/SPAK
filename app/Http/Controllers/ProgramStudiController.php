@@ -9,16 +9,11 @@ use App\Http\Requests\ProgramStudiRequest;
 
 class ProgramStudiController extends Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function index()
     {
         $prodiList = ProgramStudi::all()->sortBy('id_jurusan');
         $countProdi = $prodiList->count();
-        $countAllProdi = $countProdi;
+        $countAllProdi = ProgramStudi::all()->count();
         $countJurusan = Jurusan::all()->count();
         return view('user.'.$this->segmentUser.'.program_studi',compact('prodiList','countProdi','countJurusan','countAllProdi'));
     }
@@ -37,11 +32,11 @@ class ProgramStudiController extends Controller
     public function search(Request $request){
         $keyword = $request->all();
         if(isset($keyword['keyword'])){
+            $countAllProdi = ProgramStudi::all()->count();
+            $countJurusan = Jurusan::all()->count();
             $nama = $keyword['keyword'] != null ? $keyword['keyword'] : '';
             $prodiList = ProgramStudi::where('nama_prodi','like','%'.$nama.'%')->get();
             $countProdi = count($prodiList);
-            $countAllProdi = ProgramStudi::all()->count();
-            $countJurusan = Jurusan::all()->count();
             if($countProdi < 1){
                 $this->setFlashData('search','Hasil Pencarian','Data program studi tidak ditemukan!');
             }

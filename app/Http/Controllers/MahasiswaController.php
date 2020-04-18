@@ -3,16 +3,21 @@
 namespace App\Http\Controllers;
 
 use Session;
+use App\User;
 use App\Jurusan;
 use App\Mahasiswa;
 use App\ProgramStudi;
 use App\TahunAkademik;
+use App\NotifikasiUser;
 use App\StatusMahasiswa;
 use Illuminate\Http\Request;
 use App\Imports\MahasiswaImport;
+use App\PengajuanSuratKeterangan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\MahasiswaRequest;
 use Maatwebsite\Excel\Validators\ValidationException;
+use App\Http\Requests\PengajuanSuratKeteranganRequest;
 
 class MahasiswaController extends Controller
 {
@@ -141,7 +146,75 @@ class MahasiswaController extends Controller
     }
 
     public function dashboard(){
-        return view('mahasiswa.dashboard');
+        $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
+        $countAllPengajuan = 0;
+        $countPengajuanSuratKeterangan = 0;
+        return view($this->segmentUser.'.dashboard',compact('tahunAkademikAktif'));
+    }
+
+    public function pengajuanSuratKeteranganAktif(){
+        $perPage = $this->perPage;
+        $pengajuanSuratKeteranganAktifList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
+                                            ->where('nim',Session::get('nim'))
+                                            ->orderByDesc('created_at')
+                                            ->orderBy('status')
+                                            ->paginate($perPage,['*'],'page_pengajuan');
+        $countAllPengajuan = PengajuanSuratKeterangan::whereNotIn('status',['selesai'])->count();
+        $countPengajuanSuratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
+                                            ->where('nim',Session::get('nim'))
+                                            ->count();
+        return view($this->segmentUser.'.pengajuan_surat_keterangan_aktif_kuliah',compact('countAllPengajuan','countPengajuanSuratKeterangan','perPage','pengajuanSuratKeteranganAktifList'));
+    }
+
+    public function createPengajuanSuratKeteranganAktif(){
+        $tahunAkademik = $this->generateTahunAkademikAktif();
+        return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_aktif_kuliah',compact('tahunAkademik'));
+    }
+
+    public function storePengajuanSuratKeteranganAktif(PengajuanSuratKeteranganRequest $request){
+        $input = $request->all();
+        $mahasiswa = Mahasiswa::where('nim',Session::get('nim'))->first();
+
+        DB::beginTransaction();
+        try{
+            $user = User::where('jabatan','kasubag kemahasiswaan')->where('status_aktif','aktif')->first();
+            NotifikasiUser::create([
+                'nip'=>$user->nip,
+                'judul_notifikasi'=>'Pengajuan Surat Keterangan',
+                'isi_notifikasi'=>'Mahasiswa dengan nama '.$mahasiswa->nama.' membuat pengajuan surat keterangan aktif kuliah.',
+                'link_notifikasi'=>url('pegawai/surat-keterangan-aktif-kuliah')
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan surat keterangan aktif kuliah gagal dibuat.');
+        }
+
+        try{ 
+            PengajuanSuratKeterangan::create($input);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan surat keterangan aktif kuliah gagal dibuat.');
+        }
+
+        DB::commit();
+        $this->setFlashData('success','Berhasil','Pengajuan surat keterangan aktif kuliah berhasil dibuat.');
+        return redirect($this->segmentUser.'/pengajuan/surat-keterangan-aktif-kuliah');
+    }
+
+    public function progressPengajuanSuratKeteranganAktif(PengajuanSuratKeterangan $pengajuanSuratKeterangan){
+        $pengajuan = $pengajuanSuratKeterangan->load(['suratKeterangan.user','mahasiswa']);
+        $data = collect($pengajuan);
+        $tanggalDiajukan = $pengajuan->created_at->format('d F Y - H:i:m');
+        $data->put('tanggal_diajukan',$tanggalDiajukan);
+
+        if($pengajuan->status == 'selesai'){
+            $tanggalSelesai = $pengajuan->suratKeterangan->created_at->format('d F Y - H:i:m');
+            $data->put('tanggal_selesai',$tanggalSelesai);
+        }else if($pengajuan->status == 'ditolak'){
+            $tanggalDitolak = $pengajuan->updated_at->format('d F Y - H:i:m');
+            $data->put('tanggal_ditolak',$tanggalDitolak);
+        }
+        return $data->toJson();
     }
 
     public function logout(){

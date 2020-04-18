@@ -6,6 +6,7 @@ use Session;
 use App\User;
 use App\KodeSurat;
 use App\TahunAkademik;
+use App\SuratKeterangan;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\DB;
@@ -92,11 +93,16 @@ class UserController extends Controller
 
     public function pegawaiDashboard(){
         $kodeSuratList = KodeSurat::all();
+        $suratKeteranganAktifList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
+                                        ->orderByDesc('surat_keterangan.updated_at')
+                                        ->where('jenis_surat','surat keterangan aktif kuliah')
+                                        ->get();
         $countAllKodeSurat = $kodeSuratList->count();
+        $countAllSuratKeteranganAktif = $suratKeteranganAktifList->count();
         $kodeSuratList = $kodeSuratList->take(5);
         $countKodeSurat = count($kodeSuratList);
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
-        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','countAllKodeSurat','countKodeSurat','kodeSuratList'));
+        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','countAllKodeSurat','countKodeSurat','kodeSuratList','countAllSuratKeteranganAktif'));
     }
 
     public function indexTandaTangan(){

@@ -8,16 +8,11 @@ use App\Http\Requests\JurusanRequest;
 
 class JurusanController extends Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function index()
     {
         $jurusanList = Jurusan::all();
         $countJurusan = $jurusanList->count();
-        $countAllJurusan = $countJurusan;
+        $countAllJurusan = $jurusanList->count();
         return view('user.'.$this->segmentUser.'.jurusan',compact('jurusanList','countJurusan','countAllJurusan'));
     }
 
@@ -31,8 +26,8 @@ class JurusanController extends Controller
         if(isset($keyword['keyword'])){
             $nama = $keyword['keyword'] != null ? $keyword['keyword'] : '';
             $jurusanList = Jurusan::where('nama_jurusan','like','%'.$nama.'%')->get();
-            $countJurusan = count($jurusanList);
             $countAllJurusan = Jurusan::all()->count();
+            $countJurusan = count($jurusanList);
             if($countJurusan < 1){
                 $this->setFlashData('search','Hasil Pencarian','Data jurusan tidak ditemukan!');
             }

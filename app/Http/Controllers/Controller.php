@@ -33,7 +33,7 @@ class Controller extends BaseController
         return $tahun;
     }
 
-    protected function generateTahunAkademikSemester(){
+    protected function generateTahunAkademikAktif(){
         $tahunAkademik = TahunAkademik::where('status_aktif','aktif')->get();
         $tahunAkademikList = [];
         foreach($tahunAkademik as $value){
