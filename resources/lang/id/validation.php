@@ -152,6 +152,10 @@ return [
             'required' => 'ormawa wajib diisi.',
             'numeric' => 'ormawa harus berupa angka.',
         ],
+        'id_tahun_akademik' => [
+            'required' => 'tahun akademik wajib diisi.',
+            'numeric' => 'tahun akademik harus berupa angka.',
+        ],
     ],
 
     /*

@@ -21,4 +21,8 @@ class TahunAkademik extends Model
     public function pengajuanSuratKeterangan(){
         return $this->hasMany('App\PengajuanSuratKeterangan','id_tahun_akademik');
     }
+
+    public function statusMahasiswa(){
+        return $this->hasMany('App\StatusMahasiswa','id_tahun_akademik');
+    }
 }

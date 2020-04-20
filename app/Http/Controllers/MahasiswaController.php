@@ -167,7 +167,37 @@ class MahasiswaController extends Controller
     }
 
     public function createPengajuanSuratKeteranganAktif(){
-        $tahunAkademik = $this->generateTahunAkademikAktif();
+        $statusMahasiswa = Mahasiswa::where('nim',Session::get('nim'))->with(['tahunAkademik'=>function($query){
+            $query->orderByDesc('created_at');
+        }])->first();
+
+        if($statusMahasiswa->tahunAkademik->count() > 0){
+            $status = $statusMahasiswa->tahunAkademik->first()->pivot->status;
+            if($status == 'lulus' || $status == 'drop out' || $status == 'keluar'){
+                $this->setFlashData('info','Pengajuan Gagal','Maaf anda tidak dapat membuat pengajuan surat keterangan aktif kuliah karena status anda adalah '.$status);
+                return redirect($this->segmentUser.'/pengajuan/surat-keterangan-aktif-kuliah');
+            }
+        }
+
+        $tahunAkademik = [];
+        $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
+        $tahunAkademikTerakhir = ($tahunAkademikAktif != null) ? $tahunAkademikAktif:TahunAkademik::orderByDesc('created_at')->first();
+        $status = StatusMahasiswa::where('nim',Session::get('nim'))->orderByDesc('created_at')->get();
+        
+        foreach ($status as $value) {
+            if($value->status == 'aktif'){
+                $tahunAkademik[$value->tahunAkademik->id] = $value->tahunAkademik->tahun_akademik.' - '.ucwords($value->tahunAkademik->semester);
+                break;
+            }
+        }
+
+        foreach ($status as $value) {
+            if ($value->id_tahun_akademik == $tahunAkademikTerakhir->id) {
+                if ($value->status != 'aktif') {
+                    $this->setFlashData('info-badge', 'Status Mahasiswa', 'Maaf anda tidak dapat melakukan pengajuan surat keterangan aktif kuliah pada tahun akademik '.$tahunAkademikTerakhir->tahun_akademik.' - '.ucwords($tahunAkademikTerakhir->semester).' dikarenakan status anda adalah '.$value->status.', tetapi anda dapat melakukan pengajuan surat keterangan aktif kuliah dengan tahun akademik '.current($tahunAkademik));
+                }
+            }
+        }
         return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_aktif_kuliah',compact('tahunAkademik'));
     }
 

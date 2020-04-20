@@ -20,4 +20,12 @@ class StatusMahasiswa extends Model
         'id_tahun_akademik',
         'status',
     ];
+
+    public function mahasiswa(){
+        return $this->belongsTo('App\Mahasiswa','nim');
+    }
+
+    public function tahunAkademik(){
+        return $this->belongsTo('App\TahunAkademik','id_tahun_akademik');
+    }
 }

@@ -60,7 +60,11 @@ class LoginController extends Controller
 
     public function loginAdmin()
     {
-        if(Session::get('status') == 'admin'){
+        if(Session::get('status') == 'mahasiswa'){
+            return redirect('mahasiswa');
+        }else if(Session::get('status') == 'pegawai'){
+            return redirect('pegawai');
+        }else if(Session::get('status') == 'admin'){
             return redirect('admin');
         }
         return view('login.login_admin');
