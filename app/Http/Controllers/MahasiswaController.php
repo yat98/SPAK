@@ -194,7 +194,7 @@ class MahasiswaController extends Controller
         }
 
         if(count($tahunAkademik) == 0){
-            $this->setFlashData('info','Pengajuan Gagal','Maaf anda tidak dapat membuat pengajuan surat keterangan aktif kuliah');
+            $this->setFlashData('info','Pengajuan Gagal','Maaf anda tidak dapat membuat pengajuan surat keterangan aktif kuliah karena anda tidak memiliki status aktif');
             return redirect('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah');
         }
 

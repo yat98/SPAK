@@ -34,7 +34,7 @@ class SuratKeteranganRequest extends FormRequest
             'nip'=>'sometimes|numeric',
             'id_tahun_akademik'=>'required|numeric',
             'id_kode_surat'=>'required|numeric',
-            'jenis_surat'=>'required|string|in:surat keterangan aktif kuliah,surat keterangan kelakukan baik,surat keterangan cuti',
+            'jenis_surat'=>'required|string|in:surat keterangan aktif kuliah,surat keterangan kelakuan baik,surat keterangan cuti',
             'jumlah_cetak'=>'sometimes|numeric',
             'status'=>'sometimes|in:ditolak,diproses,selesai',
         ];

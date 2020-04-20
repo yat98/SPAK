@@ -66,6 +66,19 @@ Route::group(['prefix' => 'pegawai'],function(){
             Route::post('tanda-tangan','SuratKeteranganController@tandaTangan');
             Route::patch('tolak-pengajuan/{pengajuan_surat_keterangan}','SuratKeteranganController@tolakPengajuan');
         });
+        // Surat Keterangan Kelakuan Baik
+        Route::get('surat-keterangan-kelakuan-baik/search/','SuratKeteranganController@searchSuratKeteranganKelakuanBaik');
+        Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}/cetak','SuratKeteranganController@cetakSuratKeteranganKelakuanBaik');
+        Route::get('surat-keterangan-kelakuan-baik','SuratKeteranganController@indexSuratKeteranganKelakuanBaik');
+        Route::get('surat-keterangan-kelakuan-baik/create','SuratKeteranganController@createSuratKeteranganKelakuanBaik');
+        Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}/edit','SuratKeteranganController@editSuratKeteranganKelakuanBaik');
+        Route::post('surat-keterangan-kelakuan-baik','SuratKeteranganController@storeSuratKeteranganKelakuanBaik');
+        Route::patch('surat-keterangan-kelakuan-baik/{surat_keterangan}','SuratKeteranganController@updateSuratKeteranganKelakuanBaik');
+        Route::delete('surat-keterangan-kelakuan-baik/{surat_keterangan}','SuratKeteranganController@destroySuratKeteranganKelakuanBaik');
+        Route::group(['prefix'=>'surat-keterangan-kelakuan-baik/pengajuan'],function(){
+            Route::post('tanda-tangan','SuratKeteranganController@tandaTanganKelakuanBaik');
+            Route::patch('tolak-pengajuan/{pengajuan_surat_keterangan}','SuratKeteranganController@tolakPengajuanKelakuanBaik');
+        });
         // Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');

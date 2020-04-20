@@ -28,72 +28,66 @@ class NavServiceProvider extends ServiceProvider
         $halaman = '';
         $posisi = '';
         $segment = request()->segment(2);
-        if(request()->segment(1) == 'admin'){ 
+        if (request()->segment(1) == 'admin') {
             $posisi = 'admin'  ;
-            if($segment == ''){
+            if ($segment == '') {
                 $halaman = 'dashboard-admin';
             }
-            if($segment == 'jurusan'){
+            else if ($segment == 'jurusan') {
                 $halaman = 'jurusan';
             }
-            if($segment == 'program-studi'){
+            else if ($segment == 'program-studi') {
                 $halaman = 'program-studi';
             }
-            if($segment == 'tahun-akademik'){
+            else if ($segment == 'tahun-akademik') {
                 $halaman = 'tahun-akademik';
             }
-            if($segment == 'mahasiswa'){
+            else if ($segment == 'mahasiswa') {
                 $halaman = 'mahasiswa';
             }
-            if($segment == 'user'){
+            else if ($segment == 'user') {
                 $halaman = 'user';
             }
-            if($segment == 'status-mahasiswa'){
+            else if ($segment == 'status-mahasiswa') {
                 $halaman = 'status-mahasiswa';
             }
-            if($segment == 'ormawa'){
+            else if ($segment == 'ormawa') {
                 $halaman = 'ormawa';
             }
-            if($segment == 'pimpinan-ormawa'){
+            else if ($segment == 'pimpinan-ormawa') {
                 $halaman = 'pimpinan-ormawa';
             }
-            if($segment == 'profil'){
+            else if ($segment == 'profil') {
                 $halaman = 'profil';
             }
-        }else if(request()->segment(1) == 'mahasiswa'){
+        } else if (request()->segment(1) == 'mahasiswa') {
             $posisi = 'mahasiswa';
-            if($segment == ''){
+            if ($segment == '') {
                 $halaman = 'dashboard-mahasiswa';
             }
-            if($segment == 'pengajuan'){
+            else if ($segment == 'pengajuan') {
                 $halaman = 'surat-keterangan-aktif-kuliah';
             }
-        }else if(request()->segment(1) == 'pegawai'){
-            $pengajuanSurat = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
-                                ->where('status','diajukan');
-            $jenisSurat = $pengajuanSurat->groupBy('jenis_surat')->pluck('jenis_surat')->toArray();
-            
-            $countAllPengajuanSuratKeterangan= $pengajuanSurat->count();
+        } elseif (request()->segment(1) == 'pegawai') {
             $posisi = 'pegawai';
-            if($segment == ''){
+            if ($segment == '') {
                 $halaman = 'dashboard-pegawai';
             }
-            if($segment == 'kode-surat'){
+            else if ($segment == 'kode-surat') {
                 $halaman = 'kode-surat';
             }
-            if($segment == 'tanda-tangan'){
+            else if ($segment == 'tanda-tangan') {
                 $halaman = 'tanda-tangan';
             }
-            if($segment == 'surat-keterangan-aktif-kuliah'){
+            else if ($segment == 'surat-keterangan-aktif-kuliah') {
                 $halaman = 'surat-keterangan-aktif-kuliah';
             }
-            if($segment == 'profil'){
+            else if ($segment == 'surat-keterangan-kelakuan-baik') {
+                $halaman = 'surat-keterangan-kelakuan-baik';
+            }
+            else if ($segment == 'profil') {
                 $halaman = 'profil';
             }
-            view()->share([
-                'countAllPengajuanSuratKeterangan'=>$countAllPengajuanSuratKeterangan,
-                'jenisSurat'=>$jenisSurat
-            ]);
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi]);
     }

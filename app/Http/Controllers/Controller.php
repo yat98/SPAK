@@ -78,8 +78,10 @@ class Controller extends BaseController
         return $mahasiswaList;
     }
 
-    protected function generateNomorSurat(){
-        $nomorSurat = SuratKeterangan::all();
+    protected function generateNomorSurat($jenisSurat){
+        $nomorSurat = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
+                        ->where('jenis_surat',$jenisSurat)
+                        ->get();
         $nomorSuratList = [];
         foreach ($nomorSurat as $nmr) {
             $nomorSuratList[$nmr->nomor_surat] = 'B/'.$nmr->nomor_surat.'/'.$nmr->kodeSurat->kode_surat.'/'.$nmr->created_at->year;

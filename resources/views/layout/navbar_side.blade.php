@@ -100,15 +100,10 @@
                 <i class="mdi mdi mdi mdi-border-color menu-icon"></i>
             </a>
         </li>
-        <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}">
+        <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah' || $halaman == 'surat-keterangan-kelakuan-baik') ? 'active':'' }}">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">
                     Surat
-                    @if (isset($countAllPengajuanSuratKeterangan))
-                        @if ($countAllPengajuanSuratKeterangan > 0)
-                            <span class="notification-badge bg-danger ml-2"></span>
-                        @endif
-                    @endif
                 </span>
                 <i class="menu-arrow"></i>
                 <i class="mdi mdi-file-document-box menu-icon"></i>
@@ -118,15 +113,12 @@
                     <li class="nav-item">
                         <a class="nav-link {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-aktif-kuliah') }}">
                             Surat Keterangan <br> Aktif Kuliah
-                            @if (isset($jenisSurat))
-                                @if (in_array('surat keterangan aktif kuliah',$jenisSurat))
-                                    <span class="notification-badge bg-danger ml-2"></span>
-                                @endif
-                            @endif
                         </a>
                     </li>
                     <li class="nav-item"> 
-                        <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/user') }}">Surat Keterangan <br> Kelakuan Baik</a>
+                        <a class="nav-link {{ ($halaman == 'surat-keterangan-kelakuan-baik') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-kelakuan-baik') }}">
+                            Surat Keterangan <br> Kelakuan Baik
+                        </a>
                     </li>
                     <li class="nav-item"> 
                         <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/user') }}">Surat Keterangan Cuti</a>

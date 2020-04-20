@@ -278,7 +278,7 @@ $('.btn-surat-detail').on('click', function (e) {
                                 </tr>
                                 <tr>
                                 <th>Nomor Surat</th>
-                                    <td>B/${suratDetail.nomor_surat}/${suratDetail.kode_surat.kode_surat}/${suratDetail.created_at.toString().slice(0,4)}</td>
+                                    <td>B/${suratDetail.nomor_surat}/${suratDetail.kode}/${suratDetail.created_at.toString().slice(0,4)}</td>
                                 </tr>
                                 <tr>
                                     <th>Jenis Surat</th>

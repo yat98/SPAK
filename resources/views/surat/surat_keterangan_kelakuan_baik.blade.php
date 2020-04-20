@@ -74,6 +74,15 @@
             width: 230px;
             height: 150px;
         }
+        .pl-5{
+            padding-left: 50px;
+        }
+        .mb-1{
+            margin-bottom: 10px;
+        }
+        .mt-1{
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -81,33 +90,33 @@
         @include('surat.kop_surat')
         <div class="border"></div>
         <div class="text-center mt-3">
-            <p class="m-0"><b><span class="underline">SURAT KETERANGAN AKTIF KULIAH</span></b></p>
+            <p class="m-0"><b><span class="underline">SURAT KETERANGAN KELAKUAN BAIK</span></b></p>
             @php
                 $kode = explode('/',$suratKeterangan->kodeSurat->kode_surat);
             @endphp
             <p class="m-0"><b><i>Nomor :B/{{$suratKeterangan->nomor_surat}}/{{$kode[0].'.4/'.$kode[1]}}/{{$suratKeterangan->created_at->year}}</i></b></p>
         </div>
         <div class="content">
-            <p class="m-0">Yang bertanda tangan dibawah ini Wakil Dekan III Fakultas Teknik Universitas Negeri Gorontalo dengan ini menerangkan kepada :</p>
+            <p class="m-0 mb-1">Yang bertanda tangan dibawah ini Wakil Dekan III Fakultas Teknik Universitas Negeri Gorontalo dengan ini menerangkan kepada :</p>
             <table class="m-0">
                 <tr>
-                    <td class="data-table">Nama</td>
+                    <td class="data-table pl-5">Nama</td>
                     <td>: {{$suratKeterangan->pengajuanSuratKeterangan->mahasiswa->nama}}</td>
                 </tr>
                 <tr>
-                    <td class="data-table">NIM</td>
+                    <td class="data-table pl-5">NIM</td>
                     <td>: {{$suratKeterangan->pengajuanSuratKeterangan->nim}}</td>
                 </tr>
                 <tr>
-                    <td class="data-table">Program Studi</td>
-                    <td>: {{$suratKeterangan->pengajuanSuratKeterangan->mahasiswa->prodi->nama_prodi}}</td>
+                    <td class="data-table pl-5">Program Studi</td>
+                    <td>: {{$suratKeterangan->pengajuanSuratKeterangan->mahasiswa->prodi->strata}} - {{$suratKeterangan->pengajuanSuratKeterangan->mahasiswa->prodi->nama_prodi}}</td>
                 </tr>
                 <tr>
-                    <td class="data-table">Jurusan</td>
+                    <td class="data-table pl-5">Jurusan</td>
                     <td>: {{$suratKeterangan->pengajuanSuratKeterangan->mahasiswa->prodi->jurusan->nama_jurusan}}</td>
                 </tr>
             </table>
-            <p class="m-0">Adalah benar yang bersangkutan terdaftar sebagai <b><i class="underline">Mahasiswa Semester {{ucwords($suratKeterangan->pengajuanSuratKeterangan->tahunAkademik->semester)}} Tahun Akademik {{$suratKeterangan->pengajuanSuratKeterangan->tahunAkademik->tahun_akademik}}</i></b> serta aktif mengikuti kegiatan akademik pada Fakultas Teknik Universitas Negeri Gorontalo.</p>
+            <p class="m-0 mt-1">Bahwa yang bersangkutan adalah benar-benar <b><i class="underline">Berkelakuan Baik dan Tidak Pernah Melanggar Peraturan yang Berlaku di lingkungan Fakultas Teknik Universitas Negeri Gorontalo.</i></b></p>
             <p class="m-0">Demikian surat keterangan ini di buat dan diberikan kepada yang bersangkutan untuk dipergunakan sebagaimana mestinya.</p>
         </div>
         <div class="signature">
