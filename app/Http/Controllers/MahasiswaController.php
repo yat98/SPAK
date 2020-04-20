@@ -52,7 +52,9 @@ class MahasiswaController extends Controller
     }
 
     public function show($nim){
-        $mahasiswa = Mahasiswa::where('nim',$nim)->with(['prodi.jurusan','tahunAkademik'])->get();
+        $mahasiswa = Mahasiswa::where('nim',$nim)->with(['prodi.jurusan','tahunAkademik'=>function($query){
+            $query->orderByDesc('created_at');
+        }])->get();
         return $mahasiswa->toJson();
     }
 

@@ -88,7 +88,7 @@
                                                         Lihat Progress Surat</a>
 
                                                     @if ($pengajuanSuratKeteranganAktif->status == 'selesai' && $pengajuanSuratKeteranganAktif->suratKeterangan->jumlah_cetak <= 2)
-                                                    <a href="{{ url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah/'.$pengajuanSuratKeteranganAktif->suratKeterangan->id_pengajuan_surat_keterangan.'/cetak') }}" class="btn btn-info btn-sm" target="_blank">
+                                                    <a href="{{ url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah/'.$pengajuanSuratKeteranganAktif->suratKeterangan->id_pengajuan_surat_keterangan.'/cetak') }}" class="btn btn-info btn-sm">
                                                         <i class="mdi mdi mdi-printer btn-icon-prepend"></i>
                                                         Cetak</a>
                                                     @endif

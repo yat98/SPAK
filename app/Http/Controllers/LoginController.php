@@ -31,7 +31,13 @@ class LoginController extends Controller
             'password'=>'required|string|max:60',
         ]);
 
-        ($request->jenis_user == 'mahasiswa') ? $user = Mahasiswa::where('nim',$request->username)->first():$user = User::where('nip',$request->username)->first();
+        if($request->jenis_user == 'pimpinan'){
+            $user = User::where('jabatan','like',"%dekan%")->where('nip',$request->username)->first();
+        }else if($request->jenis_user == 'pegawai'){
+            $user = User::where('jabatan','like',"%kasubag%")->where('nip',$request->username)->first();
+        }else{
+            $user = Mahasiswa::where('nim',$request->username)->first();
+        }
         
         if(!empty($user)){
             if(Hash::check($password,$user->password)){
@@ -49,7 +55,7 @@ class LoginController extends Controller
                 }
 
                 Session::put($session);
-                $this->setFlashData('success-timer','Login Berhasil','Selamat datang '.$user->nama);
+                $this->setFlashData('success-timer','Login Berhasil','Selamat Datang '.$user->nama);
                 return redirect($session['status']);
             }
         }
@@ -88,7 +94,7 @@ class LoginController extends Controller
                     'status'=>'admin'
                 ];
                 Session::put($session);
-                $this->setFlashData('success-timer','Login Berhasil','Selamat datang '.$admin->username);
+                $this->setFlashData('success-timer','Login Berhasil','Selamat Datang '.$admin->username);
                 return redirect('admin');
             }
         }

@@ -288,6 +288,12 @@ class SuratKeteranganController extends Controller
     }
 
     public function cetakSuratKeteranganAktifKuliah(SuratKeterangan $suratKeterangan){
+        if(Session::has('nim')){
+            if($suratKeterangan->jumlah_cetak >= 3){
+                $this->setFlashData('info','Cetak Surat Keterangan','Anda telah mencetak surat keterangan aktif kuliah sebanyak 3 kali.');
+                return redirect('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah');
+            }
+        }
         $jumlahCetak = ++$suratKeterangan->jumlah_cetak;
         $suratKeterangan->update([
             'jumlah_cetak'=>$jumlahCetak
