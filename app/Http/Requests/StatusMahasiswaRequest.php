@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Mahasiswa;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 
 class StatusMahasiswaRequest extends FormRequest
 {
@@ -35,5 +37,20 @@ class StatusMahasiswaRequest extends FormRequest
             'id_tahun_akademik'=>$idTahunAkademikRules,
             'status'=>'required|string|in:aktif,non aktif,cuti,drop out,lulus,keluar'
         ];
+    }
+
+    public function withValidator(Validator $validator)
+    {
+        $mahasiswa = Mahasiswa::where('nim',$this->get('nim'))->with(['tahunAkademik'=>function($query){
+            $query->orderByDesc('created_at');
+        }])->first();
+        $validator->after(function($validator) use($mahasiswa) {
+            if($mahasiswa->tahunAkademik->count() > 0){
+                $status = $mahasiswa->tahunAkademik->first()->pivot->status;
+                if($status == 'lulus' || $status == 'drop out' || $status == 'keluar'){
+                    $validator->errors()->add('nim','status mahasiswa terakhir '.$mahasiswa->nama.' adalah '.$status);
+                }
+            }
+        });
     }
 }

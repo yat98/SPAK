@@ -18,7 +18,7 @@
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            {{ Form::label('nim','Mahasiswa') }}
+            {{ Form::label('nim','NIM') }}
             @if ($errors->any())
             @if ($errors->has('nim'))
             {{ Form::select('nim',$mahasiswaList,null,$attrNim) }}
