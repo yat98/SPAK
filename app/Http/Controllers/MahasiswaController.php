@@ -183,12 +183,17 @@ class MahasiswaController extends Controller
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
         $tahunAkademikTerakhir = ($tahunAkademikAktif != null) ? $tahunAkademikAktif:TahunAkademik::orderByDesc('created_at')->first();
         $status = StatusMahasiswa::where('nim',Session::get('nim'))->orderByDesc('created_at')->get();
-        
+
         foreach ($status as $value) {
             if($value->status == 'aktif'){
                 $tahunAkademik[$value->tahunAkademik->id] = $value->tahunAkademik->tahun_akademik.' - '.ucwords($value->tahunAkademik->semester);
                 break;
             }
+        }
+
+        if(count($tahunAkademik) == 0){
+            $this->setFlashData('info','Pengajuan Gagal','Maaf anda tidak dapat membuat pengajuan surat keterangan aktif kuliah');
+            return redirect('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah');
         }
 
         foreach ($status as $value) {
