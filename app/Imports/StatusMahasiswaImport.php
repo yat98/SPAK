@@ -36,21 +36,22 @@ class StatusMahasiswaImport implements ToModel, WithValidation, WithBatchInserts
             'id_tahun_akademik'=>$this->tahunAkademikAktif->id,
             'status'=>$row['status']
         ];
-        if($this->tahunAkademikTerakhir == null){
-            StatusMahasiswa::updateOrCreate([
-                'nim'=>$row['nim'],
-                'id_tahun_akademik'=>$this->tahunAkademikAktif->id
-            ],$statusMahasiswa);
-        }else{
-            $statusTerakhir = StatusMahasiswa::where('nim',$row['nim'])->where('id_tahun_akademik',$this->tahunAkademikTerakhir->id)->first();
-            if($statusTerakhir->status == 'lulus' || $statusTerakhir->status == 'drop out' || $statusTerakhir->status == 'keluar'){
+
+        $mahasiswa = Mahasiswa::where('nim',$row['nim'])->with(['tahunAkademik'=>function($query){
+            $query->orderByDesc('created_at');
+        }])->first();
+
+        if($mahasiswa->tahunAkademik->count() > 0){
+            $status = $mahasiswa->tahunAkademik->first()->pivot->status;
+            if($status == 'lulus' || $status == 'drop out' || $status == 'keluar'){
                 return;
             }
-            StatusMahasiswa::updateOrCreate([
-                'nim'=>$row['nim'],
-                'id_tahun_akademik'=>$this->tahunAkademikAktif->id
-            ],$statusMahasiswa);
         }
+                
+        StatusMahasiswa::updateOrCreate([
+            'nim'=>$row['nim'],
+            'id_tahun_akademik'=>$this->tahunAkademikAktif->id
+        ],$statusMahasiswa);
     }
 
     public function chunkSize(): int
