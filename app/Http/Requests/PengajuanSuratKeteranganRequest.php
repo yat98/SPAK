@@ -26,7 +26,7 @@ class PengajuanSuratKeteranganRequest extends FormRequest
         return [
             'nim'=>'required|numeric',
             'id_tahun_akademik'=>'required|numeric',
-            'jenis_surat'=>'required|string|in:surat keterangan aktif kuliah,surat keterangan kelakukan baik,surat keterangan cuti',
+            'jenis_surat'=>'required|string|in:surat keterangan aktif kuliah,surat keterangan kelakuan baik,surat keterangan cuti',
         ];
     }
 }

@@ -168,6 +168,20 @@ class MahasiswaController extends Controller
         return view($this->segmentUser.'.pengajuan_surat_keterangan_aktif_kuliah',compact('countAllPengajuan','countPengajuanSuratKeterangan','perPage','pengajuanSuratKeteranganAktifList'));
     }
 
+    public function pengajuanSuratKeteranganKelakuanBaik(){
+        $perPage = $this->perPage;
+        $pengajuanSuratKeteranganList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
+                                            ->where('nim',Session::get('nim'))
+                                            ->orderByDesc('created_at')
+                                            ->orderBy('status')
+                                            ->paginate($perPage,['*'],'page_pengajuan');
+        $countAllPengajuan = PengajuanSuratKeterangan::whereNotIn('status',['selesai'])->count();
+        $countPengajuanSuratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
+                                            ->where('nim',Session::get('nim'))
+                                            ->count();
+        return view($this->segmentUser.'.pengajuan_surat_keterangan_kelakuan_baik',compact('countAllPengajuan','countPengajuanSuratKeterangan','perPage','pengajuanSuratKeteranganList'));
+    }
+
     public function createPengajuanSuratKeteranganAktif(){
         $statusMahasiswa = Mahasiswa::where('nim',Session::get('nim'))->with(['tahunAkademik'=>function($query){
             $query->orderByDesc('created_at');
@@ -208,6 +222,16 @@ class MahasiswaController extends Controller
         return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_aktif_kuliah',compact('tahunAkademik'));
     }
 
+    public function createPengajuanSuratKeteranganKelakuanBaik(){
+        $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
+        $tahunAkademikTerakhir = ($tahunAkademikAktif != null) ? $tahunAkademikAktif:TahunAkademik::orderByDesc('created_at')->first();
+        if($tahunAkademikTerakhir != null){
+            $tahunAkademik[$tahunAkademikTerakhir->id] = $tahunAkademikTerakhir->tahun_akademik.' - '.ucwords($tahunAkademikTerakhir->semester);
+        }
+        $tahunAkademik = [];
+        return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_kelakuan_baik',compact('tahunAkademik'));
+    }
+
     public function storePengajuanSuratKeteranganAktif(PengajuanSuratKeteranganRequest $request){
         $input = $request->all();
         $mahasiswa = Mahasiswa::where('nim',Session::get('nim'))->first();
@@ -238,7 +262,37 @@ class MahasiswaController extends Controller
         return redirect($this->segmentUser.'/pengajuan/surat-keterangan-aktif-kuliah');
     }
 
-    public function progressPengajuanSuratKeteranganAktif(PengajuanSuratKeterangan $pengajuanSuratKeterangan){
+    public function storePengajuanSuratKeteranganKelakuanBaik(PengajuanSuratKeteranganRequest $request){
+        $input = $request->all();
+        $mahasiswa = Mahasiswa::where('nim',Session::get('nim'))->first();
+
+        DB::beginTransaction();
+        try{
+            $user = User::where('jabatan','kasubag kemahasiswaan')->where('status_aktif','aktif')->first();
+            NotifikasiUser::create([
+                'nip'=>$user->nip,
+                'judul_notifikasi'=>'Pengajuan Surat Keterangan',
+                'isi_notifikasi'=>'Mahasiswa dengan nama '.$mahasiswa->nama.' membuat pengajuan surat keterangan kelakuan baik.',
+                'link_notifikasi'=>url('pegawai/surat-keterangan-kelakuan-baik')
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan surat keterangan kelakuan baik gagal dibuat.');
+        }
+
+        try{ 
+            PengajuanSuratKeterangan::create($input);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan surat keterangan kelakuan baik gagal dibuat.');
+        }
+
+        DB::commit();
+        $this->setFlashData('success','Berhasil','Pengajuan surat keterangan kelakuan baik berhasil dibuat.');
+        return redirect($this->segmentUser.'/pengajuan/surat-keterangan-kelakuan-baik');
+    }
+
+    public function progressPengajuanSuratKeterangan(PengajuanSuratKeterangan $pengajuanSuratKeterangan){
         $pengajuan = $pengajuanSuratKeterangan->load(['suratKeterangan.user','mahasiswa']);
         $data = collect($pengajuan);
         $tanggalDiajukan = $pengajuan->created_at->format('d F Y - H:i:m');

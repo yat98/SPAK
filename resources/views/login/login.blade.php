@@ -30,6 +30,7 @@
                         <div class="my-2 d-flex justify-content-between align-items-center">
                             <div class="form-check"></div>
                         </div>
+                        {{ csrf_field() }}
                         {{ Form::close() }}
                     </div>
                 </div>

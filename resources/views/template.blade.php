@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{{ asset('vendors/css/vendor.bundle.base.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/sweetalert2/sweetalert2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/jquery-datepicker/jquery.datetimepicker.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/lightbox/css/lightbox.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom-css.css') }}">
 </head>
 
@@ -29,6 +31,8 @@
     <script src="{{ asset('vendors/sweetalert2/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('vendors/select2/select2.min.js') }}"></script>
     <script src="{{ asset('vendors/signatures-pad/js/signature_pad.umd.js') }}"></script>
+    <script src="{{ asset('vendors/jquery-datepicker/jquery.datetimepicker.full.min.js') }}"></script>
+    <script src="{{ asset('vendors/lightbox/js/lightbox.js') }}"></script>
     <script src="{{ asset('js/form-upload.js') }}"></script>
     <script src="{{ asset('js/script.js') }}"></script>
 

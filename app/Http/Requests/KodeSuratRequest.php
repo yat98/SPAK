@@ -9,7 +9,7 @@ use Illuminate\Contracts\Validation\Validator;
 class KodeSuratRequest extends FormRequest
 {
     // Pesan error status_aktif
-    private $errorKodeSuratAktif = 'kode surat dengan status aktif sudah ada.';
+    private $errorKodeSuratAktif = 'jenis surat dengan status aktif sudah ada.';
 
     /**
      * Determine if the user is authorized to make this request.
@@ -30,12 +30,14 @@ class KodeSuratRequest extends FormRequest
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
             $kodeSuratRules = 'required|string|regex:/.+\/+./|unique_with:kode_surat,jenis_surat,'.$this->get('id');
+            $jenisSuratRules = 'required|string|in:surat keterangan,surat dispensasi,surat pengantar cuti|unique_with:kode_surat,kode_surat,'.$this->get('id');
         }else{
             $kodeSuratRules = 'required|string|regex:/.+\/+./|unique_with:kode_surat,jenis_surat';
+            $jenisSuratRules = 'required|string|in:surat keterangan,surat dispensasi,surat pengantar cuti|unique_with:kode_surat,kode_surat';
         }
         return[
             'kode_surat'=>$kodeSuratRules,
-            'jenis_surat'=>'required|string|in:surat keterangan,surat dispensasi',
+            'jenis_surat'=>$jenisSuratRules,
             'status_aktif'=>'required|string|in:aktif,non aktif'
         ];
     }

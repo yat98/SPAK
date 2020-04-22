@@ -97,7 +97,7 @@ class SuratKeteranganController extends Controller
         return view('user.'.$this->segmentUser.'.tambah_surat_keterangan_kelakuan_baik',compact('mahasiswa','tahunAkademik','kodeSurat','nomorSuratBaru'));
     }
 
-    public function showSuratKeteranganAktifKuliah(SuratKeterangan $suratKeterangan){
+    public function showSuratKeterangan(SuratKeterangan $suratKeterangan){
         $surat = collect($suratKeterangan->load(['kodeSurat','pengajuanSuratKeterangan.mahasiswa.prodi.jurusan','pengajuanSuratKeterangan.tahunAkademik','user']));
         $tanggal = $suratKeterangan->created_at->format('d M Y - H:i:m');
         $kode = explode('/',$suratKeterangan->kodeSurat->kode_surat);
@@ -509,9 +509,9 @@ class SuratKeteranganController extends Controller
             }
         }
         $jumlahCetak = ++$suratKeterangan->jumlah_cetak;
-        // $suratKeterangan->update([
-        //     'jumlah_cetak'=>$jumlahCetak
-        // ]);
+        $suratKeterangan->update([
+            'jumlah_cetak'=>$jumlahCetak
+        ]);
         $pdf = PDF::loadview('surat.surat_keterangan_kelakuan_baik',compact('suratKeterangan'))->setPaper('a4', 'potrait');
         return $pdf->stream($suratKeterangan->pengajuanSuratKeterangan->mahasiswa->nama.' - '.$suratKeterangan->created_at->format('dmY-Him').'.pdf');
     }

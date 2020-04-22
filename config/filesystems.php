@@ -42,6 +42,10 @@ return [
     */
 
     'disks' => [
+        'file_surat_masuk' => [
+            'driver' => 'local',
+            'root' => public_path('upload_surat_masuk'),
+        ],
 
         'local' => [
             'driver' => 'local',

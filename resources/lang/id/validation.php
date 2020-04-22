@@ -156,6 +156,11 @@ return [
             'required' => 'tahun akademik wajib diisi.',
             'numeric' => 'tahun akademik harus berupa angka.',
         ],
+        'file_surat_masuk' => [
+            'image'=> 'file surat masuk hanya berupa gambar.',
+            'max' => 'file surat masuk tidak boleh lebih dari 1MB.',
+            'mimes' => 'file surat masuk hanya boleh diisi file *.jpg, *.jpeg ,*bmp, *.png.',
+        ]
     ],
 
     /*

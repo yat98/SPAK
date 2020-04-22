@@ -100,10 +100,16 @@
                 <i class="mdi mdi mdi mdi-border-color menu-icon"></i>
             </a>
         </li>
+        <li class="nav-item {{ ($halaman == 'surat-masuk') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/surat-masuk') }}">
+                <span class="menu-title">Surat Masuk</span>
+                <i class="mdi mdi mdi-file-document-box menu-icon"></i>
+            </a>
+        </li>
         <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah' || $halaman == 'surat-keterangan-kelakuan-baik') ? 'active':'' }}">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">
-                    Surat
+                    Surat Keluar
                 </span>
                 <i class="menu-arrow"></i>
                 <i class="mdi mdi-file-document-box menu-icon"></i>
@@ -121,7 +127,7 @@
                         </a>
                     </li>
                     <li class="nav-item"> 
-                        <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/user') }}">Surat Keterangan Cuti</a>
+                        <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-dispensasi') }}">Surat Dispensasi</a>
                     </li>
                 </ul>
             </div>
@@ -139,7 +145,7 @@
                 <i class="mdi mdi-home menu-icon"></i>
             </a>
         </li>
-        <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}">
+        <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah' || $halaman == 'surat-keterangan-kelakuan-baik') ? 'active':'' }}">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">
                     Pengajuan Surat
@@ -155,10 +161,10 @@
                         </a>
                     </li>
                     <li class="nav-item"> 
-                        <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/user') }}">Surat Keterangan <br> Kelakuan Baik</a>
+                        <a class="nav-link {{ ($halaman == 'surat-keterangan-kelakuan-baik') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/pengajuan/surat-keterangan-kelakuan-baik') }}">Surat Keterangan <br> Kelakuan Baik</a>
                     </li>
                     <li class="nav-item"> 
-                        <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/user') }}">Surat Keterangan Cuti</a>
+                        <a class="nav-link {{ ($halaman == 'user') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/user') }}">Surat Dispensasi</a>
                     </li>
                 </ul>
             </div>

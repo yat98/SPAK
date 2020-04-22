@@ -65,8 +65,11 @@ class NavServiceProvider extends ServiceProvider
             if ($segment == '') {
                 $halaman = 'dashboard-mahasiswa';
             }
-            else if ($segment == 'pengajuan') {
+            else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-aktif-kuliah') {
                 $halaman = 'surat-keterangan-aktif-kuliah';
+            }
+            else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-kelakuan-baik') {
+                $halaman = 'surat-keterangan-kelakuan-baik';
             }
         } elseif (request()->segment(1) == 'pegawai') {
             $posisi = 'pegawai';
@@ -87,6 +90,9 @@ class NavServiceProvider extends ServiceProvider
             }
             else if ($segment == 'profil') {
                 $halaman = 'profil';
+            }
+            else if($segment == 'surat-masuk'){
+                $halaman = 'surat-masuk';
             }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi]);

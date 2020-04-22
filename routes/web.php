@@ -29,11 +29,18 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         Route::get('notifikasi','NotifikasiMahasiswaController@index');
         // Pengajuan Surat
         Route::group(['prefix' => 'pengajuan'],function(){
+            // Surat Keterangan Aktif Kuliah
             Route::get('surat-keterangan-aktif-kuliah','MahasiswaController@pengajuanSuratKeteranganAktif');
-            Route::get('surat-keterangan-aktif-kuliah/{pengajuan_surat_keterangan}/progress','MahasiswaController@progressPengajuanSuratKeteranganAktif');
+            Route::get('surat-keterangan-aktif-kuliah/{pengajuan_surat_keterangan}/progress','MahasiswaController@progressPengajuanSuratKeterangan');
             Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}/cetak','SuratKeteranganController@cetakSuratKeteranganAktifKuliah');
             Route::get('surat-keterangan-aktif-kuliah/create','MahasiswaController@createPengajuanSuratKeteranganAktif');
             Route::post('surat-keterangan-aktif-kuliah','MahasiswaController@storePengajuanSuratKeteranganAktif');
+             // Surat Keterangan Kelakuan Baik
+             Route::get('surat-keterangan-kelakuan-baik','MahasiswaController@pengajuanSuratKeteranganKelakuanBaik');
+             Route::get('surat-keterangan-kelakuan-baik/{pengajuan_surat_keterangan}/progress','MahasiswaController@progressPengajuanSuratKeterangan');
+             Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}/cetak','SuratKeteranganController@cetakSuratKeteranganKelakuanBaik');
+             Route::get('surat-keterangan-kelakuan-baik/create','MahasiswaController@createPengajuanSuratKeteranganKelakuanBaik');
+             Route::post('surat-keterangan-kelakuan-baik','MahasiswaController@storePengajuanSuratKeteranganKelakuanBaik');
         });
     });
 });
@@ -59,7 +66,7 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::post('surat-keterangan-aktif-kuliah','SuratKeteranganController@storeSuratKeteranganAktifKuliah');
         Route::get('surat-keterangan-aktif-kuliah/create','SuratKeteranganController@createSuratKeteranganAktifKuliah');
         Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}/edit','SuratKeteranganController@editSuratKeteranganAktifKuliah');
-        Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@showSuratKeteranganAktifKuliah');
+        Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@showSuratKeterangan');
         Route::patch('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@updateSuratKeteranganAktifKuliah');
         Route::delete('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@destroySuratKeteranganAktifKuliah');
         Route::group(['prefix'=>'surat-keterangan-aktif-kuliah/pengajuan'],function(){
@@ -73,14 +80,17 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::get('surat-keterangan-kelakuan-baik/create','SuratKeteranganController@createSuratKeteranganKelakuanBaik');
         Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}/edit','SuratKeteranganController@editSuratKeteranganKelakuanBaik');
         Route::post('surat-keterangan-kelakuan-baik','SuratKeteranganController@storeSuratKeteranganKelakuanBaik');
+        Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}','SuratKeteranganController@showSuratKeterangan');
         Route::patch('surat-keterangan-kelakuan-baik/{surat_keterangan}','SuratKeteranganController@updateSuratKeteranganKelakuanBaik');
         Route::delete('surat-keterangan-kelakuan-baik/{surat_keterangan}','SuratKeteranganController@destroySuratKeteranganKelakuanBaik');
         Route::group(['prefix'=>'surat-keterangan-kelakuan-baik/pengajuan'],function(){
             Route::post('tanda-tangan','SuratKeteranganController@tandaTanganKelakuanBaik');
             Route::patch('tolak-pengajuan/{pengajuan_surat_keterangan}','SuratKeteranganController@tolakPengajuanKelakuanBaik');
         });
+        // Surat Masuk
+        Route::get('surat-masuk/search', 'SuratMasukController@search');
+        Route::resource('surat-masuk','SuratMasukController');
         // Mahasiswa
-        Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Notifikasi
         Route::get('notifikasi/{notifikasi_user}','NotifikasiUserController@show');

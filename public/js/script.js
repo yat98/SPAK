@@ -439,3 +439,77 @@ $('.btn-surat-progress').on('click', function (e) {
             $('#surat-progress-content').html(html);
         });
 });
+
+$('#tanggal_surat_masuk').datetimepicker({
+    format:'Y-m-d',
+    formatDate:'Y-m-d',
+    timepicker:false,
+});
+
+$('.btn-surat-masuk-detail').on('click',function(e){
+    e.preventDefault();
+    $('#surat-masuk-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+                .then(response => response.json())
+                .then(result => {
+                    let suratMasuk = result;
+                    let html = `<div class="table-responsive">
+                                    <table class="table">
+                                        <tr>
+                                            <td><b>Nomor Surat</b></td>
+                                            <td>${suratMasuk.nomor_surat}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Perihal</b></td>
+                                            <td>${suratMasuk.perihal}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Instansi</b></td>
+                                            <td>${suratMasuk.instansi}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Tanggal Surat Masuk</b></td>
+                                            <td>${suratMasuk.tanggal_surat_masuk}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Di buat</b></td>
+                                            <td>${suratMasuk.created}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Di Ubah</b></td>
+                                            <td>${suratMasuk.updated}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>File Surat</b></td>
+                                            <td>
+                                                <a href="${suratMasuk.link_file}" class="btn btn-info btn-sm" data-lightbox="${suratMasuk.nama_file}">
+                                                <i class="mdi mdi mdi-eye"></i>
+                                                Lihat File Surat</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>`;
+                    $('#surat-masuk-detail-content').html(html);
+                });
+})
+
+lightbox.option({
+    'resizeDuration': 200,
+    'wrapAround': true,
+    'disableScrolling':true
+});
+
+$('.btn-surat-masuk-edit').on('click',function(e){
+    // e.preventDefault();
+    // let html = `<label for="file_surat_masuk">File Surat Masuk *(Ukuran File &lt; 1MB)</label>
+    //             <input class="file-upload-default" id="file_surat_masuk" name="file_surat_masuk" type="file">
+    //             <div class="input-group col-xs-12">
+    //                 <input class="form-control file-upload-info" placeholder="Upload File Surat Masuk" disabled="disabled" name="" type="text">
+    //                 <span class="input-group-append">
+    //                     <button class="file-upload-browse btn btn-gradient-success" type="button">Upload</button>
+    //                 </span>
+    //             </div>`;
+    // $('.surat-masuk-file').empty();
+    // $('.surat-masuk-file').html(html);
+})
