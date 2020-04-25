@@ -189,6 +189,8 @@ $('.btn-password').on('click',function(e){
 })
 
 $("#mahasiswa_list").select2();
+$("#id_surat_masuk").select2();
+$(".select").select2();
 $('.search').select2({
     width: '100%'
 });
@@ -446,6 +448,20 @@ $('#tanggal_surat_masuk').datetimepicker({
     timepicker:false,
 });
 
+$('.tanggal').datetimepicker({
+    format:'Y-m-d',
+    formatDate:'Y-m-d',
+    timepicker:false,
+});
+
+ $(document).on('click','.tanggal', function(){
+    $(this).datetimepicker({
+        format:'Y-m-d',
+        formatDate:'Y-m-d',
+        timepicker:false,
+    }).focus();
+ });
+
 $('.btn-surat-masuk-detail').on('click',function(e){
     e.preventDefault();
     $('#surat-masuk-detail-content').empty();
@@ -500,16 +516,33 @@ lightbox.option({
     'disableScrolling':true
 });
 
-$('.btn-surat-masuk-edit').on('click',function(e){
-    // e.preventDefault();
-    // let html = `<label for="file_surat_masuk">File Surat Masuk *(Ukuran File &lt; 1MB)</label>
-    //             <input class="file-upload-default" id="file_surat_masuk" name="file_surat_masuk" type="file">
-    //             <div class="input-group col-xs-12">
-    //                 <input class="form-control file-upload-info" placeholder="Upload File Surat Masuk" disabled="disabled" name="" type="text">
-    //                 <span class="input-group-append">
-    //                     <button class="file-upload-browse btn btn-gradient-success" type="button">Upload</button>
-    //                 </span>
-    //             </div>`;
-    // $('.surat-masuk-file').empty();
-    // $('.surat-masuk-file').html(html);
-})
+$('.btn-tambah-mahasiswa').on('click',function(e){
+    e.preventDefault();
+    $('.mahasiswa-wrap').append('<div class="form-row mb-3" style="margin-left:1px">'+$('.mahasiswa-select').clone().html()+'</div>');
+});
+
+// new FroalaEditor('textarea#tahapan_kegiatan',{
+//     height:600
+// });
+
+$('.btn-tambah-tahapan').on('click',function(e){
+    e.preventDefault();
+    let jumlahValue = $('#jumlah_tahapan_field').val();
+    $('#jumlah_tahapan_field').val(++jumlahValue);
+    $('.tahapan').append(`<div class="form-row copy-tahapan-field mb-3">
+                            <div class="col-md-12 mb-1">
+                                <input class="form-control" id="tahapan_kegiatan" placeholder="Tahapan kegiatan" name="tahapan_kegiatan[]" type="text">
+                            </div>
+                            <div class="col-md-6 mb-1">
+                                <input class="form-control" id="tempat_kegiatan" placeholder="Tempat kegiatan" name="tempat_kegiatan[]" type="text">
+                            </div>
+                            <div class="col-md-3">
+                                <input class="tanggal form-control" id="tanggal_awal_kegiatan" placeholder="Tanggal Awal Kegiatan" name="tanggal_awal_kegiatan[]" type="text">
+                            </div>
+                            <div class="col-md-3">
+                                <input class="tanggal form-control" id="tanggal_akhir_kegiatan" placeholder="Tanggal Akhir Kegiatan" name="tanggal_akhir_kegiatan[]" type="text">
+                            </div>
+                        </div>`);
+    console.log(jumlahValue);
+    
+});

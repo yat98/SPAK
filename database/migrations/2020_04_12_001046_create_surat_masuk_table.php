@@ -14,7 +14,7 @@ class CreateSuratMasukTable extends Migration
     public function up()
     {
         Schema::create('surat_masuk', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('id')->unsigned();
             $table->string('nomor_surat',50);
             $table->string('perihal',100);
             $table->string('instansi',100);

@@ -49,7 +49,7 @@
                                     <div class="col-sm-12 col-md-12">
                                         {{ Form::open(['url'=>'pegawai/surat-masuk/search','method'=>'GET']) }}
                                         <div class="form-row">
-                                            <div class="col-sm-12 col-md-6 mt-1">
+                                            <div class="col-sm-12 col-md-5 mt-1">
                                                 {{ Form::select('keywords',$nomorSurat,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> '-- Pilih Nomor Surat --']) }}
                                             </div>
                                             <div class="col-sm-12 col-md-5 mt-1">

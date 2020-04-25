@@ -14,8 +14,7 @@ class CreateDaftarDispensasiMahasiswaTable extends Migration
     public function up()
     {
         Schema::create('daftar_dispensasi_mahasiswa', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('id_surat_dispensasi')->unsigned();
+            $table->integer('id_surat_dispensasi')->unsigned()->index();
             $table->char('nim',25)->index();
             $table->timestamps();
         });

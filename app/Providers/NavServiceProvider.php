@@ -32,67 +32,52 @@ class NavServiceProvider extends ServiceProvider
             $posisi = 'admin'  ;
             if ($segment == '') {
                 $halaman = 'dashboard-admin';
-            }
-            else if ($segment == 'jurusan') {
+            } else if ($segment == 'jurusan') {
                 $halaman = 'jurusan';
-            }
-            else if ($segment == 'program-studi') {
+            } else if ($segment == 'program-studi') {
                 $halaman = 'program-studi';
-            }
-            else if ($segment == 'tahun-akademik') {
+            } else if ($segment == 'tahun-akademik') {
                 $halaman = 'tahun-akademik';
-            }
-            else if ($segment == 'mahasiswa') {
+            } else if ($segment == 'mahasiswa') {
                 $halaman = 'mahasiswa';
-            }
-            else if ($segment == 'user') {
+            } else if ($segment == 'user') {
                 $halaman = 'user';
-            }
-            else if ($segment == 'status-mahasiswa') {
+            } else if ($segment == 'status-mahasiswa') {
                 $halaman = 'status-mahasiswa';
-            }
-            else if ($segment == 'ormawa') {
+            } else if ($segment == 'ormawa') {
                 $halaman = 'ormawa';
-            }
-            else if ($segment == 'pimpinan-ormawa') {
+            } else if ($segment == 'pimpinan-ormawa') {
                 $halaman = 'pimpinan-ormawa';
-            }
-            else if ($segment == 'profil') {
+            } else if ($segment == 'profil') {
                 $halaman = 'profil';
             }
         } else if (request()->segment(1) == 'mahasiswa') {
             $posisi = 'mahasiswa';
             if ($segment == '') {
                 $halaman = 'dashboard-mahasiswa';
-            }
-            else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-aktif-kuliah') {
+            } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-aktif-kuliah') {
                 $halaman = 'surat-keterangan-aktif-kuliah';
-            }
-            else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-kelakuan-baik') {
+            } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-kelakuan-baik') {
                 $halaman = 'surat-keterangan-kelakuan-baik';
             }
         } elseif (request()->segment(1) == 'pegawai') {
             $posisi = 'pegawai';
             if ($segment == '') {
                 $halaman = 'dashboard-pegawai';
-            }
-            else if ($segment == 'kode-surat') {
+            } else if ($segment == 'kode-surat') {
                 $halaman = 'kode-surat';
-            }
-            else if ($segment == 'tanda-tangan') {
+            } else if ($segment == 'tanda-tangan') {
                 $halaman = 'tanda-tangan';
-            }
-            else if ($segment == 'surat-keterangan-aktif-kuliah') {
+            } else if ($segment == 'surat-keterangan-aktif-kuliah') {
                 $halaman = 'surat-keterangan-aktif-kuliah';
-            }
-            else if ($segment == 'surat-keterangan-kelakuan-baik') {
+            } else if ($segment == 'surat-keterangan-kelakuan-baik') {
                 $halaman = 'surat-keterangan-kelakuan-baik';
-            }
-            else if ($segment == 'profil') {
+            } else if ($segment == 'profil') {
                 $halaman = 'profil';
-            }
-            else if($segment == 'surat-masuk'){
+            } else if($segment == 'surat-masuk'){
                 $halaman = 'surat-masuk';
+            } else if($segment == 'surat-dispensasi'){
+                $halaman = 'surat-dispensasi';
             }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi]);

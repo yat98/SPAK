@@ -15,6 +15,15 @@
     <link rel="stylesheet" href="{{ asset('vendors/sweetalert2/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/jquery-datepicker/jquery.datetimepicker.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/lightbox/css/lightbox.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/fontawesome/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/froala/css/froala_editor.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/froala/css/froala_style.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/froala/css/plugins/code_view.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/froala/css/plugins/image_manager.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/froala/css/plugins/image.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/froala/css/plugins/table.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/froala/css/plugins/video.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/codemirror/codemirror.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom-css.css') }}">
 </head>
 
@@ -33,6 +42,23 @@
     <script src="{{ asset('vendors/signatures-pad/js/signature_pad.umd.js') }}"></script>
     <script src="{{ asset('vendors/jquery-datepicker/jquery.datetimepicker.full.min.js') }}"></script>
     <script src="{{ asset('vendors/lightbox/js/lightbox.js') }}"></script>
+    <script src="{{ asset('vendors/codemirror/codemirror.min.js') }}"></script>
+    <script src="{{ asset('vendors/codemirror/xml.min.js') }}"></script>  
+    <script src="{{ asset('vendors/froala/js/froala_editor.min.js') }}"></script>
+    <script src="{{ asset('vendors/froala/js/plugins/align.min.js') }}"></script>
+    <script src="{{ asset('vendors/froala/js/plugins/code_beautifier.min.js') }}"></script>
+    <script src="{{ asset('vendors/froala/js/plugins/code_view.min.js') }}"></script>
+    <script src="{{ asset('vendors/froala/js/plugins/draggable.min.js') }}"></script>
+    <script src="{{ asset('vendors/froala/js/plugins/image.min.js') }}"></script>
+    <script src="{{ asset('vendors/froala/js/plugins/image_manager.min.js') }}"></script>
+    <script src="{{ asset('vendors/froala/js/plugins/link.min.js') }}"></script>
+    <script src="{{ asset('vendors/froala/js/plugins/lists.min.js') }}"></script>
+    <script src="{{ asset('vendors/froala/js/plugins/paragraph_format.min.js') }}"></script>
+    <script src="{{ asset('vendors/froala/js/plugins/paragraph_style.min.js') }}"></script>
+    <script src="{{ asset('vendors/froala/js/plugins/table.min.js') }}"></script>
+    <script src="{{ asset('vendors/froala/js/plugins/video.min.js') }}"></script>
+    <script src="{{ asset('vendors/froala/js/plugins/url.min.js') }}"></script>
+    <script src="{{ asset('vendors/froala/js/plugins/entities.min.js') }}"></script>
     <script src="{{ asset('js/form-upload.js') }}"></script>
     <script src="{{ asset('js/script.js') }}"></script>
 

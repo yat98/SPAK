@@ -14,7 +14,10 @@ use Illuminate\Support\Facades\Route;
 */
 // Login
 Route::get('/', 'LoginController@login');
-Route::post('/login','LoginController@checkLogin');
+Route::group(['prefix'=>'login'],function(){
+    Route::get('/', 'LoginController@login');
+    Route::post('/','LoginController@checkLogin');
+});
 
 // Mahasiswa
 Route::group(['prefix' => 'mahasiswa'],function(){
@@ -90,6 +93,11 @@ Route::group(['prefix' => 'pegawai'],function(){
         // Surat Masuk
         Route::get('surat-masuk/search', 'SuratMasukController@search');
         Route::resource('surat-masuk','SuratMasukController');
+        // Surat Dispensasi
+        Route::get('surat-dispensasi/search', 'SuratDispensasiController@search');
+        Route::get('surat-dispensasi/create/', 'SuratDispensasiController@create');
+        Route::get('surat-dispensasi/{surat_dispensasi}/cetak', 'SuratDispensasiController@cetakSuratDispensasi');
+        Route::resource('surat-dispensasi','SuratDispensasiController')->except(['create']);
         // Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Notifikasi

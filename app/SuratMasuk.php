@@ -15,4 +15,10 @@ class SuratMasuk extends Model
         'file_surat_masuk',
         'tanggal_surat_masuk'
     ];
+
+    protected $dates = ['tanggal_surat_masuk'];
+    
+    public function suratDispensasi(){
+        return $this->hasOne('App\SuratDispensasi','id_surat_masuk');
+    }
 }

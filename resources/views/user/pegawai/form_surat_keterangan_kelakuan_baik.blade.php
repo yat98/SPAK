@@ -36,7 +36,7 @@
                 {{ Form::select('id_kode_surat',$kodeSurat,null,['class'=>'form-control form-control-lg','id'=>'kode_surat','readonly'=>'readonly']) }}
                 </div>
                 <div class="col-md-3 col-sm-6 mt-1">
-                {{ Form::text('tahun',date('Y') ,['class'=>'form-control form-control-lg','disabled'=>'disabled']) }}
+                {{ Form::text('tahun',isset($suratKeterangan)?$suratKeterangan->created_at->format('Y'):date('Y') ,['class'=>'form-control form-control-lg','disabled'=>'disabled']) }}
                 </div>
             </div>    
         </div> 

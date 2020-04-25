@@ -55,4 +55,8 @@ class Mahasiswa extends Model
     public function statusMahasiswa(){
         return $this->hasMany('App\StatusMahasiswa','nim');
     }
+
+    public function suratDispensasi(){
+        return $this->belongsToMany('App\SuratDispensasi','daftar_dispensasi_mahasiswa','id_surat_dispensasi','nim')->withTimestamps();
+    }
 }

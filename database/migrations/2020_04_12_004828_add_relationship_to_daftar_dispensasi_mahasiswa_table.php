@@ -14,8 +14,10 @@ class AddRelationshipToDaftarDispensasiMahasiswaTable extends Migration
     public function up()
     {
         Schema::table('daftar_dispensasi_mahasiswa', function (Blueprint $table) {
+            $table->primary(['id_surat_dispensasi','nim']);
+
             $table->foreign('id_surat_dispensasi')
-                  ->references('id')
+                  ->references('id_surat_masuk')
                   ->on('surat_dispensasi')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');

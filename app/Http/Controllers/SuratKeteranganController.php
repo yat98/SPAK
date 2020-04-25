@@ -9,6 +9,7 @@ use Exception;
 use App\KodeSurat;
 use App\Mahasiswa;
 use App\StatusMahasiswa;
+use App\SuratDispensasi;
 use App\SuratKeterangan;
 use App\NotifikasiMahasiswa;
 use Illuminate\Http\Request;
@@ -76,8 +77,10 @@ class SuratKeteranganController extends Controller
             return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
         }
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->first();
-        $nomorSuratTerakhir = SuratKeterangan::orderByDesc('nomor_surat')->first();
-        $nomorSuratBaru = (empty($nomorSuratTerakhir)) ? 1 : ++$nomorSuratTerakhir->nomor_surat;
+        $nomorSurat[] = SuratKeterangan::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratDispensasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSuratBaru = max($nomorSurat);
+        ++$nomorSuratBaru;
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->pluck('kode_surat','id');
         $mahasiswa = $this->generateMahasiswa();
         $tahunAkademik = $this->generateAllTahunAkademik();
@@ -89,8 +92,10 @@ class SuratKeteranganController extends Controller
             return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
         }
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->first();
-        $nomorSuratTerakhir = SuratKeterangan::orderByDesc('nomor_surat')->first();
-        $nomorSuratBaru = (empty($nomorSuratTerakhir)) ? 1 : ++$nomorSuratTerakhir->nomor_surat;
+        $nomorSurat[] = SuratKeterangan::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratDispensasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSuratBaru = max($nomorSurat);
+        ++$nomorSuratBaru;
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->pluck('kode_surat','id');
         $mahasiswa = $this->generateMahasiswa();
         $tahunAkademik = $this->generateAllTahunAkademik();
@@ -405,8 +410,10 @@ class SuratKeteranganController extends Controller
             }
         }
 
-        $nomorSuratTerakhir = SuratKeterangan::orderByDesc('nomor_surat')->first();
-        $nomorSuratBaru = (empty($nomorSuratTerakhir)) ? 1 : ++$nomorSuratTerakhir->nomor_surat;
+        $nomorSurat[] = SuratKeterangan::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratDispensasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSuratBaru = max($nomorSurat);
+        ++$nomorSuratBaru;
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->first();
         $input = [
             'id_pengajuan_surat_keterangan'=>$pengajuanSuratKeterangan->id,
@@ -434,8 +441,10 @@ class SuratKeteranganController extends Controller
             return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
         }
         $pengajuanSuratKeterangan = PengajuanSuratKeterangan::findOrFail($request->id);
-        $nomorSuratTerakhir = SuratKeterangan::orderByDesc('nomor_surat')->first();
-        $nomorSuratBaru = (empty($nomorSuratTerakhir)) ? 1 : ++$nomorSuratTerakhir->nomor_surat;
+        $nomorSurat[] = SuratKeterangan::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratDispensasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSuratBaru = max($nomorSurat);
+        ++$nomorSuratBaru;
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->first();
         $input = [
             'id_pengajuan_surat_keterangan'=>$pengajuanSuratKeterangan->id,

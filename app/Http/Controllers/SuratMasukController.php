@@ -37,8 +37,8 @@ class SuratMasukController extends Controller
             $perPage = $this->perPage;
             $countAllSuratMasuk  = SuratMasuk::all()->count();
             $nomor = $keyword['keywords'] != null ? $keyword['keywords'] : '';
-            $suratMasukList = SuratMasuk::where('nomor_surat','like',$nomor);
-            (isset($keyword['instansi'])) ? $suratMasukList = $suratMasukList->orWhere('instansi',$keyword['instansi']):'';
+            $suratMasukList = SuratMasuk::where('nomor_surat','like',"%$nomor%");
+            (isset($keyword['instansi'])) ? $suratMasukList = $suratMasukList->where('instansi',$keyword['instansi']):'';
             $suratMasukList = $suratMasukList->paginate($perPage)->appends($request->except('page'));
             $countSuratMasuk = count($suratMasukList);
             if($countSuratMasuk < 1){
