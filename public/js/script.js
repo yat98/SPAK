@@ -238,7 +238,7 @@ if(wrapper){
             if (result.value) {
                 if (signaturePad.isEmpty()) {
                     errorMessage('Tanda Tangan Kosong!','Gambarkan tanda tangan anda terlebih dahulu.');
-                } else {
+                } else {                    
                     document.body.innerHTML += '<form id="form_tanda_tangan" action="'+window.location.href+'" method="post"><input type="hidden" name="tanda_tangan" value="'+signaturePad.toDataURL()+'"></form>';
                     document.getElementById("form_tanda_tangan").submit();
                 }

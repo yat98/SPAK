@@ -6,7 +6,7 @@ use Closure;
 use Session;
 use App\NotifikasiUser;
 
-class PegawaiMiddleware
+class PimpinanMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,7 @@ class PegawaiMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(Session::get('status') != 'pegawai'){
+        if(Session::get('status') != 'pimpinan'){
             return redirect('/');
         }
         
@@ -27,6 +27,7 @@ class PegawaiMiddleware
             'notifikasi'=>$notifikasi,
             'countNotifikasi'=>$countNotifikasi
         ]);
+
         return $next($request);
     }
 }

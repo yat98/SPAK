@@ -79,6 +79,15 @@ class NavServiceProvider extends ServiceProvider
             } else if($segment == 'surat-dispensasi'){
                 $halaman = 'surat-dispensasi';
             }
+        } elseif (request()->segment(1) == 'pimpinan') {
+            $posisi = 'pimpinan';
+            if ($segment == '') {
+                $halaman = 'dashboard-pimpinan';
+            } else if ($segment == 'tanda-tangan') {
+                $halaman = 'tanda-tangan';
+            } else if($segment == 'surat-dispensasi'){
+                $halaman = 'surat-dispensasi';
+            }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi]);
     }

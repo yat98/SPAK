@@ -12,6 +12,15 @@
                         {{ ($posisi == 'admin') ? 'Admin':'' }}
                         {{ ($posisi == 'mahasiswa') ? 'Mahasiswa':'' }}
                         {!! ($posisi == 'pegawai') ? '<small>'.ucwords(Session::get('jabatan')).'</small>':'' !!}
+                        @if(Session::get('jabatan') == 'dekan')
+                        <small>Dekan</small>
+                        @elseif(Session::get('jabatan') == 'wd1')
+                        <small>Wakil Dekan I</small>
+                        @elseif(Session::get('jabatan') == 'wd2')
+                        <small>Wakil Dekan II</small>
+                        @elseif(Session::get('jabatan') == 'wd3')
+                        <small>Wakil Dekan III</small>
+                        @endif
                     </span>
                 </div>
             </a>
@@ -174,7 +183,25 @@
                 <i class="mdi mdi mdi mdi-settings menu-icon"></i>
             </a>
         </li>
+        @elseif($posisi == 'pimpinan')
+        <li class="nav-item {{ ($halaman == 'dashboard-pimpinan') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/') }}">
+                <span class="menu-title">Dashboard</span>
+                <i class="mdi mdi-home menu-icon"></i>
+            </a>
+        </li>
+        <li class="nav-item {{ ($halaman == 'tanda-tangan') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/tanda-tangan') }}">
+                <span class="menu-title">Tanda Tangan</span>
+                <i class="mdi mdi mdi mdi-border-color menu-icon"></i>
+            </a>
+        </li>
+        <li class="nav-item {{ ($halaman == 'profil') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/profil') }}">
+                <span class="menu-title">Ubah Profil</span>
+                <i class="mdi mdi mdi mdi-settings menu-icon"></i>
+            </a>
+        </li>
         @endif
-        
     </ul>
 </nav>

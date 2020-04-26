@@ -105,6 +105,11 @@ class UserController extends Controller
         return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','countAllKodeSurat','countKodeSurat','kodeSuratList','countAllSuratKeteranganAktif'));
     }
 
+    public function pimpinanDashboard(){
+        $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
+        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif'));
+    }
+
     public function indexTandaTangan(){
         $nip = Session::get('nip');
         $user = User::where('nip',$nip)->first();

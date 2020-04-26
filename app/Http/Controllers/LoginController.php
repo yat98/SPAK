@@ -19,6 +19,9 @@ class LoginController extends Controller
         }else if(Session::get('status') == 'admin'){
             return redirect('admin');
         }
+        else if(Session::get('status') == 'pimpinan'){
+            return redirect('pimpinan');
+        }
         return view('login.login');
     }
 
@@ -32,9 +35,9 @@ class LoginController extends Controller
         ]);
 
         if($request->jenis_user == 'pimpinan'){
-            $user = User::where('jabatan','like',"%dekan%")->where('nip',$request->username)->first();
+            $user = User::whereIn('jabatan',['dekan','wd1','wd2','wd3'])->where('nip',$request->username)->first();
         }else if($request->jenis_user == 'pegawai'){
-            $user = User::where('jabatan','like',"%kasubag%")->where('nip',$request->username)->first();
+            $user = User::whereIn('jabatan','like',['kasubag kemahasiswaan','kasubag pendidikan dan pengajaran'])->where('nip',$request->username)->first();
         }else{
             $user = Mahasiswa::where('nim',$request->username)->first();
         }
@@ -53,7 +56,6 @@ class LoginController extends Controller
                     $session['nip'] = $user->nip;
                     $session['jabatan'] = $user->jabatan;
                 }
-
                 Session::put($session);
                 $this->setFlashData('success-timer','Login Berhasil','Selamat Datang '.$user->nama);
                 return redirect($session['status']);
@@ -72,6 +74,8 @@ class LoginController extends Controller
             return redirect('pegawai');
         }else if(Session::get('status') == 'admin'){
             return redirect('admin');
+        }else if(Session::get('status') == 'pimpinan'){
+            return redirect('pimpinan');
         }
         return view('login.login_admin');
     }

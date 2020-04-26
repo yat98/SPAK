@@ -69,6 +69,25 @@ class SuratDispensasiController extends Controller
         return $surat->toJson();
     }
 
+    public function search(Request $request){
+        $keyword = $request->all();
+        if(isset($keyword['keywords'])){
+            $nomor = $keyword['keywords'] != null ? $keyword['keywords'] : '';
+            $perPage = $this->perPage;
+            $mahasiswa = $this->generateMahasiswa();
+            $nomorSurat = $this->generateNomorSuratDispensasi();
+            $countAllSuratDispensasi = SuratDispensasi::all()->count();
+            $suratDispensasiList = SuratDispensasi::where('nomor_surat','like',"%$nomor%")->orderByDesc('created_at')->paginate($perPage);
+            $countSuratDispensasi = $suratDispensasiList->count();
+            if($countSuratDispensasi < 1){
+                $this->setFlashData('search','Hasil Pencarian','Surat dispensasi tidak ditemukan!');
+            }
+            return view('user.'.$this->segmentUser.'.surat_dispensasi',compact('perPage','mahasiswa','nomorSurat','countAllSuratDispensasi','countSuratDispensasi','suratDispensasiList'));
+        }else{
+            return redirect($this->segmentUser.'/surat-dispensasi');
+        }
+    }
+
     public function store(SuratDispensasiRequest $request){
         $input = $request->all();
         $input['jumlah_cetak'] = 0;

@@ -161,3 +161,17 @@ Route::group(['prefix' => 'admin'], function () {
         Route::patch('profil/{admin}','AdminController@update');
     });
 });
+
+// Pimpinan
+Route::group(['prefix' => 'pimpinan'], function () {
+    // Logout
+    Route::get('logout','UserController@logout');
+    
+    Route::middleware(['pimpinan'])->group(function(){
+        // Dashboard
+        Route::get('/','UserController@pimpinanDashboard');
+        // Tanda Tangan
+        Route::get('tanda-tangan','UserController@indexTandaTangan');
+        Route::post('tanda-tangan','UserController@updateTandaTangan');
+    });
+});
