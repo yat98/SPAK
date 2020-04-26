@@ -23,7 +23,7 @@ class SuratDispensasiController extends Controller
     public function index(){
         $perPage = $this->perPage;
         $mahasiswa = $this->generateMahasiswa();
-        $nomorSurat = SuratDispensasi::pluck('nomor_surat','nomor_surat');
+        $nomorSurat = $this->generateNomorSuratDispensasi();
         $countAllSuratDispensasi = SuratDispensasi::all()->count();
         $suratDispensasiList = SuratDispensasi::orderByDesc('created_at')->paginate($perPage);
         $countSuratDispensasi = $suratDispensasiList->count();
@@ -43,8 +43,30 @@ class SuratDispensasiController extends Controller
     }
 
     public function show(SuratDispensasi $suratDispensasi){
-        $surat = $suratDispensasi->load(['mahasiswa'])->toArray();
-        return json_encode($surat,JSON_HEX_QUOT | JSON_HEX_TAG | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
+        $surat = collect($suratDispensasi->load(['mahasiswa.prodi.jurusan','tahapanKegiatanDispensasi','suratMasuk','user']));
+        $kodeSurat = explode('/',$suratDispensasi->kodeSurat->kode_surat);
+        $tanggalKegiatan = [];
+        foreach ($suratDispensasi->TahapanKegiatanDispensasi as $key => $tahapan) {
+            if($tahapan->tanggal_awal_kegiatan->equalTo($tahapan->tanggal_akhir_kegiatan)){
+                $tanggal = $tahapan->tanggal_awal_kegiatan->isoFormat('D MMMM Y');
+            }elseif($tahapan->tanggal_awal_kegiatan->isSameMonth($tahapan->tanggal_akhir_kegiatan)){  
+                $tanggal = $tahapan->tanggal_awal_kegiatan->isoFormat('D').' s/d '.$tahapan->tanggal_akhir_kegiatan->isoFormat('D').' '.$tahapan->tanggal_awal_kegiatan->isoFormat('MMMM Y');
+            }else{
+                $tanggal =  $tahapan->tanggal_awal_kegiatan->isoFormat('D MMMM Y').' s/d '.$tahapan->tanggal_akhir_kegiatan->isoFormat('D MMMM Y');
+            }
+            $tanggalKegiatan[] = $tanggal;
+        }
+        $surat->put('tanggal_kegiatan',$tanggalKegiatan);
+        $surat->put('nama_file',explode('.',$suratDispensasi->suratMasuk->file_surat_masuk)[0]);
+        $surat->put('link_file',asset('upload_surat_masuk/'.$suratDispensasi->suratMasuk->file_surat_masuk));
+        $surat->put('dibuat',$suratDispensasi->created_at->format('d F Y'));
+        $surat->put('diubah',$suratDispensasi->updated_at->format('d F Y'));
+        if($suratDispensasi->user->jabatan == 'dekan'){
+            $surat->put('nomor_surat_dispensasi',$suratDispensasi->nomor_surat.'/'.$suratDispensasi->kodeSurat->kode_surat.'/'.$suratDispensasi->created_at->format('Y'));
+        }else{
+            $surat->put('nomor_surat_dispensasi',$suratDispensasi->nomor_surat.'/'.$kodeSurat[0].'.3/'.$kodeSurat[1].'/'.$suratDispensasi->created_at->format('Y'));
+        }
+        return $surat->toJson();
     }
 
     public function store(SuratDispensasiRequest $request){
@@ -121,7 +143,6 @@ class SuratDispensasiController extends Controller
     }
 
     public function update(SuratDispensasiRequest $request, SuratDispensasi $suratDispensasi){
-        // dd($suratDispensasi);
         $input = $request->all();
 
         DB::beginTransaction();
@@ -195,5 +216,19 @@ class SuratDispensasiController extends Controller
             $kode[$kodeSurat->id] = $kodeSurat->kode_surat;
         }
         return $kode;
+    }
+
+    private function generateNomorSuratDispensasi(){
+        $suratDispensasiList = SuratDispensasi::all();
+        $nomorSuratList = [];
+        foreach ($suratDispensasiList as $suratDispensasi) {
+            if($suratDispensasi->user->jabatan == 'dekan'){
+                $nomorSuratList[$suratDispensasi->nomor_surat] = $suratDispensasi->nomor_surat.'/'.$suratDispensasi->kodeSurat->kode_surat.'/'.$suratDispensasi->created_at->year;
+            }else{
+                $kodeSurat = explode('/',$suratDispensasi->kodeSurat->kode_surat);
+                $nomorSuratList[$suratDispensasi->nomor_surat] = $suratDispensasi->nomor_surat.'/'.$kodeSurat[0].'.3/'.$kodeSurat[1].'/'.$suratDispensasi->created_at->year;
+            }
+        }
+        return $nomorSuratList;
     }
 }

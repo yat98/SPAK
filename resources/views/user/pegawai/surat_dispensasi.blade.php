@@ -86,7 +86,7 @@
                                                 @if($suratDispensasi->user->jabatan == 'dekan')
                                                     <td> {{ $suratDispensasi->nomor_surat.'/'.$suratDispensasi->kodeSurat->kode_surat.'/'.$suratDispensasi->created_at->format('Y') }}</td>
                                                 @else
-                                                    <td> {{ $suratDispensasi->nomor_surat.'/'.$kode[0].'1.'.$kode[1].'/'.$suratDispensasi->created_at->format('Y') }}</td>
+                                                    <td> {{ $suratDispensasi->nomor_surat.'/'.$kode[0].'.3/.'.$kode[1].'/'.$suratDispensasi->created_at->format('Y') }}</td>
                                                 @endif
                                                 <td> {{ $suratDispensasi->nama_kegiatan }}</td>
                                                 <td> 
@@ -98,7 +98,7 @@
                                                 <td> {{ $suratDispensasi->created_at->diffForHumans() }}</td>
                                                 <td> {{ $suratDispensasi->updated_at->diffForHumans() }}</td>
                                                 <td>
-                                                    <a href="{{ url('pegawai/surat-dispensasi/'.$suratDispensasi->id_surat_masuk) }}" class="btn btn-outline-info btn-sm btn-surat-masuk-detail" data-toggle="modal" data-target="#exampleModal">
+                                                    <a href="{{ url('pegawai/surat-dispensasi/'.$suratDispensasi->id_surat_masuk) }}" class="btn btn-outline-info btn-sm btn-surat-dispensasi-detail" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
                                                         Detail
                                                     </a>
@@ -149,15 +149,17 @@
 </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content bg-white">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Detail Surat Masuk</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id='surat-dispensasi-detail-content'> </div>
+            <div class="modal-body" id='surat-dispensasi-detail-content'>
+                
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
             </div>

@@ -508,7 +508,7 @@ $('.btn-surat-masuk-detail').on('click',function(e){
                                 </div>`;
                     $('#surat-masuk-detail-content').html(html);
                 });
-})
+});
 
 lightbox.option({
     'resizeDuration': 200,
@@ -543,6 +543,118 @@ $('.btn-tambah-tahapan').on('click',function(e){
                                 <input class="tanggal form-control" id="tanggal_akhir_kegiatan" placeholder="Tanggal Akhir Kegiatan" name="tanggal_akhir_kegiatan[]" type="text">
                             </div>
                         </div>`);
-    console.log(jumlahValue);
-    
 });
+
+$('.btn-surat-dispensasi-detail').on('click',function(e){
+    e.preventDefault();
+    $('#surat-dispensasi-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+                .then(response => response.json())
+                .then(result => {
+                    let suratDispensasi = result;
+                    let tableMahasiswa = '';
+                    let tableKegiatan = '';
+                    let label;
+                    if(suratDispensasi.status == 'diproses'){
+                        label = `<label class="badge badge-gradient-warning">${suratDispensasi.status.ucwords()}</label>`;
+                    }else{
+                        label = `<label class="badge badge-gradient-info">${suratDispensasi.status.ucwords()}</label>`;
+                    }
+                    suratDispensasi.mahasiswa.forEach((mahasiswa) => {
+                        tableMahasiswa+=`<tr>
+                                            <td>${mahasiswa.nim}</td>
+                                            <td>${mahasiswa.nama}</td>
+                                            <td>${mahasiswa.prodi.strata} - ${mahasiswa.prodi.nama_prodi}</td>
+                                            <td>${mahasiswa.prodi.jurusan.nama_jurusan}</td>
+                                        </tr>`;
+                    });
+                    suratDispensasi.tahapan_kegiatan_dispensasi.forEach((tahapan,key)=>{
+                        let nmr = key;
+                        tableKegiatan += `<tr>
+                                            <td rowspan="3">${++nmr}.</td>
+                                            <td colspan="3">${tahapan.tahapan_kegiatan}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tanggal</td>
+                                            <td>:</td>
+                                            <td>${suratDispensasi.tanggal_kegiatan[key]}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tempat</td>
+                                            <td>:</td>
+                                            <td>${tahapan.tempat_kegiatan}</td>
+                                        </tr>`;
+                    });
+                    
+                    let html = `<div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tr>
+                                                    <th>Nomor Surat</th>
+                                                    <td>${suratDispensasi.nomor_surat_dispensasi}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Jenis Surat</th>
+                                                    <td>Surat Dispensasi</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Status</th>
+                                                    <td>
+                                                        ${label}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Nama Kegiatan</th>
+                                                    <td>${suratDispensasi.nama_kegiatan}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Lihat Surat Masuk</th>
+                                                    <td>
+                                                    <a href="${suratDispensasi.link_file}" class="btn btn-info btn-sm" data-lightbox="${suratDispensasi.nama_file}">
+                                                        <i class="mdi mdi mdi-eye"></i>
+                                                        Lihat File Surat</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Daftar Mahasiswa</th>
+                                                    <td>
+                                                        <table class="table">
+                                                            <tr>
+                                                                <th>NIM</th>
+                                                                <th>Nama</th>
+                                                                <th>Program Studi</th>
+                                                                <th>Jurusan</th>
+                                                            </tr>
+                                                            ${tableMahasiswa}
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Tahapan Kegiatan</th>
+                                                    <td>
+                                                        <table class="table">
+                                                            ${tableKegiatan}
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Tanda Tangan</th>
+                                                    <td>${suratDispensasi.user.nama}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Jumlah Cetak</th>
+                                                    <td>${suratDispensasi.jumlah_cetak}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>DiBuat</th>
+                                                    <td>${suratDispensasi.dibuat}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>`;
+                    $('#surat-dispensasi-detail-content').html(html);
+                });
+})

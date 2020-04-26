@@ -100,22 +100,21 @@
                 <i class="mdi mdi mdi mdi-border-color menu-icon"></i>
             </a>
         </li>
-        <li class="nav-item {{ ($halaman == 'surat-masuk') ? 'active':'' }}">
-            <a class="nav-link" href="{{ url(Request::segment(1).'/surat-masuk') }}">
-                <span class="menu-title">Surat Masuk</span>
-                <i class="mdi mdi mdi-file-document-box menu-icon"></i>
-            </a>
-        </li>
         <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah' || $halaman == 'surat-keterangan-kelakuan-baik' || $halaman == 'surat-dispensasi') ? 'active':'' }}">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">
-                    Surat Keluar
+                    Surat
                 </span>
                 <i class="menu-arrow"></i>
                 <i class="mdi mdi-file-document-box menu-icon"></i>
             </a>
             <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <a class="nav-link {{ ($halaman == 'surat-masuk') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-masuk') }}">
+                            Surat Masuk
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-aktif-kuliah') }}">
                             Surat Keterangan <br> Aktif Kuliah
