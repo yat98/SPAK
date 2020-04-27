@@ -24,10 +24,22 @@ class SuratDispensasiController extends Controller
         $perPage = $this->perPage;
         $mahasiswa = $this->generateMahasiswa();
         $nomorSurat = $this->generateNomorSuratDispensasi();
-        $countAllSuratDispensasi = SuratDispensasi::all()->count();
-        $suratDispensasiList = SuratDispensasi::orderByDesc('created_at')->paginate($perPage);
+        $countAllSuratDispensasi = SuratDispensasi::where('status','selesai')->count();
+        $suratDispensasiList = SuratDispensasi::orderBy('status')->paginate($perPage);
         $countSuratDispensasi = $suratDispensasiList->count();
         return view('user.'.$this->segmentUser.'.surat_dispensasi',compact('perPage','mahasiswa','nomorSurat','countAllSuratDispensasi','countSuratDispensasi','suratDispensasiList'));
+    }
+
+    public function suratDispensasiPimpinan(){
+        $perPage = $this->perPage;
+        $mahasiswa = $this->generateMahasiswa();
+        $nomorSurat = $this->generateNomorSuratDispensasi();
+        $suratDispensasiList = SuratDispensasi::orderByDesc('created_at')->where('status','selesai')->paginate($perPage);
+        $pengajuanSuratDispensasiList = SuratDispensasi::where('status','diproses')->where('nip',Session::get('nip'))->paginate($perPage);
+        $countAllPengajuanSuratDispensasi = $pengajuanSuratDispensasiList->count();
+        $countAllSuratDispensasi = SuratDispensasi::where('status','selesai')->count();
+        $countSuratDispensasi = $suratDispensasiList->count();
+        return view('user.'.$this->segmentUser.'.surat_dispensasi',compact('perPage','mahasiswa','nomorSurat','countAllSuratDispensasi','countSuratDispensasi','suratDispensasiList','pengajuanSuratDispensasiList','countAllPengajuanSuratDispensasi'));
     }
 
     public function create(Request $request){
@@ -99,7 +111,7 @@ class SuratDispensasiController extends Controller
                 'nip'=>$request->nip,
                 'judul_notifikasi'=>'Surat Dispensasi',
                 'isi_notifikasi'=>'Tanda tangan surat dispensasi.',
-                'link_notifikasi'=>url('mahasiswa/pengajuan/surat-dispensasi')
+                'link_notifikasi'=>url('pimpinan/surat-dispensasi')
             ]);
         }catch(Exception $e){
             DB::rollback();
@@ -121,7 +133,7 @@ class SuratDispensasiController extends Controller
                     'nim'=>$nim,
                     'judul_notifikasi'=>'Surat Dispensasi',
                     'isi_notifikasi'=>'Surat dispensasi telah selesai di buat.',
-                    'link_notifikasi'=>url('mahasiswa/pengajuan/surat-dispensasi'), 
+                    'link_notifikasi'=>url('mahasiswa/surat-dispensasi'), 
                     'created_at'=>Carbon::now(),
                     'updated_at'=>Carbon::now(),
                  ];
@@ -219,6 +231,30 @@ class SuratDispensasiController extends Controller
         return $pdf->stream('surat-dispensasi'.' - '.$suratDispensasi->created_at->format('dmY-Him').'.pdf');
     }
 
+    public function tandaTanganDispensasi(Request $request){
+        if(!$this->isTandaTanganExists()){
+            return redirect($this->segmentUser.'/surat-dispensasi');
+        }
+        $notifMahasiswa = [];
+        $suratDispensasi = SuratDispensasi::findOrFail($request->id);
+        foreach ($suratDispensasi->mahasiswa as $mahasiswa) {
+            $notifMahasiswa[] = [
+               'nim'=>$mahasiswa->nim,
+               'judul_notifikasi'=>'Surat Dispensasi',
+               'isi_notifikasi'=>'Surat dispensasi telah di tanda tangani.',
+               'link_notifikasi'=>url('mahasiswa/pengajuan/surat-dispensasi'), 
+               'created_at'=>Carbon::now(),
+               'updated_at'=>Carbon::now(),
+            ];
+        }
+        $suratDispensasi->update([
+            'status'=>'selesai',
+        ]);
+        NotifikasiMahasiswa::insert($notifMahasiswa);
+        $this->setFlashData('success','Berhasil','Tanda tangan surat keterangan berhasil');
+        return redirect($this->segmentUser.'/surat-dispensasi');
+    }
+
     private function generatePimpinan(){
         $user = [];
         $pimpinanList = User::whereIn('jabatan',['dekan','wd3'])->where('status_aktif','aktif')->get();
@@ -235,19 +271,5 @@ class SuratDispensasiController extends Controller
             $kode[$kodeSurat->id] = $kodeSurat->kode_surat;
         }
         return $kode;
-    }
-
-    private function generateNomorSuratDispensasi(){
-        $suratDispensasiList = SuratDispensasi::all();
-        $nomorSuratList = [];
-        foreach ($suratDispensasiList as $suratDispensasi) {
-            if($suratDispensasi->user->jabatan == 'dekan'){
-                $nomorSuratList[$suratDispensasi->nomor_surat] = $suratDispensasi->nomor_surat.'/'.$suratDispensasi->kodeSurat->kode_surat.'/'.$suratDispensasi->created_at->year;
-            }else{
-                $kodeSurat = explode('/',$suratDispensasi->kodeSurat->kode_surat);
-                $nomorSuratList[$suratDispensasi->nomor_surat] = $suratDispensasi->nomor_surat.'/'.$kodeSurat[0].'.3/'.$kodeSurat[1].'/'.$suratDispensasi->created_at->year;
-            }
-        }
-        return $nomorSuratList;
     }
 }

@@ -73,7 +73,7 @@ class SuratKeteranganController extends Controller
     }
 
     public function createSuratKeteranganAktifKuliah(){
-        if(!$this->isKodeSuratAktifIsExists() || !$this->isKodeSuratIsExists() || !$this->checkTandaTanganIsExists()){
+        if(!$this->isKodeSuratAktifExists() || !$this->isKodeSuratExists() || !$this->isTandaTanganExists()){
             return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
         }
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->first();
@@ -88,7 +88,7 @@ class SuratKeteranganController extends Controller
     }
 
     public function createSuratKeteranganKelakuanBaik(){
-        if(!$this->isKodeSuratAktifIsExists() || !$this->isKodeSuratIsExists() || !$this->checkTandaTanganIsExists()){
+        if(!$this->isKodeSuratAktifExists() || !$this->isKodeSuratExists() || !$this->isTandaTanganExists()){
             return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
         }
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->first();
@@ -381,7 +381,7 @@ class SuratKeteranganController extends Controller
     }
 
     public function tandaTangan(Request $request){
-        if(!$this->isKodeSuratAktifIsExists() || !$this->isKodeSuratIsExists() || !$this->checkTandaTanganIsExists()){
+        if(!$this->isKodeSuratAktifExists() || !$this->isKodeSuratExists() || !$this->isTandaTanganExists()){
             return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
         }
         $pengajuanSuratKeterangan = PengajuanSuratKeterangan::findOrFail($request->id);
@@ -437,7 +437,7 @@ class SuratKeteranganController extends Controller
     }
 
     public function tandaTanganKelakuanBaik(Request $request){
-        if(!$this->isKodeSuratAktifIsExists() || !$this->isKodeSuratIsExists() || !$this->checkTandaTanganIsExists()){
+        if(!$this->isKodeSuratAktifExists() || !$this->isKodeSuratExists() || !$this->isTandaTanganExists()){
             return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
         }
         $pengajuanSuratKeterangan = PengajuanSuratKeterangan::findOrFail($request->id);
@@ -525,17 +525,7 @@ class SuratKeteranganController extends Controller
         return $pdf->stream($suratKeterangan->pengajuanSuratKeterangan->mahasiswa->nama.' - '.$suratKeterangan->created_at->format('dmY-Him').'.pdf');
     }
 
-    private function checkTandaTanganIsExists(){
-        $nip = Session::get('nip');
-        $tandaTangan = User::where('nip',$nip)->first();
-        if($tandaTangan->tanda_tangan == null){
-            $this->setFlashData('info','Tanda Tangan Kosong','Tambahkan tanda tangan anda terlebih dahulu!');
-            return false;
-        }
-        return true;
-    }
-
-    private function isKodeSuratAktifIsExists(){
+    private function isKodeSuratAktifExists(){
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->first();
         if(empty($kodeSurat)){
             $this->setFlashData('info','Kode Surat Aktif Tidak Ada','Aktifkan kode surat terlebih dahulu!');
@@ -544,7 +534,7 @@ class SuratKeteranganController extends Controller
         return true;
     }
 
-    private function isKodeSuratIsExists(){
+    private function isKodeSuratExists(){
         $kodeSurat = KodeSurat::all()->count();
         if($kodeSurat < 1){
             $this->setFlashData('info','Kode Surat Kosong','Tambahkan kode surat terlebih dahulu!');

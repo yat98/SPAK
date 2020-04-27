@@ -10,9 +10,11 @@ use App\ProgramStudi;
 use App\TahunAkademik;
 use App\NotifikasiUser;
 use App\StatusMahasiswa;
+use App\SuratDispensasi;
 use Illuminate\Http\Request;
 use App\Imports\MahasiswaImport;
 use App\PengajuanSuratKeterangan;
+use App\DaftarDispensasiMahasiswa;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\MahasiswaRequest;
@@ -161,7 +163,7 @@ class MahasiswaController extends Controller
                                             ->orderByDesc('created_at')
                                             ->orderBy('status')
                                             ->paginate($perPage,['*'],'page_pengajuan');
-        $countAllPengajuan = PengajuanSuratKeterangan::whereNotIn('status',['selesai'])->count();
+        $countAllPengajuan = PengajuanSuratKeterangan::whereNotIn('status',['selesai'])->where('jenis_surat','surat keterangan aktif kuliah')->count();
         $countPengajuanSuratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
                                             ->where('nim',Session::get('nim'))
                                             ->count();
@@ -175,11 +177,23 @@ class MahasiswaController extends Controller
                                             ->orderByDesc('created_at')
                                             ->orderBy('status')
                                             ->paginate($perPage,['*'],'page_pengajuan');
-        $countAllPengajuan = PengajuanSuratKeterangan::whereNotIn('status',['selesai'])->count();
+        $countAllPengajuan = PengajuanSuratKeterangan::whereNotIn('status',['selesai'])->where('jenis_surat','surat keterangan kelakuan baik')->count();
         $countPengajuanSuratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
                                             ->where('nim',Session::get('nim'))
                                             ->count();
         return view($this->segmentUser.'.pengajuan_surat_keterangan_kelakuan_baik',compact('countAllPengajuan','countPengajuanSuratKeterangan','perPage','pengajuanSuratKeteranganList'));
+    }
+
+    public function suratDispensasi(){
+        $perPage = $this->perPage;
+        $mahasiswa = $this->generateMahasiswa();
+        $nomorSurat = $this->generateNomorSuratDispensasi();
+        $suratDispensasiList = SuratDispensasi::join('daftar_dispensasi_mahasiswa','daftar_dispensasi_mahasiswa.id_surat_dispensasi','=','surat_dispensasi.id_surat_masuk')
+                                    ->where('nim',Session::get('nim'))
+                                    ->paginate($perPage);
+        $countAllSuratDispensasi = $suratDispensasiList->count();
+        $countSuratDispensasi = $suratDispensasiList->count();
+        return view($this->segmentUser.'.surat_dispensasi',compact('perPage','mahasiswa','nomorSurat','countAllSuratDispensasi','countSuratDispensasi','suratDispensasiList'));
     }
 
     public function createPengajuanSuratKeteranganAktif(){
@@ -306,6 +320,17 @@ class MahasiswaController extends Controller
             $data->put('tanggal_ditolak',$tanggalDitolak);
         }
         return $data->toJson();
+    }
+
+    public function progressPengajuanSuratDispensasi(SuratDispensasi $suratDispensasi){
+        $surat = collect($suratDispensasi);
+        $kodeSurat = explode('/',$suratDispensasi->kodeSurat->kode_surat);
+        $surat->put('tanggal_diajukan',$suratDispensasi->created_at->format('d F Y - H:i:m'));
+        if($suratDispensasi->status == 'selesai'){
+            $tanggalSelesai = $suratDispensasi->updated_at->format('d F Y - H:i:m');
+            $surat->put('tanggal_selesai',$tanggalSelesai);
+        }
+        return $surat->toJson();
     }
 
     public function logout(){

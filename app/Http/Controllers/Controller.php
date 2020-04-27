@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Session;
+use App\User;
 use App\Jurusan;
 use App\Mahasiswa;
 use App\ProgramStudi;
 use App\TahunAkademik;
+use App\SuratDispensasi;
 use App\SuratKeterangan;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
@@ -92,5 +94,29 @@ class Controller extends BaseController
     protected function setFlashData($flashType,$titleText,$text){
         Session::flash($flashType,$text);
         Session::flash($flashType.'-title',$titleText);
+    }
+
+    protected function isTandaTanganExists(){
+        $nip = Session::get('nip');
+        $tandaTangan = User::where('nip',$nip)->first();
+        if($tandaTangan->tanda_tangan == null){
+            $this->setFlashData('info','Tanda Tangan Kosong','Tambahkan tanda tangan anda terlebih dahulu!');
+            return false;
+        }
+        return true;
+    }
+    
+    protected function generateNomorSuratDispensasi(){
+        $suratDispensasiList = SuratDispensasi::all();
+        $nomorSuratList = [];
+        foreach ($suratDispensasiList as $suratDispensasi) {
+            if($suratDispensasi->user->jabatan == 'dekan'){
+                $nomorSuratList[$suratDispensasi->nomor_surat] = $suratDispensasi->nomor_surat.'/'.$suratDispensasi->kodeSurat->kode_surat.'/'.$suratDispensasi->created_at->year;
+            }else{
+                $kodeSurat = explode('/',$suratDispensasi->kodeSurat->kode_surat);
+                $nomorSuratList[$suratDispensasi->nomor_surat] = $suratDispensasi->nomor_surat.'/'.$kodeSurat[0].'.3/'.$kodeSurat[1].'/'.$suratDispensasi->created_at->year;
+            }
+        }
+        return $nomorSuratList;
     }
 }

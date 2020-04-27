@@ -37,7 +37,7 @@ class LoginController extends Controller
         if($request->jenis_user == 'pimpinan'){
             $user = User::whereIn('jabatan',['dekan','wd1','wd2','wd3'])->where('nip',$request->username)->first();
         }else if($request->jenis_user == 'pegawai'){
-            $user = User::whereIn('jabatan','like',['kasubag kemahasiswaan','kasubag pendidikan dan pengajaran'])->where('nip',$request->username)->first();
+            $user = User::whereIn('jabatan',['kasubag kemahasiswaan','kasubag pendidikan dan pengajaran'])->where('nip',$request->username)->first();
         }else{
             $user = Mahasiswa::where('nim',$request->username)->first();
         }

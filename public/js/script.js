@@ -127,7 +127,7 @@ $('.btn-detail').on('click', function (e) {
                     }else if(status.pivot.status == 'drop out' || status.pivot.status == 'keluar'){
                         tableStatus+=`<td><label class="badge badge-gradient-danger">${status.pivot.status.ucwords()}</label><td></tr>`;
                     }else if(status.pivot.status == 'cuti'){
-                        tableStatus+=`<td><label class="badge badge-gradient-warning">${status.pivot.status.ucwords()}</label><td></tr>`;
+                        tableStatus+=`<td><label class="badge badge-gradient-warning text-dark">${status.pivot.status.ucwords()}</label><td></tr>`;
                     }else{
                         tableStatus+=`<td><label class="badge badge-gradient-dark">${status.pivot.status.ucwords()}</label><td></tr>`;
                     }
@@ -501,7 +501,7 @@ $('.btn-surat-masuk-detail').on('click',function(e){
                                             <td>
                                                 <a href="${suratMasuk.link_file}" class="btn btn-info btn-sm" data-lightbox="${suratMasuk.nama_file}">
                                                 <i class="mdi mdi mdi-eye"></i>
-                                                Lihat File Surat</a>
+                                                Lihat File Surat Masuk</a>
                                             </td>
                                         </tr>
                                     </table>
@@ -557,7 +557,7 @@ $('.btn-surat-dispensasi-detail').on('click',function(e){
                     let tableKegiatan = '';
                     let label;
                     if(suratDispensasi.status == 'diproses'){
-                        label = `<label class="badge badge-gradient-warning">${suratDispensasi.status.ucwords()}</label>`;
+                        label = `<label class="badge badge-gradient-warning text-dark">${suratDispensasi.status.ucwords()}</label>`;
                     }else{
                         label = `<label class="badge badge-gradient-info">${suratDispensasi.status.ucwords()}</label>`;
                     }
@@ -610,11 +610,11 @@ $('.btn-surat-dispensasi-detail').on('click',function(e){
                                                     <td>${suratDispensasi.nama_kegiatan}</td>
                                                 </tr>
                                                 <tr>
-                                                    <th>Lihat Surat Masuk</th>
+                                                    <th>Lihat File Surat Masuk</th>
                                                     <td>
                                                     <a href="${suratDispensasi.link_file}" class="btn btn-info btn-sm" data-lightbox="${suratDispensasi.nama_file}">
                                                         <i class="mdi mdi mdi-eye"></i>
-                                                        Lihat File Surat</a>
+                                                        Lihat File Surat Masuk</a>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -658,3 +658,65 @@ $('.btn-surat-dispensasi-detail').on('click',function(e){
                     $('#surat-dispensasi-detail-content').html(html);
                 });
 })
+
+$('.btn-surat-dispensasi-progress').on('click', function (e) {
+    e.preventDefault();
+    $('#surat-progress-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let pengajuanSurat = result;
+            console.log(pengajuanSurat.status);
+            
+            if(pengajuanSurat.status == 'selesai'){
+                html = `<div class="row">
+                        <div class="col-6 text-center">
+                            <p class="h6 m-0 mb-1 text-dark">
+                                <i class="mdi mdi-marker-check icon-sm text-success"></i>
+                                Diproses
+                            </p> 
+                            <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
+                            <div class="bg-gradient-success mx-auto position-progress-round"></div>
+                            <div class="bg-gradient-success mx-auto position-progress-pole"></div>
+                        </div>
+                        <div class="col-6 text-center"></div>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 100%" aria-valuenow="100   " aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-center"></div>
+                        <div class="col-6 text-center">
+                            <div class="bg-gradient-success mx-auto position-progress-pole"></div>
+                            <div class="bg-gradient-success mx-auto position-progress-round"></div>
+                            <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_selesai}</small></p>
+                            <p class="h6 mt-1 text-dark">
+                            <i class="mdi mdi-marker-check icon-sm text-success"></i>
+                            Selesai</p> 
+                        </div>
+                    </div>`;
+            }else if(pengajuanSurat.status == 'diproses'){
+                html = `<div class="row">
+                            <div class="col-6 text-center">
+                                <p class="h6 m-0 mb-1 text-dark">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    Diproses
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-6 text-center"></div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 50%" aria-valuenow="50   " aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 text-center"></div>
+                            <div class="col-6 text-center"></div>
+                        </div>`;
+            }
+            $('#surat-progress-content').html(html);
+        });
+});

@@ -45,6 +45,11 @@ Route::group(['prefix' => 'mahasiswa'],function(){
              Route::get('surat-keterangan-kelakuan-baik/create','MahasiswaController@createPengajuanSuratKeteranganKelakuanBaik');
              Route::post('surat-keterangan-kelakuan-baik','MahasiswaController@storePengajuanSuratKeteranganKelakuanBaik');
         });
+        //  Surat Dispensasi
+        Route::get('surat-dispensasi/{surat_dispensasi}/cetak', 'SuratDispensasiController@cetakSuratDispensasi');
+        Route::get('surat-dispensasi/{surat_dispensasi}/progress','MahasiswaController@progressPengajuanSuratDispensasi');
+        Route::resource('surat-dispensasi','SuratDispensasiController')->only(['show']);
+        Route::get('surat-dispensasi','MahasiswaController@suratDispensasi');
     });
 });
 
@@ -95,9 +100,8 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::resource('surat-masuk','SuratMasukController');
         // Surat Dispensasi
         Route::get('surat-dispensasi/search', 'SuratDispensasiController@search');
-        Route::get('surat-dispensasi/create/', 'SuratDispensasiController@create');
         Route::get('surat-dispensasi/{surat_dispensasi}/cetak', 'SuratDispensasiController@cetakSuratDispensasi');
-        Route::resource('surat-dispensasi','SuratDispensasiController')->except(['create']);
+        Route::resource('surat-dispensasi','SuratDispensasiController');
         // Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Notifikasi
@@ -170,6 +174,14 @@ Route::group(['prefix' => 'pimpinan'], function () {
     Route::middleware(['pimpinan'])->group(function(){
         // Dashboard
         Route::get('/','UserController@pimpinanDashboard');
+        // Surat Dispensasi
+        Route::get('surat-dispensasi', 'SuratDispensasiController@suratDispensasiPimpinan');
+        Route::get('surat-dispensasi/search', 'SuratDispensasiController@search');
+        Route::resource('surat-dispensasi','SuratDispensasiController')->only(['show']);
+        Route::post('surat-dispensasi/pengajuan/tanda-tangan','SuratDispensasiController@tandaTanganDispensasi');
+        // Notifikasi
+        Route::get('notifikasi/{notifikasi_user}','NotifikasiUserController@show');
+        Route::get('notifikasi','NotifikasiUserController@index');
         // Tanda Tangan
         Route::get('tanda-tangan','UserController@indexTandaTangan');
         Route::post('tanda-tangan','UserController@updateTandaTangan');

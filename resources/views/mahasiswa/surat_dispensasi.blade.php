@@ -15,7 +15,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4 stretch-card grid-margin">
-                        <div class="card bg-gradient-info card-img-holder text-white">
+                        <div class="card bg-gradient-success card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
@@ -38,30 +38,8 @@
                                     <div class="col-12 col-md-6">
                                         <h4>Surat Dispensasi</h4>
                                     </div>
-                                    <div class="col-12 col-md-6 text-right">
-                                        <a href="{{ url('pegawai/surat-dispensasi/create')}}"
-                                            class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">+
-                                            Tambah Surat Dispensasi</a>
-                                    </div>
                                 </div>
                                 <hr class="mb-4">
-                                <div class="row mb-3">
-                                    <div class="col-sm-12 col-md-12">
-                                        {{ Form::open(['url'=>'pegawai/surat-dispensasi/search','method'=>'GET']) }}
-                                        <div class="form-row">
-                                            <div class="col-sm-12 col-md-6 mt-1">
-                                                {{ Form::select('keywords',$nomorSurat,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> '-- Pilih Nomor Surat --']) }}
-                                            </div>
-                                            <div class="col-sm-12 col-md">
-                                                <button class="btn btn-success btn-sm btn-tambah" type="submit">
-                                                    <i class="mdi mdi-magnify btn-icon-prepend"></i>
-                                                    Cari
-                                                </button>
-                                            </div>
-                                        </div>
-                                        {{ Form::close() }}
-                                    </div>
-                                </div>
                                 @if ($countSuratDispensasi > 0)
                                 <div class="table-responsive">
                                     <table class="table">
@@ -98,26 +76,18 @@
                                                 <td> {{ $suratDispensasi->created_at->diffForHumans() }}</td>
                                                 <td> {{ $suratDispensasi->updated_at->diffForHumans() }}</td>
                                                 <td>
-                                                    <a href="{{ url('pegawai/surat-dispensasi/'.$suratDispensasi->id_surat_masuk) }}" class="btn btn-outline-info btn-sm btn-surat-dispensasi-detail" data-toggle="modal" data-target="#exampleModal">
+                                                    <a href="{{ url('mahasiswa/surat-dispensasi/'.$suratDispensasi->id_surat_masuk.'/progress') }}" class="btn-surat-dispensasi-progress btn btn-outline-info btn-sm" data-toggle="modal" data-target="#dispensasiMahasiswa">
+                                                        <i class="mdi mdi mdi-information btn-icon-prepend"></i>
+                                                        Lihat Progress Surat</a>
+                                                    <a href="{{ url('mahasiswa/surat-dispensasi/'.$suratDispensasi->id_surat_masuk) }}" class="btn btn-outline-info btn-sm btn-surat-dispensasi-detail" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
                                                         Detail
                                                     </a>
-                                                    @if($suratDispensasi->status == 'selesai')
-                                                    <a href="{{ url('pegawai/surat-dispensasi/'.$suratDispensasi->id_surat_masuk.'/cetak') }}" class="btn btn-info btn-sm" target="_blank">
+                                                    @if($suratDispensasi->status == 'selesai' && $suratDispensasi->jumlah_cetak <= 2)
+                                                    <a href="{{ url('mahasiswa/surat-dispensasi/'.$suratDispensasi->id_surat_masuk.'/cetak') }}" class="btn btn-info btn-sm">
                                                         <i class="mdi mdi mdi-printer btn-icon-prepend"></i>
                                                         Cetak</a>
                                                     @endif
-                                                    <a href="{{ url('pegawai/surat-dispensasi/'.$suratDispensasi->id_surat_masuk.'/edit') }}"
-                                                        class="btn btn-warning btn-sm text-dark">
-                                                        <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>
-                                                        Edit
-                                                    </a>
-                                                    {{ Form::open(['method'=>'DELETE','action'=>['SuratDispensasiController@destroy',$suratDispensasi->id_surat_masuk],'class'=>'d-inline-block']) }}
-                                                    <button type="submit" class="btn btn-danger btn-sm sweet-delete">
-                                                        <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
-                                                        Hapus
-                                                    </button>
-                                                    {{ Form::close() }}
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -135,7 +105,7 @@
                                             {{ (Session::has('search-title')) ? Session::get('search-title') : ' Surat Dispensasi Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi surat dispensasi terlebih dahulu.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : 'Surat dispensasi belum ada.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -146,6 +116,20 @@
                 </div>
             </div>
             @include('layout.footer')
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="dispensasiMahasiswa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Progress Surat</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='surat-progress-content'></div>
         </div>
     </div>
 </div>

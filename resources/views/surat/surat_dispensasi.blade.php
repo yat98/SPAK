@@ -168,10 +168,11 @@
                 @if($suratDispensasi->user->jabatan == 'dekan')
                     <p class="m-0"><b>Dekan,</b></p>
                 @else
+                    <p class="m-0"><b>a.n Dekan,</b></p>
                     <p class="m-0"><b>Wakil Dekan 3,</b></p>
                 @endif
                 <p class="m-0 tanda-tangan-margin">
-                    {{-- <img class="tanda-tangan" src="{{$suratKeterangan->user->tanda_tangan}}"> --}}
+                    <img class="tanda-tangan" src="{{$suratDispensasi->user->tanda_tangan}}">
                 </p>
                 <p class="m-0"><b>{{$suratDispensasi->user->nama}}</b></p>
                 <p class="m-0"><b>NIP. {{substr($suratDispensasi->user->nip,0,8)}} {{substr($suratDispensasi->user->nip,8,6)}} {{substr($suratDispensasi->user->nip,14,1)}} {{substr($suratDispensasi->user->nip,15,3)}}</b></p>

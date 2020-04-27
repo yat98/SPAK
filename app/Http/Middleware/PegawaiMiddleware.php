@@ -4,7 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Session;
+use App\User;
 use App\NotifikasiUser;
+use Illuminate\Support\Facades\Hash;
 
 class PegawaiMiddleware
 {

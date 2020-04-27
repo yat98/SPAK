@@ -10,7 +10,7 @@
         </button>
         <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item dropdown">
-            @if ($posisi == 'pegawai' || $posisi == 'mahasiswa')
+            @if ($posisi == 'pegawai' || $posisi == 'mahasiswa' || $posisi == 'pimpinan')
             @if (isset($notifikasi) && isset($countNotifikasi))
             @if ($countNotifikasi > 0)
                 <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"

@@ -59,6 +59,8 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-keterangan-aktif-kuliah';
             } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-kelakuan-baik') {
                 $halaman = 'surat-keterangan-kelakuan-baik';
+            } else if ($segment == 'surat-dispensasi') {
+                $halaman = 'surat-dispensasi';
             }
         } elseif (request()->segment(1) == 'pegawai') {
             $posisi = 'pegawai';
