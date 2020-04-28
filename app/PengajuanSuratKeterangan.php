@@ -12,7 +12,8 @@ class PengajuanSuratKeterangan extends Model
         'nim',
         'id_tahun_akademik',
         'status',
-        'jenis_surat'
+        'jenis_surat',
+        'keterangan',
     ];
 
     public function mahasiswa(){

@@ -333,7 +333,7 @@ tandaTangan.on('click',function(e){
 });
 
 let tolakSurat = $('.tolak-surat');
-tolakSurat.on('click',function(e){
+tolakSurat.on('click', function(e){
     e.preventDefault();
     Swal.fire({
         title: 'Yakin?',
@@ -347,8 +347,31 @@ tolakSurat.on('click',function(e){
     }).then((result) => {
         if (result.value) {
             if (result.value) {
-                let form = $(this).parents('form');
-                form.submit();
+                Swal.fire({
+                    title: 'Keterangan',
+                    input: 'textarea',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Simpan',
+                    cancelButtonText: 'Cancel',
+                    inputPlaceholder: 'Keterangan...',
+                    inputAttributes: {
+                      'aria-label': 'Keterangan...'
+                    },
+                    showCancelButton: true,
+                    inputValidator: (value) => {
+                        return new Promise((resolve) => {
+                            if (value.trim() === undefined || value.trim() == null || value.length <= 0) {
+                                resolve('Keterangan wajib diisi.')
+                            } else {
+                                console.log(value);
+                                $('#keterangan_surat').val(value);
+                                let form = $(this).parents('form');
+                                form.submit();
+                            }
+                        })
+                    }
+                })
             }
         }
     })

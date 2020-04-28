@@ -99,6 +99,7 @@
                                                     {{ Form::close() }}
 
                                                     {{ Form::open(['url'=>'pegawai/surat-keterangan-aktif-kuliah/pengajuan/tolak-pengajuan/'.$pengajuanSuratKeteranganAktif->id,'class'=>'d-inline-block','method'=>'PATCH']) }}
+                                                    {{ Form::hidden('keterangan','-',['id'=>'keterangan_surat']) }}
                                                     <button type="submit" class="btn btn-danger btn-sm tolak-surat">
                                                         <i class="mdi mdi mdi-close btn-icon-prepend"></i>
                                                         Tolak

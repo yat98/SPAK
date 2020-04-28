@@ -239,10 +239,10 @@ class MahasiswaController extends Controller
     public function createPengajuanSuratKeteranganKelakuanBaik(){
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
         $tahunAkademikTerakhir = ($tahunAkademikAktif != null) ? $tahunAkademikAktif:TahunAkademik::orderByDesc('created_at')->first();
+        $tahunAkademik = [];
         if($tahunAkademikTerakhir != null){
             $tahunAkademik[$tahunAkademikTerakhir->id] = $tahunAkademikTerakhir->tahun_akademik.' - '.ucwords($tahunAkademikTerakhir->semester);
         }
-        $tahunAkademik = [];
         return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_kelakuan_baik',compact('tahunAkademik'));
     }
 

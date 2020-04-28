@@ -19,6 +19,7 @@ class CreatePengajuanSuratKeteranganTable extends Migration
             $table->integer('id_tahun_akademik')->unsigned();
             $table->enum('jenis_surat',['surat keterangan aktif kuliah','surat keterangan kelakuan baik']);
             $table->enum('status',['diajukan','selesai','ditolak'])->default('diajukan');
+            $table->string('keterangan')->default('-');
             $table->timestamps();
         });
     }

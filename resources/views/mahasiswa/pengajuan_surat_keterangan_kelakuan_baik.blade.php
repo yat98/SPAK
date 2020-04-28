@@ -80,6 +80,7 @@
                                                     </label>
                                                     @endif
                                                 </td>
+                                                <td> {{ $pengajuanSuratKeterangan->keterangan }}</td>
                                                 <td> {{ $pengajuanSuratKeterangan->created_at->diffForHumans() }}</td>
                                                 <td> {{ $pengajuanSuratKeterangan->updated_at->diffForHumans() }}</td>
                                                 <td>

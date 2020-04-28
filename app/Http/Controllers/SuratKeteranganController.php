@@ -467,9 +467,11 @@ class SuratKeteranganController extends Controller
         return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
     }
 
-    public function tolakPengajuan(PengajuanSuratKeterangan $pengajuanSuratKeterangan){
+    public function tolakPengajuan(Request $request, PengajuanSuratKeterangan $pengajuanSuratKeterangan){
+        $keterangan = $request->keterangan ?? '-';
         $pengajuanSuratKeterangan->update([
-            'status'=>'ditolak'
+            'status'=>'ditolak',
+            'keterangan'=>$keterangan,
         ]);
         NotifikasiMahasiswa::create([
             'nim'=>$pengajuanSuratKeterangan->nim,
@@ -481,9 +483,11 @@ class SuratKeteranganController extends Controller
         return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
     }
 
-    public function tolakPengajuanKelakuanBaik(PengajuanSuratKeterangan $pengajuanSuratKeterangan){
+    public function tolakPengajuanKelakuanBaik(Request $request, PengajuanSuratKeterangan $pengajuanSuratKeterangan){
+        $keterangan = $request->keterangan ?? '-';
         $pengajuanSuratKeterangan->update([
-            'status'=>'ditolak'
+            'status'=>'ditolak',
+            'keterangan'=>$keterangan,
         ]);
         NotifikasiMahasiswa::create([
             'nim'=>$pengajuanSuratKeterangan->nim,

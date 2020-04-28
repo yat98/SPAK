@@ -54,6 +54,7 @@
                                                 <th> Nama </th>
                                                 <th> Jenis Surat</th>
                                                 <th> Status</th>
+                                                <th> Keterangan</th>
                                                 <th> Di Buat</th>
                                                 <th> Di Ubah</th>
                                                 <th> Aksi</th>
@@ -80,6 +81,7 @@
                                                     </label>
                                                     @endif
                                                 </td>
+                                                <td> {{ $pengajuanSuratKeteranganAktif->keterangan }}</td>
                                                 <td> {{ $pengajuanSuratKeteranganAktif->created_at->diffForHumans() }}</td>
                                                 <td> {{ $pengajuanSuratKeteranganAktif->updated_at->diffForHumans() }}</td>
                                                 <td>
