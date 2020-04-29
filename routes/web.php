@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+// Route::get('test',function(){
+//     return App\SuratDispensasi::with(['pengajuanSuratDispensasi.user','user','pengajuanSuratDispensasi.suratMasuk','pengajuanSuratDispensasi.tahapanKegiatanMahasiswa','pengajuanSuratDispensasi.mahasiswa'])->get()->toJson();
+// });
 // Login
 Route::get('/', 'LoginController@login');
 Route::group(['prefix'=>'login'],function(){
@@ -34,20 +37,20 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         Route::group(['prefix' => 'pengajuan'],function(){
             // Surat Keterangan Aktif Kuliah
             Route::get('surat-keterangan-aktif-kuliah','MahasiswaController@pengajuanSuratKeteranganAktif');
-            Route::get('surat-keterangan-aktif-kuliah/{pengajuan_surat_keterangan}/progress','MahasiswaController@progressPengajuanSuratKeterangan');
+            Route::get('surat-keterangan-aktif-kuliah/{pengajuan_surat_keterangan}/progress','SuratKeteranganController@progressPengajuanSuratKeterangan');
             Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}/cetak','SuratKeteranganController@cetakSuratKeteranganAktifKuliah');
             Route::get('surat-keterangan-aktif-kuliah/create','MahasiswaController@createPengajuanSuratKeteranganAktif');
             Route::post('surat-keterangan-aktif-kuliah','MahasiswaController@storePengajuanSuratKeteranganAktif');
              // Surat Keterangan Kelakuan Baik
              Route::get('surat-keterangan-kelakuan-baik','MahasiswaController@pengajuanSuratKeteranganKelakuanBaik');
-             Route::get('surat-keterangan-kelakuan-baik/{pengajuan_surat_keterangan}/progress','MahasiswaController@progressPengajuanSuratKeterangan');
+             Route::get('surat-keterangan-kelakuan-baik/{pengajuan_surat_keterangan}/progress','SuratKeteranganController@progressPengajuanSuratKeterangan');
              Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}/cetak','SuratKeteranganController@cetakSuratKeteranganKelakuanBaik');
              Route::get('surat-keterangan-kelakuan-baik/create','MahasiswaController@createPengajuanSuratKeteranganKelakuanBaik');
              Route::post('surat-keterangan-kelakuan-baik','MahasiswaController@storePengajuanSuratKeteranganKelakuanBaik');
         });
         //  Surat Dispensasi
         Route::get('surat-dispensasi/{surat_dispensasi}/cetak', 'SuratDispensasiController@cetakSuratDispensasi');
-        Route::get('surat-dispensasi/{surat_dispensasi}/progress','MahasiswaController@progressPengajuanSuratDispensasi');
+        Route::get('surat-dispensasi/{surat_dispensasi}/progress','SuratDispensasiController@progressPengajuanSuratDispensasi');
         Route::resource('surat-dispensasi','SuratDispensasiController')->only(['show']);
         Route::get('surat-dispensasi','MahasiswaController@suratDispensasi');
     });
@@ -179,6 +182,7 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::get('surat-dispensasi/search', 'SuratDispensasiController@search');
         Route::resource('surat-dispensasi','SuratDispensasiController')->only(['show']);
         Route::post('surat-dispensasi/pengajuan/tanda-tangan','SuratDispensasiController@tandaTanganDispensasi');
+        Route::patch('surat-dispensasi/tolak/{surat_dispensasi}','SuratDispensasiController@tolakPengajuan');
         // Notifikasi
         Route::get('notifikasi/{notifikasi_user}','NotifikasiUserController@show');
         Route::get('notifikasi','NotifikasiUserController@index');

@@ -27,6 +27,7 @@ class AddRelationshipToDaftarDispensasiMahasiswaTable extends Migration
                   ->on('mahasiswa')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
+            
         });
     }
 

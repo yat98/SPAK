@@ -12,17 +12,14 @@ class SuratDispensasi extends Model
 
     protected $fillable = [
         'id_surat_masuk',
-        'nomor_surat',
         'nip',
+        'nip_kasubag',
         'id_kode_surat',
+        'nomor_surat',
         'nama_kegiatan',
+        'status',
         'jumlah_cetak',
-        'status'
     ];
-
-    public function suratMasuk(){
-        return $this->belongsTo('App\SuratMasuk','id_surat_masuk');
-    }
 
     public function kodeSurat(){
         return $this->belongsTo('App\KodeSurat','id_kode_surat');
@@ -33,10 +30,18 @@ class SuratDispensasi extends Model
     }
 
     public function mahasiswa(){
-        return $this->belongsToMany('App\Mahasiswa','daftar_dispensasi_mahasiswa','id_surat_dispensasi','nim')->withTimestamps();
+        return $this->belongsToMany('App\Mahasiswa','daftar_dispensasi_mahasiswa','id_surat_dispensasi','nim');
     }
 
     public function tahapanKegiatanDispensasi(){
         return $this->hasMany('App\TahapanKegiatanDispensasi','id_surat_dispensasi');
+    }
+
+    public function suratMasuk(){
+        return $this->belongsTo('App\SuratMasuk','id_surat_masuk');
+    }
+
+    public function kasubag(){
+        return $this->belongsTo('App\User','nip_kasubag');
     }
 }

@@ -483,6 +483,22 @@ class SuratKeteranganController extends Controller
         return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
     }
 
+    public function progressPengajuanSuratKeterangan(PengajuanSuratKeterangan $pengajuanSuratKeterangan){
+        $pengajuan = $pengajuanSuratKeterangan->load(['suratKeterangan.user','mahasiswa']);
+        $data = collect($pengajuan);
+        $tanggalDiajukan = $pengajuan->created_at->format('d F Y - H:i:m');
+        $data->put('tanggal_diajukan',$tanggalDiajukan);
+
+        if($pengajuan->status == 'selesai'){
+            $tanggalSelesai = $pengajuan->suratKeterangan->created_at->format('d F Y - H:i:m');
+            $data->put('tanggal_selesai',$tanggalSelesai);
+        }else if($pengajuan->status == 'ditolak'){
+            $tanggalDitolak = $pengajuan->updated_at->format('d F Y - H:i:m');
+            $data->put('tanggal_ditolak',$tanggalDitolak);
+        }
+        return $data->toJson();
+    }
+
     public function tolakPengajuanKelakuanBaik(Request $request, PengajuanSuratKeterangan $pengajuanSuratKeterangan){
         $keterangan = $request->keterangan ?? '-';
         $pengajuanSuratKeterangan->update([

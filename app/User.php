@@ -28,4 +28,8 @@ class User extends Model
     public function notifikasiUser(){
         return $this->hasMany('App\NotifikasiUser','nip','nip');
     }
+
+    public function suratDispensasi(){
+        return $this->hasMany('App\SuratDispensasi','nip','nip_kasubag');
+    }
 }

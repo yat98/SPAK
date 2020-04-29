@@ -57,6 +57,6 @@ class Mahasiswa extends Model
     }
 
     public function suratDispensasi(){
-        return $this->belongsToMany('App\SuratDispensasi','daftar_dispensasi_mahasiswa','id_surat_dispensasi','nim')->withTimestamps();
+        return $this->belongsToMany('App\SuratDispensasi','daftar_dispensasi_mahasiswa','id_surat_dispensasi','nim')->withTimeStamps();
     }
 }

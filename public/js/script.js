@@ -575,12 +575,14 @@ $('.btn-surat-dispensasi-detail').on('click',function(e){
     let a = fetch(url)
                 .then(response => response.json())
                 .then(result => {
-                    let suratDispensasi = result;
+                    let suratDispensasi = result;                    
                     let tableMahasiswa = '';
                     let tableKegiatan = '';
                     let label;
-                    if(suratDispensasi.status == 'diproses'){
+                    if(suratDispensasi.status == 'diajukan'){
                         label = `<label class="badge badge-gradient-warning text-dark">${suratDispensasi.status.ucwords()}</label>`;
+                    }else if(suratDispensasi.status == 'ditolak'){
+                        label = `<label class="badge badge-gradient-danger">${suratDispensasi.status.ucwords()}</label>`;
                     }else{
                         label = `<label class="badge badge-gradient-info">${suratDispensasi.status.ucwords()}</label>`;
                     }
@@ -621,6 +623,10 @@ $('.btn-surat-dispensasi-detail').on('click',function(e){
                                                 <tr>
                                                     <th>Jenis Surat</th>
                                                     <td>Surat Dispensasi</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Di Ajukan Oleh</th>
+                                                    <td>${suratDispensasi.kasubag.nama}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Status</th>
@@ -671,7 +677,7 @@ $('.btn-surat-dispensasi-detail').on('click',function(e){
                                                     <td>${suratDispensasi.jumlah_cetak}</td>
                                                 </tr>
                                                 <tr>
-                                                    <th>DiBuat</th>
+                                                    <th>Dibuat</th>
                                                     <td>${suratDispensasi.dibuat}</td>
                                                 </tr>
                                             </table>
@@ -690,14 +696,12 @@ $('.btn-surat-dispensasi-progress').on('click', function (e) {
         .then(response => response.json())
         .then(result => {
             let pengajuanSurat = result;
-            console.log(pengajuanSurat.status);
-            
             if(pengajuanSurat.status == 'selesai'){
                 html = `<div class="row">
                         <div class="col-6 text-center">
                             <p class="h6 m-0 mb-1 text-dark">
                                 <i class="mdi mdi-marker-check icon-sm text-success"></i>
-                                Diproses
+                                Diajukan
                             </p> 
                             <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
                             <div class="bg-gradient-success mx-auto position-progress-round"></div>
@@ -719,12 +723,12 @@ $('.btn-surat-dispensasi-progress').on('click', function (e) {
                             Selesai</p> 
                         </div>
                     </div>`;
-            }else if(pengajuanSurat.status == 'diproses'){
+            }else if(pengajuanSurat.status == 'diajukan'){
                 html = `<div class="row">
                             <div class="col-6 text-center">
                                 <p class="h6 m-0 mb-1 text-dark">
                                     <i class="mdi mdi-marker-check icon-sm text-info"></i>
-                                    Diproses
+                                    Diajukan
                                 </p> 
                                 <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
                                 <div class="bg-gradient-info mx-auto position-progress-round"></div>
@@ -739,6 +743,34 @@ $('.btn-surat-dispensasi-progress').on('click', function (e) {
                             <div class="col-6 text-center"></div>
                             <div class="col-6 text-center"></div>
                         </div>`;
+            }else if(pengajuanSurat.status == 'ditolak'){
+                html = `<div class="row">
+                        <div class="col-6 text-center">
+                            <p class="h6 m-0 mb-1 text-dark">
+                                <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                Diajukan
+                            </p> 
+                            <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
+                            <div class="bg-gradient-danger mx-auto position-progress-round"></div>
+                            <div class="bg-gradient-danger mx-auto position-progress-pole"></div>
+                        </div>
+                        <div class="col-6 text-center"></div>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-gradient-danger" role="progressbar" style="width: 100%" aria-valuenow="100   " aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 text-center"></div>
+                        <div class="col-6 text-center">
+                            <div class="bg-gradient-danger mx-auto position-progress-pole"></div>
+                            <div class="bg-gradient-danger mx-auto position-progress-round"></div>
+                            <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_ditolak}</small></p>
+                            <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi mdi-close-circle icon-sm text-danger"></i>
+                                Di Tolak
+                            </p> 
+                        </div>
+                    </div>`;
             }
             $('#surat-progress-content').html(html);
         });

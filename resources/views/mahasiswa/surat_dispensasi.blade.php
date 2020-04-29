@@ -15,7 +15,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4 stretch-card grid-margin">
-                        <div class="card bg-gradient-success card-img-holder text-white">
+                        <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
@@ -70,6 +70,8 @@
                                                 <td> 
                                                 @if($suratDispensasi->status == 'diproses')
                                                 <label class="badge badge-gradient-warning text-dark">{{ ucwords($suratDispensasi->status) }}</td></label>
+                                                @elseif($suratDispensasi->status == 'ditolak')
+                                                <label class="badge badge-gradient-danger">{{ ucwords($suratDispensasi->status) }}</td></label>
                                                 @else
                                                 <label class="badge badge-gradient-info">{{ ucwords($suratDispensasi->status) }}</td></label>
                                                 @endif

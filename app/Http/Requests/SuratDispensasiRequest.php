@@ -25,10 +25,10 @@ class SuratDispensasiRequest extends FormRequest
     public function rules()
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
-            $nomorSuratRules = 'required|numeric|min:1|unique:surat_dispensasi,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_keterangan,nomor_surat,'.$this->get('nomor_surat').',nomor_surat';
+            $nomorSuratRules = 'required|numeric|min:1|unique_with:surat_dispensasi,status,'.$this->get('nomor_surat').',nomor_surat|unique:surat_keterangan,nomor_surat,'.$this->get('nomor_surat').',nomor_surat';
             $idSuratMasukRules = 'required|numeric|unique:surat_dispensasi,id_surat_masuk,'.$this->get('id').',id_surat_masuk';
         }else{
-            $nomorSuratRules = 'required|numeric|min:1|unique:surat_dispensasi,nomor_surat|unique:surat_keterangan,nomor_surat';
+            $nomorSuratRules = 'required|numeric|min:1|unique_with:surat_dispensasi,nomor_surat|unique:surat_keterangan,nomor_surat';
             $idSuratMasukRules = 'required|numeric|unique:surat_dispensasi,id_surat_masuk';
         }
         return [
@@ -43,7 +43,7 @@ class SuratDispensasiRequest extends FormRequest
             'tanggal_awal_kegiatan'=>'required',
             'tanggal_akhir_kegiatan'=>'required',
             'jumlah_cetak'=>'sometimes|numeric',
-            'status'=>'sometimes|in:diproses,selesai',
+            'status'=>'sometimes|in:diajukan,ditolak,selesai',
         ];
     }
 

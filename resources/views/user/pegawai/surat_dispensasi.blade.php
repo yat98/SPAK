@@ -36,7 +36,7 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Surat Dispensasi</h4>
+                                        <h4>Data Surat Dispensasi</h4>
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
                                         <a href="{{ url('pegawai/surat-dispensasi/create')}}"
@@ -90,8 +90,10 @@
                                                 @endif
                                                 <td> {{ $suratDispensasi->nama_kegiatan }}</td>
                                                 <td> 
-                                                @if($suratDispensasi->status == 'diproses')
+                                                @if($suratDispensasi->status == 'diajukan')
                                                 <label class="badge badge-gradient-warning text-dark">{{ ucwords($suratDispensasi->status) }}</td></label>
+                                                @elseif($suratDispensasi->status == 'ditolak')
+                                                <label class="badge badge-gradient-danger">{{ ucwords($suratDispensasi->status) }}</td></label>
                                                 @else
                                                 <label class="badge badge-gradient-info">{{ ucwords($suratDispensasi->status) }}</td></label>
                                                 @endif
@@ -143,7 +145,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>  
             </div>
             @include('layout.footer')
         </div>

@@ -26,6 +26,12 @@ class AddRelationshipToSuratDispensasiTable extends Migration
                   ->onUpdate('cascade')
                   ->onCascade('cascade');
 
+            $table->foreign('nip_kasubag')
+                  ->references('nip')
+                  ->on('user')
+                  ->onUpdate('cascade')
+                  ->onCascade('cascade');
+
             $table->foreign('id_kode_surat')
                   ->references('id')
                   ->on('kode_surat')
@@ -44,6 +50,7 @@ class AddRelationshipToSuratDispensasiTable extends Migration
         Schema::table('surat_dispensasi', function (Blueprint $table) {
             $table->dropForeign(['id_surat_masuk']);
             $table->dropForeign(['nip']);
+            $table->dropForeign(['nip_kasubag']);
             $table->dropForeign(['id_kode_surat']);
         });
     }

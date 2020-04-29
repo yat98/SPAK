@@ -72,7 +72,7 @@
             width: 160px;
         }
         .signature{
-            line-height: 1;
+            line-height: 1.3;
             margin-top: 20px;
             margin-right: 30px;
         }
