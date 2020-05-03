@@ -61,6 +61,10 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-keterangan-kelakuan-baik';
             } else if ($segment == 'surat-dispensasi') {
                 $halaman = 'surat-dispensasi';
+            } else if ($segment == 'surat-rekomendasi') {
+                $halaman = 'surat-rekomendasi';
+            } else if ($segment == 'surat-tugas') {
+                $halaman = 'surat-tugas';
             }
         } elseif (request()->segment(1) == 'pegawai') {
             $posisi = 'pegawai';
@@ -80,6 +84,10 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-masuk';
             } else if($segment == 'surat-dispensasi'){
                 $halaman = 'surat-dispensasi';
+            } else if($segment == 'surat-rekomendasi'){
+                $halaman = 'surat-rekomendasi';
+            } else if($segment == 'surat-tugas'){
+                $halaman = 'surat-tugas';
             }
         } elseif (request()->segment(1) == 'pimpinan') {
             $posisi = 'pimpinan';
@@ -89,6 +97,10 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'tanda-tangan';
             } else if($segment == 'surat-dispensasi'){
                 $halaman = 'surat-dispensasi';
+            } else if($segment == 'surat-rekomendasi'){
+                $halaman = 'surat-rekomendasi';
+            } else if($segment == 'surat-tugas'){
+                $halaman = 'surat-tugas';
             }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi]);

@@ -18,7 +18,7 @@ class CreateSuratKeteranganTable extends Migration
             $table->char('nomor_surat',6);
             $table->char('nip',18)->nullable();
             $table->integer('id_kode_surat')->unsigned();
-            $table->integer('jumlah_cetak');
+            $table->integer('jumlah_cetak')->default(0);
             $table->timestamps();
         });
     }

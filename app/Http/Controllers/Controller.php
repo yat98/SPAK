@@ -19,7 +19,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    protected $perPage = 20;
+    protected $perPage = 25;
 
     protected $segmentUser;
 
@@ -86,7 +86,8 @@ class Controller extends BaseController
                         ->get();
         $nomorSuratList = [];
         foreach ($nomorSurat as $nmr) {
-            $nomorSuratList[$nmr->nomor_surat] = 'B/'.$nmr->nomor_surat.'/'.$nmr->kodeSurat->kode_surat.'/'.$nmr->created_at->year;
+            $nomor = explode('/',$nmr->kodeSurat->kode_surat);
+            $nomorSuratList[$nmr->nomor_surat] = 'B/'.$nmr->nomor_surat.'/'.$nomor[0].'.4/'.$nomor[1].'/'.$nmr->created_at->year;
         }
         return $nomorSuratList;
     }

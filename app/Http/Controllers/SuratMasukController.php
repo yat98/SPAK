@@ -22,6 +22,7 @@ class SuratMasukController extends Controller
 
     public function show(SuratMasuk $suratMasuk){
         $surat = collect($suratMasuk);
+        $surat->put('tanggal_surat_masuk',$suratMasuk->created_at->isoFormat('D MMMM Y'));
         $surat->put('created',$suratMasuk->created_at->format('d F Y H:i:s'));
         $surat->put('updated',$suratMasuk->updated_at->format('d F Y H:i:s'));
         $surat->put('nama_file',explode('.',$suratMasuk->file_surat_masuk)[0]);

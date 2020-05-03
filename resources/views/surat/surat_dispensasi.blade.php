@@ -114,8 +114,8 @@
             @if($suratDispensasi->mahasiswa->count() > 0)
                     <table class="m-0 text-center table table-margin">
                     <tr class="table">
-                        <th class="table">No</th>
-                        <th class="table">Nama</th>
+                        <th class="table">NO</th>
+                        <th class="table">NAMA</th>
                         <th class="table">NIM</th>
                         <th class="table">PRODI</th>
                         <th class="table">JURUSAN</th>
@@ -164,12 +164,12 @@
         </div>
         <div class="signature">
             <div class="signature-content">
-                <p class="m-0"><b>Gorontalo, {{$suratDispensasi->created_at->format('d F Y')}}</b></p>
+                <p class="m-0"><b>Gorontalo, {{$suratDispensasi->created_at->isoFormat('D MMMM Y')}}</b></p>
                 @if($suratDispensasi->user->jabatan == 'dekan')
                     <p class="m-0"><b>Dekan,</b></p>
                 @else
                     <p class="m-0"><b>a.n Dekan,</b></p>
-                    <p class="m-0"><b>Wakil Dekan 3,</b></p>
+                    <p class="m-0"><b>Wakil Dekan Bidang Kemahasiswaan dan Alumni,</b></p>
                 @endif
                 <p class="m-0 tanda-tangan-margin">
                     <img class="tanda-tangan" src="{{$suratDispensasi->user->tanda_tangan}}">

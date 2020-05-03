@@ -21,7 +21,7 @@ class CreateSuratDispensasiTable extends Migration
             $table->string('nama_kegiatan',100);
             $table->char('nomor_surat',6);
             $table->enum('status',['diajukan','selesai'])->default('diajukan');
-            $table->integer('jumlah_cetak');
+            $table->integer('jumlah_cetak')->default(0);
             $table->timestamps();
         });
     }

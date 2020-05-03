@@ -112,7 +112,7 @@
         </div>
         <div class="signature">
             <div class="signature-content">
-                <p class="m-0"><b>{{$suratKeterangan->created_at->format('d F Y')}}</b></p>
+                <p class="m-0"><b>{{$suratKeterangan->created_at->isoFormat('D MMMM Y')}}</b></p>
                 <p class="m-0"><b>a.n Wakil Dekan III,</b></p>
                 <p class="m-0"><b>Kasubag Kemahasiswaan</b></p>
                 <p class="m-0 tanda-tangan-margin">

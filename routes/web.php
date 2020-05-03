@@ -52,7 +52,17 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         Route::get('surat-dispensasi/{surat_dispensasi}/cetak', 'SuratDispensasiController@cetakSuratDispensasi');
         Route::get('surat-dispensasi/{surat_dispensasi}/progress','SuratDispensasiController@progressPengajuanSuratDispensasi');
         Route::resource('surat-dispensasi','SuratDispensasiController')->only(['show']);
-        Route::get('surat-dispensasi','MahasiswaController@suratDispensasi');
+        Route::get('surat-dispensasi','SuratDispensasiController@suratDispensasiMahasiswa');
+        // Surat Rekomendasi
+        Route::get('surat-rekomendasi/{surat_rekomendasi}/cetak', 'SuratRekomendasiController@cetakSuratRekomendasi');
+        Route::get('surat-rekomendasi/{surat_rekomendasi}/progress','SuratRekomendasiController@progressPengajuanSuratRekomendasi');
+        Route::resource('surat-rekomendasi','SuratRekomendasiController')->only(['show']);
+        Route::get('surat-rekomendasi','SuratRekomendasiController@suratRekomendasiMahasiswa');
+        // Surat Tugas
+        Route::get('surat-tugas/{surat_tugas}/cetak', 'SuratTugasController@cetakSuratTugas');
+        Route::get('surat-tugas/{surat_tugas}/progress','SuratTugasController@progressPengajuanSuratTugas');
+        Route::resource('surat-tugas','SuratTugasController')->only(['show']);
+        Route::get('surat-tugas','SuratTugasController@suratTugasMahasiswa');
     });
 });
 
@@ -105,6 +115,14 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::get('surat-dispensasi/search', 'SuratDispensasiController@search');
         Route::get('surat-dispensasi/{surat_dispensasi}/cetak', 'SuratDispensasiController@cetakSuratDispensasi');
         Route::resource('surat-dispensasi','SuratDispensasiController');
+        // Surat Rekomendasi
+        Route::get('surat-rekomendasi/search', 'SuratRekomendasiController@search');
+        Route::get('surat-rekomendasi/{surat_rekomendasi}/cetak', 'SuratRekomendasiController@cetakSuratRekomendasi');
+        Route::resource('surat-rekomendasi','SuratRekomendasiController');
+        // Surat Tugas
+        Route::get('surat-tugas/search', 'SuratTugasController@search');
+        Route::get('surat-tugas/{surat_tugas}/cetak', 'SuratTugasController@cetakSuratTugas');
+        Route::resource('surat-tugas','SuratTugasController');
         // Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Notifikasi
@@ -182,7 +200,16 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::get('surat-dispensasi/search', 'SuratDispensasiController@search');
         Route::resource('surat-dispensasi','SuratDispensasiController')->only(['show']);
         Route::post('surat-dispensasi/pengajuan/tanda-tangan','SuratDispensasiController@tandaTanganDispensasi');
-        Route::patch('surat-dispensasi/tolak/{surat_dispensasi}','SuratDispensasiController@tolakPengajuan');
+         // Surat Rekomendasi
+         Route::get('surat-rekomendasi', 'SuratRekomendasiController@suratRekomendasiPimpinan');
+         Route::get('surat-rekomendasi/search', 'SuratRekomendasiController@search');
+         Route::resource('surat-rekomendasi','SuratRekomendasiController')->only(['show']);
+         Route::post('surat-rekomendasi/pengajuan/tanda-tangan','SuratRekomendasiController@tandaTanganRekomendasi');
+         // Surat Tugas
+         Route::get('surat-tugas', 'SuratTugasController@suratTugasPimpinan');
+         Route::get('surat-tugas/search', 'SuratTugasController@search');
+         Route::resource('surat-tugas','SuratTugasController')->only(['show']);
+         Route::post('surat-tugas/pengajuan/tanda-tangan','SuratTugasController@tandaTanganTugas');
         // Notifikasi
         Route::get('notifikasi/{notifikasi_user}','NotifikasiUserController@show');
         Route::get('notifikasi','NotifikasiUserController@index');

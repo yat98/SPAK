@@ -80,6 +80,7 @@ class KodeSuratController extends Controller
             'surat keterangan'=>'Surat Keterangan',
             'surat dispensasi'=>'Surat Dispensasi',
             'surat pengantar cuti'=>'Surat Pengantar Cuti',
+            'surat rekomendasi'=>'Surat Rekomendasi',
         ];
     }
 }

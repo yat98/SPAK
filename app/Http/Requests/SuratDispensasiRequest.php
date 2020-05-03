@@ -25,25 +25,25 @@ class SuratDispensasiRequest extends FormRequest
     public function rules()
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
-            $nomorSuratRules = 'required|numeric|min:1|unique_with:surat_dispensasi,status,'.$this->get('nomor_surat').',nomor_surat|unique:surat_keterangan,nomor_surat,'.$this->get('nomor_surat').',nomor_surat';
+            $nomorSuratRules = 'required|numeric|min:1|unique:surat_rekomendasi,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_tugas,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_dispensasi,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_keterangan,nomor_surat,'.$this->get('nomor_surat').',nomor_surat';
             $idSuratMasukRules = 'required|numeric|unique:surat_dispensasi,id_surat_masuk,'.$this->get('id').',id_surat_masuk';
         }else{
-            $nomorSuratRules = 'required|numeric|min:1|unique_with:surat_dispensasi,nomor_surat|unique:surat_keterangan,nomor_surat';
+            $nomorSuratRules = 'required|numeric|min:1|unique:surat_rekomendasi,nomor_surat|unique:surat_tugas,nomor_surat|unique:surat_dispensasi,nomor_surat|unique:surat_keterangan,nomor_surat';
             $idSuratMasukRules = 'required|numeric|unique:surat_dispensasi,id_surat_masuk';
         }
         return [
-            'nomor_surat'=>$nomorSuratRules,
-            'nip'=>'required|numeric',
-            'nim'=>'required',
-            'id_kode_surat'=>'required|numeric',
             'id_surat_masuk'=>$idSuratMasukRules,
-            'nama_kegiatan'=>'required|string',
+            'nip'=>'required|numeric',
+            'id_kode_surat'=>'required|numeric',
+            'nomor_surat'=>$nomorSuratRules,
+            'nama_kegiatan'=>'required|string|max:100',
+            'status'=>'sometimes|in:diajukan,selesai',
+            'nim'=>'required',
             'tahapan_kegiatan'=>'required',
             'tempat_kegiatan'=>'required',
             'tanggal_awal_kegiatan'=>'required',
             'tanggal_akhir_kegiatan'=>'required',
             'jumlah_cetak'=>'sometimes|numeric',
-            'status'=>'sometimes|in:diajukan,ditolak,selesai',
         ];
     }
 

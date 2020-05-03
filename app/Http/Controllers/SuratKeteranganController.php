@@ -8,9 +8,11 @@ use App\User;
 use Exception;
 use App\KodeSurat;
 use App\Mahasiswa;
+use App\SuratTugas;
 use App\StatusMahasiswa;
 use App\SuratDispensasi;
 use App\SuratKeterangan;
+use App\SuratRekomendasi;
 use App\NotifikasiMahasiswa;
 use Illuminate\Http\Request;
 use App\PengajuanSuratKeterangan;
@@ -54,7 +56,6 @@ class SuratKeteranganController extends Controller
                                         ->where('jenis_surat','surat keterangan kelakuan baik')
                                         ->paginate($perPage,['*'],'page');
         
-
         $pengajuanSuratKeteranganList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
                                             ->whereNotIn('status',['selesai'])
                                             ->orderByDesc('created_at')
@@ -79,6 +80,8 @@ class SuratKeteranganController extends Controller
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->first();
         $nomorSurat[] = SuratKeterangan::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
         $nomorSurat[] = SuratDispensasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratRekomendasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratTugas::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
         $nomorSuratBaru = max($nomorSurat);
         ++$nomorSuratBaru;
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->pluck('kode_surat','id');
@@ -94,6 +97,8 @@ class SuratKeteranganController extends Controller
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->first();
         $nomorSurat[] = SuratKeterangan::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
         $nomorSurat[] = SuratDispensasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratRekomendasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratTugas::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
         $nomorSuratBaru = max($nomorSurat);
         ++$nomorSuratBaru;
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->pluck('kode_surat','id');
@@ -139,7 +144,6 @@ class SuratKeteranganController extends Controller
         }
 
         $input['nip'] = Session::get('nip');
-        $input['jumlah_cetak'] = 0;
 
         DB::beginTransaction();
         try{
@@ -174,7 +178,6 @@ class SuratKeteranganController extends Controller
     public function storeSuratKeteranganKelakuanBaik(SuratKeteranganRequest $request){
         $input = $request->all();
         $input['nip'] = Session::get('nip');
-        $input['jumlah_cetak'] = 0;
 
         DB::beginTransaction();
         try{
@@ -412,6 +415,9 @@ class SuratKeteranganController extends Controller
 
         $nomorSurat[] = SuratKeterangan::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
         $nomorSurat[] = SuratDispensasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratRekomendasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratTugas::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+
         $nomorSuratBaru = max($nomorSurat);
         ++$nomorSuratBaru;
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->first();
@@ -419,7 +425,6 @@ class SuratKeteranganController extends Controller
             'id_pengajuan_surat_keterangan'=>$pengajuanSuratKeterangan->id,
             'nomor_surat'=>$nomorSuratBaru,
             'id_kode_surat'=>$kodeSurat->id,
-            'jumlah_cetak'=>0,
             'nip' => Session::get('nip'),
         ];
         SuratKeterangan::create($input);
@@ -443,6 +448,8 @@ class SuratKeteranganController extends Controller
         $pengajuanSuratKeterangan = PengajuanSuratKeterangan::findOrFail($request->id);
         $nomorSurat[] = SuratKeterangan::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
         $nomorSurat[] = SuratDispensasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratRekomendasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratTugas::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
         $nomorSuratBaru = max($nomorSurat);
         ++$nomorSuratBaru;
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->first();
@@ -450,7 +457,6 @@ class SuratKeteranganController extends Controller
             'id_pengajuan_surat_keterangan'=>$pengajuanSuratKeterangan->id,
             'nomor_surat'=>$nomorSuratBaru,
             'id_kode_surat'=>$kodeSurat->id,
-            'jumlah_cetak'=>0,
             'nip' => Session::get('nip'),
         ];
         SuratKeterangan::create($input);
@@ -486,14 +492,14 @@ class SuratKeteranganController extends Controller
     public function progressPengajuanSuratKeterangan(PengajuanSuratKeterangan $pengajuanSuratKeterangan){
         $pengajuan = $pengajuanSuratKeterangan->load(['suratKeterangan.user','mahasiswa']);
         $data = collect($pengajuan);
-        $tanggalDiajukan = $pengajuan->created_at->format('d F Y - H:i:m');
+        $tanggalDiajukan = $pengajuan->created_at->isoFormat('D MMMM Y - HH:m:s');
         $data->put('tanggal_diajukan',$tanggalDiajukan);
 
         if($pengajuan->status == 'selesai'){
-            $tanggalSelesai = $pengajuan->suratKeterangan->created_at->format('d F Y - H:i:m');
+            $tanggalSelesai = $pengajuan->suratKeterangan->created_at->isoFormat('D MMMM Y - HH:m:s');
             $data->put('tanggal_selesai',$tanggalSelesai);
         }else if($pengajuan->status == 'ditolak'){
-            $tanggalDitolak = $pengajuan->updated_at->format('d F Y - H:i:m');
+            $tanggalDitolak = $pengajuan->updated_at->isoFormat('D MMMM Y - HH:m:s');
             $data->put('tanggal_ditolak',$tanggalDitolak);
         }
         return $data->toJson();

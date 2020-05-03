@@ -163,7 +163,7 @@ class MahasiswaController extends Controller
                                             ->orderByDesc('created_at')
                                             ->orderBy('status')
                                             ->paginate($perPage,['*'],'page_pengajuan');
-        $countAllPengajuan = PengajuanSuratKeterangan::whereNotIn('status',['selesai'])->where('jenis_surat','surat keterangan aktif kuliah')->count();
+        $countAllPengajuan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')->where('nim',Session::get('nim'))->count();
         $countPengajuanSuratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
                                             ->where('nim',Session::get('nim'))
                                             ->count();
@@ -177,23 +177,11 @@ class MahasiswaController extends Controller
                                             ->orderByDesc('created_at')
                                             ->orderBy('status')
                                             ->paginate($perPage,['*'],'page_pengajuan');
-        $countAllPengajuan = PengajuanSuratKeterangan::whereNotIn('status',['selesai'])->where('jenis_surat','surat keterangan kelakuan baik')->count();
+        $countAllPengajuan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')->where('nim',Session::get('nim'))->count();
         $countPengajuanSuratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
                                             ->where('nim',Session::get('nim'))
                                             ->count();
         return view($this->segmentUser.'.pengajuan_surat_keterangan_kelakuan_baik',compact('countAllPengajuan','countPengajuanSuratKeterangan','perPage','pengajuanSuratKeteranganList'));
-    }
-
-    public function suratDispensasi(){
-        $perPage = $this->perPage;
-        $mahasiswa = $this->generateMahasiswa();
-        $nomorSurat = $this->generateNomorSuratDispensasi();
-        $suratDispensasiList = SuratDispensasi::join('daftar_dispensasi_mahasiswa','daftar_dispensasi_mahasiswa.id_surat_dispensasi','=','surat_dispensasi.id_surat_masuk')
-                                    ->where('nim',Session::get('nim'))
-                                    ->paginate($perPage);
-        $countAllSuratDispensasi = $suratDispensasiList->count();
-        $countSuratDispensasi = $suratDispensasiList->count();
-        return view($this->segmentUser.'.surat_dispensasi',compact('perPage','mahasiswa','nomorSurat','countAllSuratDispensasi','countSuratDispensasi','suratDispensasiList'));
     }
 
     public function createPengajuanSuratKeteranganAktif(){

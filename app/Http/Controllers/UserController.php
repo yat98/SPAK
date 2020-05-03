@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Session;
 use App\User;
 use App\KodeSurat;
+use App\SuratMasuk;
 use App\TahunAkademik;
+use App\SuratDispensasi;
 use App\SuratKeterangan;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
@@ -97,12 +99,35 @@ class UserController extends Controller
                                         ->orderByDesc('surat_keterangan.updated_at')
                                         ->where('jenis_surat','surat keterangan aktif kuliah')
                                         ->get();
+        $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
+        $suratMasukList = SuratMasuk::orderByDesc('created_at')->get();
+        $suratKeteranganKelakuanList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
+                                        ->orderByDesc('surat_keterangan.updated_at')
+                                        ->where('jenis_surat','surat keterangan kelakuan baik')
+                                        ->get();
+        $suratDispensasiList = SuratDispensasi::orderBy('status')->get();
+        
         $countAllKodeSurat = $kodeSuratList->count();
         $countAllSuratKeteranganAktif = $suratKeteranganAktifList->count();
-        $kodeSuratList = $kodeSuratList->take(5);
+        $countAllSuratKeteranganKelakuan = $suratKeteranganKelakuanList->count();
+        $countAllSuratMasuk  = $suratMasukList->count();
+        $countAllSuratDispensasi = $suratDispensasiList->count();
+        
+        
         $countKodeSurat = count($kodeSuratList);
-        $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
-        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','countAllKodeSurat','countKodeSurat','kodeSuratList','countAllSuratKeteranganAktif'));
+        $countSuratKeteranganAktif = count($suratKeteranganAktifList);
+        $countSuratMasuk = count($suratMasukList);
+        $countSuratKeteranganKelakuan = count($suratKeteranganKelakuanList);
+        $countSuratDispensasi = count($suratDispensasiList);
+        
+        $kodeSuratList = $kodeSuratList->take(5);
+        $suratMasukList = $suratMasukList->take(5);
+        $suratKeteranganAktifList = $suratKeteranganAktifList->take(5);
+        $suratKeteranganKelakuanList = $suratKeteranganKelakuanList->take(5);
+        $suratDispensasiList = $suratDispensasiList->take(5);
+
+       
+        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','countAllKodeSurat','countKodeSurat','kodeSuratList','countAllSuratKeteranganAktif','suratMasukList','countAllSuratMasuk','countSuratMasuk','countSuratKeteranganAktif','suratKeteranganAktifList','suratKeteranganKelakuanList','countAllSuratKeteranganKelakuan','countSuratKeteranganKelakuan','suratDispensasiList','countAllSuratDispensasi','countSuratDispensasi'));
     }
 
     public function pimpinanDashboard(){

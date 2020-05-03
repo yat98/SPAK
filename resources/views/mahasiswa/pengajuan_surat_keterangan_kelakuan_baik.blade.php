@@ -54,6 +54,7 @@
                                                 <th> Nama </th>
                                                 <th> Jenis Surat</th>
                                                 <th> Status</th>
+                                                <th> Keterangan</th>
                                                 <th> Di Buat</th>
                                                 <th> Di Ubah</th>
                                                 <th> Aksi</th>

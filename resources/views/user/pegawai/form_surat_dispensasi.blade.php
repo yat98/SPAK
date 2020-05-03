@@ -141,13 +141,13 @@ $jumlah = $suratDispensasi->tahapanKegiatanDispensasi->count();
             {{ Form::label('nip','Tanda Tangan') }}
             @if ($errors->any())
             @if ($errors->has('nip'))
-            {{ Form::select('nip',$userList,null,['class'=>'form-control form-control-lg is-invalid','id'=>'nip','placeholder'=> '-- Pilih Pimpinan --']) }}
+            {{ Form::select('nip',$userList,null,['class'=>'form-control form-control-lg is-invalid','id'=>'nip','placeholder'=> '-- Pilih Tanda Tangan --']) }}
             <div class="invalid-feedback">{{ $errors->first('nip') }}</div>
             @else
-            {{ Form::select('nip',$userList,null,['class'=>'form-control form-control-lg is-valid','id'=>'nip','placeholder'=> '-- Pilih Pimpinan --']) }}
+            {{ Form::select('nip',$userList,null,['class'=>'form-control form-control-lg is-valid','id'=>'nip','placeholder'=> '-- Pilih Tanda Tangan --']) }}
             @endif
             @else
-            {{ Form::select('nip',$userList,null,['class'=>'form-control form-control-lg','id'=>'nip','placeholder'=> '-- Pilih Pimpinan --']) }}
+            {{ Form::select('nip',$userList,null,['class'=>'form-control form-control-lg','id'=>'nip','placeholder'=> '-- Pilih Tanda Tangan --']) }}
             @endif
         </div>
         <div class="form-group">

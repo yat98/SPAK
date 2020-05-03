@@ -21,4 +21,12 @@ class KodeSurat extends Model
     public function suratDispensasi(){
         return $this->hasMany('App\SuratDispensasi','id_kode_surat');
     }
+
+    public function suratRekomendasi(){
+        return $this->hasMany('App\SuratRekomendasi','id_kode_surat');
+    }
+
+    public function suratTugas(){
+        return $this->hasMany('App\SuratTugas','id_kode_surat');
+    }
 }

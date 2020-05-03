@@ -19,11 +19,11 @@
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Pengajuan Surat Dispensasi <i
+                                <h4 class="font-weight-normal mb-3">Tanda Tangan Surat Dispensasi <i
                                         class="mdi mdi-file-document-box mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllPengajuanSuratDispensasi > 0 ? $countAllPengajuanSuratDispensasi.' Pengajuan Surat Dispensasi' : 'Pengajuan Surat Dispensasi Kosong' }}
+                                    {{ $countAllPengajuanSuratDispensasi > 0 ? $countAllPengajuanSuratDispensasi.' Tanda Tangan Surat Dispensasi' : 'Tanda Tangan Surat Dispensasi Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -51,7 +51,7 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Pengajuan Surat Dispensasi</h4>
+                                        <h4>Tanda Tangan Surat Dispensasi</h4>
                                     </div>
                                 </div>
                                 <hr class="mb-4">
@@ -120,10 +120,10 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Surat Dispensasi Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Tanda Tangan Surat Dispensasi Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi surat dispensasi terlebih dahulu.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Tanda tangan surat dispensasi belum ada.' }}
                                         </p>
                                     </div>
                                 </div>

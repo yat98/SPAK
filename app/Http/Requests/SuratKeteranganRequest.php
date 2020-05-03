@@ -24,9 +24,9 @@ class SuratKeteranganRequest extends FormRequest
     public function rules()
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
-            $nomorSuratRules = 'required|numeric|min:1|unique:surat_keterangan,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_dispensasi,nomor_surat,'.$this->get('nomor_surat').',nomor_surat';
+            $nomorSuratRules = 'required|numeric|min:1|unique:surat_rekomendasi,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_tugas,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_dispensasi,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_keterangan,nomor_surat,'.$this->get('nomor_surat').',nomor_surat';
         }else{
-            $nomorSuratRules = 'required|numeric|min:1|unique:surat_keterangan,nomor_surat|unique:surat_dispensasi,nomor_surat';
+            $nomorSuratRules = 'required|numeric|min:1|unique:surat_rekomendasi,nomor_surat|unique:surat_tugas,nomor_surat|unique:surat_dispensasi,nomor_surat|unique:surat_keterangan,nomor_surat';
         }
         return [
             'nomor_surat'=>$nomorSuratRules,
