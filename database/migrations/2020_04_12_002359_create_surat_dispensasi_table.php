@@ -20,7 +20,7 @@ class CreateSuratDispensasiTable extends Migration
             $table->integer('id_kode_surat')->unsigned();
             $table->string('nama_kegiatan',100);
             $table->char('nomor_surat',6);
-            $table->enum('status',['diajukan','selesai'])->default('diajukan');
+            $table->enum('status',['menunggu tanda tangan','selesai'])->default('menunggu tanda tangan');
             $table->integer('jumlah_cetak')->default(0);
             $table->timestamps();
         });

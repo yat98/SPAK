@@ -7,8 +7,10 @@ use App\SuratTugas;
 use App\ProgramStudi;
 use App\TahunAkademik;
 use App\PimpinanOrmawa;
+use App\SuratKeterangan;
 use App\PengajuanSuratKeterangan;
 use Illuminate\Support\Facades\Route;
+use App\PengajuanSuratPersetujuanPindah;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
@@ -45,6 +47,9 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('pimmpinan_ormawa', PimpinanOrmawa::class);
         Route::model('pengajuan_surat_keterangan', PengajuanSuratKeterangan::class);
         Route::model('surat_tuga', SuratTugas::class);
+        Route::model('pengajuan_persetujuan_pindah', PengajuanSuratPersetujuanPindah::class);
+        Route::model('surat_keterangan_aktif_kuliah', SuratKeterangan::class);
+        Route::model('surat_keterangan_kelakuan_baik', SuratKeterangan::class);
     }
 
     /**

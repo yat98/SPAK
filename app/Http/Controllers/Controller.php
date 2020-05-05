@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use Session;
 use App\User;
 use App\Jurusan;
+use App\KodeSurat;
 use App\Mahasiswa;
+use App\SuratTugas;
 use App\ProgramStudi;
 use App\TahunAkademik;
 use App\SuratDispensasi;
 use App\SuratKeterangan;
+use App\SuratRekomendasi;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -119,5 +122,24 @@ class Controller extends BaseController
             }
         }
         return $nomorSuratList;
+    }
+
+    protected function isKodeSuratExists(){
+        $kodeSurat = KodeSurat::all()->count();
+        if($kodeSurat < 1){
+            $this->setFlashData('info','Kode Surat Kosong','Tambahkan kode surat terlebih dahulu!');
+            return false;
+        }
+        return true;
+    }
+
+    protected function generateNomorSuratBaru(){
+        $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->first();
+        $nomorSurat[] = SuratKeterangan::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratDispensasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratRekomendasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratTugas::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSuratBaru = max($nomorSurat);
+        return ++$nomorSuratBaru;
     }
 }

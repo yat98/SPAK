@@ -68,7 +68,7 @@
                                                 @endif
                                                 <td> {{ $suratDispensasi->nama_kegiatan }}</td>
                                                 <td> 
-                                                @if($suratDispensasi->status == 'diajukan')
+                                                @if($suratDispensasi->status == 'menunggu tanda tangan')
                                                 <label class="badge badge-gradient-warning text-dark">{{ ucwords($suratDispensasi->status) }}</td></label>
                                                 @else
                                                 <label class="badge badge-gradient-info">{{ ucwords($suratDispensasi->status) }}</td></label>

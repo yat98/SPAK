@@ -37,7 +37,7 @@ class SuratDispensasiController extends Controller
         $mahasiswa = $this->generateMahasiswa();
         $nomorSurat = $this->generateNomorSuratDispensasi();
         $suratDispensasiList = SuratDispensasi::orderByDesc('created_at')->where('status','selesai')->paginate($perPage);
-        $pengajuanSuratDispensasiList = SuratDispensasi::whereIn('status',['diajukan'])->where('nip',Session::get('nip'))->paginate($perPage);
+        $pengajuanSuratDispensasiList = SuratDispensasi::whereIn('status',['menunggu tanda tangan'])->where('nip',Session::get('nip'))->paginate($perPage);
         $countAllPengajuanSuratDispensasi = $pengajuanSuratDispensasiList->count();
         $countAllSuratDispensasi = SuratDispensasi::where('status','selesai')->count();
         $countSuratDispensasi = $suratDispensasiList->count();
@@ -59,13 +59,7 @@ class SuratDispensasiController extends Controller
 
     public function create(Request $request){
         $mahasiswa = $this->generateMahasiswa();
-        $nomorSurat[] = SuratKeterangan::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratDispensasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratRekomendasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratTugas::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        
-        $nomorSuratBaru = max($nomorSurat);
-        ++$nomorSuratBaru;
+        $nomorSuratBaru = $this->generateNomorSuratBaru();
         $suratMasuk = SuratMasuk::pluck('nomor_surat','id');
         $userList = $this->generatePimpinan();
         $kodeSurat = $this->generateKodeSurat();

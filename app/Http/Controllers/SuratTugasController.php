@@ -35,7 +35,7 @@ class SuratTugasController extends Controller
         $mahasiswa = $this->generateMahasiswa();
         $nomorSurat = $this->generateNomorSuratTugas();
         $suratTugasList = SuratTugas::orderByDesc('created_at')->where('status','selesai')->paginate($perPage);
-        $pengajuanSuratTugasList = SuratTugas::whereIn('status',['diajukan'])->where('nip',Session::get('nip'))->paginate($perPage);
+        $pengajuanSuratTugasList = SuratTugas::whereIn('status',['menunggu tanda tangan'])->where('nip',Session::get('nip'))->paginate($perPage);
         $countAllPengajuanSuratTugas = $pengajuanSuratTugasList->count();
         $countAllSuratTugas = SuratTugas::where('status','selesai')->count();
         $countSuratTugas = $suratTugasList->count();
@@ -275,6 +275,13 @@ class SuratTugasController extends Controller
         return $nomorSuratList;
     }
 
+    private function generatePimpinan(){
+        $user = [];
+        $pimpinan = User::where('jabatan','dekan')->where('status_aktif','aktif')->first();
+        $user[$pimpinan->nip] = strtoupper($pimpinan->jabatan).' - '.$pimpinan->nama;
+        return $user;
+    }
+
     private function isKodeSuratTugasExists(){
         $kodeSurat = KodeSurat::where('jenis_surat','surat tugas')->where('status_aktif','aktif')->first();
         if(empty($kodeSurat)){
@@ -282,21 +289,5 @@ class SuratTugasController extends Controller
             return false;
         }
         return true;
-    }
-
-    private function isKodeSuratExists(){
-        $kodeSurat = KodeSurat::all()->count();
-        if($kodeSurat < 1){
-            $this->setFlashData('info','Kode Surat Kosong','Tambahkan kode surat terlebih dahulu!');
-            return false;
-        }
-        return true;
-    }
-
-    private function generatePimpinan(){
-        $user = [];
-        $pimpinan = User::where('jabatan','dekan')->where('status_aktif','aktif')->first();
-        $user[$pimpinan->nip] = strtoupper($pimpinan->jabatan).' - '.$pimpinan->nama;
-        return $user;
     }
 }

@@ -18,7 +18,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h3 class="mb-5">Edit Surat Keterangan Aktif Kuliah</h3>
-                                {{ Form::model($suratKeterangan->toArray() + $suratKeterangan->pengajuanSuratKeterangan->toArray(),['method'=>'PATCH','action'=>['SuratKeteranganController@updateSuratKeteranganAktifKuliah',$suratKeterangan->id_pengajuan_surat_keterangan]]) }}
+                                {{ Form::model($suratKeterangan->toArray() + $suratKeterangan->pengajuanSuratKeterangan->toArray(),['method'=>'PATCH','action'=>['SuratKeteranganAktifKuliahController@update',$suratKeterangan->id_pengajuan_surat_keterangan]]) }}
                                 @include('user.pegawai.form_surat_keterangan_aktif_kuliah',['buttonLabel'=>'Simpan'])
                                 {{ Form::close() }}
                             </div>

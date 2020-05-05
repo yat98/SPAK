@@ -208,7 +208,7 @@
                                                         <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>
                                                         Edit
                                                     </a>
-                                                    {{ Form::open(['method'=>'DELETE','action'=>['SuratKeteranganController@destroySuratKeteranganKelakuanBaik',$suratKeterangan->id_pengajuan_surat_keterangan],'class'=>'d-inline-block']) }}
+                                                    {{ Form::open(['method'=>'DELETE','action'=>['SuratKeteranganKelakuanBaikController@destroy',$suratKeterangan->id_pengajuan_surat_keterangan],'class'=>'d-inline-block']) }}
                                                     <button type="submit" class="btn btn-danger btn-sm sweet-delete">
                                                         <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
                                                         Hapus

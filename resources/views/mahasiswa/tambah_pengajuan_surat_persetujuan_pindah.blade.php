@@ -10,16 +10,16 @@
                 <div class="page-header">
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
-                            <i class="mdi mdi-file-document-box menu-icon"></i>
-                        </span> Surat Keterangan Kelakuan Baik </h3>
+                            <i class="mdi mdi-file-document-box"></i>
+                        </span> Pengajuan Surat Persetujuan Pindah</h3>
                 </div>
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Edit Surat Keterangan Kelakuan Baik</h3>
-                                {{ Form::model($suratKeterangan->toArray() + $suratKeterangan->pengajuanSuratKeterangan->toArray(),['method'=>'PATCH','action'=>['SuratKeteranganKelakuanBaikController@update',$suratKeterangan->id_pengajuan_surat_keterangan]]) }}
-                                @include('user.pegawai.form_surat_keterangan_kelakuan_baik',['buttonLabel'=>'Simpan'])
+                                <h3 class="mb-5">Buat Pengajuan Surat Persetujuan Pindah</h3>
+                                {{ Form::open(['url'=>'mahasiswa/pengajuan/surat-persetujuan-pindah','files'=>true]) }}
+                                @include('mahasiswa.form_pengajuan_surat_persetujuan_pindah',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>
                         </div>

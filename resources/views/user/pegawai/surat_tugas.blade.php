@@ -83,7 +83,7 @@
                                                 <td> {{ 'B/'.$suratTugas->nomor_surat.'/'.$suratTugas->kodeSurat->kode_surat.'/'.$suratTugas->created_at->format('Y') }}</td>
                                                 <td> {{ $suratTugas->nama_kegiatan }}</td>
                                                 <td> 
-                                                @if($suratTugas->status == 'diajukan')
+                                                @if($suratTugas->status == 'menunggu tanda tangan')
                                                 <label class="badge badge-gradient-warning text-dark">{{ ucwords($suratTugas->status) }}</td></label>
                                                 @else
                                                 <label class="badge badge-gradient-info">{{ ucwords($suratTugas->status) }}</td></label>

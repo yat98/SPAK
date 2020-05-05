@@ -83,10 +83,8 @@
                                                 @endif
                                                 <td> {{ $suratDispensasi->nama_kegiatan }}</td>
                                                 <td> 
-                                                @if($suratDispensasi->status == 'diajukan')
+                                                @if($suratDispensasi->status == 'menunggu tanda tangan')
                                                 <label class="badge badge-gradient-warning text-dark">{{ ucwords($suratDispensasi->status) }}</td></label>
-                                                @elseif($suratDispensasi->status == 'ditolak')
-                                                <label class="badge badge-gradient-danger">{{ ucwords($suratDispensasi->status) }}</td></label>
                                                 @else
                                                 <label class="badge badge-gradient-info">{{ ucwords($suratDispensasi->status) }}</td></label>
                                                 @endif
@@ -97,7 +95,7 @@
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
                                                         Detail
                                                     </a>
-                                                     @if ($suratDispensasi->status == 'diajukan' && $suratDispensasi->nip == Session::get('nip'))
+                                                     @if ($suratDispensasi->status == 'menunggu tanda tangan' && $suratDispensasi->nip == Session::get('nip'))
                                                     {{ Form::open(['url'=>'pimpinan/surat-dispensasi/pengajuan/tanda-tangan','class'=>'d-inline-block']) }}
                                                     {{ Form::hidden('id',$suratDispensasi->id_surat_masuk)}}
                                                     <button type="submit" class="btn btn-info btn-sm simpan-tanda-tangan">
@@ -186,12 +184,8 @@
                                                     <td> {{ $suratDispensasi->nomor_surat.'/'.$kode[0].'.3/.'.$kode[1].'/'.$suratDispensasi->created_at->format('Y') }}</td>
                                                 @endif
                                                 <td> {{ $suratDispensasi->nama_kegiatan }}</td>
-                                                <td> 
-                                                @if($suratDispensasi->status == 'diproses')
-                                                <label class="badge badge-gradient-warning">{{ ucwords($suratDispensasi->status) }}</td></label>
-                                                @else
+                                                <td>                                                
                                                 <label class="badge badge-gradient-info">{{ ucwords($suratDispensasi->status) }}</td></label>
-                                                @endif
                                                 <td> {{ $suratDispensasi->created_at->diffForHumans() }}</td>
                                                 <td> {{ $suratDispensasi->updated_at->diffForHumans() }}</td>
                                                 <td>

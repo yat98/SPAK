@@ -35,7 +35,7 @@ class SuratRekomendasiController extends Controller
         $mahasiswa = $this->generateMahasiswa();
         $nomorSurat = $this->generateNomorSuratRekomendasi();
         $suratRekomendasiList = SuratRekomendasi::orderByDesc('created_at')->where('status','selesai')->paginate($perPage);
-        $pengajuanSuratRekomendasiList = SuratRekomendasi::whereIn('status',['diajukan'])->where('nip',Session::get('nip'))->paginate($perPage);
+        $pengajuanSuratRekomendasiList = SuratRekomendasi::whereIn('status',['menunggu tanda tangan'])->where('nip',Session::get('nip'))->paginate($perPage);
         $countAllPengajuanSuratRekomendasi = $pengajuanSuratRekomendasiList->count();
         $countAllSuratRekomendasi = SuratRekomendasi::where('status','selesai')->count();
         $countSuratRekomendasi = $suratRekomendasiList->count();
@@ -305,15 +305,6 @@ class SuratRekomendasiController extends Controller
         $kodeSurat = KodeSurat::where('jenis_surat','surat rekomendasi')->where('status_aktif','aktif')->first();
         if(empty($kodeSurat)){
             $this->setFlashData('info','Kode Surat Rekomendasi Aktif Tidak Ada','Aktifkan kode surat terlebih dahulu!');
-            return false;
-        }
-        return true;
-    }
-
-    private function isKodeSuratExists(){
-        $kodeSurat = KodeSurat::all()->count();
-        if($kodeSurat < 1){
-            $this->setFlashData('info','Kode Surat Kosong','Tambahkan kode surat terlebih dahulu!');
             return false;
         }
         return true;

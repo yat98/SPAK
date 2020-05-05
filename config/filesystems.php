@@ -47,6 +47,11 @@ return [
             'root' => public_path('upload_surat_masuk'),
         ],
 
+        'file_persetujuan_pindah' => [
+            'driver' => 'local',
+            'root' => public_path('upload_persetujuan_pindah'),
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),

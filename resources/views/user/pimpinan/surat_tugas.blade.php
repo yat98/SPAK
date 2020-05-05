@@ -79,7 +79,7 @@
                                                 <td> {{ 'B/'.$suratTugas->nomor_surat.'/'.$suratTugas->kodeSurat->kode_surat.'/'.$suratTugas->created_at->format('Y') }}</td>
                                                 <td> {{ $suratTugas->nama_kegiatan }}</td>
                                                 <td> 
-                                                @if($suratTugas->status == 'diajukan')
+                                                @if($suratTugas->status == 'menunggu tanda tangan')
                                                 <label class="badge badge-gradient-warning text-dark">{{ ucwords($suratTugas->status) }}</td></label>
                                                 @else
                                                 <label class="badge badge-gradient-info">{{ ucwords($suratTugas->status) }}</td></label>
@@ -91,7 +91,7 @@
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
                                                         Detail
                                                     </a>
-                                                     @if ($suratTugas->status == 'diajukan' && $suratTugas->nip == Session::get('nip'))
+                                                     @if ($suratTugas->status == 'menunggu tanda tangan' && $suratTugas->nip == Session::get('nip'))
                                                     {{ Form::open(['url'=>'pimpinan/surat-tugas/pengajuan/tanda-tangan','class'=>'d-inline-block']) }}
                                                     {{ Form::hidden('id',$suratTugas->id)}}
                                                     <button type="submit" class="btn btn-info btn-sm simpan-tanda-tangan">
@@ -176,12 +176,8 @@
                                                 <td> {{ $loop->iteration + $perPage * ($suratTugasList->currentPage() - 1)  }}</td>
                                                 <td> {{ 'B/'.$suratTugas->nomor_surat.'/'.$suratTugas->kodeSurat->kode_surat.'/'.$suratTugas->created_at->format('Y') }}</td>
                                                 <td> {{ $suratTugas->nama_kegiatan }}</td>
-                                                <td> 
-                                                @if($suratTugas->status == 'diproses')
-                                                <label class="badge badge-gradient-warning">{{ ucwords($suratTugas->status) }}</td></label>
-                                                @else
+                                                <td>                                                
                                                 <label class="badge badge-gradient-info">{{ ucwords($suratTugas->status) }}</td></label>
-                                                @endif
                                                 <td> {{ $suratTugas->created_at->diffForHumans() }}</td>
                                                 <td> {{ $suratTugas->updated_at->diffForHumans() }}</td>
                                                 <td>

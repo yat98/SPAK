@@ -11,7 +11,7 @@
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
                             <i class="mdi mdi-file-document-box"></i>
-                        </span> Surat Keterangan Aktif Kuliah </h3>
+                        </span> Surat Persetujuan Pindah </h3>
                 </div>
                 <div class="row">
                     <div class="col-md-6 stretch-card grid-margin">
@@ -19,11 +19,11 @@
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Pengajuan Surat Keterangan Aktif Kuliah<i
+                                <h4 class="font-weight-normal mb-3">Pengajuan Surat Persetujuan Pindah<i
                                         class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllPengajuanSuratKeterangan > 0 ? $countAllPengajuanSuratKeterangan.' Pengajuan Surat Keterangan Aktif Kuliah' : 'Pengajuan Surat Keterangan Aktif Kuliah Kosong' }}
+                                    {{ $countAllPengajuanSuratPersetujuanPindah > 0 ? $countAllPengajuanSuratPersetujuanPindah.' Pengajuan Surat Persetujuan Pindah' : 'Pengajuan Surat Persetujuan Pindah Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -34,11 +34,11 @@
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Surat Keterangan Aktif Kuliah <i
+                                <h4 class="font-weight-normal mb-3">Surat Persetujuan Pindah <i
                                         class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllSuratKeteranganAktif > 0 ? $countAllSuratKeteranganAktif.' Surat Keterangan Aktif Kuliah' : 'Surat Keterangan Aktif Kuliah Kosong' }}
+                                    {{ $countAllSuratPersetujuanPindah > 0 ? $countAllSuratPersetujuanPindah.' Surat Persetujuan Pindah' : 'Surat Persetujuan Pindah Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -51,56 +51,55 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Pengajuan Surat Keterangan Aktif Kuliah</h4>
+                                        <h4>Pengajuan Surat Persetujuan Pindah</h4>
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countPengajuanSuratKeterangan > 0)
+                                @if ($countPengajuanSuratPersetujuanPindah > 0)
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
                                             <tr>
                                                 <th> No. </th>
                                                 <th> Nama Mahasiswa</th>
-                                                <th> Semester</th>
                                                 <th> Status</th>
-                                                <th> Keterangan</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($pengajuanSuratKeteranganAktifList as $pengajuanSuratKeteranganAktif)
+                                            @foreach ($pengajuanSuratPersetujuanList as $pengajuanSuratPersetujuan)
                                             <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($pengajuanSuratKeteranganAktifList->currentPage() - 1) }}</td>
-                                                <td> {{ $pengajuanSuratKeteranganAktif->mahasiswa->nama }}</td>
-                                                <td> {{ $pengajuanSuratKeteranganAktif->tahunAkademik->tahun_akademik.' - '.ucwords($pengajuanSuratKeteranganAktif->tahunAkademik->semester) }}</td>
+                                                <td> {{ $loop->iteration + $perPage * ($pengajuanSuratPersetujuanList->currentPage() - 1) }}</td>
+                                                <td> {{ $pengajuanSuratPersetujuan->mahasiswa->nama }}</td>
                                                 <td> 
-                                                    @if ($pengajuanSuratKeteranganAktif->status == 'diajukan')
+                                                    @if ($pengajuanSuratPersetujuan->status == 'diajukan')
                                                     <label class="badge badge-gradient-warning text-dark">
-                                                        {{ ucwords($pengajuanSuratKeteranganAktif->status) }}
+                                                        {{ ucwords($pengajuanSuratPersetujuan->status) }}
                                                     </label>
-                                                    @elseif($pengajuanSuratKeteranganAktif->status == 'ditolak')
+                                                    @elseif($pengajuanSuratPersetujuan->status == 'ditolak')
                                                     <label class="badge badge-gradient-danger">
-                                                        {{ ucwords($pengajuanSuratKeteranganAktif->status) }}
+                                                        {{ ucwords($pengajuanSuratPersetujuan->status) }}
                                                     </label>
                                                     @endif
                                                 </td>
-                                                <td>{{ $pengajuanSuratKeteranganAktif->keterangan }}</td>
                                                 <td>
-                                                    <a href="{{ url('pegawai/detail/mahasiswa/'.$pengajuanSuratKeteranganAktif->nim) }}" class="btn-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                    <a href="{{ url('pegawai/detail/mahasiswa/'.$pengajuanSuratPersetujuan->nim) }}" class="btn-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-account btn-icon-prepend"></i>
                                                         Detail</a>
-
-                                                    @if ($pengajuanSuratKeteranganAktif->status == 'diajukan')
-                                                    {{ Form::open(['url'=>'pegawai/surat-keterangan-aktif-kuliah/pengajuan/tanda-tangan','class'=>'d-inline-block']) }}
-                                                    {{ Form::hidden('id',$pengajuanSuratKeteranganAktif->id)}}
+                                                     <a href="{{ url('pegawai/pengajuan/surat-persetujuan-pindah/'.$pengajuanSuratPersetujuan->id) }}" class="btn-pengajuan-pindah btn btn-outline-info btn-sm" data-toggle="modal" data-target="#persetujuanDetail">
+                                                        <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
+                                                        Detail Pengajuan</a>
+                                                        
+                                                    @if ($pengajuanSuratPersetujuan->status == 'diajukan')
+                                                    {{ Form::open(['url'=>'pegawai/surat-keterangan-aktif-kuliah/pengajuan/create','class'=>'d-inline-block']) }}
+                                                    {{ Form::hidden('id',$pengajuanSuratPersetujuan->id)}}
                                                     <button type="submit" class="btn btn-info btn-sm simpan-tanda-tangan">
-                                                        <i class="mdi mdi mdi-border-color btn-icon-prepend"></i>
-                                                        Tanda Tangan
+                                                        <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
+                                                        Buat Surat
                                                     </button>
                                                     {{ Form::close() }}
 
-                                                    {{ Form::open(['url'=>'pegawai/surat-keterangan-aktif-kuliah/pengajuan/tolak-pengajuan/'.$pengajuanSuratKeteranganAktif->id,'class'=>'d-inline-block','method'=>'PATCH']) }}
+                                                    {{ Form::open(['url'=>'pegawai/surat-keterangan-aktif-kuliah/pengajuan/tolak-pengajuan/'.$pengajuanSuratPersetujuan->id,'class'=>'d-inline-block','method'=>'PATCH']) }}
                                                     {{ Form::hidden('keterangan','-',['id'=>'keterangan_surat']) }}
                                                     <button type="submit" class="btn btn-danger btn-sm tolak-surat">
                                                         <i class="mdi mdi mdi-close btn-icon-prepend"></i>
@@ -114,7 +113,7 @@
                                         </tbody>
                                     </table>
                                     <div class="col">
-                                        {{ $pengajuanSuratKeteranganAktifList->appends(['page' => $suratKeteranganAktifList->currentPage()])->links() }}
+                                        {{ $pengajuanSuratPersetujuanList->appends(['page' => $suratPersetujuanPindahList->currentPage()])->links() }}
                                     </div>
                                 </div>
                                 @else
@@ -122,10 +121,10 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Surat Keterangan Aktif Kuliah Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Surat Persetujuan Pindah Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Belum ada pengajuan surat keterangan aktif kuliah.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Belum ada pengajuan surat persetujuan pindah.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -138,28 +137,25 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Data Surat Keterangan Aktif Kuliah</h4>
+                                        <h4>Data Surat Persetujuan Pindah</h4>
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
-                                        <a href="{{ url('pegawai/surat-keterangan-aktif-kuliah/create')}}"
+                                        <a href="{{ url('pegawai/surat-persetujuan-pindah/create')}}"
                                             class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">+
-                                            Tambah Surat Keterangan Aktif Kuliah</a>
+                                            Tambah Surat Persetujuan Pindah</a>
                                     </div>
                                 </div>
                                 <hr class="mb-4">
                                 <div class="row mb-3">
                                     <div class="col-sm-12">
-                                        {{ Form::open(['url'=>'pegawai/surat-keterangan-aktif-kuliah/search','method'=>'get']) }}
+                                        {{ Form::open(['url'=>'pegawai/surat-persetujuan-pindah/search','method'=>'get']) }}
                                         <div class="form-row">
                                             <div class="col-sm-4 col-md-4 mt-1">
                                                 {{ Form::select('nomor_surat',$nomorSurat,(request()->get('nomor_surat') != null) ? request()->get('nomor_surat'):null,['class'=>'form-control search','placeholder'=> 'Cari kode surat...']) }}
                                             </div>
-                                            <div class="col-sm-4 col-md-4 mt-1">
+                                            {{-- <div class="col-sm-4 col-md-4 mt-1">
                                                 {{ Form::select('keywords',$mahasiswa,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> 'Cari mahasiswa...']) }}
-                                            </div>
-                                            <div class="col-sm-4 col-md-2 mt-1">
-                                                {{ Form::select('tahun_akademik',$tahunAkademik,(request()->get('tahun_akademik') != null) ? request()->get('tahun_akademik'):null,['class'=>'search btn-margin form-control','placeholder'=> '-- Pilih Tahun Akademik --']) }}
-                                            </div>
+                                            </div> --}}
                                             <div class="col-sm-12 col-md">
                                                 <button class="btn btn-success btn-sm btn-tambah" type="submit">
                                                     <i class="mdi mdi-magnify btn-icon-prepend"></i>
@@ -170,7 +166,7 @@
                                         {{ Form::close() }}
                                     </div>
                                 </div>
-                                @if ($countSuratKeteranganAktif > 0)
+                                @if ($countSuratPersetujuanPindah > 0)
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
@@ -184,21 +180,21 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($suratKeteranganAktifList as $suratKeteranganAktif)
+                                            @foreach ($suratPersetujuanPindahList as $suratPersetujuanPindah)
                                             @php
-                                                $kode = explode('/',$suratKeteranganAktif->kodeSurat->kode_surat);
+                                                $kode = explode('/',$suratPersetujuanPindah->kodeSurat->kode_surat);
                                             @endphp
                                             <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($suratKeteranganAktifList->currentPage() - 1) }}</td>
-                                                <td> {{ 'B/'.$suratKeteranganAktif->nomor_surat.'/'.$kode[0].'.4/'.$kode[1].'/'.$suratKeteranganAktif->created_at->year }}</td>
-                                                <td> {{ $suratKeteranganAktif->pengajuanSuratKeterangan->mahasiswa->nama }}</td>
-                                                <td> {{ $suratKeteranganAktif->pengajuanSuratKeterangan->tahunAkademik->tahun_akademik.' - '.ucwords($suratKeteranganAktif->pengajuanSuratKeterangan->tahunAkademik->semester) }}</td>
-                                                <td> 
+                                                <td> {{ $loop->iteration + $perPage * ($suratPersetujuanPindahList->currentPage() - 1) }}</td>
+                                                <td> {{ 'B/'.$suratPersetujuanPindah->nomor_surat.'/'.$kode[0].'.4/'.$kode[1].'/'.$suratPersetujuanPindah->created_at->year }}</td>
+                                                {{-- <td> {{ $suratPersetujuanPindah->pengajuanSuratKeterangan->mahasiswa->nama }}</td> --}}
+                                                {{-- <td> {{ $suratPersetujuanPindah->pengajuanSuratKeterangan->tahunAkademik->tahun_akademik.' - '.ucwords($suratKeteranganAktif->pengajuanSuratKeterangan->tahunAkademik->semester) }}</td> --}}
+                                                {{-- <td> 
                                                     <label class="badge badge-gradient-info">
                                                         {{ ucwords($suratKeteranganAktif->status) }}
                                                     </label>
-                                                </td>
-                                                <td>
+                                                </td> --}}
+                                                {{-- <td>
                                                     <a href="{{ url('pegawai/surat-keterangan-aktif-kuliah/'.$suratKeteranganAktif->id_pengajuan_surat_keterangan) }}" class="btn-surat-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
                                                         Detail</a>
@@ -210,19 +206,19 @@
                                                         <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>
                                                         Edit
                                                     </a>
-                                                    {{ Form::open(['method'=>'DELETE','action'=>['SuratKeteranganAktifKuliahController@destroy',$suratKeteranganAktif->id_pengajuan_surat_keterangan],'class'=>'d-inline-block']) }}
+                                                    {{ Form::open(['method'=>'DELETE','action'=>['SuratKeteranganController@destroySuratKeteranganAktifKuliah',$suratKeteranganAktif->id_pengajuan_surat_keterangan],'class'=>'d-inline-block']) }}
                                                     <button type="submit" class="btn btn-danger btn-sm sweet-delete">
                                                         <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
                                                         Hapus
                                                     </button>
                                                     {{ Form::close() }}
-                                                </td>
+                                                </td> --}}
                                             </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                     <div class="col">
-                                        {{ $suratKeteranganAktifList->appends(['page_pengajuan' => $pengajuanSuratKeteranganAktifList->currentPage()])->links() }}
+                                        {{ $suratPersetujuanPindahList->appends(['page_pengajuan' => $pengajuanSuratPersetujuanList->currentPage()])->links() }}
                                     </div>
                                 </div>
                                 @else
@@ -230,10 +226,10 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Keterangan Aktif Kuliah Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Persetujuan Pindah Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat keterangan aktif kuliah terlebih dahulu.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat persetujuan pindah terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -258,6 +254,25 @@
                 </button>
             </div>
             <div class="modal-body" id='surat-keterangan-aktif-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="persetujuanDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='persetujuan-pindah-detail-content'>
+            
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
             </div>

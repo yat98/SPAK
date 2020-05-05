@@ -23,7 +23,7 @@ class CreateSuratRekomendasiTable extends Migration
             $table->date('tanggal_awal_kegiatan');
             $table->date('tanggal_akhir_kegiatan');
             $table->string('tempat_kegiatan',100);
-            $table->enum('status',['diajukan','selesai'])->default('diajukan');
+            $table->enum('status',['menunggu tanda tangan','selesai'])->default('menunggu tanda tangan');
             $table->integer('jumlah_cetak')->default(0);
             $table->timestamps();
         });
