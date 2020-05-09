@@ -24,9 +24,9 @@ class SuratKeteranganRequest extends FormRequest
     public function rules()
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
-            $nomorSuratRules = 'required|numeric|min:1|unique:surat_rekomendasi,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_tugas,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_dispensasi,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_keterangan,nomor_surat,'.$this->get('nomor_surat').',nomor_surat';
+            $nomorSuratRules = 'required|numeric|min:1|unique:surat_persetujuan_pindah,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_rekomendasi,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_tugas,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_dispensasi,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_keterangan,nomor_surat,'.$this->get('nomor_surat').',nomor_surat';
         }else{
-            $nomorSuratRules = 'required|numeric|min:1|unique:surat_rekomendasi,nomor_surat|unique:surat_tugas,nomor_surat|unique:surat_dispensasi,nomor_surat|unique:surat_keterangan,nomor_surat';
+            $nomorSuratRules = 'required|numeric|min:1|unique:surat_persetujuan_pindah,nomor_surat|unique:surat_rekomendasi,nomor_surat|unique:surat_tugas,nomor_surat|unique:surat_dispensasi,nomor_surat|unique:surat_keterangan,nomor_surat';
         }
         return [
             'nomor_surat'=>$nomorSuratRules,
@@ -35,8 +35,6 @@ class SuratKeteranganRequest extends FormRequest
             'id_tahun_akademik'=>'required|numeric',
             'id_kode_surat'=>'required|numeric',
             'jenis_surat'=>'required|string|in:surat keterangan aktif kuliah,surat keterangan kelakuan baik',
-            'jumlah_cetak'=>'sometimes|numeric',
-            'status'=>'sometimes|in:ditolak,diajukan,selesai',
         ];
     }
 }

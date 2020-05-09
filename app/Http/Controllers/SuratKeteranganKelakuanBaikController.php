@@ -203,16 +203,23 @@ class SuratKeteranganKelakuanBaikController extends Controller
 
     public function tolakPengajuan(Request $request, PengajuanSuratKeterangan $pengajuanSuratKeterangan){
         $keterangan = $request->keterangan ?? '-';
-        $pengajuanSuratKeterangan->update([
-            'status'=>'ditolak',
-            'keterangan'=>$keterangan,
-        ]);
-        NotifikasiMahasiswa::create([
-            'nim'=>$pengajuanSuratKeterangan->nim,
-            'judul_notifikasi'=>'Pengajuan Surat Keterangan',
-            'isi_notifikasi'=>'Pengajuan surat keterangan kelakuan baik di tolak.',
-            'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik')
-        ]);
+        DB::beginTransaction();
+        try{
+            $pengajuanSuratKeterangan->update([
+                'status'=>'ditolak',
+                'keterangan'=>$keterangan,
+            ]);
+            NotifikasiMahasiswa::create([
+                'nim'=>$pengajuanSuratKeterangan->nim,
+                'judul_notifikasi'=>'Pengajuan Surat Keterangan',
+                'isi_notifikasi'=>'Pengajuan surat keterangan kelakuan baik di tolak.',
+                'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik')
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Gagal Mengubah Data','Surat keterangan kelakuan baik gagal ditolak.');
+        }
+        DB::commit();
         $this->setFlashData('success','Berhasil','Pengajuan surat keterangan kelakuan baik mahasiswa dengan nama '.$pengajuanSuratKeterangan->mahasiswa->nama.' ditolak');
         return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
     }

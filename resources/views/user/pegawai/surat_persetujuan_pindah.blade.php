@@ -63,6 +63,7 @@
                                                 <th> No. </th>
                                                 <th> Nama Mahasiswa</th>
                                                 <th> Status</th>
+                                                <th> Keterangan</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -72,7 +73,7 @@
                                                 <td> {{ $loop->iteration + $perPage * ($pengajuanSuratPersetujuanList->currentPage() - 1) }}</td>
                                                 <td> {{ $pengajuanSuratPersetujuan->mahasiswa->nama }}</td>
                                                 <td> 
-                                                    @if ($pengajuanSuratPersetujuan->status == 'diajukan')
+                                                    @if ($pengajuanSuratPersetujuan->status == 'diajukan' || $pengajuanSuratPersetujuan->status == 'menunggu tanda tangan')
                                                     <label class="badge badge-gradient-warning text-dark">
                                                         {{ ucwords($pengajuanSuratPersetujuan->status) }}
                                                     </label>
@@ -82,24 +83,22 @@
                                                     </label>
                                                     @endif
                                                 </td>
+                                                <td> {{ $pengajuanSuratPersetujuan->keterangan }}</td>
                                                 <td>
                                                     <a href="{{ url('pegawai/detail/mahasiswa/'.$pengajuanSuratPersetujuan->nim) }}" class="btn-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-account btn-icon-prepend"></i>
                                                         Detail</a>
-                                                     <a href="{{ url('pegawai/pengajuan/surat-persetujuan-pindah/'.$pengajuanSuratPersetujuan->id) }}" class="btn-pengajuan-pindah btn btn-outline-info btn-sm" data-toggle="modal" data-target="#persetujuanDetail">
+                                                     <a href="{{ url('pegawai/surat-persetujuan-pindah/pengajuan/'.$pengajuanSuratPersetujuan->id) }}" class="btn-pengajuan-pindah btn btn-outline-info btn-sm" data-toggle="modal" data-target="#persetujuanDetail">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
                                                         Detail Pengajuan</a>
                                                         
                                                     @if ($pengajuanSuratPersetujuan->status == 'diajukan')
-                                                    {{ Form::open(['url'=>'pegawai/surat-keterangan-aktif-kuliah/pengajuan/create','class'=>'d-inline-block']) }}
-                                                    {{ Form::hidden('id',$pengajuanSuratPersetujuan->id)}}
-                                                    <button type="submit" class="btn btn-info btn-sm simpan-tanda-tangan">
+                                                    <a href="{{ url('pegawai/surat-persetujuan-pindah/pengajuan/'.$pengajuanSuratPersetujuan->id.'/create') }}" class="btn btn-sm btn-info">
                                                         <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
                                                         Buat Surat
-                                                    </button>
-                                                    {{ Form::close() }}
+                                                    </a>
 
-                                                    {{ Form::open(['url'=>'pegawai/surat-keterangan-aktif-kuliah/pengajuan/tolak-pengajuan/'.$pengajuanSuratPersetujuan->id,'class'=>'d-inline-block','method'=>'PATCH']) }}
+                                                    {{ Form::open(['url'=>'pegawai/surat-persetujuan-pindah/pengajuan/tolak-pengajuan/'.$pengajuanSuratPersetujuan->id,'class'=>'d-inline-block','method'=>'PATCH']) }}
                                                     {{ Form::hidden('keterangan','-',['id'=>'keterangan_surat']) }}
                                                     <button type="submit" class="btn btn-danger btn-sm tolak-surat">
                                                         <i class="mdi mdi mdi-close btn-icon-prepend"></i>
@@ -174,45 +173,48 @@
                                                 <th> No. </th>
                                                 <th> Nomor Surat</th>
                                                 <th> Nama Mahasiswa</th>
-                                                <th> Semester</th>
                                                 <th> Status</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($suratPersetujuanPindahList as $suratPersetujuanPindah)
-                                            @php
-                                                $kode = explode('/',$suratPersetujuanPindah->kodeSurat->kode_surat);
-                                            @endphp
                                             <tr>
                                                 <td> {{ $loop->iteration + $perPage * ($suratPersetujuanPindahList->currentPage() - 1) }}</td>
-                                                <td> {{ 'B/'.$suratPersetujuanPindah->nomor_surat.'/'.$kode[0].'.4/'.$kode[1].'/'.$suratPersetujuanPindah->created_at->year }}</td>
-                                                {{-- <td> {{ $suratPersetujuanPindah->pengajuanSuratKeterangan->mahasiswa->nama }}</td> --}}
-                                                {{-- <td> {{ $suratPersetujuanPindah->pengajuanSuratKeterangan->tahunAkademik->tahun_akademik.' - '.ucwords($suratKeteranganAktif->pengajuanSuratKeterangan->tahunAkademik->semester) }}</td> --}}
-                                                {{-- <td> 
-                                                    <label class="badge badge-gradient-info">
-                                                        {{ ucwords($suratKeteranganAktif->status) }}
+                                                <td> {{ 'B/'.$suratPersetujuanPindah->nomor_surat.'/'.$suratPersetujuanPindah->kodeSurat->kode_surat.'/'.$suratPersetujuanPindah->created_at->year }}</td>
+                                                <td> {{ $suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->mahasiswa->nama }}</td>
+                                                <td> 
+                                                    @if($suratPersetujuanPindah->status == 'menunggu tanda tangan')
+                                                    <label class="badge badge-gradient-warning text-dark">
+                                                        {{ ucwords($suratPersetujuanPindah->status) }}
                                                     </label>
-                                                </td> --}}
-                                                {{-- <td>
-                                                    <a href="{{ url('pegawai/surat-keterangan-aktif-kuliah/'.$suratKeteranganAktif->id_pengajuan_surat_keterangan) }}" class="btn-surat-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                    @else
+                                                    <label class="badge badge-gradient-info">
+                                                        {{ ucwords($suratPersetujuanPindah->status) }}
+                                                    </label>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <a href="{{ url('pegawai/surat-persetujuan-pindah/'.$suratPersetujuanPindah->id_pengajuan_persetujuan_pindah) }}" class="btn-surat-pindah-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#pindahDetail">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
                                                         Detail</a>
-                                                    <a href="{{ url('pegawai/surat-keterangan-aktif-kuliah/'.$suratKeteranganAktif->id_pengajuan_surat_keterangan.'/cetak') }}" class="btn btn-info btn-sm" target="_blank">
+                                                    @if($suratPersetujuanPindah->status == 'selesai')
+                                                    <a href="{{ url('pegawai/surat-persetujuan-pindah/'.$suratPersetujuanPindah->id_pengajuan_persetujuan_pindah.'/cetak') }}" class="btn btn-info btn-sm" target="_blank">
                                                         <i class="mdi mdi mdi-printer btn-icon-prepend"></i>
-                                                        Cetak</a>
-                                                    <a href="{{ url('pegawai/surat-keterangan-aktif-kuliah/'.$suratKeteranganAktif->id_pengajuan_surat_keterangan.'/edit') }}"
+                                                        Cetak</a>  
+                                                    @endif
+                                                    <a href="{{ url('pegawai/surat-persetujuan-pindah/'.$suratPersetujuanPindah->id_pengajuan_persetujuan_pindah.'/edit') }}"
                                                         class="btn btn-warning btn-sm text-dark">
                                                         <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>
                                                         Edit
                                                     </a>
-                                                    {{ Form::open(['method'=>'DELETE','action'=>['SuratKeteranganController@destroySuratKeteranganAktifKuliah',$suratKeteranganAktif->id_pengajuan_surat_keterangan],'class'=>'d-inline-block']) }}
+                                                    {{ Form::open(['method'=>'DELETE','action'=>['SuratPersetujuanPindahController@destroy',$suratPersetujuanPindah->id_pengajuan_persetujuan_pindah],'class'=>'d-inline-block']) }}
                                                     <button type="submit" class="btn btn-danger btn-sm sweet-delete">
                                                         <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
                                                         Hapus
                                                     </button>
                                                     {{ Form::close() }}
-                                                </td> --}}
+                                                </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -271,6 +273,25 @@
                 </button>
             </div>
             <div class="modal-body" id='persetujuan-pindah-detail-content'>
+            
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="pindahDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='surat-pindah-detail-content'>
             
             </div>
             <div class="modal-footer">

@@ -302,16 +302,23 @@ class SuratKeteranganAktifKuliahController extends Controller
 
     public function tolakPengajuan(Request $request, PengajuanSuratKeterangan $pengajuanSuratKeterangan){
         $keterangan = $request->keterangan ?? '-';
-        $pengajuanSuratKeterangan->update([
-            'status'=>'ditolak',
-            'keterangan'=>$keterangan,
-        ]);
-        NotifikasiMahasiswa::create([
-            'nim'=>$pengajuanSuratKeterangan->nim,
-            'judul_notifikasi'=>'Pengajuan Surat Keterangan',
-            'isi_notifikasi'=>'Pengajuan surat keterangan aktif kuliah di tolak.',
-            'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah')
-        ]);
+        DB::beginTransaction();
+        try{    
+            $pengajuanSuratKeterangan->update([
+                'status'=>'ditolak',
+                'keterangan'=>$keterangan,
+            ]);
+            NotifikasiMahasiswa::create([
+                'nim'=>$pengajuanSuratKeterangan->nim,
+                'judul_notifikasi'=>'Pengajuan Surat Keterangan',
+                'isi_notifikasi'=>'Pengajuan surat keterangan aktif kuliah di tolak.',
+                'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah')
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Gagal Mengubah Data','Surat keterangan aktif kuliah gagal ditolak.');
+        }
+        DB::commit();
         $this->setFlashData('success','Berhasil','Pengajuan surat keterangan aktif kuliah mahasiswa dengan nama '.$pengajuanSuratKeterangan->mahasiswa->nama.' ditolak');
         return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
     }

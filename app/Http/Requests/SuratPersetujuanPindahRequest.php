@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PengajuanSuratPersetujuanPindahRequest extends FormRequest
+class SuratPersetujuanPindahRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,6 +24,7 @@ class PengajuanSuratPersetujuanPindahRequest extends FormRequest
     public function rules()
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
+            $nomorSuratRules = 'required|numeric|min:1|unique:surat_persetujuan_pindah,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_rekomendasi,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_tugas,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_dispensasi,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_keterangan,nomor_surat,'.$this->get('nomor_surat').',nomor_surat';
             $fileSuratKeteranganLulusButuhRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:2048';
             $fileIjazahTerakhirRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024';
             $fileSuratRekomendasiJurusanRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024';
@@ -31,8 +32,8 @@ class PengajuanSuratPersetujuanPindahRequest extends FormRequest
             $fileSuratKeteranganBebasPerlengkapanFakultasRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024';
             $fileSuratKeteranganBebasPerpustakaanUniversitasRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024';
             $fileSuratKeteranganBebasPerpustakaanFakultasRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024';
-           
         }else{
+            $nomorSuratRules = 'required|numeric|min:1|unique:surat_persetujuan_pindah,nomor_surat|unique:surat_rekomendasi,nomor_surat|unique:surat_tugas,nomor_surat|unique:surat_dispensasi,nomor_surat|unique:surat_keterangan,nomor_surat';
             $fileSuratKeteranganLulusButuhRules='required|image|mimes:jpg,jpeg,bmp,png|max:2048';
             $fileIjazahTerakhirRules='required|image|mimes:jpg,jpeg,bmp,png|max:1024';
             $fileSuratRekomendasiJurusanRules='required|image|mimes:jpg,jpeg,bmp,png|max:1024';
@@ -42,6 +43,9 @@ class PengajuanSuratPersetujuanPindahRequest extends FormRequest
             $fileSuratKeteranganBebasPerpustakaanFakultasRules='required|image|mimes:jpg,jpeg,bmp,png|max:1024';
         }
         return [
+            'nomor_surat'=>$nomorSuratRules,
+            'nip'=>'required|numeric',
+            'id_kode_surat'=>'required|numeric',
             'nim'=>'required',
             'nama_prodi'=>'required|string|max:100',
             'strata'=>'required|string|in:D3,S1,S2,S3',

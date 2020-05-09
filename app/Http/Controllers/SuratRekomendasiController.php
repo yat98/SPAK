@@ -74,12 +74,7 @@ class SuratRekomendasiController extends Controller
             return redirect($this->segmentUser.'/surat-rekomendasi');
         }
         $mahasiswa = $this->generateMahasiswa();
-        $nomorSurat[] = SuratKeterangan::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratDispensasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratRekomendasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratTugas::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSuratBaru = max($nomorSurat);
-        ++$nomorSuratBaru;
+        $nomorSuratBaru = $this->generateNomorSuratBaru();
         $userList = $this->generatePimpinan();
         $kodeSurat = $this->generateKodeSurat();
         return view('user.'.$this->segmentUser.'.tambah_surat_rekomendasi',compact('userList','kodeSurat','nomorSuratBaru','mahasiswa'));

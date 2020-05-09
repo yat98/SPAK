@@ -788,31 +788,31 @@ $('.btn-surat-dispensasi-progress').on('click', function (e) {
             let pengajuanSurat = result;
             if(pengajuanSurat.status == 'selesai'){
                 html = `<div class="row">
-                        <div class="col-6 text-center">
-                            <p class="h6 m-0 mb-1 text-dark">
-                                <i class="mdi mdi-border-color icon-sm text-success"></i>
-                                Menunggu Tanda Tangan
-                            </p> 
-                            <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
-                            <div class="bg-gradient-success mx-auto position-progress-round"></div>
-                            <div class="bg-gradient-success mx-auto position-progress-pole"></div>
+                            <div class="col-6 text-center">
+                                <p class="h6 m-0 mb-1 text-dark">
+                                    <i class="mdi mdi-border-color icon-sm text-success"></i>
+                                    Menunggu Tanda Tangan
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
+                                <div class="bg-gradient-success mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-success mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-6 text-center"></div>
                         </div>
-                        <div class="col-6 text-center"></div>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 100%" aria-valuenow="100   " aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6 text-center"></div>
-                        <div class="col-6 text-center">
-                            <div class="bg-gradient-success mx-auto position-progress-pole"></div>
-                            <div class="bg-gradient-success mx-auto position-progress-round"></div>
-                            <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_selesai}</small></p>
-                            <p class="h6 mt-1 text-dark">
-                            <i class="mdi mdi-marker-check icon-sm text-success"></i>
-                            Selesai</p> 
+                        <div class="progress">
+                            <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 100%" aria-valuenow="100   " aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                    </div>`;
+                        <div class="row">
+                            <div class="col-6 text-center"></div>
+                            <div class="col-6 text-center">
+                                <div class="bg-gradient-success mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-success mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_selesai}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi-marker-check icon-sm text-success"></i>
+                                Selesai</p> 
+                            </div>
+                        </div>`;
             }else if(pengajuanSurat.status == 'menunggu tanda tangan'){
                 html = `<div class="row">
                             <div class="col-6 text-center">
@@ -942,6 +942,16 @@ $('.btn-pengajuan-pindah').on('click',function(e){
                 .then(response => response.json())
                 .then(result => {
                     let pengajuan =result;
+                    console.log(pengajuan);
+                    
+                    let label;
+                    if(pengajuan.status == 'menunggu tanda tangan' || pengajuan.status == 'diajukan'){
+                        label = `<label class="badge badge-gradient-warning text-dark">${pengajuan.status.ucwords()}</label>`;
+                    }else if(pengajuan.status == 'ditolak'){
+                        label = `<label class="badge badge-gradient-danger">${pengajuan.status.ucwords()}</label>`;
+                    }else{
+                        label = `<label class="badge badge-gradient-info">${pengajuan.status.ucwords()}</label>`;
+                    }
                     let html = `<div class="table-responsive">
                                     <table class="table">
                                         <tr>
@@ -962,7 +972,11 @@ $('.btn-pengajuan-pindah').on('click',function(e){
                                         </tr>
                                         <tr>
                                             <th>Status</th>
-                                            <td>${pengajuan.status.ucwords()}</td>
+                                            <td>${label}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Keterangan</th>
+                                            <td>${pengajuan.keterangan}</td>
                                         </tr>
                                         <tr>
                                             <th>File Surat Keterangan Lulus Butuh</th>
@@ -1028,4 +1042,272 @@ $('.btn-pengajuan-pindah').on('click',function(e){
                                 </div>`;
                     $('#persetujuan-pindah-detail-content').html(html);
                 });
-})
+});
+
+$('.btn-pengajuan-pindah-progress').on('click',function(e){
+    $('#surat-progress-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let pengajuanSurat = result;
+            if(pengajuanSurat.status == 'diajukan'){
+                html = `<div class="row">
+                            <div class="col-4 text-center">
+                                <p class="h6 m-0 mb-1 text-dark">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    Diajukan
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-4 text-center"></div>
+                            <div class="col-4 text-center"></div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 33.3%" aria-valuenow="33.3" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 text-center"></div>
+                                <div class="col-4 text-center"></div>
+                                <div class="col-4 text-center"></div>
+                            </div>
+                        </div>`;
+            }else if(pengajuanSurat.status == 'menunggu tanda tangan'){
+                html = `<div class="row">
+                            <div class="col-4 text-center">
+                                <p class="h6 m-0 mb-1 text-dark">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    Diajukan
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-4 text-center"></div>
+                            <div class="col-4 text-center"></div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 66.6%" aria-valuenow="66.6   " aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 text-center"></div>
+                                <div class="col-4 text-center">
+                                    <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                    <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                    <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_tunggu_tanda_tangan}</small></p>
+                                    <p class="h6 mt-1 text-dark">
+                                        <i class="mdi mdi-border-color icon-sm text-info"></i>
+                                        Menunggu Tanda Tangan
+                                    </p> 
+                                </div>
+                                <div class="col-4 text-center"></div>
+                            </div>
+                        </div>`;
+            }else if(pengajuanSurat.status == 'selesai'){
+                html = `<div class="row">
+                            <div class="col-4 text-center">
+                                <p class="h6 m-0 mb-1 text-dark">
+                                    <i class="mdi mdi-marker-check icon-sm text-success"></i>
+                                    Diajukan
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
+                                <div class="bg-gradient-success mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-success mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-4 text-center"></div>
+                            <div class="col-4 text-center">
+                                <p class="h6 m-0 mb-1 text-dark">
+                                    <i class="mdi mdi-marker-check icon-sm text-success"></i>
+                                    Selesai
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_selesai}</small></p>
+                                <div class="bg-gradient-success mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-success mx-auto position-progress-pole"></div>
+                            </div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 100%" aria-valuenow="100   " aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 text-center"></div>
+                                <div class="col-4 text-center">
+                                    <div class="bg-gradient-success mx-auto position-progress-pole"></div>
+                                    <div class="bg-gradient-success mx-auto position-progress-round"></div>
+                                    <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_tunggu_tanda_tangan}</small></p>
+                                    <p class="h6 mt-1 text-dark">
+                                        <i class="mdi mdi-border-color icon-sm text-success"></i>
+                                        Menunggu Tanda Tangan
+                                    </p> 
+                                </div>
+                                <div class="col-4 text-center"></div>
+                            </div>
+                        </div>`;
+            }else if(pengajuanSurat.status == 'ditolak'){
+                html = `<div class="row">
+                            <div class="col-6 text-center">
+                                <p class="h6 m-0 mb-1 text-dark">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    Diajukan
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
+                                <div class="bg-gradient-danger mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-danger mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-6 text-center"></div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-gradient-danger" role="progressbar" style="width: 100%" aria-valuenow="100   " aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 text-center"></div>
+                                <div class="col-6 text-center">
+                                    <div class="bg-gradient-danger mx-auto position-progress-pole"></div>
+                                    <div class="bg-gradient-danger mx-auto position-progress-round"></div>
+                                    <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_ditolak}</small></p>
+                                    <p class="h6 mt-1 text-dark">
+                                        <i class="mdi mdi mdi-close-circle icon-sm text-danger"></i>
+                                        Di Tolak
+                                    </p> 
+                                </div>
+                            </div>
+                        </div>`;
+            }
+        $('#surat-progress-content').html(html);
+    })
+});
+
+$('.btn-surat-pindah-detail').on('click',function(e){
+    e.preventDefault();
+    $('#surat-pindah-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+                .then(response => response.json())
+                .then(result => {
+                    let pengajuan =result;
+                    let label;
+                    if(pengajuan.pengajuan_surat_persetujuan_pindah.status == 'menunggu tanda tangan' || pengajuan.pengajuan_surat_persetujuan_pindah.status == 'diajukan'){
+                        label = `<label class="badge badge-gradient-warning text-dark">${pengajuan.pengajuan_surat_persetujuan_pindah.status.ucwords()}</label>`;
+                    }else if(pengajuan.pengajuan_surat_persetujuan_pindah.status == 'ditolak'){
+                        label = `<label class="badge badge-gradient-danger">${pengajuan.pengajuan_surat_persetujuan_pindah.status.ucwords()}</label>`;
+                    }else{
+                        label = `<label class="badge badge-gradient-info">${pengajuan.pengajuan_surat_persetujuan_pindah.status.ucwords()}</label>`;
+                    }
+                    let html = `<div class="table-responsive">
+                                    <table class="table">
+                                        <tr>
+                                            <th>Nomor Surat</th>
+                                            <td>B/${pengajuan.nomor_surat}/${pengajuan.kode_surat.kode_surat}/${pengajuan.created_at.toString().slice(6,10)}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>NIM</th>
+                                            <td>${pengajuan.pengajuan_surat_persetujuan_pindah.mahasiswa.nim}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <td>${pengajuan.pengajuan_surat_persetujuan_pindah.mahasiswa.nama}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Nama Kampus</th>
+                                            <td>${pengajuan.pengajuan_surat_persetujuan_pindah.nama_kampus}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Program Studi</th>
+                                            <td>${pengajuan.pengajuan_surat_persetujuan_pindah.strata} - ${pengajuan.pengajuan_surat_persetujuan_pindah.nama_prodi}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Status</th>
+                                            <td>${label}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Keterangan</th>
+                                            <td>${pengajuan.pengajuan_surat_persetujuan_pindah.keterangan}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>File Surat Keterangan Lulus Butuh</th>
+                                            <td>
+                                                <a href="${pengajuan.file_surat_keterangan_lulus_butuh}" class="btn btn-info btn-sm" data-lightbox="${pengajuan.nama_file_surat_keterangan_lulus_butuh}">
+                                                <i class="mdi mdi mdi-eye"></i>
+                                                Lihat File</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>File Ijazah Terakhir</th>
+                                            <td>
+                                                <a href="${pengajuan.file_ijazah_terakhir}" class="btn btn-info btn-sm" data-lightbox="${pengajuan.nama_file_ijazah_terakhir}">
+                                                <i class="mdi mdi mdi-eye"></i>
+                                                Lihat File</a>
+                                            </td>
+                                        </tr>   
+                                        <tr>
+                                            <th>File Surat Rekomendasi Jurusan</th>
+                                            <td>
+                                                <a href="${pengajuan.file_surat_rekomendasi_jurusan}" class="btn btn-info btn-sm" data-lightbox="${pengajuan.nama_file_surat_rekomendasi_jurusan}">
+                                                <i class="mdi mdi mdi-eye"></i>
+                                                Lihat File</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>File Surat Keterangan Bebas Perlengkapan Universitas</th>
+                                            <td>
+                                                <a href="${pengajuan.file_surat_keterangan_bebas_perlengkapan_universitas}" class="btn btn-info btn-sm" data-lightbox="${pengajuan.nama_file_surat_keterangan_bebas_perlengkapan_universitas}">
+                                                <i class="mdi mdi mdi-eye"></i>
+                                                Lihat File</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>File Surat Keterangan Bebas Perlengkapan Fakultas</th>
+                                            <td>
+                                                <a href="${pengajuan.file_surat_keterangan_bebas_perlengkapan_fakultas}" class="btn btn-info btn-sm" data-lightbox="${pengajuan.nama_file_surat_keterangan_bebas_perlengkapan_fakultas}">
+                                                <i class="mdi mdi mdi-eye"></i>
+                                                Lihat File</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>File Surat Keterangan Bebas Perpustakaan Universitas</th>
+                                            <td>
+                                                <a href="${pengajuan.file_surat_keterangan_bebas_perpustakaan_universitas}" class="btn btn-info btn-sm" data-lightbox="${pengajuan.nama_file_surat_keterangan_bebas_perpustakaan_universitas}">
+                                                <i class="mdi mdi mdi-eye"></i>
+                                                Lihat File</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>File Surat Keterangan Bebas Perpustakaan Fakultas</th>
+                                            <td>
+                                                <a href="${pengajuan.file_surat_keterangan_bebas_perpustakaan_fakultas}" class="btn btn-info btn-sm" data-lightbox="${pengajuan.nama_file_surat_keterangan_bebas_perpustakaan_fakultas}">
+                                                <i class="mdi mdi mdi-eye"></i>
+                                                Lihat File</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Jumlah Cetak</th>
+                                            <td>${pengajuan.jumlah_cetak}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Di Tandatangani Oleh</th>
+                                            <td>${pengajuan.user.nama}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Di Buat</th>
+                                            <td>${pengajuan.created_at}</td>
+                                        </tr>
+                                    </table>
+                                </div>`;                    
+                    $('#surat-pindah-detail-content').html(html);
+                });
+});
+
+$('.btn-ubah-file-pindah').on('click',function(e){
+    e.preventDefault();
+    let form = $(this).parents('.form-row').siblings();
+    $(this).toggleClass('btn-warning');
+    $(this).toggleClass('btn-danger');
+    
+    if($(this).hasClass('btn-warning')){
+        $(this).html('Ubah File');
+    }else{
+        $(this).html('Batalkan');
+    }
+    form.toggleClass('d-none').addClass('mt-3 mb-5');
+});

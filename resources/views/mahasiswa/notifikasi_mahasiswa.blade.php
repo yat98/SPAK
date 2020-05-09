@@ -39,7 +39,7 @@
                                             @foreach ($notifikasiList as $ntfksi)
                                             <tr>
                                                 <td> {{ $loop->iteration + $perPage * ($notifikasiList->currentPage() - 1) }}</td>
-                                                <td> {{ $ntfksi->judul_notifikasi  }}</td>
+                                                <td> <a href="{{ url($ntfksi->link_notifikasi) }}" class="text-dark">{{ $ntfksi->judul_notifikasi  }}</a></td>
                                                 <td> {{ $ntfksi->isi_notifikasi  }}</td>
                                                 <td>
                                                     @if ($ntfksi->status == 'dilihat')

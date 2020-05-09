@@ -26,13 +26,12 @@ class LoginController extends Controller
     }
 
     public function checkLogin(Request $request){
-        $user;
-        $username = $request->username;
-        $password = $request->password;
         $this->validate($request,[
             'username'=>'required|string|max:60',
             'password'=>'required|string|max:60',
         ]);
+        $username = $request->username;
+        $password = $request->password;
 
         if($request->jenis_user == 'pimpinan'){
             $user = User::whereIn('jabatan',['dekan','wd1','wd2','wd3'])->where('nip',$request->username)->first();

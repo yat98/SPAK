@@ -1,33 +1,54 @@
 <div class="row">
     <div class="col-md-10">
         <div class="form-group">
-            {{ Form::label('nim','NIM') }}
+            {{ Form::label('nim','Mahasiswa') }}
             <br>
             @if ($errors->any())
             @if ($errors->has('nim'))
-            {{ Form::text('nim',Session::get('nim'),['class'=>'form-control form-control-lg is-invalid','id'=>'nim','readonly'=>'readonly']) }}
+            {{ Form::select('nim',$mahasiswa,null,['class'=>'form-control form-control-lg','id'=>'mahasiswa_list','placeholder'=> '-- Pilih Mahasiswa --']) }}
             <div class="text-danger-red mt-1"><small>{{ $errors->first('nim') }}</small></div>
             @else
-            {{ Form::text('nim',Session::get('nim'),['class'=>'form-control form-control-lg','id'=>'nim','readonly'=>'readonly']) }}
+            {{ Form::select('nim',$mahasiswa,null,['class'=>'form-control form-control-lg','id'=>'mahasiswa_list','placeholder'=> '-- Pilih Mahasiswa --']) }}
             @endif
             @else
-            {{ Form::text('nim',Session::get('nim'),['class'=>'form-control form-control-lg','id'=>'nim','readonly'=>'readonly']) }}
+            {{ Form::select('nim',$mahasiswa,null,['class'=>'form-control form-control-lg','id'=>'mahasiswa_list','placeholder'=> '-- Pilih Mahasiswa --']) }}
             @endif
-        </div>  
-        <div class="form-group">
-            {{ Form::label('nama','Nama') }}
-            <br>
-            @if ($errors->any())
-            @if ($errors->has('nama'))
-            {{ Form::text('nama',Session::get('username'),['class'=>'form-control form-control-lg is-invalid','id'=>'nama','disabled'=>'disabled']) }}
-            <div class="text-danger-red mt-1"><small>{{ $errors->first('nim') }}</small></div>
-            @else
-            {{ Form::text('nama',Session::get('username'),['class'=>'form-control form-control-lg','id'=>'nama','disabled'=>'disabled']) }}
-            @endif
-            @else
-            {{ Form::text('nama',Session::get('username'),['class'=>'form-control form-control-lg','id'=>'nama','disabled'=>'disabled']) }}
-            @endif
-        </div>
+        </div> 
+       <div class="form-group">
+            {{ Form::label('nomor_surat','Nomor Surat') }}
+            <div class="form-row">
+                <div class="col-md-2 col-sm-3 mt-1">
+                {{ Form::text('tipe_surat','B',['class'=>'form-control form-control-lg','disabled'=>'disabled']) }}
+                </div>
+                <div class="col-md-4 col-sm-3 mt-1">
+                @if ($errors->any())
+                @if ($errors->has('nomor_surat'))
+                {{ Form::text('nomor_surat',(isset($nomorSuratBaru)) ? $nomorSuratBaru : null ,['class'=>'form-control form-control-lg is-invalid','id'=>'nomor_surat']) }}
+                <div class="text-danger-red mt-1"><small>{{ $errors->first('nomor_surat') }}</small></div>
+                @else
+                {{ Form::text('nomor_surat',(isset($nomorSuratBaru)) ? $nomorSuratBaru : null ,['class'=>'form-control form-control-lg is-valid','id'=>'nomor_surat']) }}
+                @endif
+                @else
+                {{ Form::text('nomor_surat',(isset($nomorSuratBaru)) ? $nomorSuratBaru : null ,['class'=>'form-control form-control-lg','id'=>'nomor_surat']) }}
+                @endif
+                </div>
+                <div class="col-md col-sm-3 mt-1">
+                 @if ($errors->any())
+                @if ($errors->has('id_kode_surat'))
+                {{ Form::select('id_kode_surat',$kodeSurat,null,['class'=>'form-control form-control-lg is-invalid','id'=>'nomor_surat','readonly'=>'readonly']) }}
+                <div class="text-danger-red mt-1"><small>{{ $errors->first('id_kode_surat') }}</small></div>
+                @else
+                {{ Form::select('id_kode_surat',$kodeSurat,null,['class'=>'form-control form-control-lg is-valid','id'=>'nomor_surat','readonly'=>'readonly']) }}
+                @endif
+                @else
+                {{ Form::select('id_kode_surat',$kodeSurat,null,['class'=>'form-control form-control-lg','id'=>'nomor_surat','readonly'=>'readonly']) }}
+                @endif
+                </div>
+                <div class="col-md-3 col-sm-3 mt-1">
+                {{ Form::text('tahun',isset($suratPersetujuanPindah)?$suratPersetujuanPindah->created_at->format('Y'):date('Y') ,['class'=>'form-control form-control-lg','disabled'=>'disabled']) }}
+                </div>
+            </div>    
+        </div> 
         <div class="form-group">
             {{ Form::label('nama_kampus','Nama Kampus') }}
             @if ($errors->any())
@@ -68,13 +89,13 @@
             @endif
         </div>
         <div class="form-group">
-            @if(isset($pengajuanSuratPersetujuanPindah))
+            @if(isset($suratPersetujuanPindah))
                 <div class="form-row">
                     <div class="col-md-8 col-12">
                         {{ Form::label('file_surat_keterangan_lulus_butuh','File Surat Keterangan Lulus Butuh *(Ukuran File < 1MB)',['class'=>'mt-2']) }}
                     </div>
                     <div class="col-md-4 col-12 text-right">
-                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSuratPersetujuanPindah->file_surat_keterangan_lulus_butuh) }}"  data-lightbox="{{ explode('.',$pengajuanSuratPersetujuanPindah->file_surat_keterangan_lulus_butuh)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
+                        <a href="{{ asset('upload_persetujuan_pindah/'.$suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->file_surat_keterangan_lulus_butuh) }}"  data-lightbox="{{ explode('.',$suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->file_surat_keterangan_lulus_butuh)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
                         <a href="" class="btn btn-sm btn-warning btn-ubah-file-pindah">Ubah File</a>    
                     </div>
                 </div>
@@ -102,13 +123,13 @@
             @endif
         </div>  
         <div class="form-group">
-            @if(isset($pengajuanSuratPersetujuanPindah))
+            @if(isset($suratPersetujuanPindah))
                 <div class="form-row">
                     <div class="col-md-8 col-12">
                        {{ Form::label('file_ijazah_terakhir','File Ijazah Terakhir *(Ukuran File < 1MB)',['class'=>'mt-2']) }}
                     </div>
                     <div class="col-md-4 col-12 text-right">
-                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSuratPersetujuanPindah->file_ijazah_terakhir) }}"  data-lightbox="{{ explode('.',$pengajuanSuratPersetujuanPindah->file_ijazah_terakhir)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
+                        <a href="{{ asset('upload_persetujuan_pindah/'.$suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->file_ijazah_terakhir) }}"  data-lightbox="{{ explode('.',$suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->file_ijazah_terakhir)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
                         <a href="" class="btn btn-sm btn-warning btn-ubah-file-pindah">Ubah File</a>    
                     </div>
                 </div>
@@ -136,13 +157,13 @@
             @endif
         </div>  
         <div class="form-group">
-            @if(isset($pengajuanSuratPersetujuanPindah))
+            @if(isset($suratPersetujuanPindah))
                 <div class="form-row">
                     <div class="col-md-8 col-12">
                        {{ Form::label('file_surat_rekomendasi_jurusan','File Surat Rekomendasi Jurusan *(Ukuran File < 1MB)',['class'=>'mt-2']) }}
                     </div>
                     <div class="col-md-4 col-12 text-right">
-                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSuratPersetujuanPindah->file_surat_rekomendasi_jurusan) }}"  data-lightbox="{{ explode('.',$pengajuanSuratPersetujuanPindah->file_surat_rekomendasi_jurusan)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
+                        <a href="{{ asset('upload_persetujuan_pindah/'.$suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->file_surat_rekomendasi_jurusan) }}"  data-lightbox="{{ explode('.',$suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->file_surat_rekomendasi_jurusan)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
                         <a href="" class="btn btn-sm btn-warning btn-ubah-file-pindah">Ubah File</a>    
                     </div>
                 </div>
@@ -170,13 +191,13 @@
             @endif
         </div>
         <div class="form-group">
-            @if(isset($pengajuanSuratPersetujuanPindah))
+            @if(isset($suratPersetujuanPindah))
                 <div class="form-row">
                     <div class="col-md-8 col-12">
                         {{ Form::label('file_surat_keterangan_bebas_perlengkapan_universitas','File Surat Keterangan Bebas Perlengkapan Universitas *(Ukuran File < 1MB)',['class'=>'mt-2']) }}
                     </div>
                     <div class="col-md-4 col-12 text-right">
-                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perlengkapan_universitas) }}"  data-lightbox="{{ explode('.',$pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perlengkapan_universitas)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
+                        <a href="{{ asset('upload_persetujuan_pindah/'.$suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perlengkapan_universitas) }}"  data-lightbox="{{ explode('.',$suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perlengkapan_universitas)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
                         <a href="" class="btn btn-sm btn-warning btn-ubah-file-pindah">Ubah File</a>    
                     </div>
                 </div>
@@ -204,13 +225,13 @@
             @endif
         </div>
          <div class="form-group">
-            @if(isset($pengajuanSuratPersetujuanPindah))
+            @if(isset($suratPersetujuanPindah))
                 <div class="form-row">
                     <div class="col-md-8 col-12">
                         {{ Form::label('file_surat_keterangan_bebas_perlengkapan_fakultas','File Surat Keterangan Bebas Perlengkapan Fakultas *(Ukuran File < 1MB)',['class'=>'mt-2']) }}
                     </div>
                     <div class="col-md-4 col-12 text-right">
-                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perlengkapan_fakultas) }}"  data-lightbox="{{ explode('.',$pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perlengkapan_fakultas)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
+                        <a href="{{ asset('upload_persetujuan_pindah/'.$suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perlengkapan_fakultas) }}"  data-lightbox="{{ explode('.',$suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perlengkapan_fakultas)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
                         <a href="" class="btn btn-sm btn-warning btn-ubah-file-pindah">Ubah File</a>    
                     </div>
                 </div>
@@ -238,13 +259,13 @@
             @endif
         </div>
         <div class="form-group">
-            @if(isset($pengajuanSuratPersetujuanPindah))
+            @if(isset($suratPersetujuanPindah))
                 <div class="form-row">
                     <div class="col-md-8 col-12">
                         {{ Form::label('file_surat_keterangan_bebas_perpustakaan_universitas','File Surat Keterangan Bebas Perpustakaan Universitas *(Ukuran File < 1MB)',['class'=>'mt-2']) }}
                     </div>
                     <div class="col-md-4 col-12 text-right">
-                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perpustakaan_universitas) }}"  data-lightbox="{{ explode('.',$pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perpustakaan_universitas)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
+                        <a href="{{ asset('upload_persetujuan_pindah/'.$suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perpustakaan_universitas) }}"  data-lightbox="{{ explode('.',$suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perpustakaan_universitas)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
                         <a href="" class="btn btn-sm btn-warning btn-ubah-file-pindah">Ubah File</a>    
                     </div>
                 </div>
@@ -272,13 +293,13 @@
             @endif
         </div>
          <div class="form-group">
-            @if(isset($pengajuanSuratPersetujuanPindah))
+            @if(isset($suratPersetujuanPindah))
                 <div class="form-row">
                     <div class="col-md-8 col-12">
                         {{ Form::label('file_surat_keterangan_bebas_perpustakaan_fakultas','File Surat Keterangan Bebas Perpustakaan Fakultas *(Ukuran File < 1MB)') }}
                     </div>
                     <div class="col-md-4 col-12 text-right">
-                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perpustakaan_fakultas) }}"  data-lightbox="{{ explode('.',$pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perpustakaan_fakultas)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
+                        <a href="{{ asset('upload_persetujuan_pindah/'.$suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perpustakaan_fakultas) }}"  data-lightbox="{{ explode('.',$suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perpustakaan_fakultas)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
                         <a href="" class="btn btn-sm btn-warning btn-ubah-file-pindah">Ubah File</a>    
                     </div>
                 </div>
@@ -303,6 +324,19 @@
             @endif
             @if ($errors->any())
             <div class="text-danger-red mt-1"><small>{{ $errors->first('file_surat_keterangan_bebas_perpustakaan_fakultas') }}</small></div>
+            @endif
+        </div>
+        <div class="form-group">
+            {{ Form::label('nip','Tanda Tangan') }}
+            @if ($errors->any())
+            @if ($errors->has('nip'))
+            {{ Form::select('nip',$userList,null,['class'=>'form-control form-control-lg is-invalid','id'=>'nip','readonly'=> 'readonly']) }}
+            <div class="invalid-feedback">{{ $errors->first('nip') }}</div>
+            @else
+            {{ Form::select('nip',$userList,null,['class'=>'form-control form-control-lg is-valid','id'=>'nip','readonly'=> 'readonly']) }}
+            @endif
+            @else
+            {{ Form::select('nip',$userList,null,['class'=>'form-control form-control-lg','id'=>'nip','readonly'=> 'readonly']) }}
             @endif
         </div>
         <div class="form-group">

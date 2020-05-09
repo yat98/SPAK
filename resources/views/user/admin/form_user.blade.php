@@ -40,6 +40,32 @@
             @endif
         </div>
         <div class="form-group">
+            {{ Form::label('pangkat','Pangkat') }}
+            @if ($errors->any())
+            @if ($errors->has('pangkat'))
+            {{ Form::select('pangkat',['penata muda'=>'Penata Muda','penata muda tkt. I'=>'Penata Muda Tkt. I','penata'=>'Penata','penata tkt. I'=>'Penata Tkt. I','pembina'=>'Pembina','pembina tkt. I '=>'Pembina Tkt. I','pembina utama muda'=>'Pembina Utama Muda','pembina utama madya'=>'Pembina Utama Madya','pembina utama'=>'Pembina Utama'],null,['class'=>'form-control form-control-lg is-invalid','id'=>'pangkat','placeholder'=> '-- Pilih Pangkat --']) }}
+            <div class="invalid-feedback">{{ $errors->first('pangkat') }}</div>
+            @else
+            {{ Form::select('pangkat',['penata muda'=>'Penata Muda','penata muda tkt. I'=>'Penata Muda Tkt. I','penata'=>'Penata','penata tkt. I'=>'Penata Tkt. I','pembina'=>'Pembina','pembina tkt. I '=>'Pembina Tkt. I','pembina utama muda'=>'Pembina Utama Muda','pembina utama madya'=>'Pembina Utama Madya','pembina utama'=>'Pembina Utama'],null,['class'=>'form-control form-control-lg is-valid','id'=>'pangkat','placeholder'=> '-- Pilih Pangkat --']) }}
+            @endif
+            @else
+            {{ Form::select('pangkat',['penata muda'=>'Penata Muda','penata muda tkt. I'=>'Penata Muda Tkt. I','penata'=>'Penata','penata tkt. I'=>'Penata Tkt. I','pembina'=>'Pembina','pembina tkt. I'=>'Pembina Tkt. I','pembina utama muda'=>'Pembina Utama Muda','pembina utama madya'=>'Pembina Utama Madya','pembina utama'=>'Pembina Utama'],null,['class'=>'form-control form-control-lg','id'=>'pangkat','placeholder'=> '-- Pilih Pangkat --']) }}
+            @endif
+        </div>
+         <div class="form-group">
+            {{ Form::label('golongan','Golongan') }}
+            @if ($errors->any())
+            @if ($errors->has('golongan'))
+            {{ Form::select('golongan',['III/a'=>'III/a','III/b'=>'III/b','III/c'=>'III/c','III/d'=>'III/d','IV/a'=>'IV/a','IV/b'=>'IV/b','IV/c'=>'IV/c','IV/d'=>'IV/d','IV/e'=>'IV/e'],null,['class'=>'form-control form-control-lg is-invalid','id'=>'golongan','placeholder'=> '-- Pilih Golongan --']) }}
+            <div class="invalid-feedback">{{ $errors->first('golongan') }}</div>
+            @else
+            {{ Form::select('golongan',['III/a'=>'III/a','III/b'=>'III/b','III/c'=>'III/c','III/d'=>'III/d','IV/a'=>'IV/a','IV/b'=>'IV/b','IV/c'=>'IV/c','IV/d'=>'IV/d','IV/e'=>'IV/e'],null,['class'=>'form-control form-control-lg is-valid','id'=>'golongan','placeholder'=> '-- Pilih Golongan --']) }}
+            @endif
+            @else
+            {{ Form::select('golongan',['III/a'=>'III/a','III/b'=>'III/b','III/c'=>'III/c','III/d'=>'III/d','IV/a'=>'IV/a','IV/b'=>'IV/b','IV/c'=>'IV/c','IV/d'=>'IV/d','IV/e'=>'IV/e'],null,['class'=>'form-control form-control-lg','id'=>'golongan','placeholder'=> '-- Pilih Golongan --']) }}
+            @endif
+        </div>
+        <div class="form-group">
             {{ Form::label('status_aktif','Status Aktif') }}
             @if ($errors->any())
             @if ($errors->has('status_aktif'))

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Session;
 use Storage;
+use App\User;
+use App\NotifikasiUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\PengajuanSuratPersetujuanPindah;
 use App\Http\Requests\PengajuanSuratPersetujuanPindahRequest;
 
@@ -84,8 +87,76 @@ class PengajuanSuratPersetujuanPindahController extends Controller
             $uploadPath = 'upload_persetujuan_pindah';
             $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
         }
-        PengajuanSuratPersetujuanPindah::create($input);
+        $user = User::where('jabatan','kasubag kemahasiswaan')->first();
+        DB::beginTransaction();
+        try{
+            $pengajuan = PengajuanSuratPersetujuanPindah::create($input);
+            NotifikasiUser::create([
+                'nip'=>$user->nip,
+                'judul_notifikasi'=>'Pengajuan Surat Persetujuan Pindah',
+                'isi_notifikasi'=>'Mahasiswa dengan nama '.$pengajuan->mahasiswa->nama.' membuat pengajuan surat persetujuan pindah.',
+                'link_notifikasi'=>url('pegawai/surat-persetujuan-pindah')
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Gagal Menambahkan Data','Pengajuan surat persetujuan pindah gagal ditambahkan.');
+        }
+        DB::commit();
         $this->setFlashData('success','Berhasil','Pengajuan surat persetujuan pindah berhasil ditambahkan');
+        return redirect($this->segmentUser.'/pengajuan/surat-persetujuan-pindah');
+    }
+
+    public function edit(PengajuanSuratPersetujuanPindah $pengajuanSuratPersetujuanPindah){
+        // dd($pengajuanSuratPersetujuanPindah);
+        return view($this->segmentUser.'.edit_pengajuan_surat_persetujuan_pindah',compact('pengajuanSuratPersetujuanPindah'));
+    }
+
+    public function update(PengajuanSuratPersetujuanPindahRequest $request, PengajuanSuratPersetujuanPindah $pengajuanSuratPersetujuanPindah){
+        $input = $request->all();
+        if($request->has('file_surat_keterangan_lulus_butuh')){
+            $imageFieldName = 'file_surat_keterangan_lulus_butuh'; 
+            $uploadPath = 'upload_persetujuan_pindah';
+            $this->deleteImage($pengajuanSuratPersetujuanPindah->file_surat_keterangan_lulus_butuh);
+            $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
+        }
+        if($request->has('file_ijazah_terakhir')){
+            $imageFieldName = 'file_ijazah_terakhir'; 
+            $uploadPath = 'upload_persetujuan_pindah';
+            $this->deleteImage($pengajuanSuratPersetujuanPindah->file_ijazah_terakhir);
+            $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
+        }
+        if($request->has('file_surat_rekomendasi_jurusan')){
+            $imageFieldName = 'file_surat_rekomendasi_jurusan'; 
+            $uploadPath = 'upload_persetujuan_pindah';
+            $this->deleteImage($pengajuanSuratPersetujuanPindah->file_surat_rekomendasi_jurusan);
+            $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
+        }
+        if($request->has('file_surat_keterangan_bebas_perlengkapan_universitas')){
+            $imageFieldName = 'file_surat_keterangan_bebas_perlengkapan_universitas'; 
+            $uploadPath = 'upload_persetujuan_pindah';
+            $this->deleteImage($pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perlengkapan_universitas);
+            $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
+        }
+        if($request->has('file_surat_keterangan_bebas_perlengkapan_fakultas')){
+            $imageFieldName = 'file_surat_keterangan_bebas_perlengkapan_fakultas'; 
+            $uploadPath = 'upload_persetujuan_pindah';
+            $this->deleteImage($pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perlengkapan_fakultas);
+            $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
+        }
+        if($request->has('file_surat_keterangan_bebas_perpustakaan_universitas')){
+            $imageFieldName = 'file_surat_keterangan_bebas_perpustakaan_universitas'; 
+            $uploadPath = 'upload_persetujuan_pindah';
+            $this->deleteImage($pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perpustakaan_universitas);
+            $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
+        }
+        if($request->has('file_surat_keterangan_bebas_perpustakaan_fakultas')){
+            $imageFieldName = 'file_surat_keterangan_bebas_perpustakaan_fakultas'; 
+            $uploadPath = 'upload_persetujuan_pindah';
+            $this->deleteImage($pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perpustakaan_fakultas);
+            $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
+        }
+        $pengajuanSuratPersetujuanPindah->update($input);
+        $this->setFlashData('success','Berhasil','Pengajuan surat persetujuan pindah berhasil diubah');
         return redirect($this->segmentUser.'/pengajuan/surat-persetujuan-pindah');
     }
 
@@ -100,10 +171,31 @@ class PengajuanSuratPersetujuanPindahController extends Controller
         return false;
     }
 
-    private function deleteImage($imageFieldName,$imageName){
-        $exist = Storage::disk($imageFieldName)->exists($imageName);
+    public function progress(PengajuanSuratPersetujuanPindah $pengajuanSuratPersetujuanPindah){
+        $pengajuan = $pengajuanSuratPersetujuanPindah->load(['mahasiswa']);
+        $data = collect($pengajuan);
+        $tanggalDiajukan = $pengajuan->created_at->isoFormat('D MMMM Y - HH:m:s');
+        $data->put('tanggal_diajukan',$tanggalDiajukan);
+
+        if($pengajuan->status == 'selesai'){
+            $tanggalSelesai = $pengajuan->updated_at->isoFormat('D MMMM Y - HH:m:s');
+            $tanggalTunggu = $pengajuan->suratPersetujuanPindah->created_at->isoFormat('D MMMM Y - HH:m:s');
+            $data->put('tanggal_tunggu_tanda_tangan',$tanggalTunggu);
+            $data->put('tanggal_selesai',$tanggalSelesai);
+        }else if($pengajuan->status == 'ditolak'){
+            $tanggalDitolak = $pengajuan->updated_at->isoFormat('D MMMM Y - HH:m:s');
+            $data->put('tanggal_ditolak',$tanggalDitolak);
+        }else if($pengajuan->status == 'menunggu tanda tangan'){
+            $tanggalTunggu = $pengajuan->updated_at->isoFormat('D MMMM Y - HH:m:s');
+            $data->put('tanggal_tunggu_tanda_tangan',$tanggalTunggu);
+        }
+        return $data->toJson();
+    }
+    
+    private function deleteImage($imageName){
+        $exist = Storage::disk('file_persetujuan_pindah')->exists($imageName);
         if(isset($imageName) && $exist){
-            $delete = Storage::disk($imageFieldName)->delete($imageName);
+            $delete = Storage::disk('file_persetujuan_pindah')->delete($imageName);
             if($delete) return true;
             return false;
         }

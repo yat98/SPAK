@@ -39,7 +39,7 @@
                                             @foreach ($notifikasiList as $ntfksi)
                                             <tr>
                                                 <td> {{ $loop->iteration + $perPage * ($notifikasiList->currentPage() - 1) }}</td>
-                                                <td> {{ $ntfksi->judul_notifikasi  }}</td>
+                                                <td> <a href="{{ url($ntfksi->link_notifikasi) }}" class="text-dark">{{ $ntfksi->judul_notifikasi  }}</a></td>
                                                 <td> {{ $ntfksi->isi_notifikasi  }}</td>
                                                 <td>
                                                     @if ($ntfksi->status == 'dilihat')
@@ -48,7 +48,7 @@
                                                     <label class="badge badge-gradient-info">{{ ucwords($ntfksi->status) }}</label>
                                                     @endif 
                                                 </td>
-                                                <td> {{ $ntfksi->created_at->format('d F Y - H:i:s') }}</td>
+                                                <td> {{ $ntfksi->created_at->isoFormat('D MMMM Y HH:mm:ss') }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>

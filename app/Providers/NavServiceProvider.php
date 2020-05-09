@@ -105,7 +105,9 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-rekomendasi';
             } else if($segment == 'surat-tugas'){
                 $halaman = 'surat-tugas';
-            }
+            } else if ($segment == 'surat-persetujuan-pindah') {
+                $halaman = 'surat-persetujuan-pindah';
+            } 
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi]);
     }

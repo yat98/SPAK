@@ -65,7 +65,7 @@
                                                 <td> {{ $loop->iteration }}</td>
                                                 <td> {{ $pengajuanSuratPindah->mahasiswa->nama }}</td>
                                                 <td>
-                                                    @if ($pengajuanSuratPindah->status == 'diajukan')
+                                                    @if ($pengajuanSuratPindah->status == 'diajukan' || $pengajuanSuratPindah->status == 'menunggu tanda tangan')
                                                     <label class="badge badge-gradient-warning text-dark">
                                                         {{ ucwords($pengajuanSuratPindah->status) }}
                                                     </label>
@@ -83,12 +83,27 @@
                                                 <td> {{ $pengajuanSuratPindah->created_at->diffForHumans() }}</td>
                                                 <td> {{ $pengajuanSuratPindah->updated_at->diffForHumans() }}</td>
                                                 <td>
-                                                    <a href="{{ url('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik/'.$pengajuanSuratPindah->id.'/progress') }}" class="btn-surat-progress btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                    @if($pengajuanSuratPindah->status == 'selesai')
+                                                    <a href="{{ url('mahasiswa/surat-persetujuan-pindah/'.$pengajuanSuratPindah->id) }}" class="btn-surat-pindah-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#pindahDetail">
+                                                    <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
+                                                    Detail</a>
+                                                    @else
+                                                    <a href="{{ url('mahasiswa/pengajuan/surat-persetujuan-pindah/'.$pengajuanSuratPindah->id) }}" class="btn-pengajuan-pindah btn btn-outline-info btn-sm" data-toggle="modal" data-target="#persetujuanDetail">
+                                                        <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
+                                                        Detail</a>
+                                                    @endif
+
+                                                    <a href="{{ url('mahasiswa/pengajuan/surat-persetujuan-pindah/'.$pengajuanSuratPindah->id.'/progress') }}" class="btn-pengajuan-pindah-progress btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi mdi-information btn-icon-prepend"></i>
                                                         Lihat Progress Surat</a>
-
+                                                    @if($pengajuanSuratPindah->status == 'diajukan')
+                                                    <a href="{{ url('mahasiswa/pengajuan/surat-persetujuan-pindah/'.$pengajuanSuratPindah->id.'/edit') }}" class="btn btn-sm btn-warning text-dark">
+                                                        <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>
+                                                        Edit</a>
+                                                    </a>
+                                                    @endif
                                                     @if ($pengajuanSuratPindah->status == 'selesai')
-                                                    <a href="{{ url('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik/'.$pengajuanSuratPindah->id.'/cetak') }}" class="btn btn-info btn-sm">
+                                                    <a href="{{ url('mahasiswa/pengajuan/surat-persetujuan-pindah/'.$pengajuanSuratPindah->id.'/cetak') }}" class="btn btn-info btn-sm">
                                                         <i class="mdi mdi mdi-printer btn-icon-prepend"></i>
                                                         Cetak</a>
                                                     @endif
@@ -130,7 +145,46 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id='surat-progress-content'></div>
+            <div class="modal-body" id='surat-progress-content'>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="pindahDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='surat-pindah-detail-content'>
+            
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="persetujuanDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='persetujuan-pindah-detail-content'>
+            
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>

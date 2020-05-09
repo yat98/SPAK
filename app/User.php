@@ -17,6 +17,8 @@ class User extends Model
         'nama',
         'jabatan',
         'status_aktif',
+        'pangkat',
+        'golongan',
         'tanda_tangan',
         'password',
     ];

@@ -26,8 +26,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        config(['app.locale' => 'id']);
-        Carbon::setLocale('id');
         Validator::extend('alpha_spaces', function ($attribute, $value) {
             return preg_match('/^[\pL\s\.\'\,]+$/u', $value); 
         });
