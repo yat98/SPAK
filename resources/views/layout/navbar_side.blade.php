@@ -109,7 +109,7 @@
                 <i class="mdi mdi mdi mdi-border-color menu-icon"></i>
             </a>
         </li>
-        <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah' || $halaman == 'surat-keterangan-kelakuan-baik' || $halaman == 'surat-dispensasi' || $halaman == 'surat-masuk' || $halaman == 'surat-rekomendasi' || $halaman == 'surat-tugas' || $halaman == 'surat-persetujuan-pindah') ? 'active':'' }}">
+        <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah' || $halaman == 'surat-keterangan-kelakuan-baik' || $halaman == 'surat-dispensasi' || $halaman == 'surat-masuk' || $halaman == 'surat-rekomendasi' || $halaman == 'surat-tugas' || $halaman == 'surat-persetujuan-pindah' || $halaman == 'surat-pengantar-cuti') ? 'active':'' }}">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">
                     Surat
@@ -146,8 +146,23 @@
                     <li class="nav-item"> 
                         <a class="nav-link {{ ($halaman == 'surat-persetujuan-pindah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-persetujuan-pindah') }}">Surat Persetujuan Pindah</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ ($halaman == 'surat-pengantar-cuti') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-pengantar-cuti') }}">Surat Pengantar Cuti</a>
+                    </li>
                 </ul>
             </div>
+        </li>
+        <li class="nav-item {{ ($halaman == 'waktu-cuti') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/waktu-cuti') }}">
+                <span class="menu-title">Waktu Cuti</span>
+                <i class="mdi mdi mdi mdi-clock menu-icon"></i>
+            </a>
+        </li>
+        <li class="nav-item {{ ($halaman == 'pendaftaran-cuti') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/pendaftaran-cuti') }}">
+                <span class="menu-title">Pendaftaran Cuti</span>
+                <i class="mdi mdi mdi mdi mdi-playlist-check menu-icon"></i>
+            </a>
         </li>
         <li class="nav-item {{ ($halaman == 'profil') ? 'active':'' }}">
             <a class="nav-link" href="{{ url(Request::segment(1).'/profil') }}">
@@ -189,11 +204,17 @@
                     <li class="nav-item"> 
                         <a class="nav-link {{ ($halaman == 'surat-tugas') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-tugas') }}">Surat Tugas</a>
                     </li>
-                     <li class="nav-item"> 
+                    <li class="nav-item"> 
                         <a class="nav-link {{ ($halaman == 'surat-persetujuan-pindah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/pengajuan/surat-persetujuan-pindah') }}">Surat Persetujuan Pindah</a>
                     </li>
                 </ul>
             </div>
+        </li>
+        <li class="nav-item {{ ($halaman == 'pendaftaran-cuti') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/pendaftaran-cuti') }}">
+                <span class="menu-title">Pendaftaran Cuti</span>
+                <i class="mdi mdi mdi mdi mdi-playlist-check menu-icon"></i>
+            </a>
         </li>
         <li class="nav-item {{ ($halaman == 'profil') ? 'active':'' }}">
             <a class="nav-link" href="{{ url(Request::segment(1).'/profil') }}">

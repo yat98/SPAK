@@ -41,7 +41,13 @@ class KodeSuratTableSeeder extends Seeder
             'status_aktif'=>'aktif',
             'jenis_surat'=>'surat persetujuan pindah'
         ]);
+
+        KodeSurat::create([
+            'kode_surat'=>'UN47.B5/KM.00.01',
+            'status_aktif'=>'aktif',
+            'jenis_surat'=>'surat pengantar cuti'
+        ]);
         
-        $this->command->info('Berhasil menambahkan 5 data kode surat');
+        $this->command->info('Berhasil menambahkan 6 data kode surat');
     }
 }

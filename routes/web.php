@@ -75,6 +75,9 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         Route::get('surat-tugas','SuratTugasController@suratTugasMahasiswa');
         // Surat Persetujuan Pindah
         Route::resource('surat-persetujuan-pindah','SuratPersetujuanPindahController')->only('show');
+        // Pendaftaran Cuti
+        Route::get('pendaftaran-cuti','PendaftaranCutiController@pendaftaranCutiMahasiswa');
+        Route::resource('pendaftaran-cuti','PendaftaranCutiController')->except('index');
     });
 });
 
@@ -133,6 +136,17 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::get('surat-persetujuan-pindah/{surat_persetujuan_pindah}/cetak', 'SuratPersetujuanPindahController@cetakSuratPindah');
         Route::get('surat-persetujuan-pindah/pengajuan/{pengajuan_persetujuan_pindah}','PengajuanSuratPersetujuanPindahController@show');
         Route::resource('surat-persetujuan-pindah','SuratPersetujuanPindahController');
+        // Waktu Cuti
+        Route::get('waktu-cuti/search', 'WaktuCutiController@search');
+        Route::resource('waktu-cuti','WaktuCutiController')->except('show');
+        // Surat Tugas
+        Route::get('pendaftaran-cuti/search', 'PendaftaranCutiController@search');
+        Route::patch('pendaftaran-cuti/terima/{pendaftaran_cuti}', 'PendaftaranCutiController@terima');
+        Route::patch('pendaftaran-cuti/tolak/{pendaftaran_cuti}', 'PendaftaranCutiController@tolak');
+        Route::resource('pendaftaran-cuti','PendaftaranCutiController');
+        // Surat Pengantar Cuti
+        Route::get('surat-pengantar-cuti/{surat_pengantar_cuti}/cetak', 'SuratPengantarCutiController@cetakSuratCuti');
+        Route::resource('surat-pengantar-cuti','SuratPengantarCutiController');
         // Detail Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Notifikasi

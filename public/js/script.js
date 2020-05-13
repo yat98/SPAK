@@ -1311,3 +1311,208 @@ $('.btn-ubah-file-pindah').on('click',function(e){
     }
     form.toggleClass('d-none').addClass('mt-3 mb-5');
 });
+
+$('.btn-pendaftaran-cuti-detail').on('click',function(e){
+    e.preventDefault();
+    $('#pendaftaran-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+                .then(response => response.json())
+                .then(result => {
+                    let pendaftaran = result;
+                    let label;
+                    if(pendaftaran.status == 'diajukan'){
+                        label = `<label class="badge badge-gradient-warning text-dark">${pendaftaran.status.ucwords()}</label>`;
+                    }else if(pendaftaran.status == 'ditolak'){
+                        label = `<label class="badge badge-gradient-danger">${pendaftaran.status.ucwords()}</label>`;
+                    }else{
+                        label = `<label class="badge badge-gradient-info">${pendaftaran.status.ucwords()}</label>`;
+                    }
+                    let html = `<div class="table-responsive">
+                                    <table class="table">
+                                        <tr>
+                                            <th>NIM</th>
+                                            <td>${pendaftaran.nim}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <td>${pendaftaran.mahasiswa.nama}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Tahun Akademik</th>
+                                            <td>${pendaftaran.waktu_cuti.tahun_akademik.tahun_akademik} - ${pendaftaran.waktu_cuti.tahun_akademik.semester.ucwords()}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Status</th>
+                                            <td>${label}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Di Buat</th>
+                                            <td>${pendaftaran.created_at}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>File Surat Permohonan Cuti</th>
+                                            <td>
+                                                <a href="${pendaftaran.file_surat_permohonan_cuti}" class="btn btn-info btn-sm" data-lightbox="${pendaftaran.nama_file_surat_permohonan_cuti}">
+                                                <i class="mdi mdi mdi-eye"></i>
+                                                Lihat File</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>File KRS Sebelumnya</th>
+                                            <td>
+                                                <a href="${pendaftaran.file_krs_sebelumnya}" class="btn btn-info btn-sm" data-lightbox="${pendaftaran.nama_file_krs_sebelumnya}">
+                                                <i class="mdi mdi mdi-eye"></i>
+                                                Lihat File</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>File Slip UKT</th>
+                                            <td>
+                                                <a href="${pendaftaran.file_slip_ukt}" class="btn btn-info btn-sm" data-lightbox="${pendaftaran.nama_file_slip_ukt}">
+                                                <i class="mdi mdi mdi-eye"></i>
+                                                Lihat File</a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>`;
+                    $('#pendaftaran-detail-content').html(html);
+                });
+});
+
+let terima = $('.btn-terima');
+terima.on('click',function(e){
+    e.preventDefault();
+    Swal.fire({
+        title: 'Yakin?',
+        text: "Pendaftaran cuti diterima",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Terima',
+        cancelButtonText: 'Tidak'
+    }).then((result) => {
+        if (result.value) {
+            if (result.value) {
+                let form = $(this).parents('form');
+                form.submit();
+            }
+        }
+    })
+});
+
+let tolak = $('.btn-tolak');
+tolak.on('click', function(e){
+    e.preventDefault();
+    Swal.fire({
+        title: 'Yakin?',
+        text: "pendaftaran cuti akan ditolak",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Tolak',
+        cancelButtonText: 'Tidak'
+    }).then((result) => {
+        if (result.value) {
+            if (result.value) {
+                Swal.fire({
+                    title: 'Keterangan',
+                    input: 'textarea',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Simpan',
+                    cancelButtonText: 'Cancel',
+                    inputPlaceholder: 'Keterangan...',
+                    inputAttributes: {
+                      'aria-label': 'Keterangan...'
+                    },
+                    showCancelButton: true,
+                    inputValidator: (value) => {
+                        return new Promise((resolve) => {
+                            if (value.trim() === undefined || value.trim() == null || value.length <= 0) {
+                                resolve('Keterangan wajib diisi.')
+                            } else {
+                                console.log(value);
+                                $('#keterangan_surat').val(value);
+                                let form = $(this).parents('form');
+                                form.submit();
+                            }
+                        })
+                    }
+                })
+            }
+        }
+    })
+});
+
+
+$('.btn-surat-pengantar-cuti-detail').on('click',function(e){
+    e.preventDefault();
+    $('#surat-pengantar-cuti-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+                .then(response => response.json())
+                .then(result => {
+                    let cuti = result;
+                    let pendaftaranCuti = '';
+                    if(cuti.waktu_cuti.pendaftaran_cuti.length > 0){
+                        cuti.waktu_cuti.pendaftaran_cuti.forEach((daftarCuti) => {
+                            pendaftaranCuti += `<tr>
+                                                    <td>${daftarCuti.mahasiswa.nama}</td>
+                                                    <td>${daftarCuti.mahasiswa.nim}</td>
+                                                    <td>${daftarCuti.mahasiswa.prodi.strata} - ${daftarCuti.mahasiswa.prodi.nama_prodi}</td>
+                                                    <td>${daftarCuti.alasan_cuti}</td>
+                                                </tr>`;
+                        });
+                    }
+                    console.log(pendaftaranCuti);
+                    
+                    let html = `<div class="row">
+                                    <div class="col-4">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tr>
+                                                    <th>Nomor Surat</th>
+                                                    <td>${cuti.nomor_surat}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Di Tandatangani Oleh</th>
+                                                    <td>${cuti.user.nama}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Jumlah Cetak</th>
+                                                    <td>${cuti.jumlah_cetak}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Di Buat</th>
+                                                    <td>${cuti.created_at}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tr>
+                                                    <th>Daftar Mahasiswa</th>
+                                                    <td>
+                                                        <table class="table">
+                                                            <tr>
+                                                                <td>Nama</td>
+                                                                <td>NIM</td>
+                                                                <td>Prodi</td>
+                                                                <td>Keterangan</td>
+                                                            </tr>
+                                                            ${pendaftaranCuti}
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        <div>
+                                    </div>
+                                </div> `
+                    $('#surat-pengantar-cuti-detail-content').html(html);
+                });
+});

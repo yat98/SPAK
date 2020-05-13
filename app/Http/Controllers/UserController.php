@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Session;
 use App\User;
 use App\KodeSurat;
+use App\WaktuCuti;
+use Carbon\Carbon;
 use App\SuratMasuk;
 use App\TahunAkademik;
 use App\SuratDispensasi;
@@ -94,6 +96,7 @@ class UserController extends Controller
     }
 
     public function pegawaiDashboard(){
+        $tgl = Carbon::now();
         $kodeSuratList = KodeSurat::all();
         $suratKeteranganAktifList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
                                         ->orderByDesc('surat_keterangan.updated_at')
@@ -106,13 +109,13 @@ class UserController extends Controller
                                         ->where('jenis_surat','surat keterangan kelakuan baik')
                                         ->get();
         $suratDispensasiList = SuratDispensasi::orderBy('status')->get();
-        
+        $waktuCuti = isset($tahunAkademikAktif) ? WaktuCuti::where('id_tahun_akademik',$tahunAkademikAktif->id)->first():null;
+
         $countAllKodeSurat = $kodeSuratList->count();
         $countAllSuratKeteranganAktif = $suratKeteranganAktifList->count();
         $countAllSuratKeteranganKelakuan = $suratKeteranganKelakuanList->count();
         $countAllSuratMasuk  = $suratMasukList->count();
         $countAllSuratDispensasi = $suratDispensasiList->count();
-        
         
         $countKodeSurat = count($kodeSuratList);
         $countSuratKeteranganAktif = count($suratKeteranganAktifList);
@@ -127,7 +130,7 @@ class UserController extends Controller
         $suratDispensasiList = $suratDispensasiList->take(5);
 
        
-        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','countAllKodeSurat','countKodeSurat','kodeSuratList','countAllSuratKeteranganAktif','suratMasukList','countAllSuratMasuk','countSuratMasuk','countSuratKeteranganAktif','suratKeteranganAktifList','suratKeteranganKelakuanList','countAllSuratKeteranganKelakuan','countSuratKeteranganKelakuan','suratDispensasiList','countAllSuratDispensasi','countSuratDispensasi'));
+        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','countAllKodeSurat','countKodeSurat','kodeSuratList','countAllSuratKeteranganAktif','suratMasukList','countAllSuratMasuk','countSuratMasuk','countSuratKeteranganAktif','suratKeteranganAktifList','suratKeteranganKelakuanList','countAllSuratKeteranganKelakuan','countSuratKeteranganKelakuan','suratDispensasiList','countAllSuratDispensasi','countSuratDispensasi','waktuCuti','tgl'));
     }
 
     public function pimpinanDashboard(){

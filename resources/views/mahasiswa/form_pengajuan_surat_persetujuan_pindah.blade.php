@@ -203,7 +203,7 @@
             <div class="text-danger-red mt-1"><small>{{ $errors->first('file_surat_keterangan_bebas_perlengkapan_universitas') }}</small></div>
             @endif
         </div>
-         <div class="form-group">
+        <div class="form-group">
             @if(isset($pengajuanSuratPersetujuanPindah))
                 <div class="form-row">
                     <div class="col-md-8 col-12">
@@ -271,7 +271,7 @@
             <div class="text-danger-red mt-1"><small>{{ $errors->first('file_surat_keterangan_bebas_perpustakaan_universitas') }}</small></div>
             @endif
         </div>
-         <div class="form-group">
+        <div class="form-group">
             @if(isset($pengajuanSuratPersetujuanPindah))
                 <div class="form-row">
                     <div class="col-md-8 col-12">

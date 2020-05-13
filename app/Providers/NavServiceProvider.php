@@ -67,6 +67,8 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-tugas';
             } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-persetujuan-pindah') {
                 $halaman = 'surat-persetujuan-pindah';
+            } else if ($segment == 'pendaftaran-cuti') {
+                $halaman = 'pendaftaran-cuti';
             } 
         } elseif (request()->segment(1) == 'pegawai') {
             $posisi = 'pegawai';
@@ -92,7 +94,13 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-tugas';
             } else if ($segment == 'surat-persetujuan-pindah') {
                 $halaman = 'surat-persetujuan-pindah';
-            } 
+            } else if ($segment == 'waktu-cuti') {
+                $halaman = 'waktu-cuti';
+            } else if ($segment == 'pendaftaran-cuti') {
+                $halaman = 'pendaftaran-cuti';
+            } else if($segment == 'surat-pengantar-cuti'){
+                $halaman = 'surat-pengantar-cuti';
+            }
         } elseif (request()->segment(1) == 'pimpinan') {
             $posisi = 'pimpinan';
             if ($segment == '') {

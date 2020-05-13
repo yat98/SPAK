@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="{{ asset('vendors/froala/css/plugins/table.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/froala/css/plugins/video.css') }}">
     <link rel="stylesheet" href="{{ asset('vendors/codemirror/codemirror.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/flipclock/css/flip-clock.css') }}">
     <link rel="stylesheet" href="{{ asset('css/custom-css.css') }}">
 </head>
 
@@ -59,6 +60,7 @@
     <script src="{{ asset('vendors/froala/js/plugins/video.min.js') }}"></script>
     <script src="{{ asset('vendors/froala/js/plugins/url.min.js') }}"></script>
     <script src="{{ asset('vendors/froala/js/plugins/entities.min.js') }}"></script>
+    <script src="{{ asset('vendors/flipclock/js/flip-clock.js') }}"></script>
     <script src="{{ asset('js/form-upload.js') }}"></script>
     <script src="{{ asset('js/script.js') }}"></script>
 
@@ -82,6 +84,7 @@
         errorMessage("{{ Session::get('error-title') }}","{{ Session::get('error') }}");
     </script>
     @endif
+    @yield('timer-javascript')
 </body>
 
 </html>

@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class AddRelationshipToWaktuCutiTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('waktu_cuti', function (Blueprint $table) {
+            $table->foreign('id_tahun_akademik')
+                  ->references('id')
+                  ->on('tahun_akademik')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('waktu_cuti', function (Blueprint $table) {
+            $table->dropForeign(['id_tahun_akademik']);
+        });
+    }
+}

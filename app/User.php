@@ -42,4 +42,8 @@ class User extends Model
     public function suratPersetujuanPindah(){
         return $this->hasMany('App\SuratPersetujuanPindah','nip');
     }
+
+    public function suratPengantarCuti(){
+        return $this->hasMany('App\SuratPengantarCuti','nip');
+    }
 }

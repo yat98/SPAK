@@ -67,4 +67,8 @@ class Mahasiswa extends Model
     public function suratTugas(){
         return $this->belongsToMany('App\SuratTugas','daftar_tugas_mahasiswa','id_surat_tugas','nim');
     }
+
+    public function pendaftaranCuti(){
+        return $this->hasMany('App\PendaftaranCuti','nim');
+    }
 }

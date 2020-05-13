@@ -6,6 +6,8 @@ use Session;
 use App\User;
 use App\Jurusan;
 use App\Mahasiswa;
+use App\WaktuCuti;
+use Carbon\Carbon;
 use App\ProgramStudi;
 use App\TahunAkademik;
 use App\NotifikasiUser;
@@ -150,10 +152,12 @@ class MahasiswaController extends Controller
     }
 
     public function dashboard(){
+        $tgl = Carbon::now();
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
+        $waktuCuti = isset($tahunAkademikAktif) ? WaktuCuti::where('id_tahun_akademik',$tahunAkademikAktif->id)->first():null;
         $countAllPengajuan = 0;
         $countPengajuanSuratKeterangan = 0;
-        return view($this->segmentUser.'.dashboard',compact('tahunAkademikAktif'));
+        return view($this->segmentUser.'.dashboard',compact('tahunAkademikAktif','tgl','waktuCuti'));
     }
     
     public function logout(){

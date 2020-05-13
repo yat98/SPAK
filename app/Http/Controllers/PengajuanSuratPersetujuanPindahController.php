@@ -107,7 +107,6 @@ class PengajuanSuratPersetujuanPindahController extends Controller
     }
 
     public function edit(PengajuanSuratPersetujuanPindah $pengajuanSuratPersetujuanPindah){
-        // dd($pengajuanSuratPersetujuanPindah);
         return view($this->segmentUser.'.edit_pengajuan_surat_persetujuan_pindah',compact('pengajuanSuratPersetujuanPindah'));
     }
 
@@ -160,17 +159,6 @@ class PengajuanSuratPersetujuanPindahController extends Controller
         return redirect($this->segmentUser.'/pengajuan/surat-persetujuan-pindah');
     }
 
-    private function uploadImage($imageFieldName, $request, $uploadPath){
-        $image = $request->file($imageFieldName);
-        $ext = $image->getClientOriginalExtension();
-        if($image->isValid()){
-            $imageName = $request->nim.'_'.date('YmdHis').'_'.$imageFieldName.".$ext";
-            $image->move($uploadPath,$imageName);            
-            return $imageName;
-        }
-        return false;
-    }
-
     public function progress(PengajuanSuratPersetujuanPindah $pengajuanSuratPersetujuanPindah){
         $pengajuan = $pengajuanSuratPersetujuanPindah->load(['mahasiswa']);
         $data = collect($pengajuan);
@@ -190,6 +178,17 @@ class PengajuanSuratPersetujuanPindahController extends Controller
             $data->put('tanggal_tunggu_tanda_tangan',$tanggalTunggu);
         }
         return $data->toJson();
+    }
+
+    private function uploadImage($imageFieldName, $request, $uploadPath){
+        $image = $request->file($imageFieldName);
+        $ext = $image->getClientOriginalExtension();
+        if($image->isValid()){
+            $imageName = $request->nim.'_'.date('YmdHis').'_'.$imageFieldName.".$ext";
+            $image->move($uploadPath,$imageName);            
+            return $imageName;
+        }
+        return false;
     }
     
     private function deleteImage($imageName){

@@ -25,4 +25,8 @@ class TahunAkademik extends Model
     public function statusMahasiswa(){
         return $this->hasMany('App\StatusMahasiswa','id_tahun_akademik');
     }
+
+    public function waktuCuti(){
+        return $this->hasMany('App\Waktu','id_tahun_akademik');
+    }
 }

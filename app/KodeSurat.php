@@ -33,4 +33,8 @@ class KodeSurat extends Model
     public function suratPersetujuanPindah(){
         return $this->hasMany('App\SuratPersetujuanPindah','id_kode_surat');
     }
+
+    public function suratPengantarCuti(){
+        return $this->hasMany('App\SuratPengantarCuti','id_kode_surat');
+    }
 }
