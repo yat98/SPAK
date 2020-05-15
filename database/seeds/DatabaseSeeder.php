@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ProgramStudiTableSeeder::class);
         $this->call(TahunAkademikTableSeeder::class);
         $this->call(MahasiswaTableSeeder::class);
-        $this->call(KodeSuratTableSeeder::class);
         $this->call(StatusMahasiswaTableSeeder::class);
+        $this->call(KodeSuratTableSeeder::class);
         $this->call(WaktuCutiTableSeeder::class);
     }
 }

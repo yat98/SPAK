@@ -64,12 +64,81 @@ class SuratPersetujuanPindahController extends Controller
 
     public function create()
     {
+        if(!$this->isKodeSuratPindahExists() || !$this->isKodeSuratExists()){
+            return redirect($this->segmentUser.'/surat-tugas');
+        }
         $mahasiswa = $this->generateMahasiswa();
         $nomorSuratBaru = $this->generateNomorSuratBaru();
         $userList =$this->generatePimpinan();
         $kodeSurat = $this->generateKodeSurat();
         return view('user.'.$this->segmentUser.'.tambah_surat_persetujuan_pindah',compact('userList','kodeSurat','nomorSuratBaru','mahasiswa','userList'));
     }   
+
+    public function searchPimpinan(Request $request){
+        $keyword = $request->all(); 
+        if(isset($keyword['keywords'])){
+            $nomor = $keyword['keywords'] != null ? $keyword['keywords'] : '';
+            $perPage = $this->perPage;
+            $mahasiswa = $this->generateMahasiswa();
+            $nomorSurat = $this->generateNomorSuratPindah(['selesai']);
+            $suratPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan_persetujuan_pindah')
+                                ->where('nomor_surat','like',"%$nomor%")
+                                ->orderByDesc('surat_persetujuan_pindah.created_at')
+                                ->where('status','selesai')
+                                ->paginate($perPage);
+            $pengajuanSuratPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan_persetujuan_pindah')
+                                        ->whereIn('status',['menunggu tanda tangan'])
+                                        ->where('nip',Session::get('nip'))
+                                        ->paginate($perPage);
+            $countAllPengajuanSuratPindah = $pengajuanSuratPindahList->count();
+            $countAllSuratPindah = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan_persetujuan_pindah')
+                                    ->where('status','selesai')
+                                    ->count();
+            $countSuratPindah = $suratPindahList->count();
+            if($countSuratPindah < 1){
+                $this->setFlashData('search','Hasil Pencarian','Surat persetujuan pindah tidak ditemukan!');
+            }
+            return view('user.'.$this->segmentUser.'.surat_persetujuan_pindah',compact('perPage','mahasiswa','nomorSurat','countAllSuratPindah','countSuratPindah','suratPindahList','pengajuanSuratPindahList','countAllPengajuanSuratPindah'));
+         }else{
+            return redirect($this->segmentUser.'/surat-persetujuan-pindah');
+        }
+    }
+
+    public function search(Request $request){
+        $keyword = $request->all();
+        if(isset($keyword['keywords'])){
+            $nomor = $keyword['keywords'] != null ? $keyword['keywords'] : '';
+            $perPage = $this->perPage;
+            $mahasiswa = $this->generateMahasiswa();
+            
+            $suratPersetujuanPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan_persetujuan_pindah')
+                                            ->where('nomor_surat','like',"%$nomor%")
+                                            ->orderByDesc('surat_persetujuan_pindah.created_at')
+                                            ->orderByDesc('nomor_surat')
+                                            ->paginate($perPage,['*'],'page');
+
+            $pengajuanSuratPersetujuanList = PengajuanSuratPersetujuanPindah::whereNotIn('status',['selesai','menunggu tanda tangan'])
+                                ->orderByDesc('created_at')
+                                ->orderBy('status')
+                                ->paginate($perPage,['*'],'page_pengajuan');
+
+            $countAllSuratPersetujuanPindah = $suratPersetujuanPindahList->count();
+            $countSuratPersetujuanPindah = $suratPersetujuanPindahList->count();
+
+            $countPengajuanSuratPersetujuanPindah = $pengajuanSuratPersetujuanList->count();
+            $countAllPengajuanSuratPersetujuanPindah = $pengajuanSuratPersetujuanList->count();
+
+            $nomorSurat = $this->generateNomorSuratPindah(['selesai','menunggu tanda tangan']);
+
+            if($countSuratPersetujuanPindah < 1){
+                $this->setFlashData('search','Hasil Pencarian','Surat persetujuan pindah tidak ditemukan!');
+            }
+
+            return view('user.'.$this->segmentUser.'.surat_persetujuan_pindah',compact('perPage','nomorSurat','suratPersetujuanPindahList','pengajuanSuratPersetujuanList','countAllSuratPersetujuanPindah','countSuratPersetujuanPindah','countPengajuanSuratPersetujuanPindah','countAllPengajuanSuratPersetujuanPindah'));
+        }else{
+            return redirect($this->segmentUser.'/surat-persetujuan-pindah');
+        }
+    }
 
     public function createSurat(PengajuanSuratPersetujuanPindah $pengajuanSuratPersetujuanPindah)
     {
@@ -331,7 +400,7 @@ class SuratPersetujuanPindahController extends Controller
     private function isKodeSuratPindahExists(){
         $kodeSurat = KodeSurat::where('jenis_surat','surat persetujuan pindah')->where('status_aktif','aktif')->first();
         if(empty($kodeSurat)){
-            $this->setFlashData('info','Kode Surat Persetujuan Pindah Tidak Ada','Aktifkan kode surat terlebih dahulu!');
+            $this->setFlashData('info','Kode Surat Aktif Tidak Ada','Aktifkan kode surat terlebih dahulu!');
             return false;
         }
         return true;

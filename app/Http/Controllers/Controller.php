@@ -14,6 +14,7 @@ use App\SuratDispensasi;
 use App\SuratKeterangan;
 use App\SuratRekomendasi;
 use App\SuratPengantarCuti;
+use App\SuratPengantarBeasiswa;
 use App\SuratPersetujuanPindah;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
@@ -143,6 +144,7 @@ class Controller extends BaseController
         $nomorSurat[] = SuratTugas::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
         $nomorSurat[] = SuratPersetujuanPindah::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
         $nomorSurat[] = SuratPengantarCuti::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratPengantarBeasiswa::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
         $nomorSuratBaru = max($nomorSurat);
         return ++$nomorSuratBaru;
     }

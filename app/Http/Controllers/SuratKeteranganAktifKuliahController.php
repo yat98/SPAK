@@ -142,7 +142,7 @@ class SuratKeteranganAktifKuliahController extends Controller
             $pengajuanSuratKeterangan = PengajuanSuratKeterangan::create($input);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Gagal Menambahkan Data','Pengajuan surat keterangan gagal ditambahkan.');
+            $this->setFlashData('error','Gagal Menambahkan Data','Pengajuan surat keterangan aktif kuliah gagal ditambahkan.');
         }
 
         try{
@@ -165,11 +165,6 @@ class SuratKeteranganAktifKuliahController extends Controller
         DB::commit();
         $this->setFlashData('success','Berhasil','Surat keterangan aktif kuliah mahasiswa dengan nim '.$input['nim'].' berhasil ditambahkan');
         return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
-    }
-
-    public function show($id)
-    {
-        //
     }
 
     public function edit(SuratKeterangan $suratKeterangan){
@@ -210,14 +205,14 @@ class SuratKeteranganAktifKuliahController extends Controller
             $suratKeterangan->pengajuanSuratKeterangan->update($input);;
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Gagal Mengubah Data','Pengajuan surat keterangan gagal diubah.');
+            $this->setFlashData('error','Gagal Mengubah Data','Pengajuan surat keterangan aktif kuliah gagal diubah.');
         }
 
         try{
             $suratKeterangan->update($input);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Gagal Mengubah Data','Surat keterangan gagal diubah.');
+            $this->setFlashData('error','Gagal Mengubah Data','Surat keterangan aktif kuliah gagal diubah.');
         }
 
         DB::commit();

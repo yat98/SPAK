@@ -21,4 +21,8 @@ class SuratMasuk extends Model
     public function suratDispensasi(){
         return $this->hasOne('App\SuratDispensasi','id_surat_masuk');
     }
+
+    public function suratPengantarBeasiswa(){
+        return $this->hasOne('App\SuratPengantarBeasiswa','id_surat_masuk');
+    }
 }

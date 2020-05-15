@@ -46,4 +46,8 @@ class User extends Model
     public function suratPengantarCuti(){
         return $this->hasMany('App\SuratPengantarCuti','nip');
     }
+
+    public function suratPengantarBeasiswa(){
+        return $this->hasMany('App\SuratPengantarBeasiswa','nip','nip_kasubag');
+    }
 }

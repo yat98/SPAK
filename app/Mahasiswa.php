@@ -71,4 +71,8 @@ class Mahasiswa extends Model
     public function pendaftaranCuti(){
         return $this->hasMany('App\PendaftaranCuti','nim');
     }
+
+    public function suratPengantarBeasiswa(){
+        return $this->belongsToMany('App\SuratPengantarCuti','daftar_beasiswa_mahasiswa','id_surat_beasiswa','nim');
+    }
 }

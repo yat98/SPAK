@@ -22,15 +22,33 @@ class SuratPengantarCutiController extends Controller
         return view('user.'.$this->segmentUser.'.surat_pengantar_cuti',compact('perPage','suratCutiList','countAllSuratCuti','countSuratCuti','nomorSurat'));
     }
 
+    public function search(Request $request){
+        $input = $request->all();
+        if(isset($input['keywords'])){
+            $nomor = $input['keywords'] ?? ' ';
+            $perPage = $this->perPage;
+            $nomorSurat = $this->generateNomorSuratCuti();
+            $suratCutiList = SuratPengantarCuti::orderByDesc('nomor_surat')->where('nomor_surat','like',"%$nomor%")->paginate($perPage);
+            $countAllSuratCuti = SuratPengantarCuti::all()->count();
+            $countSuratCuti = $suratCutiList->count();
+            return view('user.'.$this->segmentUser.'.surat_pengantar_cuti',compact('perPage','suratCutiList','countAllSuratCuti','countSuratCuti','nomorSurat'));
+        }else{
+            return redirect($this->segmentUser.'/surat-pengantar-cuti');
+        }
+    }
+
     public function create()
     {
+        if(!$this->isKodeSuratCutiExists() || !$this->isKodeSuratExists() || !$this->isTandaTanganExists()){
+            return redirect($this->segmentUser.'/surat-pengantar-cuti');
+        }
         $waktuCuti = $this->generateWaktuCuti();
         $userList = $this->generateKasubagKemahasiswaan();
         $nomorSuratBaru = $this->generateNomorSuratBaru();
         $kodeSurat = $this->generateKodeSurat();
         return view('user.'.$this->segmentUser.'.tambah_surat_pengantar_cuti',compact('userList','nomorSuratBaru','kodeSurat','waktuCuti'));
     }
-
+    
     public function store(SuratPengantarCutiRequest $request)
     {
         $input = $request->all();
@@ -118,5 +136,14 @@ class SuratPengantarCutiController extends Controller
             $waktuCutiList[$value->id] = $value->tahunAkademik->tahun_akademik.' - '.ucwords($value->tahunAkademik->semester);
         }
         return $waktuCutiList;
+    }
+
+    private function isKodeSuratCutiExists(){
+        $kodeSurat = KodeSurat::where('jenis_surat','surat pengantar cuti')->where('status_aktif','aktif')->first();
+        if(empty($kodeSurat)){
+            $this->setFlashData('info','Kode Surat Aktif Tidak Ada','Aktifkan kode surat terlebih dahulu!');
+            return false;
+        }
+        return true;
     }
 }

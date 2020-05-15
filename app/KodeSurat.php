@@ -37,4 +37,8 @@ class KodeSurat extends Model
     public function suratPengantarCuti(){
         return $this->hasMany('App\SuratPengantarCuti','id_kode_surat');
     }
+
+    public function suratPengantarBeasiswa(){
+        return $this->hasMany('App\SuratPengantarBeasiswa','id_kode_surat');
+    }
 }

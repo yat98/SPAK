@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use Storage;
 use Session;
-use App\PendaftaranCuti;
 use App\User;
-use App\NotifikasiUser;
-use App\NotifikasiMahasiswa;
-use App\Http\Requests\PendaftaranCutiRequest;
-use Illuminate\Support\Facades\DB;
-use App\TahunAkademik;
+use Carbon\Carbon;
 use App\WaktuCuti;
+use App\TahunAkademik;
+use App\NotifikasiUser;
+use App\PendaftaranCuti;
+use App\NotifikasiMahasiswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\PendaftaranCutiRequest;
 
 class PendaftaranCutiController extends Controller
 {
@@ -267,6 +268,7 @@ class PendaftaranCutiController extends Controller
             $this->setFlashData('info','Waktu Pendaftaran Cuti','Waktu pendaftaran cuti belum di buka');
             return false;
         }else{
+            $tgl = Carbon::now();
             $countPendaftaranCutiSelesai =  PendaftaranCuti::where('id_waktu_cuti',$waktuCuti->id)
                         ->where('nim',Session::get('nim'))
                         ->where('status','diterima')->count();
@@ -279,6 +281,16 @@ class PendaftaranCutiController extends Controller
             }
             if($countPendaftaranCutiDiajukan >= 1){
                 $this->setFlashData('info','Pendaftaran Cuti Diajukan','Mohon menunggu, pendaftaran cuti anda akan segera di proses');
+                return false;
+            }
+            
+            if($tgl->lessThanOrEqualTo($waktuCuti->tanggal_awal_cuti)){
+                $this->setFlashData('info','Pendaftaran Cuti','Pendaftaran cuti semester ini belum di buka');
+                return false;
+            }  
+            
+            if($tgl->greaterThanOrEqualTo($waktuCuti->tanggal_akhir_cuti)){
+                $this->setFlashData('info','Pendaftaran Cuti','Pendaftaran cuti semester ini telah selesai');
                 return false;
             }
         }

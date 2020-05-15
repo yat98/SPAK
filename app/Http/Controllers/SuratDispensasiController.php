@@ -58,6 +58,9 @@ class SuratDispensasiController extends Controller
     }
 
     public function create(Request $request){
+        if(!$this->isKodeSuratDispensasiExists() || !$this->isKodeSuratExists() || !$this->isTandaTanganExists()){
+            return redirect($this->segmentUser.'/surat-dispensasi');
+        }
         $mahasiswa = $this->generateMahasiswa();
         $nomorSuratBaru = $this->generateNomorSuratBaru();
         $suratMasuk = SuratMasuk::pluck('nomor_surat','id');
@@ -303,5 +306,14 @@ class SuratDispensasiController extends Controller
             $kode[$kodeSurat->id] = $kodeSurat->kode_surat;
         }
         return $kode;
+    }
+
+    private function isKodeSuratDispensasiExists(){
+        $kodeSurat = KodeSurat::where('jenis_surat','surat dispensasi')->where('status_aktif','aktif')->first();
+        if(empty($kodeSurat)){
+            $this->setFlashData('info','Kode Surat Aktif Tidak Ada','Aktifkan kode surat terlebih dahulu!');
+            return false;
+        }
+        return true;
     }
 }

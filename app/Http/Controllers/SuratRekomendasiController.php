@@ -70,7 +70,7 @@ class SuratRekomendasiController extends Controller
 
     public function create()
     {
-        if(!$this->isKodeSuratRekomendasiExists() || !$this->isKodeSuratExists()){
+        if(!$this->isKodeSuratRekomendasiExists() || !$this->isKodeSuratExists() || !$this->isTandaTanganExists()){
             return redirect($this->segmentUser.'/surat-rekomendasi');
         }
         $mahasiswa = $this->generateMahasiswa();
@@ -299,7 +299,7 @@ class SuratRekomendasiController extends Controller
     private function isKodeSuratRekomendasiExists(){
         $kodeSurat = KodeSurat::where('jenis_surat','surat rekomendasi')->where('status_aktif','aktif')->first();
         if(empty($kodeSurat)){
-            $this->setFlashData('info','Kode Surat Rekomendasi Aktif Tidak Ada','Aktifkan kode surat terlebih dahulu!');
+            $this->setFlashData('info','Kode Surat Aktif Tidak Ada','Aktifkan kode surat terlebih dahulu!');
             return false;
         }
         return true;

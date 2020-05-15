@@ -8,10 +8,6 @@ use App\Http\Requests\KodeSuratRequest;
 
 class KodeSuratController extends Controller
 {
-    public function __construct(){
-        parent::__construct();
-    }
-
     public function index()
     {
         $jenisSurat = $this->getJenisSurat();
@@ -83,6 +79,7 @@ class KodeSuratController extends Controller
             'surat rekomendasi'=>'Surat Rekomendasi',
             'surat persetujuan pindah'=>'Surat Persetujuan Pindah',
             'surat tugas'=>'Surat Tugas',
+            'surat pengantar beasiswa'=>'Surat Pengantar Beasiswa'
         ];
     }
 }

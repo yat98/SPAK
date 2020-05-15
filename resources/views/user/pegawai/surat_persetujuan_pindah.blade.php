@@ -150,11 +150,8 @@
                                         {{ Form::open(['url'=>'pegawai/surat-persetujuan-pindah/search','method'=>'get']) }}
                                         <div class="form-row">
                                             <div class="col-sm-4 col-md-4 mt-1">
-                                                {{ Form::select('nomor_surat',$nomorSurat,(request()->get('nomor_surat') != null) ? request()->get('nomor_surat'):null,['class'=>'form-control search','placeholder'=> 'Cari kode surat...']) }}
+                                                {{ Form::select('keywords',$nomorSurat,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> 'Cari kode surat...']) }}
                                             </div>
-                                            {{-- <div class="col-sm-4 col-md-4 mt-1">
-                                                {{ Form::select('keywords',$mahasiswa,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> 'Cari mahasiswa...']) }}
-                                            </div> --}}
                                             <div class="col-sm-12 col-md">
                                                 <button class="btn btn-success btn-sm btn-tambah" type="submit">
                                                     <i class="mdi mdi-magnify btn-icon-prepend"></i>

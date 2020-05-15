@@ -229,7 +229,7 @@
                                             {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pendaftaran Cuti Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Belum ada pendaftaran cuti.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi pendaftaran cuti terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>

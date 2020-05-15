@@ -1447,7 +1447,6 @@ tolak.on('click', function(e){
     })
 });
 
-
 $('.btn-surat-pengantar-cuti-detail').on('click',function(e){
     e.preventDefault();
     $('#surat-pengantar-cuti-detail-content').empty();
@@ -1466,9 +1465,7 @@ $('.btn-surat-pengantar-cuti-detail').on('click',function(e){
                                                     <td>${daftarCuti.alasan_cuti}</td>
                                                 </tr>`;
                         });
-                    }
-                    console.log(pendaftaranCuti);
-                    
+                    }                    
                     let html = `<div class="row">
                                     <div class="col-4">
                                         <div class="table-responsive">
@@ -1514,5 +1511,99 @@ $('.btn-surat-pengantar-cuti-detail').on('click',function(e){
                                     </div>
                                 </div> `
                     $('#surat-pengantar-cuti-detail-content').html(html);
+                });
+});
+
+$('.btn-surat-pengantar-beasiswa-detail').on('click',function(e){
+    e.preventDefault();
+    $('#surat-pengantar-beasiswa-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+                .then(response => response.json())
+                .then(result => {
+                    let beasiswa = result;
+                    let mahasiswa = '';
+                    let label;
+                    if(beasiswa.status == 'menunggu tanda tangan'){
+                        label = `<label class="badge badge-gradient-warning text-dark">${beasiswa.status.ucwords()}</label>`;
+                    }else{
+                        label = `<label class="badge badge-gradient-info">${beasiswa.status.ucwords()}</label>`;
+                    }
+                    if(beasiswa.mahasiswa.length > 0){
+                        beasiswa.mahasiswa.forEach((mhs) => {
+                            mahasiswa += `<tr>
+                                                    <td>${mhs.nama}</td>
+                                                    <td>${mhs.nim}</td>
+                                                    <td>${mhs.prodi.strata} - ${mhs.prodi.nama_prodi}</td>
+                                                    <td>${mhs.prodi.jurusan.nama_jurusan}</td>
+                                                </tr>`;
+                        });
+                    }
+                    
+                    let html = `<div class="row">
+                                    <div class="col-4">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tr>
+                                                    <th>Nomor Surat</th>
+                                                    <td>${beasiswa.nomor_surat}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Perihal</th>
+                                                    <td>${beasiswa.surat_masuk.perihal}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Diajukan Oleh</th>
+                                                    <td>${beasiswa.kasubag.nama}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Di Tandatangani Oleh</th>
+                                                    <td>${beasiswa.user.nama}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Status</th>
+                                                    <td>${label}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Jumlah Cetak</th>
+                                                    <td>${beasiswa.jumlah_cetak}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>File Surat Masuk</th>
+                                                    <td>
+                                                        <a href="${beasiswa.link_file}" class="btn btn-info btn-sm" data-lightbox="${beasiswa.nama_file}">
+                                                        <i class="mdi mdi mdi-eye"></i>
+                                                        Lihat File Surat Masuk</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Di Buat</th>
+                                                    <td>${beasiswa.created_at}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tr>
+                                                    <th>Daftar Mahasiswa</th>
+                                                    <td>
+                                                        <table class="table">
+                                                            <tr>
+                                                                <td>Nama</td>
+                                                                <td>NIM</td>
+                                                                <td>Prodi</td>
+                                                                <td>Jurusan</td>
+                                                            </tr>
+                                                            ${mahasiswa}
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        <div>
+                                    </div>
+                                </div> `
+                    $('#surat-pengantar-beasiswa-detail-content').html(html);
                 });
 });

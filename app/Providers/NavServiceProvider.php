@@ -100,6 +100,8 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'pendaftaran-cuti';
             } else if($segment == 'surat-pengantar-cuti'){
                 $halaman = 'surat-pengantar-cuti';
+            } else if($segment == 'surat-pengantar-beasiswa'){
+                $halaman = 'surat-pengantar-beasiswa';
             }
         } elseif (request()->segment(1) == 'pimpinan') {
             $posisi = 'pimpinan';
@@ -115,7 +117,9 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-tugas';
             } else if ($segment == 'surat-persetujuan-pindah') {
                 $halaman = 'surat-persetujuan-pindah';
-            } 
+            } else if($segment == 'surat-pengantar-beasiswa'){
+                $halaman = 'surat-pengantar-beasiswa';
+            }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi]);
     }

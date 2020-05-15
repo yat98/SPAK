@@ -280,7 +280,7 @@ class SuratTugasController extends Controller
     private function isKodeSuratTugasExists(){
         $kodeSurat = KodeSurat::where('jenis_surat','surat tugas')->where('status_aktif','aktif')->first();
         if(empty($kodeSurat)){
-            $this->setFlashData('info','Kode Surat Tugas Aktif Tidak Ada','Aktifkan kode surat terlebih dahulu!');
+            $this->setFlashData('info','Kode Surat Aktif Tidak Ada','Aktifkan kode surat terlebih dahulu!');
             return false;
         }
         return true;

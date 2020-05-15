@@ -46,13 +46,13 @@
             {{ Form::label('tanggal_surat_masuk','Tanggal Surat Masuk') }}
             @if ($errors->any())
             @if ($errors->has('tanggal_surat_masuk'))
-            {{ Form::text('tanggal_surat_masuk',null,['class'=>'form-control form-control-lg is-invalid','id'=>'tanggal_surat_masuk','placeholder'=>'yyyy-mm-dd']) }}
+            {{ Form::text('tanggal_surat_masuk',isset($suratMasuk) ? $suratMasuk->created_at->format('Y-m-d') : null,['class'=>'form-control form-control-lg is-invalid','id'=>'tanggal_surat_masuk','placeholder'=>'yyyy-mm-dd']) }}
             <div class="invalid-feedback">{{ $errors->first('tanggal_surat_masuk') }}</div>
             @else
-            {{ Form::text('tanggal_surat_masuk',null,['class'=>'form-control form-control-lg is-valid','id'=>'tanggal_surat_masuk','placeholder'=>'yyyy-mm-dd']) }}
+            {{ Form::text('tanggal_surat_masuk',isset($suratMasuk) ? $suratMasuk->created_at->format('Y-m-d') : null,['class'=>'form-control form-control-lg is-valid','id'=>'tanggal_surat_masuk','placeholder'=>'yyyy-mm-dd']) }}
             @endif
             @else
-            {{ Form::text('tanggal_surat_masuk',null,['class'=>'form-control form-control-lg','id'=>'tanggal_surat_masuk','placeholder'=>'yyyy-mm-dd']) }}
+            {{ Form::text('tanggal_surat_masuk',isset($suratMasuk) ? $suratMasuk->created_at->format('Y-m-d') : null,['class'=>'form-control form-control-lg','id'=>'tanggal_surat_masuk','placeholder'=>'yyyy-mm-dd']) }}
             @endif
         </div>
         <div class="form-group surat-masuk-file">

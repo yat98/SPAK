@@ -145,8 +145,13 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::patch('pendaftaran-cuti/tolak/{pendaftaran_cuti}', 'PendaftaranCutiController@tolak');
         Route::resource('pendaftaran-cuti','PendaftaranCutiController');
         // Surat Pengantar Cuti
+        Route::get('surat-pengantar-cuti/search', 'SuratPengantarCutiController@search');
         Route::get('surat-pengantar-cuti/{surat_pengantar_cuti}/cetak', 'SuratPengantarCutiController@cetakSuratCuti');
         Route::resource('surat-pengantar-cuti','SuratPengantarCutiController');
+        // Surat Pengantar Beasiswa
+        Route::get('surat-pengantar-beasiswa/search', 'SuratPengantarBeasiswaController@search');
+        Route::get('surat-pengantar-beasiswa/{surat_pengantar_beasiswa}/cetak', 'SuratPengantarBeasiswaController@cetakSuratBeasiswa');
+        Route::resource('surat-pengantar-beasiswa','SuratPengantarBeasiswaController');
         // Detail Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Notifikasi
@@ -236,11 +241,16 @@ Route::group(['prefix' => 'pimpinan'], function () {
          Route::post('surat-tugas/pengajuan/tanda-tangan','SuratTugasController@tandaTanganTugas');
          // Surat Persetujuan Pindah
          Route::get('surat-persetujuan-pindah', 'SuratPersetujuanPindahController@suratPindahPimpinan');
+         Route::get('surat-persetujuan-pindah/search', 'SuratPersetujuanPindahController@searchPimpinan');
          Route::get('surat-persetujuan-pindah/pengajuan/{pengajuan_persetujuan_pindah}','PengajuanSuratPersetujuanPindahController@show');
          Route::resource('surat-persetujuan-pindah','SuratPersetujuanPindahController')->only('show');
-         Route::get('surat-persetujuan-pindah/search', 'SuratTugasController@search');
          Route::post('surat-persetujuan-pindah/pengajuan/tanda-tangan','SuratPersetujuanPindahController@tandaTanganPindah');
-        // Notifikasi
+         //  Surat Pengantar Beasiswa
+         Route::get('surat-pengantar-beasiswa', 'SuratPengantarBeasiswaController@suratBeasiswaPimpinan');
+         Route::get('surat-pengantar-beasiswa/search', 'SuratPengantarBeasiswaController@searchPimpinan');
+         Route::resource('surat-pengantar-beasiswa', 'SuratPengantarBeasiswaController')->only('show');
+         Route::post('surat-pengantar-beasiswa/pengajuan/tanda-tangan','SuratPengantarBeasiswaController@tandaTanganBeasiswa');
+         // Notifikasi
         Route::get('notifikasi/{notifikasi_user}','NotifikasiUserController@show');
         Route::get('notifikasi','NotifikasiUserController@index');
         // Tanda Tangan
