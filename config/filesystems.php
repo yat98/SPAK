@@ -57,6 +57,11 @@ return [
             'root' => public_path('upload_permohonan_cuti'),
         ],
 
+        'file_surat_permohonan_kegiatan' => [
+            'driver' => 'local',
+            'root' => public_path('upload_surat_permohonan_kegiatan'),
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),

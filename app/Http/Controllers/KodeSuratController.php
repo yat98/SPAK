@@ -79,7 +79,8 @@ class KodeSuratController extends Controller
             'surat rekomendasi'=>'Surat Rekomendasi',
             'surat persetujuan pindah'=>'Surat Persetujuan Pindah',
             'surat tugas'=>'Surat Tugas',
-            'surat pengantar beasiswa'=>'Surat Pengantar Beasiswa'
+            'surat pengantar beasiswa'=>'Surat Pengantar Beasiswa',
+            'surat kegiatan mahasiswa'=>'Surat Kegiatan Mahasiswa'
         ];
     }
 }

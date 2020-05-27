@@ -46,7 +46,7 @@
                                 </div>
                                 <hr class="mb-4">
                                 <div class="row mb-3">
-                                    <div class="col-sm-12 col-md-8">
+                                    <div class="col-sm-12 col-md-10">
                                         {{ Form::open(['url'=>'admin/ormawa/search','method'=>'get']) }}
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-4">

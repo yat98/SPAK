@@ -31,6 +31,9 @@ class SuratPengantarCutiController extends Controller
             $suratCutiList = SuratPengantarCuti::orderByDesc('nomor_surat')->where('nomor_surat','like',"%$nomor%")->paginate($perPage);
             $countAllSuratCuti = SuratPengantarCuti::all()->count();
             $countSuratCuti = $suratCutiList->count();
+            if($countSuratCuti < 1){
+                $this->setFlashData('search','Hasil Pencarian','Surat pengantar cuti tidak ditemukan!');
+            }
             return view('user.'.$this->segmentUser.'.surat_pengantar_cuti',compact('perPage','suratCutiList','countAllSuratCuti','countSuratCuti','nomorSurat'));
         }else{
             return redirect($this->segmentUser.'/surat-pengantar-cuti');

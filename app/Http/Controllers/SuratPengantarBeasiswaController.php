@@ -74,6 +74,9 @@ class SuratPengantarBeasiswaController extends Controller
             $suratBeasiswaList = SuratPengantarBeasiswa::orderBy('status')->where('nomor_surat','like',"%$nomor%")->paginate($perPage);
             $countAllSuratBeasiswa = SuratPengantarBeasiswa::all()->count();
             $countSuratBeasiswa = $suratBeasiswaList->count();
+            if($countSuratBeasiswa < 1){
+                $this->setFlashData('search','Hasil Pencarian','Surat pengantar beasiswa tidak ditemukan!');
+            }
             return view('user.'.$this->segmentUser.'.surat_pengantar_beasiswa',compact('perPage','suratBeasiswaList','countAllSuratBeasiswa','countSuratBeasiswa','nomorSurat'));
         }else{
             return redirect($this->segmentUser.'/surat-pengantar-beasiswa');
@@ -92,6 +95,9 @@ class SuratPengantarBeasiswaController extends Controller
             $countAllPengajuanBeasiswa = SuratPengantarBeasiswa::where('status','menunggu tanda tangan')->count();
             $countSuratBeasiswa = $suratBeasiswaList->count();
             $countPengajuanBeasiswa = $pengajuanBeasiswaList->count();
+            if($countSuratBeasiswa < 1){
+                $this->setFlashData('search','Hasil Pencarian','Surat pengantar beasiswa tidak ditemukan!');
+            }
             return view('user.'.$this->segmentUser.'.surat_pengantar_beasiswa',compact('perPage','nomorSurat','suratBeasiswaList','pengajuanBeasiswaList','countAllSuratBeasiswa','countAllPengajuanBeasiswa','countSuratBeasiswa','countPengajuanBeasiswa'));
         }else{
             return redirect($this->segmentUser.'/surat-pengantar-beasiswa');

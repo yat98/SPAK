@@ -1,3 +1,6 @@
+@if(isset($suratKeterangan))
+    {{ Form::hidden('id',$suratKeterangan->id_pengajuan_surat_keterangan) }}
+@endif
 <div class="row">
     <div class="col-md-8">
         <div class="form-group">

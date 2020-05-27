@@ -20,5 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(StatusMahasiswaTableSeeder::class);
         $this->call(KodeSuratTableSeeder::class);
         $this->call(WaktuCutiTableSeeder::class);
+        $this->call(OrmawaTableSeeder::class);
+        $this->call(PimpinanOrmawaTableSeeder::class);
     }
 }

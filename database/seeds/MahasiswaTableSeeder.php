@@ -24,6 +24,66 @@ class MahasiswaTableSeeder extends Seeder
             'password'=>Hash::make('531416055'),
             'id_prodi'=>$prodi->id
         ]);
-        $this->command->info('Berhasil menambahkan 1 data mahasiswa');
+
+        Mahasiswa::create([
+            'nim'=>'531416042',
+            'nama'=>'Rivaldi Barabuat',
+            'sex'=>'L',
+            'angkatan'=>'2016',
+            'ipk'=>'2.62',
+            'password'=>Hash::make('531416042'),
+            'id_prodi'=>$prodi->id
+        ]);
+
+        Mahasiswa::create([
+            'nim'=>'531416038',
+            'nama'=>'Amien Nurholiq Alam',
+            'sex'=>'L',
+            'angkatan'=>'2016',
+            'ipk'=>'3.41',
+            'password'=>Hash::make('531416038'),
+            'id_prodi'=>$prodi->id
+        ]);
+
+        Mahasiswa::create([
+            'nim'=>'531416037',
+            'nama'=>'Sri Mulyani',
+            'sex'=>'L',
+            'angkatan'=>'2016',
+            'ipk'=>'2.96',
+            'password'=>Hash::make('531416038'),
+            'id_prodi'=>$prodi->id
+        ]);
+
+        Mahasiswa::create([
+            'nim'=>'531416020',
+            'nama'=>'Adnan Kasim',
+            'sex'=>'L',
+            'angkatan'=>'2016',
+            'ipk'=>'3.39',
+            'password'=>Hash::make('531416020'),
+            'id_prodi'=>$prodi->id
+        ]);
+
+        Mahasiswa::create([
+            'nim'=>'531417001',
+            'nama'=>'Shaniyah Alhayu Paudi',
+            'sex'=>'L',
+            'angkatan'=>'2016',
+            'ipk'=>'3.32',
+            'password'=>Hash::make('531417001'),
+            'id_prodi'=>$prodi->id
+        ]);
+        
+        Mahasiswa::create([
+            'nim'=>'531416017',
+            'nama'=>'Mohamad Rezkarnin Yahya',
+            'sex'=>'L',
+            'angkatan'=>'2016',
+            'ipk'=>'3.02',
+            'password'=>Hash::make('531416017'),
+            'id_prodi'=>$prodi->id
+        ]);
+        $this->command->info('Berhasil menambahkan 7 data mahasiswa');
     }
 }

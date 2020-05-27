@@ -17,7 +17,7 @@
                             {{ Form::select('jenis_user',['mahasiswa'=>'Mahasiswa','pegawai'=>'Pegawai','pimpinan'=>'Pimpinan'],old('jenis_user'),['class'=>'form-control form-control-lg','id'=>'jenis-user']) }}
                         </div>
                         <div class="form-group">
-                            {{ Form::label('username','NIM',['id'=>'username-id']) }}
+                            {{ Form::label('username','Username') }}
                             @if ($errors->any())
                             @if ($errors->has('username'))
                              {{ Form::text('username',(Session::has('username')) ? Session::get('username') : null,['class'=>'is-invalid form-control form-control-lg','placeholder'=>'NIM','id'=>'username']) }}

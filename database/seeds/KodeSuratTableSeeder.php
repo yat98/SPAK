@@ -53,7 +53,13 @@ class KodeSuratTableSeeder extends Seeder
             'status_aktif'=>'aktif',
             'jenis_surat'=>'surat pengantar beasiswa'
         ]);
+
+        KodeSurat::create([
+            'kode_surat'=>'UN47.B5/KM',
+            'status_aktif'=>'aktif',
+            'jenis_surat'=>'surat Kegiatan Mahasiswa'
+        ]);
         
-        $this->command->info('Berhasil menambahkan 6 data kode surat');
+        $this->command->info('Berhasil menambahkan 7 data kode surat');
     }
 }

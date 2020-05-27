@@ -20,4 +20,8 @@ class PimpinanOrmawa extends Model
     public function mahasiswa(){
         return $this->belongsTo('App\Mahasiswa','nim','nim');
     }
+
+    public function ormawa(){
+        return $this->belongsTo('App\Ormawa','id_ormawa');
+    }
 }

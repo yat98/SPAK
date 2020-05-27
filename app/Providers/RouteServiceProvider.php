@@ -9,9 +9,11 @@ use App\TahunAkademik;
 use App\PimpinanOrmawa;
 use App\SuratKeterangan;
 use App\SuratPengantarCuti;
+use App\SuratKegiatanMahasiswa;
 use App\SuratPengantarBeasiswa;
 use App\PengajuanSuratKeterangan;
 use Illuminate\Support\Facades\Route;
+use App\PengajuanSuratKegiatanMahasiswa;
 use App\PengajuanSuratPersetujuanPindah;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -54,6 +56,8 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('surat_keterangan_kelakuan_baik', SuratKeterangan::class);
         Route::model('surat_pengantar_cuti', SuratPengantarCuti::class);
         Route::model('surat_pengantar_beasiswa', SuratPengantarBeasiswa::class);
+        Route::model('pengajuan_kegiatan_mahasiswa', PengajuanSuratKegiatanMahasiswa::class);
+        Route::model('surat_kegiatan_mahasiswa', SuratKegiatanMahasiswa::class);
     }
 
     /**

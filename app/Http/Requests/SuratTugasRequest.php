@@ -24,9 +24,9 @@ class SuratTugasRequest extends FormRequest
     public function rules()
     {
         if($this->method() == 'PATCH' || $this->method == 'PUT'){
-            $nomorSuratRules = 'required|numeric|min:1|unique:surat_pengantar_beasiswa,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_pengantar_cuti,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_persetujuan_pindah,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_rekomendasi,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_tugas,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_dispensasi,nomor_surat,'.$this->get('nomor_surat').',nomor_surat|unique:surat_keterangan,nomor_surat,'.$this->get('nomor_surat').',nomor_surat';
+            $nomorSuratRules = 'required|numeric|min:1|unique:surat_kegiatan_mahasiswa,nomor_surat|unique:surat_pengantar_beasiswa,nomor_surat|unique:surat_pengantar_cuti,nomor_surat|unique:surat_persetujuan_pindah,nomor_surat|unique:surat_rekomendasi,nomor_surat|unique:surat_tugas,nomor_surat,'.$this->get('id').'|unique:surat_dispensasi,nomor_surat|unique:surat_keterangan,nomor_surat';
         }else{
-            $nomorSuratRules = 'required|numeric|min:1|unique:surat_pengantar_beasiswa,nomor_surat|unique:surat_pengantar_cuti,nomor_surat|unique:surat_persetujuan_pindah,nomor_surat|unique:surat_rekomendasi,nomor_surat|unique:surat_tugas,nomor_surat|unique:surat_dispensasi,nomor_surat|unique:surat_keterangan,nomor_surat';
+            $nomorSuratRules = 'required|numeric|min:1|unique:surat_kegiatan_mahasiswa,nomor_surat|unique:surat_pengantar_beasiswa,nomor_surat|unique:surat_pengantar_cuti,nomor_surat|unique:surat_persetujuan_pindah,nomor_surat|unique:surat_rekomendasi,nomor_surat|unique:surat_tugas,nomor_surat|unique:surat_dispensasi,nomor_surat|unique:surat_keterangan,nomor_surat';
         }
         return [
             'nim'=>'required',

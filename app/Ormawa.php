@@ -16,4 +16,8 @@ class Ormawa extends Model
     public function jurusan(){
         return $this->belongsTo('App\Jurusan','id_jurusan');
     }
+
+    public function pimpinanOrmawa(){
+        return $this->hasMany('App\PimpinanOrmawa','id_ormawa');
+    }
 }

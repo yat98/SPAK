@@ -50,4 +50,16 @@ class User extends Model
     public function suratPengantarBeasiswa(){
         return $this->hasMany('App\SuratPengantarBeasiswa','nip','nip_kasubag');
     }
+
+    public function pengajuanSuratKegiatanMahasiswa(){
+        return $this->hasMany('App\PengajuanSuratKegiatanMahasiswa','nip');
+    }
+
+    public function suratKegiatanMahasiswa(){
+        return $this->hasMany('App\SuratKegiatanMahasiswa','nip');
+    }
+
+    public function disposisiPengajuanKegiatan(){
+        return $this->belongsToMany('App\PengajuanSuratKegiatanMahasiswa','disposisi_surat_kegiatan_mahasiswa','id_pengajuan','nip')->withPivot('catatan')->withTimestamps();
+    }
 }

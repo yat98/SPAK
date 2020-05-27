@@ -109,7 +109,7 @@
                 <i class="mdi mdi mdi mdi-border-color menu-icon"></i>
             </a>
         </li>
-        <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah' || $halaman == 'surat-keterangan-kelakuan-baik' || $halaman == 'surat-dispensasi' || $halaman == 'surat-masuk' || $halaman == 'surat-rekomendasi' || $halaman == 'surat-tugas' || $halaman == 'surat-persetujuan-pindah' || $halaman == 'surat-pengantar-cuti' ||  $halaman == 'surat-pengantar-beasiswa') ? 'active':'' }}">
+        <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah' || $halaman == 'surat-keterangan-kelakuan-baik' || $halaman == 'surat-dispensasi' || $halaman == 'surat-masuk' || $halaman == 'surat-rekomendasi' || $halaman == 'surat-tugas' || $halaman == 'surat-persetujuan-pindah' || $halaman == 'surat-pengantar-cuti' || $halaman == 'surat-kegiatan-mahasiswa' ||  $halaman == 'surat-pengantar-beasiswa') ? 'active':'' }}">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">
                     Surat
@@ -152,6 +152,9 @@
                     <li class="nav-item">
                         <a class="nav-link {{ ($halaman == 'surat-pengantar-beasiswa') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-pengantar-beasiswa') }}">Surat Pengantar Beasiswa</a>
                     </li>
+                    <li class="nav-item"> 
+                        <a class="nav-link {{ ($halaman == 'surat-kegiatan-mahasiswa') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-kegiatan-mahasiswa') }}">Surat Kegiatan Mahasiswa</a>
+                    </li>
                 </ul>
             </div>
         </li>
@@ -180,7 +183,7 @@
                 <i class="mdi mdi-home menu-icon"></i>
             </a>
         </li>
-        <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah' || $halaman == 'surat-keterangan-kelakuan-baik' || $halaman == 'surat-dispensasi' || $halaman == 'surat-rekomendasi' || $halaman == 'surat-tugas' || $halaman == 'surat-persetujuan-pindah') ? 'active':'' }}">
+        <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah' || $halaman == 'surat-keterangan-kelakuan-baik' || $halaman == 'surat-dispensasi' || $halaman == 'surat-rekomendasi' || $halaman == 'surat-tugas' || $halaman == 'surat-persetujuan-pindah' || $halaman == 'surat-kegiatan-mahasiswa') ? 'active':'' }}">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">
                     Surat
@@ -210,6 +213,11 @@
                     <li class="nav-item"> 
                         <a class="nav-link {{ ($halaman == 'surat-persetujuan-pindah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/pengajuan/surat-persetujuan-pindah') }}">Surat Persetujuan Pindah</a>
                     </li>
+                    @if(isset($pimpinanOrmawa))
+                        <li class="nav-item"> 
+                            <a class="nav-link {{ ($halaman == 'surat-kegiatan-mahasiswa') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/pengajuan/surat-kegiatan-mahasiswa') }}">Surat Kegiatan Mahasiswa</a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </li>
@@ -238,7 +246,7 @@
                 <i class="mdi mdi mdi mdi-border-color menu-icon"></i>
             </a>
         </li>
-        <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah' || $halaman == 'surat-keterangan-kelakuan-baik' || $halaman == 'surat-dispensasi' || $halaman == 'surat-rekomendasi' || $halaman == 'surat-tugas' || $halaman == 'surat-persetujuan-pindah' || $halaman == 'surat-pengantar-beasiswa') ? 'active':'' }}">
+        <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah' || $halaman == 'surat-keterangan-kelakuan-baik' || $halaman == 'surat-dispensasi' || $halaman == 'surat-rekomendasi' || $halaman == 'surat-tugas' || $halaman == 'surat-persetujuan-pindah' || $halaman == 'surat-pengantar-beasiswa' || $halaman == 'surat-kegiatan-mahasiswa') ? 'active':'' }}">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">
                     Surat
@@ -262,6 +270,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ ($halaman == 'surat-pengantar-beasiswa') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-pengantar-beasiswa') }}">Surat Pengantar Beasiswa</a>
+                    </li>
+                     <li class="nav-item">
+                        <a class="nav-link {{ ($halaman == 'surat-kegiatan-mahasiswa') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-kegiatan-mahasiswa') }}">Surat Kegiatan Mahasiswa</a>
                     </li>
                 </ul>
             </div>

@@ -49,8 +49,8 @@ class ProgramStudiController extends Controller
     public function store(ProgramStudiRequest $request)
     {
         $input = $request->all();
-        $this->setFlashData('success','Berhasil','Data program studi '.strtolower($input['nama_prodi']).' berhasil ditambahkan');
         ProgramStudi::create($input);
+        $this->setFlashData('success','Berhasil','Data program studi '.strtolower($input['nama_prodi']).' berhasil ditambahkan');
         return redirect($this->segmentUser.'/program-studi');
     }
     

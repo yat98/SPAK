@@ -51,7 +51,7 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Tanda Tangan Surat Pengantar Beasiswa</h4>
+                                        <h4>Disposisi Surat Pengantar Beasiswa</h4>
                                     </div>
                                 </div>
                                 <hr class="mb-4">

@@ -87,3 +87,15 @@
         width: 100%;
     }
 }
+
+@media (min-width: 0px) and (max-width: 997px) {
+    .p-sm {
+        height:90px;
+    }
+}
+
+@media (min-width: 997px) and (max-width: 1295px) {
+    .p-sm {
+        height:40px;
+    }
+}

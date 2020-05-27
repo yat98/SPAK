@@ -69,7 +69,9 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-persetujuan-pindah';
             } else if ($segment == 'pendaftaran-cuti') {
                 $halaman = 'pendaftaran-cuti';
-            } 
+            } else if (($segment == 'pengajuan' && request()->segment(3) == 'surat-kegiatan-mahasiswa') || $segment == 'surat-kegiatan-mahasiswa') {
+                $halaman = 'surat-kegiatan-mahasiswa';
+            }
         } elseif (request()->segment(1) == 'pegawai') {
             $posisi = 'pegawai';
             if ($segment == '') {
@@ -102,6 +104,8 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-pengantar-cuti';
             } else if($segment == 'surat-pengantar-beasiswa'){
                 $halaman = 'surat-pengantar-beasiswa';
+            } else if ($segment == 'surat-kegiatan-mahasiswa') {
+                $halaman = 'surat-kegiatan-mahasiswa';
             }
         } elseif (request()->segment(1) == 'pimpinan') {
             $posisi = 'pimpinan';
@@ -119,6 +123,8 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-persetujuan-pindah';
             } else if($segment == 'surat-pengantar-beasiswa'){
                 $halaman = 'surat-pengantar-beasiswa';
+            } else if($segment == 'surat-kegiatan-mahasiswa'){
+                $halaman = 'surat-kegiatan-mahasiswa';
             }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi]);

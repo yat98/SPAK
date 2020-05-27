@@ -61,7 +61,6 @@ $('.pagination').addClass('justify-content-end mt-5');
 
 let jenisUser = document.getElementById('jenis_user');
 $('#jenis-user').on('click', function () {
-    let label = $('#username-id');
     let username = $('#username');
     let value = '';
     switch ($(this).val()) {
@@ -75,7 +74,6 @@ $('#jenis-user').on('click', function () {
             value = 'nip'
             break;
     }
-    label.html(value.toUpperCase())
     username.attr('placeholder', value.toUpperCase());
 });
 
@@ -544,9 +542,31 @@ $('.btn-tambah-mahasiswa').on('click',function(e){
     $('.mahasiswa-wrap').append('<div class="form-row mb-3" style="margin-left:1px">'+$('.mahasiswa-select').clone().html()+'</div>');
 });
 
-// new FroalaEditor('textarea#tahapan_kegiatan',{
-//     height:600
-// });
+new FroalaEditor('textarea#froala-editor',{
+    fontFamily: {
+        "Roboto,sans-serif": 'sans-serif',
+    },
+    fontFamilySelection: true
+});
+
+new FroalaEditor('textarea#lampiran_panitia',{
+    height:600,
+    fontFamily: {
+        "serif": 'serif',
+    },
+    fontFamilySelection: true
+});
+
+var editor = new FroalaEditor('textarea#froala-editor-disabled',{
+    height:600,
+    fontFamily: {
+        "Roboto,sans-serif": 'sans-serif',
+    },
+    fontFamilySelection: true
+}, function () {
+    editor.edit.off();
+    editor.edit.isDisabled();
+});
 
 $('.btn-tambah-tahapan').on('click',function(e){
     e.preventDefault();
@@ -1606,4 +1626,591 @@ $('.btn-surat-pengantar-beasiswa-detail').on('click',function(e){
                                 </div> `
                     $('#surat-pengantar-beasiswa-detail-content').html(html);
                 });
+});
+
+$('.btn-surat-kegiatan-mahasiswa-progress').on('click', function (e) {
+    e.preventDefault();
+    $('#surat-progress-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let pengajuanSurat = result;
+            let html = '';
+            if(pengajuanSurat.status == 'diajukan'){
+                html = `<div class="row">
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Diajukan</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.created_at}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center"></div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center"></div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center"></div>
+                            <div class="col-1 text-center"></div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 9%" aria-valuenow="9" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 text-center"></div>
+                            <div class="col-3 text-center"></div>
+                            <div class="col-3 text-center"></div>
+                            <div class="col-3 text-center"></div>
+                        </div>`;
+            }else if(pengajuanSurat.status == 'diterima'){
+                html = `<div class="row">
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Diajukan</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.created_at}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center"></div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center"></div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center"></div>
+                            <div class="col-1 text-center"></div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 15%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 text-center">
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_diterima}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                <small>Diterima</small></p> 
+                            </div>
+                            <div class="col-3 text-center"></div>
+                            <div class="col-3 text-center"></div>
+                            <div class="col-3 text-center"></div>
+                        </div>`;
+            }else if(pengajuanSurat.status == 'ditolak'){
+                html = `<div class="row">
+                            <div class="col-6 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Diajukan</small>
+                                </p>
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.created_at}</small></p>
+                                <div class="bg-gradient-danger mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-danger mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-6 text-center"></div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-gradient-danger" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 text-center"></div>
+                            <div class="col-6 text-center">
+                                <div class="bg-gradient-danger mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-danger mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.updated_at}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi-close-circle icon-sm text-danger"></i>
+                                <small>Ditolak</small></p> 
+                            </div>
+                        </div>`;
+            }else if(pengajuanSurat.status == 'disposisi dekan'){
+                html = `<div class="row">
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Diajukan</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.created_at}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Disposisi Dekan</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_disposisi_dekan}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center"></div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center"></div>
+                            <div class="col-1 text-center"></div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 text-center">
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_diterima}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                <small>Diterima</small></p> 
+                            </div>
+                            <div class="col-3 text-center"></div>
+                            <div class="col-3 text-center"></div>
+                            <div class="col-3 text-center"></div>
+                        </div>`;
+            } else if(pengajuanSurat.status == 'disposisi wakil dekan I'){
+                html = `<div class="row">
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Diajukan</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.created_at}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Disposisi Dekan</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_disposisi_dekan}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center"></div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center"></div>
+                            <div class="col-1 text-center"></div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 text-center">
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_diterima}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                <small>Diterima</small></p> 
+                            </div>
+                            <div class="col-3 text-center">
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_disposisi_wakil_dekan_1}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi mdi-marker-check icon-sm text-info"></i>
+                                <small>Disposisi Wakil Dekan I</small></p> 
+                            </div>
+                            <div class="col-3 text-center"></div>
+                            <div class="col-3 text-center"></div>
+                        </div>`;
+            } else if(pengajuanSurat.status == 'disposisi wakil dekan II'){
+                html = `<div class="row">
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Diajukan</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.created_at}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Disposisi Dekan</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_disposisi_dekan}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Disposisi Wakil Dekan II</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_disposisi_wakil_dekan_2}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center"></div>
+                            <div class="col-1 text-center"></div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-gradient-info" role="progressbar" style="width:61%" aria-valuenow="61" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 text-center">
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_diterima}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                <small>Diterima</small></p> 
+                            </div>
+                            <div class="col-3 text-center">
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_disposisi_wakil_dekan_1}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi mdi-marker-check icon-sm text-info"></i>
+                                <small>Disposisi Wakil Dekan I</small></p> 
+                            </div>
+                            <div class="col-3 text-center"></div>
+                            <div class="col-3 text-center"></div>
+                        </div>`;
+            } else if(pengajuanSurat.status == 'disposisi wakil dekan III'){
+                html = `<div class="row">
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Diajukan</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.created_at}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Disposisi Dekan</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_disposisi_dekan}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Disposisi Wakil Dekan II</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_disposisi_wakil_dekan_2}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center"></div>
+                            <div class="col-1 text-center"></div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-gradient-info" role="progressbar" style="width:73%" aria-valuenow="73" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 text-center">
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_diterima}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                <small>Diterima</small></p> 
+                            </div>
+                            <div class="col-3 text-center">
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_disposisi_wakil_dekan_1}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi mdi-marker-check icon-sm text-info"></i>
+                                <small>Disposisi Wakil Dekan I</small></p> 
+                            </div>
+                            <div class="col-3 text-center">
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_disposisi_wakil_dekan_3}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi mdi-marker-check icon-sm text-info"></i>
+                                <small>Disposisi Wakil Dekan III</small></p> 
+                            </div>
+                            <div class="col-3 text-center"></div>
+                        </div>`;
+            } else if(pengajuanSurat.status == 'menunggu tanda tangan'){
+                html = `<div class="row">
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Diajukan</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.created_at}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Disposisi Dekan</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_disposisi_dekan}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Disposisi Wakil Dekan II</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_disposisi_wakil_dekan_2}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-border-color icon-sm text-info"></i>
+                                    <small>Menunggu Tanda Tangan</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_tanda_tangan}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-gradient-info" role="progressbar" style="width:87%" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 text-center">
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_diterima}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                <small>Diterima</small></p> 
+                            </div>
+                            <div class="col-3 text-center">
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_disposisi_wakil_dekan_1}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi mdi-marker-check icon-sm text-info"></i>
+                                <small>Disposisi Wakil Dekan I</small></p> 
+                            </div>
+                            <div class="col-3 text-center">
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_disposisi_wakil_dekan_3}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi mdi-marker-check icon-sm text-info"></i>
+                                <small>Disposisi Wakil Dekan III</small></p> 
+                            </div>
+                            <div class="col-3 text-center"></div>
+                        </div>`;
+            }else if(pengajuanSurat.status == 'selesai'){
+                html = `<div class="row">
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Diajukan</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.created_at}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Disposisi Dekan</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_disposisi_dekan}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    <small>Disposisi Wakil Dekan II</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_disposisi_wakil_dekan_2}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                            <div class="col-2 text-center">
+                                <p class="h6 m-0 mb-1 text-dark p-sm">
+                                    <i class="mdi mdi-border-color icon-sm text-info"></i>
+                                    <small>Menunggu Tanda Tangan</small>
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_tanda_tangan}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-1 text-center"></div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-gradient-info" role="progressbar" style="width:100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 text-center">
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_diterima}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                <small>Diterima</small></p> 
+                            </div>
+                            <div class="col-3 text-center">
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_disposisi_wakil_dekan_1}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi mdi-marker-check icon-sm text-info"></i>
+                                <small>Disposisi Wakil Dekan I</small></p> 
+                            </div>
+                            <div class="col-3 text-center">
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_disposisi_wakil_dekan_3}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi mdi-marker-check icon-sm text-info"></i>
+                                <small>Disposisi Wakil Dekan III</small></p> 
+                            </div>
+                            <div class="col-3 text-center">
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_selesai}</small></p>
+                                <p class="h6 mt-1 text-dark">
+                                <i class="mdi mdi mdi-marker-check icon-sm text-info"></i>
+                                <small>Selesai</small></p> 
+                            </div>
+                        </div>`;
+            }
+            $('#surat-progress-content').html(html);
+        })
+});
+
+let terimaKegiatan = $('.btn-terima-kegiatan');
+terimaKegiatan.on('click',function(e){
+    e.preventDefault();
+    Swal.fire({
+        title: 'Yakin?',
+        text: "Pengajuan surat kegiatan mahasiswa diterima",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Terima',
+        cancelButtonText: 'Tidak'
+    }).then((result) => {
+        if (result.value) {
+            if (result.value) {
+                let form = $(this).parents('form');
+                form.submit();
+            }
+        }
+    })
+});
+
+let disposisi = $('.disposisi');
+disposisi.on('click',function(e){
+    e.preventDefault();
+    Swal.fire({
+        title: 'Yakin?',
+        text: "Surat akan di disposisi",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Disposisi',
+        cancelButtonText: 'Tidak'
+    }).then((result) => {
+        if (result.value) {
+            if (result.value) {
+                Swal.fire({
+                    title: 'Catatan',
+                    input: 'textarea',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Simpan',
+                    cancelButtonText: 'Cancel',
+                    inputPlaceholder: 'Catatan...',
+                    inputAttributes: {
+                      'aria-label': 'Catatan...'
+                    },
+                    showCancelButton: true,
+                    inputValidator: (value) => {
+                        return new Promise((resolve) => {
+                            if (value.trim() === undefined || value.trim() == null || value.length <= 0) {
+                                resolve('Catatan wajib diisi.')
+                            } else {
+                                console.log(value);
+                                $('#catatan_disposisi').val(value);
+                                let form = $(this).parents('form');
+                                form.submit();
+                            }
+                        })
+                    }
+                })
+            }
+        }
+    })
+});
+
+
+$('.btn-disposisi-detail').on('click',function(e){
+    e.preventDefault();
+    $('#disposisi-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+                .then(response => response.json())
+                .then(result => {
+                    let disposisi = result;
+                    let content='';
+                    disposisi.forEach((d)=>{
+                        content += `<tr>
+                                        <td>${d.nama}</td>
+                                        <td>${d.pivot.catatan}</td>
+                                    </tr>`;
+                        
+                    });
+                    let html = `
+                                    <div class="table-responsive">
+                                            <table class="table">
+                                                <tr>
+                                                    <th>Diteruskan</th>
+                                                    <th>Disposisi</th>
+                                                </tr>
+                                                ${content}
+                                            </table>
+                                </div>`
+                    $('#disposisi-detail-content').html(html);
+                });
+});
+
+let namaOrmawaOld = '{ ORMAWA }';
+$('.ormawa-list').on('change',function(){
+    let namaOrmawa = $('.ormawa-list option:selected').text();
+    let replace = document.getElementsByClassName('replace');
+    
+    for (let form of replace) {
+        let temp = form.value.toString();
+        let newValue = temp.replace(namaOrmawaOld,namaOrmawa);
+        
+        form.value = newValue;
+        form.previousSibling.children[2].children[0].innerHTML = newValue;
+    }
+
+    namaOrmawaOld = namaOrmawa;
 });
