@@ -88,6 +88,9 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         // Pendaftaran Cuti
         Route::get('pendaftaran-cuti','PendaftaranCutiController@pendaftaranCutiMahasiswa');
         Route::resource('pendaftaran-cuti','PendaftaranCutiController')->except('index');
+        // Password
+        Route::get('password','MahasiswaController@password');
+        Route::post('password','MahasiswaController@updatePassword');
     });
 });
 
@@ -272,7 +275,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
         //  Surat Kegiatan Mahasiswa
         Route::get('surat-kegiatan-mahasiswa', 'SuratKegiatanMahasiswaController@suratKegiatanPimpinan');
         Route::get('surat-kegiatan-mahasiswa/search', 'SuratKegiatanMahasiswaController@searchPimpinan');
-        Route::get('surat-kegiatan-mahasiswa/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@show');
+        Route::resource('surat-kegiatan-mahasiswa','SuratKegiatanMahasiswaController')->only('show');
+        Route::get('surat-kegiatan-mahasiswa/pengajuan/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@show');
         Route::get('surat-kegiatan-mahasiswa/{pengajuan_kegiatan_mahasiswa}/disposisi','PengajuanSuratKegiatanMahasiswaController@detailDisposisi');
         Route::post('surat-kegiatan-mahasiswa/pengajuan/tanda-tangan','SuratKegiatanMahasiswaController@tandaTanganKegiatan');
         Route::post('surat-kegiatan-mahasiswa/disposisi','PengajuanSuratKegiatanMahasiswaController@disposisi');

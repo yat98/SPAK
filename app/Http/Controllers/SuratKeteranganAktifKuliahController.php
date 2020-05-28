@@ -48,11 +48,15 @@ class SuratKeteranganAktifKuliahController extends Controller
     public function indexMahasiswa(){
         $perPage = $this->perPage;
         $pengajuanSuratKeteranganAktifList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
-                                            ->where('nim',Session::get('nim'))
-                                            ->orderByDesc('created_at')
-                                            ->orderBy('status')
-                                            ->paginate($perPage,['*'],'page_pengajuan');
-        $countAllPengajuan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')->where('nim',Session::get('nim'))->count();
+                                                ->where('nim',Session::get('nim'))
+                                                ->orderByDesc('created_at')
+                                                ->orderBy('status')
+                                                ->paginate($perPage,['*'],'page_pengajuan');
+
+        $countAllPengajuan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
+                                ->where('nim',Session::get('nim'))
+                                ->count();
+                                
         $countPengajuanSuratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
                                             ->where('nim',Session::get('nim'))
                                             ->count();

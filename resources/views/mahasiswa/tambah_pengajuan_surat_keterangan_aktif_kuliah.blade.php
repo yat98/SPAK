@@ -11,7 +11,7 @@
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
                             <i class="mdi mdi-file-document-box"></i>
-                        </span> Pengajuan Surat Keterangan Aktif Kuliah</h3>
+                        </span>Surat Keterangan Aktif Kuliah</h3>
                 </div>
                 @if (Session::has('info-badge'))   
                 <div class="row">

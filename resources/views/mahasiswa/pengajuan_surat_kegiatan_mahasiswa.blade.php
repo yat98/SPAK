@@ -14,11 +14,11 @@
                         </span> Surat Kegiatan Mahasiswa</h3>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 stretch-card grid-margin">
+                    <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute" alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Surat Kegiatan Mahasiswa <i class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                <h4 class="font-weight-normal mb-3">Pengajuan Surat Kegiatan Mahasiswa <i class="mdi mdi-file-document-box mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
                                     {{ $countAllPengajuanKegiatan > 0 ? $countAllPengajuanKegiatan.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
@@ -119,7 +119,7 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Surat Kegiatan Mahasiswa Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
                                             {{ (Session::has('search')) ? Session::get('search') : 'Pengajuan surat kegiatan mahasiswa belum ada.' }}

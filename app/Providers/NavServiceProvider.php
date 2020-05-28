@@ -71,6 +71,8 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'pendaftaran-cuti';
             } else if (($segment == 'pengajuan' && request()->segment(3) == 'surat-kegiatan-mahasiswa') || $segment == 'surat-kegiatan-mahasiswa') {
                 $halaman = 'surat-kegiatan-mahasiswa';
+            } else if ($segment == 'password') {
+                $halaman = 'password';
             }
         } elseif (request()->segment(1) == 'pegawai') {
             $posisi = 'pegawai';

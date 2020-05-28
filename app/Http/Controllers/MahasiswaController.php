@@ -8,11 +8,14 @@ use App\Jurusan;
 use App\Mahasiswa;
 use App\WaktuCuti;
 use Carbon\Carbon;
+use App\SuratTugas;
 use App\ProgramStudi;
 use App\TahunAkademik;
 use App\NotifikasiUser;
+use App\PendaftaranCuti;
 use App\StatusMahasiswa;
 use App\SuratDispensasi;
+use App\SuratRekomendasi;
 use Illuminate\Http\Request;
 use App\Imports\MahasiswaImport;
 use App\PengajuanSuratKeterangan;
@@ -20,6 +23,8 @@ use App\DaftarDispensasiMahasiswa;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\MahasiswaRequest;
+use App\PengajuanSuratKegiatanMahasiswa;
+use App\PengajuanSuratPersetujuanPindah;
 use Maatwebsite\Excel\Validators\ValidationException;
 use App\Http\Requests\PengajuanSuratKeteranganRequest;
 
@@ -151,13 +156,94 @@ class MahasiswaController extends Controller
         }
     }
 
+    public function password(){
+        return view($this->segmentUser.'.password');
+    }
+    
+    public function updatePassword(Request $request){
+        $nim = Session::get('nim');
+        $mahasiswa = Mahasiswa::where('nim',$nim)->first();
+        $this->validate($request,[
+            'password_lama'=>function($attr,$val,$fail) use($mahasiswa){
+                if (!Hash::check($val, $mahasiswa->password)) {
+                    $fail('password lama tidak sesuai.');
+                }
+            },
+            'password'=>'required|string|max:60|confirmed',
+            'password_confirmation'=>'required|string|max:60'
+       ]);
+       $mahasiswa->update([
+           'password'=>Hash::make($request->password)
+       ]);
+       Session::flush();
+       $this->setFlashData('success','Berhasil','Password  berhasil diubah');
+       return redirect($this->segmentUser);
+    }
+
     public function dashboard(){
         $tgl = Carbon::now();
+        $pengajuanKegiatanList = null;
+        $mahasiswa = Mahasiswa::where('nim',Session::get('nim'))->first();
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
         $waktuCuti = isset($tahunAkademikAktif) ? WaktuCuti::where('id_tahun_akademik',$tahunAkademikAktif->id)->first():null;
-        $countAllPengajuan = 0;
-        $countPengajuanSuratKeterangan = 0;
-        return view($this->segmentUser.'.dashboard',compact('tahunAkademikAktif','tgl','waktuCuti'));
+
+        $pengajuanSuratKeteranganAktifList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
+                                               ->orderByDesc('created_at')
+                                               ->orderBy('status')
+                                               ->where('nim',Session::get('nim'))
+                                               ->get();
+        $pengajuanSuratKeteranganList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
+                                               ->where('nim',Session::get('nim'))
+                                               ->orderByDesc('created_at')
+                                               ->orderBy('status')
+                                               ->get();
+        $pengajuanSuratPindahList = PengajuanSuratPersetujuanPindah::where('nim',Session::get('nim'))
+                                               ->orderByDesc('created_at')
+                                               ->orderBy('status')
+                                               ->get();
+        $suratDispensasiList = SuratDispensasi::join('daftar_dispensasi_mahasiswa','daftar_dispensasi_mahasiswa.id_surat_dispensasi','=','surat_dispensasi.id_surat_masuk')
+                                               ->where('nim',Session::get('nim'))
+                                               ->orderByDesc('surat_dispensasi.created_at')
+                                               ->get();
+        $suratRekomendasiList = SuratRekomendasi::join('daftar_rekomendasi_mahasiswa','daftar_rekomendasi_mahasiswa.id_surat_rekomendasi','=','surat_rekomendasi.id')
+                                               ->where('nim',Session::get('nim'))
+                                               ->orderByDesc('surat_rekomendasi.created_at')
+                                               ->get();
+        $suratTugasList = SuratTugas::select('*','surat_tugas.created_at','surat_tugas.updated_at')
+                                               ->join('daftar_tugas_mahasiswa','daftar_tugas_mahasiswa.id_surat_tugas','=','surat_tugas.id')
+                                               ->where('nim',Session::get('nim'))
+                                               ->orderByDesc('surat_tugas.created_at')
+                                               ->get();
+        if(isset($mahasiswa->pimpinanOrmawa)){
+            $pengajuanKegiatanList = PengajuanSuratKegiatanMahasiswa::join('mahasiswa','mahasiswa.nim','=','pengajuan_surat_kegiatan_mahasiswa.nim')
+                                        ->join('pimpinan_ormawa','pimpinan_ormawa.nim','=','mahasiswa.nim')
+                                        ->join('ormawa','pimpinan_ormawa.id_ormawa','=','ormawa.id')
+                                        ->select('*','pengajuan_surat_kegiatan_mahasiswa.id AS id') 
+                                        ->where('ormawa.nama',$mahasiswa->pimpinanOrmawa->ormawa->nama)
+                                        ->orderByDesc('pengajuan_surat_kegiatan_mahasiswa.created_at')
+                                        ->get();
+        }
+        $pendaftaranCutiList = PendaftaranCuti::where('nim',Session::get('nim'))->get();
+
+        $countAllPengajuan =    $pengajuanSuratKeteranganAktifList->count();
+        $countAllPengajuanBaik =    $pengajuanSuratKeteranganList->count();
+        $countAllPengajuanPindah =    $pengajuanSuratPindahList->count();
+        $countAllDispensasi =    $suratDispensasiList->count();
+        $countAllSuratRekomendasi =    $suratRekomendasiList->count();
+        $countAllSuratTugas =    $suratTugasList->count();
+        $countAllPengajuanKegiatan = ($pengajuanKegiatanList != null) ? $pengajuanKegiatanList->count() : 0;
+        $countPendaftaranCuti = $pendaftaranCutiList->count();
+
+        $pengajuanSuratKeteranganAktifList = $pengajuanSuratKeteranganAktifList->take(5);
+        $pengajuanSuratKeteranganList = $pengajuanSuratKeteranganList->take(5);
+        $pengajuanSuratPindahList = $pengajuanSuratPindahList->take(5);
+        $suratDispensasiList = $suratDispensasiList->take(5);
+        $suratRekomendasiList = $suratRekomendasiList->take(5);
+        $suratTugasList = $suratTugasList->take(5);
+        $pengajuanKegiatanList =  ($pengajuanKegiatanList != null) ? $pengajuanKegiatanList->take(5) : null;
+        $pendaftaranCutiList = $pendaftaranCutiList->take(5);
+            
+        return view($this->segmentUser.'.dashboard',compact('tahunAkademikAktif','tgl','waktuCuti','pengajuanSuratKeteranganAktifList','countAllPengajuan','pengajuanSuratKeteranganList','countAllPengajuanBaik','pengajuanSuratKeteranganList','pengajuanSuratPindahList','countAllPengajuanPindah','suratDispensasiList','countAllDispensasi','countAllSuratRekomendasi','suratRekomendasiList','suratTugasList','countAllSuratTugas','pengajuanKegiatanList','countAllPengajuanKegiatan','pendaftaranCutiList','countPendaftaranCuti'));
     }
     
     public function logout(){

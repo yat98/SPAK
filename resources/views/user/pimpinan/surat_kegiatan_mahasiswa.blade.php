@@ -292,9 +292,17 @@
                                                 </label>
                                             </td>
                                             <td>
-                                                <a href="{{ url('pimpinan/surat-kegiatan-mahasiswa/'.$suratKegiatan->id_pengajuan_kegiatan) }}" class="btn btn-outline-info btn-sm">
-                                                    <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
-                                                    Detail</a>
+                                                  @if($suratKegiatan->status == 'selesai')
+                                                    <a href="{{ url('pimpinan/surat-kegiatan-mahasiswa/'.$suratKegiatan->id_pengajuan_kegiatan) }}" class="btn btn-outline-info btn-sm">
+                                                        <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
+                                                        Detail
+                                                    </a>
+                                                    @else
+                                                     <a href="{{ url('pimpinan/pengajuan/surat-kegiatan-mahasiswa/'.$suratKegiatan->id_pengajuan_kegiatan) }}" class="btn btn-outline-info btn-sm">
+                                                        <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
+                                                        Detail
+                                                    </a>    
+                                                    @endif
                                             </td>
                                         </tr>
                                         @endforeach

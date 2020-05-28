@@ -21,6 +21,12 @@ class StatusMahasiswaTableSeeder extends Seeder
             'id_tahun_akademik'=>$tahunAkademik->id,
             'status'=>'aktif'
         ]);
+        $mahasiswa = Mahasiswa::where('nim','531416038')->first();
+        StatusMahasiswa::create([
+            'nim'=>$mahasiswa->nim,
+            'id_tahun_akademik'=>$tahunAkademik->id,
+            'status'=>'aktif'
+        ]);
         $this->command->info('Berhasil menambahkan 1 data status mahasiswa');
     }
 }

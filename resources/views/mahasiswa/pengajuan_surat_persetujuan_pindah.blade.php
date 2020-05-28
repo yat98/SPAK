@@ -11,10 +11,10 @@
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
                             <i class="mdi mdi-file-document-box"></i>
-                        </span> Pengajuan Surat Persetujuan Pindah</h3>
+                        </span> Surat Persetujuan Pindah</h3>
                 </div>
                 <div class="row">
-                    <div class="col-md-5 stretch-card grid-margin">
+                    <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
@@ -118,7 +118,7 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Surat Persetujuan Pindah Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
                                             {{ (Session::has('search')) ? Session::get('search') : ' Pengajuan surat persetujuan pindah belum ada.' }}
