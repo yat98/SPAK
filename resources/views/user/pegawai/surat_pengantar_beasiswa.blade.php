@@ -14,7 +14,7 @@
                         </span> Surat Pengantar Beasiswa</h3>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 stretch-card grid-margin">
+                    <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
@@ -36,7 +36,7 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Data Surat Pengantar Beasiswa</h4>
+                                        <h4>Surat Pengantar Beasiswa</h4>
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
                                         <a href="{{ url('pegawai/surat-pengantar-beasiswa/create')}}"
@@ -123,10 +123,10 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Surat Pengantar Beasiswa!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi surat pengantar beasiswa terlebih dahulu.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat pengantar beasiswa terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>

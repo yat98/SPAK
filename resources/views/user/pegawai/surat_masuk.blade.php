@@ -14,7 +14,7 @@
                         </span> Surat Masuk </h3>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 stretch-card grid-margin">
+                    <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
@@ -23,7 +23,7 @@
                                         class="mdi mdi-file-document-box mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllSuratMasuk > 0 ? $countAllSuratMasuk.' Surat Masuk' : 'Data Surat Masuk Kosong' }}
+                                    {{ $countAllSuratMasuk > 0 ? $countAllSuratMasuk.' Surat Masuk' : 'Surat Masuk Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -116,7 +116,7 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Surat Masuk Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
                                             {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi surat masuk terlebih dahulu.' }}

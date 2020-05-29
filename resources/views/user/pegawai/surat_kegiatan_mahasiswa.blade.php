@@ -23,7 +23,7 @@
                                         class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllPengajuanKegiatan > 0 ? $countAllPengajuanKegiatan.' Pengajuan Surat Kegiatan Mahasiswa' : 'Pengajuan Surat Kegiatan Mahasiswa Kosong' }}
+                                    {{ $countAllPengajuanKegiatan > 0 ? $countAllPengajuanKegiatan.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -137,10 +137,10 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            Pengajuan Surat Kegiatan Mahasiswa Kosong!
+                                            Pengajuan Surat Kosong!
                                         </h4>
                                         <p class="text-muted">
-                                            Belum ada pengajuan surat kegiatan mahasiswa.
+                                            Pengajuan surat kegiatan mahasiswa belum ada.
                                         </p>
                                     </div>
                                 </div>
@@ -153,7 +153,7 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Data Surat Kegiatan Mahasiswa</h4>
+                                        <h4>Surat Kegiatan Mahasiswa</h4>
                                     </div>
                                 </div>
                                 <hr class="mb-4">
@@ -231,7 +231,7 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kegiatan Mahasiswa Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
                                             {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat kegiatan mahasiswa terlebih dahulu.' }}

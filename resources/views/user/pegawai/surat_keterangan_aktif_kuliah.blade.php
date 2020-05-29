@@ -23,7 +23,7 @@
                                         class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllPengajuanSuratKeterangan > 0 ? $countAllPengajuanSuratKeterangan.' Pengajuan Surat Keterangan Aktif Kuliah' : 'Pengajuan Surat Keterangan Aktif Kuliah Kosong' }}
+                                    {{ $countAllPengajuanSuratKeterangan > 0 ? $countAllPengajuanSuratKeterangan.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -122,10 +122,10 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Surat Keterangan Aktif Kuliah Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Belum ada pengajuan surat keterangan aktif kuliah.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Pengajuan surat keterangan aktif kuliah belum ada.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -138,7 +138,7 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Data Surat Keterangan Aktif Kuliah</h4>
+                                        <h4>Surat Keterangan Aktif Kuliah</h4>
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
                                         <a href="{{ url('pegawai/surat-keterangan-aktif-kuliah/create')}}"
@@ -230,7 +230,7 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Keterangan Aktif Kuliah Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
                                             {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat keterangan aktif kuliah terlebih dahulu.' }}

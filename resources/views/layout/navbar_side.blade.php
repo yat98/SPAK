@@ -118,7 +118,7 @@
                 <i class="mdi mdi-file-document-box menu-icon"></i>
             </a>
             <div class="collapse" id="ui-basic">
-                <ul class="nav flex-column sub-menu">
+                <ul class="nav flex-column sub-menu overflow-hidden">
                     <li class="nav-item">
                         <a class="nav-link {{ ($halaman == 'surat-masuk') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-masuk') }}">
                             Surat Masuk
@@ -192,7 +192,7 @@
                 <i class="mdi mdi-file-document-box menu-icon"></i>
             </a>
             <div class="collapse" id="ui-basic">
-                <ul class="nav flex-column sub-menu">
+                <ul class="nav flex-column sub-menu overflow-hidden">
                     <li class="nav-item">
                         <a class="nav-link {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/pengajuan/surat-keterangan-aktif-kuliah') }}">
                             Surat Keterangan <br> Aktif Kuliah
@@ -255,7 +255,7 @@
                 <i class="mdi mdi-file-document-box menu-icon"></i>
             </a>
             <div class="collapse" id="ui-basic">
-                <ul class="nav flex-column sub-menu">
+                <ul class="nav flex-column sub-menu overflow-hidden">
                     <li class="nav-item"> 
                         <a class="nav-link {{ ($halaman == 'surat-dispensasi') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-dispensasi') }}">Surat Dispensasi</a>
                     </li>

@@ -34,7 +34,7 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Surat Kegiatan Mahasiswa</h4>
+                                        <h4>Pengajuan Surat Kegiatan Mahasiswa</h4>
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
                                         <a href="{{ url('mahasiswa/pengajuan/surat-kegiatan-mahasiswa/create')}}" class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">+

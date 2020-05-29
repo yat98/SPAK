@@ -36,7 +36,7 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Data Waktu Cuti</h4>
+                                        <h4>Waktu Cuti</h4>
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
                                         <a href="{{ url('pegawai/waktu-cuti/create')}}"

@@ -52,7 +52,7 @@
                         <div class="col-12 grid-margin">
                             <div class="card mb-2 bg-danger text-white">
                                 <div class="card-body text-center">
-                                    <h1>Pendaftaran Cuti Pada Semester Telah Selesai</h1>
+                                    <h1>Pendaftaran Cuti Pada Semester Ini Telah Selesai</h1>
                                 </div>     
                             </div>
                         </div>
@@ -374,7 +374,7 @@
                                                 $kode = explode('/',$suratDispensasi->kodeSurat->kode_surat);
                                             @endphp
                                             <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($suratDispensasiList->currentPage() - 1)  }}</td>
+                                                <td> {{ $loop->iteration  }}</td>
                                                 @if($suratDispensasi->user->jabatan == 'dekan')
                                                     <td> {{ $suratDispensasi->nomor_surat.'/'.$suratDispensasi->kodeSurat->kode_surat.'/'.$suratDispensasi->created_at->format('Y') }}</td>
                                                 @else
@@ -440,7 +440,7 @@
                                                 $kode = explode('/',$suratRekomendasi->kodeSurat->kode_surat);
                                             @endphp
                                             <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($suratRekomendasiList->currentPage() - 1)  }}</td>
+                                                <td> {{ $loop->iteration  }}</td>
                                                 @if($suratRekomendasi->user->jabatan == 'wd3')
                                                     <td> {{ $suratRekomendasi->nomor_surat.'/'.$kode[0].'.3/.'.$kode[1].'/'.$suratRekomendasi->created_at->format('Y') }}</td>
                                                 @else
@@ -503,7 +503,7 @@
                                         <tbody>
                                             @foreach ($suratTugasList as $suratTugas)
                                             <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($suratTugasList->currentPage() - 1)  }}</td>
+                                                <td> {{ $loop->iteration  }}</td>
                                                 <td> {{ 'B/'.$suratTugas->nomor_surat.'/'.$suratTugas->kodeSurat->kode_surat.'/'.$suratTugas->created_at->format('Y') }}</td>
                                                 <td> {{ $suratTugas->nama_kegiatan }}</td>
                                                 <td> 
@@ -638,7 +638,7 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Surat Kegiatan Mahasiswa</h4>
+                                        <h4>Pengajuan Surat Kegiatan Mahasiswa</h4>
                                     </div>
                                 </div>
                                 <hr class="mb-4">
@@ -659,7 +659,7 @@
                                         <tbody>
                                             @foreach ($pengajuanKegiatanList as $pengajuanKegiatan)
                                             <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($pengajuanKegiatanList->currentPage() - 1)  }}</td>
+                                                <td> {{ $loop->iteration  }}</td>
                                                 <td> {{ $pengajuanKegiatan->nama_kegiatan }}</td>
                                                 <td> {{ $pengajuanKegiatan->mahasiswa->pimpinanOrmawa->ormawa->nama }}</td>
                                                 <td>
@@ -727,7 +727,7 @@
                                         <tbody>
                                             @foreach ($pendaftaranCutiList as $pendaftaranCuti)
                                             <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($pendaftaranCutiList->currentPage() - 1)  }}</td>
+                                                <td> {{ $loop->iteration }}</td>
                                                 <td> {{ $pendaftaranCuti->mahasiswa->nama }}</td>
                                                 <td> {{ $pendaftaranCuti->waktuCuti->tahunAkademik->tahun_akademik }} - {{ ucwords($pendaftaranCuti->waktuCuti->tahunAkademik->semester) }}</td>
                                                 <td> {{ $pendaftaranCuti->alasan_cuti }}</td>

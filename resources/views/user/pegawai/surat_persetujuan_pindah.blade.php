@@ -23,7 +23,7 @@
                                         class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllPengajuanSuratPersetujuanPindah > 0 ? $countAllPengajuanSuratPersetujuanPindah.' Pengajuan Surat Persetujuan Pindah' : 'Pengajuan Surat Persetujuan Pindah Kosong' }}
+                                    {{ $countAllPengajuanSuratPersetujuanPindah > 0 ? $countAllPengajuanSuratPersetujuanPindah.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -120,10 +120,10 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Surat Persetujuan Pindah Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Belum ada pengajuan surat persetujuan pindah.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Pengajuan surat persetujuan pindah belum ada.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -136,7 +136,7 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Data Surat Persetujuan Pindah</h4>
+                                        <h4>Surat Persetujuan Pindah</h4>
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
                                         <a href="{{ url('pegawai/surat-persetujuan-pindah/create')}}"
@@ -225,7 +225,7 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Persetujuan Pindah Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
                                             {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat persetujuan pindah terlebih dahulu.' }}
