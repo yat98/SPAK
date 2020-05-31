@@ -115,6 +115,10 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'dashboard-pimpinan';
             } else if ($segment == 'tanda-tangan') {
                 $halaman = 'tanda-tangan';
+            } else if ($segment == 'surat-keterangan-aktif-kuliah') {
+                $halaman = 'surat-keterangan-aktif-kuliah';
+            } else if ($segment == 'surat-keterangan-kelakuan-baik') {
+                $halaman = 'surat-keterangan-kelakuan-baik';
             } else if($segment == 'surat-dispensasi'){
                 $halaman = 'surat-dispensasi';
             } else if($segment == 'surat-rekomendasi'){
@@ -123,10 +127,14 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-tugas';
             } else if ($segment == 'surat-persetujuan-pindah') {
                 $halaman = 'surat-persetujuan-pindah';
+            } else if($segment == 'surat-pengantar-cuti'){
+                $halaman = 'surat-pengantar-cuti';
             } else if($segment == 'surat-pengantar-beasiswa'){
                 $halaman = 'surat-pengantar-beasiswa';
             } else if($segment == 'surat-kegiatan-mahasiswa'){
                 $halaman = 'surat-kegiatan-mahasiswa';
+            } else if ($segment == 'profil') {
+                $halaman = 'profil';
             }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi]);

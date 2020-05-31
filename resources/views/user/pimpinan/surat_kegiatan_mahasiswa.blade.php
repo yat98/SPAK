@@ -23,7 +23,7 @@
                                         class="mdi mdi-file-document-box mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllDisposisi > 0 ? $countAllDisposisi.' Disposisi Surat Kegiatan Mahasiswa' : 'Disposisi Surat Kegiatan Mahasiswa Kosong' }}
+                                    {{ $countAllDisposisi > 0 ? $countAllDisposisi.' Disposisi Surat' : 'Disposisi Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -39,7 +39,7 @@
                                         class="mdi mdi-file-document-box mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllTandaTangan > 0 ? $countAllTandaTangan.' Tanda Tangan Surat Kegiatan Mahasiswa' : 'Tanda Tangan Surat Kegiatan Mahasiswa Kosong' }}
+                                    {{ $countAllTandaTangan > 0 ? $countAllTandaTangan.' Tanda Tangan Surat' : 'Tanda Tangan Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -139,7 +139,7 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            Disposisi Surat Kegiatan Mahasiswa Kosong!
+                                            Disposisi Surat Kosong!
                                         </h4>
                                         <p class="text-muted">
                                             Disposisi surat kegiatan mahasiswa belum ada.
@@ -227,7 +227,7 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            Tanda Tangan Surat Kegiatan Mahasiswa Kosong!
+                                            Tanda Tangan Surat Kosong!
                                         </h4>
                                         <p class="text-muted">
                                            Tanda tangan surat kegiatan mahasiswa belum ada.
@@ -245,7 +245,7 @@
                         <div class="card-body">
                             <div class="row mb-3">
                                 <div class="col-12 col-md-6">
-                                    <h4>Data Surat Kegiatan Mahasiswa</h4>
+                                    <h4>Surat Kegiatan Mahasiswa</h4>
                                 </div>
                             </div>
                             <hr class="mb-4">
@@ -317,7 +317,7 @@
                                 <div class="col text-center">
                                     <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                     <h4 class="display-4 mt-3">
-                                        {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kegiatan Mahasiswa Kosong!' }}
+                                        {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
                                     </h4>
                                     <p class="text-muted">
                                         {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat kegiatan mahasiswa terlebih dahulu.' }}

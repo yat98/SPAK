@@ -14,7 +14,7 @@
                         </span> Dashboard </h3>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 stretch-card grid-margin">
+                    <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-danger card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
@@ -25,6 +25,701 @@
                                 <h2 class="mb-5">
                                     {{ isset($tahunAkademikAktif) ? $tahunAkademikAktif->tahun_akademik.' - '.ucwords($tahunAkademikAktif->semester) : 'Tidak Ada Tahun Akademik Aktif' }}
                                 </h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 stretch-card grid-margin">
+                        <div class="card bg-gradient-info card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Surat Keterangan Aktif Kuliah<i
+                                        class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countAllSuratKeteranganAktif > 0 ? $countAllSuratKeteranganAktif.' Surat Keterangan Aktif Kuliah' : 'Surat Keterangan Aktif Kuliah Kosong' }}
+                                </h2>
+                                <h6 class="card-text">
+                                    <a href="{{ url('pimpinan/surat-keterangan-aktif-kuliah') }}" class="text-white">Lihat surat keterangan aktif kuliah</a>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 stretch-card grid-margin">
+                        <div class="card bg-gradient-info card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Surat Keterangan Kelakuan Baik <i
+                                        class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countAllSuratKeteranganKelakuan > 0 ? $countAllSuratKeteranganKelakuan.' Surat Keterangan Kelakuan Baik' : 'Surat Keterangan Kelakuan Baik Kosong' }}
+                                </h2>
+                                <h6 class="card-text">
+                                <a href="{{ url('pimpinan/surat-keterangan-kelakuan-baik') }}" class="text-white">Lihat surat keterangan kelakuan baik</a></h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 stretch-card grid-margin">
+                        <div class="card bg-gradient-info card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Surat Dispensasi <i
+                                        class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countAllSuratDispensasi > 0 ? $countAllSuratDispensasi.' Surat Dispensasi' : 'Surat Dispensasi Kosong' }}
+                                </h2>
+                                <h6 class="card-text">
+                                    <a href="{{ url('pimpinan/surat-dispensasi') }}" class="text-white">Lihat surat dispensasi</a>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 stretch-card grid-margin">
+                        <div class="card bg-gradient-info card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Surat Rekomendasi <i
+                                        class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countAllSuratRekomendasi > 0 ? $countAllSuratRekomendasi.' Surat Rekomendasi' : 'Surat Rekomendasi Kosong' }}
+                                </h2>
+                                <h6 class="card-text">
+                                    <a href="{{ url('pimpinan/surat-rekomendasi') }}" class="text-white">Lihat surat rekomendasi</a>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 stretch-card grid-margin">
+                        <div class="card bg-gradient-info card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Surat Tugas <i
+                                        class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countAllSuratTugas > 0 ? $countAllSuratTugas.' Surat Tugas' : 'Surat Tugas Kosong' }}
+                                </h2>
+                                <h6 class="card-text">
+                                    <a href="{{ url('pimpinan/surat-tugas') }}" class="text-white">Lihat surat tugas</a></h6>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 stretch-card grid-margin">
+                        <div class="card bg-gradient-info card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Surat Persetujuan Pindah <i
+                                        class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countAllSuratPersetujuanPindah > 0 ? $countAllSuratPersetujuanPindah.' Surat Persetujuan Pindah' : 'Surat Persetujuan Pindah Kosong' }}
+                                </h2>
+                                <h6 class="card-text">
+                                    <a href="{{ url('pimpinan/surat-persetujuan-pindah') }}" class="text-white">Lihat surat persetujuan pindah</a></h6>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-md-6 stretch-card grid-margin">
+                        <div class="card bg-gradient-info card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Surat Pengantar Cuti <i
+                                        class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countAllSuratCuti > 0 ? $countAllSuratCuti.' Surat Pengantar Cuti' : 'Surat Pengantar Cuti Kosong' }}
+                                </h2>
+                                <h6 class="card-text">
+                                    <a href="{{ url('pimpinan/surat-pengantar-cuti') }}" class="text-white">Lihat surat pengantar cuti</a></h6>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 stretch-card grid-margin">
+                        <div class="card bg-gradient-info card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Surat Pengantar Beasiswa <i
+                                        class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countAllSuratBeasiswa > 0 ? $countAllSuratBeasiswa.' Surat Pengantar Beasiswa' : 'Surat Pengantar Beasiswa Kosong' }}
+                                </h2>
+                                <h6 class="card-text">
+                                    <a href="{{ url('pimpinan/surat-pengantar-beasiswa') }}" class="text-white">Lihat surat pengantar beasiswa</a></h6>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-md-6 stretch-card grid-margin">
+                        <div class="card bg-gradient-info card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Surat Kegiatan Mahasiswa <i
+                                        class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countAllSuratKegiatan > 0 ? $countAllSuratKegiatan.' Surat Kegiatan Mahasiswa' : 'Surat Kegiatan Mahasiswa Kosong' }}
+                                </h2>
+                                <h6 class="card-text">
+                                    <a href="{{ url('pimpinan/surat-kegiatan-mahasiswa') }}" class="text-white">Lihat surat kegiatan mahasiswa</a></h6
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Surat Keterangan Aktif Kuliah</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countAllSuratKeteranganAktif > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Nomor Surat</th>
+                                                <th> Nama Mahasiswa</th>
+                                                <th> Semester</th>
+                                                <th> Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($suratKeteranganAktifList as $suratKeteranganAktif)
+                                            @php
+                                                $kode = explode('/',$suratKeteranganAktif->kodeSurat->kode_surat);
+                                            @endphp
+                                            <tr>
+                                                <td> {{ $loop->iteration }}</td>
+                                                <td> {{ 'B/'.$suratKeteranganAktif->nomor_surat.'/'.$kode[0].'.4/'.$kode[1].'/'.$suratKeteranganAktif->created_at->year }}</td>
+                                                <td> {{ $suratKeteranganAktif->pengajuanSuratKeterangan->mahasiswa->nama }}</td>
+                                                <td> {{ $suratKeteranganAktif->pengajuanSuratKeterangan->tahunAkademik->tahun_akademik.' - '.ucwords($suratKeteranganAktif->pengajuanSuratKeterangan->tahunAkademik->semester) }}</td>
+                                                <td> 
+                                                    <label class="badge badge-gradient-info">
+                                                        {{ ucwords($suratKeteranganAktif->status) }}
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat keterangan aktif kuliah terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Surat Keterangan Kelakuan Baik</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countAllSuratKeteranganKelakuan > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Nomor Surat</th>
+                                                <th> Nama Mahasiswa</th>
+                                                <th> Semester</th>
+                                                <th> Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($suratKeteranganKelakuanList as $suratKeterangan)
+                                            <tr>
+                                                @php
+                                                    $kode = explode('/',$suratKeterangan->kodeSurat->kode_surat);
+                                                @endphp
+                                                <td> {{ $loop->iteration }}</td>
+                                                <td> {{ 'B/'.$suratKeterangan->nomor_surat.'/'.$kode[0].'.4/'.$kode[1].'/'.$suratKeterangan->created_at->year }}</td>
+                                                <td> {{ $suratKeterangan->pengajuanSuratKeterangan->mahasiswa->nama }}</td>
+                                                <td> {{ $suratKeterangan->pengajuanSuratKeterangan->tahunAkademik->tahun_akademik.' - '.ucwords($suratKeterangan->pengajuanSuratKeterangan->tahunAkademik->semester) }}</td>
+                                                <td> 
+                                                    <label class="badge badge-gradient-info">
+                                                        {{ ucwords($suratKeterangan->status) }}
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat keterangan kelakuan baik terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Surat Dispensasi</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countAllSuratDispensasi > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Nomor Surat</th>
+                                                <th> Nama kegiatan</th>
+                                                <th> Status</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($suratDispensasiList as $suratDispensasi)
+                                             @php
+                                                $kode = explode('/',$suratDispensasi->kodeSurat->kode_surat);
+                                            @endphp
+                                            <tr>
+                                                <td> {{ $loop->iteration }}</td>
+                                                @if($suratDispensasi->user->jabatan == 'dekan')
+                                                    <td> {{ $suratDispensasi->nomor_surat.'/'.$suratDispensasi->kodeSurat->kode_surat.'/'.$suratDispensasi->created_at->format('Y') }}</td>
+                                                @else
+                                                    <td> {{ $suratDispensasi->nomor_surat.'/'.$kode[0].'.3/.'.$kode[1].'/'.$suratDispensasi->created_at->format('Y') }}</td>
+                                                @endif
+                                                <td> {{ $suratDispensasi->nama_kegiatan }}</td>
+                                                <td> 
+                                                @if($suratDispensasi->status == 'diajukan')
+                                                <label class="badge badge-gradient-warning text-dark">{{ ucwords($suratDispensasi->status) }}</td></label>
+                                                @elseif($suratDispensasi->status == 'ditolak')
+                                                <label class="badge badge-gradient-danger">{{ ucwords($suratDispensasi->status) }}</td></label>
+                                                @else
+                                                <label class="badge badge-gradient-info">{{ ucwords($suratDispensasi->status) }}</td></label>
+                                                @endif
+                                                <td> {{ $suratDispensasi->created_at->diffForHumans() }}</td>
+                                                <td> {{ $suratDispensasi->updated_at->diffForHumans() }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat dispensasi terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Surat Rekomendasi</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countAllSuratRekomendasi > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Nomor Surat</th>
+                                                <th> Nama kegiatan</th>
+                                                <th> Status</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($suratRekomendasiList as $suratRekomendasi)
+                                             @php
+                                                $kode = explode('/',$suratRekomendasi->kodeSurat->kode_surat);
+                                            @endphp
+                                            <tr>
+                                                <td> {{ $loop->iteration  }}</td>
+                                                @if($suratRekomendasi->user->jabatan == 'wd3')
+                                                    <td> {{ $suratRekomendasi->nomor_surat.'/'.$kode[0].'.3/'.$kode[1].'/'.$suratRekomendasi->created_at->format('Y') }}</td>
+                                                @else
+                                                    <td> {{ $suratRekomendasi->nomor_surat.'/'.$kode[0].'.4/'.$kode[1].'/'.$suratRekomendasi->created_at->format('Y') }}</td>
+                                                @endif
+                                                <td> {{ $suratRekomendasi->nama_kegiatan }}</td>
+                                                <td> 
+                                                @if($suratRekomendasi->status == 'menunggu tanda tangan')
+                                                <label class="badge badge-gradient-warning text-dark">{{ ucwords($suratRekomendasi->status) }}</td></label>
+                                                @else
+                                                <label class="badge badge-gradient-info">{{ ucwords($suratRekomendasi->status) }}</td></label>
+                                                @endif
+                                                <td> {{ $suratRekomendasi->created_at->diffForHumans() }}</td>
+                                                <td> {{ $suratRekomendasi->updated_at->diffForHumans() }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat rekomendasi terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Surat Tugas</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countAllSuratTugas > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Nomor Surat</th>
+                                                <th> Nama kegiatan</th>
+                                                <th> Status</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($suratTugasList as $suratTugas)
+                                            <tr>
+                                                <td> {{ $loop->iteration  }}</td>
+                                                <td> {{ 'B/'.$suratTugas->nomor_surat.'/'.$suratTugas->kodeSurat->kode_surat.'/'.$suratTugas->created_at->format('Y') }}</td>
+                                                <td> {{ $suratTugas->nama_kegiatan }}</td>
+                                                <td> 
+                                                @if($suratTugas->status == 'menunggu tanda tangan')
+                                                <label class="badge badge-gradient-warning text-dark">{{ ucwords($suratTugas->status) }}</td></label>
+                                                @else
+                                                <label class="badge badge-gradient-info">{{ ucwords($suratTugas->status) }}</td></label>
+                                                @endif
+                                                <td> {{ $suratTugas->created_at->diffForHumans() }}</td>
+                                                <td> {{ $suratTugas->updated_at->diffForHumans() }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat tugas terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Surat Persetujuan Pindah</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countAllSuratPersetujuanPindah > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Nomor Surat</th>
+                                                <th> Nama Mahasiswa</th>
+                                                <th> Status</th>
+                                                <th> Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($suratPersetujuanPindahList as $suratPersetujuanPindah)
+                                            <tr>
+                                                <td> {{ $loop->iteration }}</td>
+                                                <td> {{ 'B/'.$suratPersetujuanPindah->nomor_surat.'/'.$suratPersetujuanPindah->kodeSurat->kode_surat.'/'.$suratPersetujuanPindah->created_at->year }}</td>
+                                                <td> {{ $suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->mahasiswa->nama }}</td>
+                                                <td> 
+                                                    @if($suratPersetujuanPindah->status == 'menunggu tanda tangan')
+                                                    <label class="badge badge-gradient-warning text-dark">
+                                                        {{ ucwords($suratPersetujuanPindah->status) }}
+                                                    </label>
+                                                    @else
+                                                    <label class="badge badge-gradient-info">
+                                                        {{ ucwords($suratPersetujuanPindah->status) }}
+                                                    </label>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat persetujuan pindah terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Surat Pengantar Cuti</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countAllSuratCuti > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Nomor Surat</th>
+                                                <th> Tahun Akademik</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
+                                                <th> Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($suratCutiList as $suratCuti)
+                                            @php
+                                                $kode = explode('/',$suratCuti->kodeSurat->kode_surat);
+                                            @endphp
+                                            <tr>
+                                                <td> {{ $loop->iteration  }}</td>
+                                                <td> {{ $suratCuti->nomor_surat.'/'.$kode[0].'.4/.'.$kode[1].'/'.$suratCuti->created_at->format('Y') }}</td>
+                                                <td> {{ $suratCuti->waktuCuti->tahunAkademik->tahun_akademik }} - {{ ucwords($suratCuti->waktuCuti->tahunAkademik->semester) }}</td>
+                                                <td> 
+                                                <td> {{ $suratCuti->created_at->diffForHumans() }}</td>
+                                                <td> {{ $suratCuti->updated_at->diffForHumans() }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : 'Data Surat Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat pengantar cuti terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Surat Pengantar Beasiswa</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countAllSuratBeasiswa > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Nomor Surat</th>
+                                                <th> Status</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
+                                                <th> Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($suratBeasiswaList as $suratBeasiswa)
+                                            <tr>
+                                                <td> {{ $loop->iteration  }}</td>
+                                                <td> {{ 'B/'.$suratBeasiswa->nomor_surat.'/'.$suratBeasiswa->kodeSurat->kode_surat.'/'.$suratBeasiswa->created_at->format('Y') }}</td>
+                                                <td> 
+                                                @if($suratBeasiswa->status == 'menunggu tanda tangan')
+                                                <label class="badge badge-gradient-warning text-dark">{{ ucwords($suratBeasiswa->status) }}</td></label>
+                                                @else
+                                                <label class="badge badge-gradient-info">{{ ucwords($suratBeasiswa->status) }}</td></label>
+                                                @endif
+                                                <td> {{ $suratBeasiswa->created_at->diffForHumans() }}</td>
+                                                <td> {{ $suratBeasiswa->updated_at->diffForHumans() }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat pengantar beasiswa terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Surat Kegiatan Mahasiswa</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countAllSuratKegiatan > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Nomor Surat</th>
+                                                <th> Nama Kegiatan</th>
+                                                <th> Ormawa</th>
+                                                <th> Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($suratKegiatanList as $suratKegiatan)
+                                            <tr>
+                                                <td> {{ $loop->iteration }}</td>
+                                                <td> {{ $suratKegiatan->nomor_surat.'/'.$suratKegiatan->kodeSurat->kode_surat.'/'.$suratKegiatan->created_at->year }}</td>
+                                                 <td> {{ $suratKegiatan->pengajuanSuratKegiatanMahasiswa->nama_kegiatan }}</td>
+                                                <td> {{ $suratKegiatan->pengajuanSuratKegiatanMahasiswa->mahasiswa->pimpinanOrmawa->ormawa->nama }}</td>
+                                                <td> 
+                                                    <label class="badge badge-gradient-info">
+                                                        {{ ucwords($suratKegiatan->status) }}
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat kegiatan mahasiswa terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>

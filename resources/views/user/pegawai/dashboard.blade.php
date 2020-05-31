@@ -96,7 +96,7 @@
                                     {{ $countAllKodeSurat > 0 ? $countAllKodeSurat.' Kode Surat' : 'Kode Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text">
-                                    <a href="{{ url('pegawai/kode-surat') }}" class="text-white">Lihat data kode surat</a>
+                                    <a href="{{ url('pegawai/kode-surat') }}" class="text-white">Lihat kode surat</a>
                                 </h6>
                             </div>
                         </div>
@@ -147,7 +147,7 @@
                                     {{ $countAllSuratKeteranganKelakuan > 0 ? $countAllSuratKeteranganKelakuan.' Surat Keterangan Kelakuan Baik' : 'Surat Keterangan Kelakuan Baik Kosong' }}
                                 </h2>
                                 <h6 class="card-text">
-                                <a href="{{ url('pegawai/surat-keterangan-kelakuan-baik') }}" class="text-white">Lihat surat keterangan kelakuan baik</a></h6>
+                                    <a href="{{ url('pegawai/surat-keterangan-kelakuan-baik') }}" class="text-white">Lihat surat keterangan kelakuan baik</a></h6>
                             </div>
                         </div>
                     </div>
@@ -196,7 +196,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllSuratTugas > 0 ? $countAllSuratTugas.' Surat Tugas' : 'Surat Tugas Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('pegawai/surat-tugas') }}" class="text-white">Lihat surat tugas</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -211,7 +213,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllSuratPersetujuanPindah > 0 ? $countAllSuratPersetujuanPindah.' Surat Persetujuan Pindah' : 'Surat Persetujuan Pindah Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('pegawai/surat-persetujuan-pindah') }}" class="text-white">Lihat surat persetujuan pindah</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -226,7 +230,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllSuratCuti > 0 ? $countAllSuratCuti.' Surat Pengantar Cuti' : 'Surat Pengantar Cuti Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('pegawai/surat-pengantar-cuti') }}" class="text-white">Lihat surat pengantar cuti</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -241,7 +247,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllSuratBeasiswa > 0 ? $countAllSuratBeasiswa.' Surat Pengantar Beasiswa' : 'Surat Pengantar Beasiswa Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('pegawai/surat-pengantar-beasiswa') }}" class="text-white">Lihat surat pengantar beasiswa</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -256,7 +264,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllSuratKegiatan > 0 ? $countAllSuratKegiatan.' Surat Kegiatan Mahasiswa' : 'Surat Kegiatan Mahasiswa Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('pegawai/surat-kegiatan-mahasiswa') }}" class="text-white">Lihat surat kegiatan mahasiswa</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -271,7 +281,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllWaktuCuti > 0 ? $countAllWaktuCuti.' Waktu Cuti' : 'Waktu Cuti Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('pegawai/waktu-cuti') }}" class="text-white">Lihat waktu cuti</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -286,7 +298,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllPendaftaranCuti > 0 ? $countAllPendaftaranCuti.' Pendaftaran Cuti' : 'Pendaftaran Cuti Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('pegawai/pendaftaran-cuti') }}" class="text-white">Lihat pendaftaran cuti</a>
+                                </h6>
                             </div>
                         </div>
                     </div>

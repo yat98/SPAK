@@ -246,6 +246,14 @@ Route::group(['prefix' => 'pimpinan'], function () {
     Route::middleware(['pimpinan'])->group(function(){
         // Dashboard
         Route::get('/','UserController@pimpinanDashboard');
+         // Surat Keterangan Aktif Kuliah
+         Route::get('surat-keterangan-aktif-kuliah/search/','SuratKeteranganAktifKuliahController@search');
+         Route::resource('surat-keterangan-aktif-kuliah','SuratKeteranganAktifKuliahController')->except('show');
+         Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@show');
+         // Surat Keterangan Kelakuan Baik
+         Route::get('surat-keterangan-kelakuan-baik/search/','SuratKeteranganKelakuanBaikController@search');
+         Route::resource('surat-keterangan-kelakuan-baik','SuratKeteranganKelakuanBaikController')->except('show');
+         Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}','SuratKeteranganController@show');
         // Surat Dispensasi
         Route::get('surat-dispensasi', 'SuratDispensasiController@suratDispensasiPimpinan');
         Route::get('surat-dispensasi/search', 'SuratDispensasiController@search');
@@ -267,6 +275,9 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::get('surat-persetujuan-pindah/pengajuan/{pengajuan_persetujuan_pindah}','PengajuanSuratPersetujuanPindahController@show');
         Route::resource('surat-persetujuan-pindah','SuratPersetujuanPindahController')->only('show');
         Route::post('surat-persetujuan-pindah/pengajuan/tanda-tangan','SuratPersetujuanPindahController@tandaTanganPindah');
+        // Surat Pengantar Cuti
+        Route::get('surat-pengantar-cuti/search', 'SuratPengantarCutiController@search');
+        Route::resource('surat-pengantar-cuti','SuratPengantarCutiController');
         //  Surat Pengantar Beasiswa
         Route::get('surat-pengantar-beasiswa', 'SuratPengantarBeasiswaController@suratBeasiswaPimpinan');
         Route::get('surat-pengantar-beasiswa/search', 'SuratPengantarBeasiswaController@searchPimpinan');
@@ -286,5 +297,10 @@ Route::group(['prefix' => 'pimpinan'], function () {
         // Tanda Tangan
         Route::get('tanda-tangan','UserController@indexTandaTangan');
         Route::post('tanda-tangan','UserController@updateTandaTangan');
+        // Profil
+        Route::get('profil','UserController@profil');
+        Route::get('profil/password','UserController@profilPassword');
+        Route::post('profil/password','UserController@updatePassword');
+        Route::patch('profil/{user}','UserController@updateProfil');
     });
 });

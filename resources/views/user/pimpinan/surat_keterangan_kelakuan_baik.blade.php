@@ -10,8 +10,8 @@
                 <div class="page-header">
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
-                            <i class="mdi mdi-file-document-box "></i>
-                        </span> Surat Dispensasi</h3>
+                            <i class="mdi mdi-file-document-box"></i>
+                        </span> Surat Keterangan Kelakuan Baik </h3>
                 </div>
                 <div class="row">
                     <div class="col-md-6 stretch-card grid-margin">
@@ -19,11 +19,11 @@
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Tanda Tangan Surat Dispensasi <i
-                                        class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                <h4 class="font-weight-normal mb-3">Pengajuan Surat Keterangan Kelakuan Baik<i
+                                        class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllPengajuanSuratDispensasi > 0 ? $countAllPengajuanSuratDispensasi.' Tanda Tangan Surat' : 'Tanda Tangan Surat Kosong' }}
+                                    {{ $countAllPengajuanSuratKeterangan > 0 ? $countAllPengajuanSuratKeterangan.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -34,11 +34,11 @@
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Surat Dispensasi <i
-                                        class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                <h4 class="font-weight-normal mb-3">Surat Keterangan Kelakuan Baik <i
+                                        class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllSuratDispensasi > 0 ? $countAllSuratDispensasi.' Surat Dispensasi' : 'Surat Dispensasi Kosong' }}
+                                    {{ $countAllSuratKeterangan > 0 ? $countAllSuratKeterangan.' Surat Keterangan Kelakuan Baik' : 'Surat Keterangan Kelakuan Baik Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -51,66 +51,50 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Tanda Tangan Surat Dispensasi</h4>
+                                        <h4>Pengajuan Surat Keterangan Kelakuan Baik</h4>
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countAllPengajuanSuratDispensasi > 0)
+                                @if ($countPengajuanSuratKeterangan > 0)
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
                                             <tr>
                                                 <th> No. </th>
-                                                <th> Nomor Surat</th>
-                                                <th> Nama kegiatan</th>
+                                                <th> Nama Mahasiswa</th>
+                                                <th> Semester</th>
                                                 <th> Status</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($pengajuanSuratDispensasiList as $suratDispensasi)
-                                             @php
-                                                $kode = explode('/',$suratDispensasi->kodeSurat->kode_surat);
-                                            @endphp
+                                            @foreach ($pengajuanSuratKeteranganList as $pengajuanSuratKeterangan)
                                             <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($suratDispensasiList->currentPage() - 1)  }}</td>
-                                                @if($suratDispensasi->user->jabatan == 'dekan')
-                                                    <td> {{ $suratDispensasi->nomor_surat.'/'.$suratDispensasi->kodeSurat->kode_surat.'/'.$suratDispensasi->created_at->format('Y') }}</td>
-                                                @else
-                                                    <td> {{ $suratDispensasi->nomor_surat.'/'.$kode[0].'.3/.'.$kode[1].'/'.$suratDispensasi->created_at->format('Y') }}</td>
-                                                @endif
-                                                <td> {{ $suratDispensasi->nama_kegiatan }}</td>
+                                                <td> {{ $loop->iteration + $perPage * ($pengajuanSuratKeteranganList->currentPage() - 1) }}</td>
+                                                <td> {{ $pengajuanSuratKeterangan->mahasiswa->nama }}</td>
+                                                <td> {{ $pengajuanSuratKeterangan->tahunAkademik->tahun_akademik.' - '.ucwords($pengajuanSuratKeterangan->tahunAkademik->semester) }}</td>
                                                 <td> 
-                                                @if($suratDispensasi->status == 'menunggu tanda tangan')
-                                                <label class="badge badge-gradient-warning text-dark">{{ ucwords($suratDispensasi->status) }}</td></label>
-                                                @else
-                                                <label class="badge badge-gradient-info">{{ ucwords($suratDispensasi->status) }}</td></label>
-                                                @endif
-                                                <td> {{ $suratDispensasi->created_at->diffForHumans() }}</td>
-                                                <td> {{ $suratDispensasi->updated_at->diffForHumans() }}</td>
-                                                <td>
-                                                    <a href="{{ url('pimpinan/surat-dispensasi/'.$suratDispensasi->id_surat_masuk) }}" class="btn btn-outline-info btn-sm btn-surat-dispensasi-detail" data-toggle="modal" data-target="#exampleModal">
-                                                        <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
-                                                        Detail
-                                                    </a>
-                                                     @if ($suratDispensasi->status == 'menunggu tanda tangan' && $suratDispensasi->nip == Session::get('nip'))
-                                                    {{ Form::open(['url'=>'pimpinan/surat-dispensasi/pengajuan/tanda-tangan','class'=>'d-inline-block']) }}
-                                                    {{ Form::hidden('id',$suratDispensasi->id_surat_masuk)}}
-                                                    <button type="submit" class="btn btn-info btn-sm simpan-tanda-tangan">
-                                                        <i class="mdi mdi mdi-border-color btn-icon-prepend"></i>
-                                                        Tanda Tangan
-                                                    </button>
-                                                    {{ Form::close() }}
+                                                    @if ($pengajuanSuratKeterangan->status == 'diajukan')
+                                                    <label class="badge badge-gradient-warning text-dark">
+                                                        {{ ucwords($pengajuanSuratKeterangan->status) }}
+                                                    </label>
+                                                    @elseif($pengajuanSuratKeterangan->status == 'ditolak')
+                                                    <label class="badge badge-gradient-danger">
+                                                        {{ ucwords($pengajuanSuratKeterangan->status) }}
+                                                    </label>
                                                     @endif
+                                                </td>
+                                                <td>
+                                                    <a href="{{ url('pegawai/detail/mahasiswa/'.$pengajuanSuratKeterangan->nim) }}" class="btn-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                        <i class="mdi mdi-account btn-icon-prepend"></i>
+                                                        Detail</a>
                                                 </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                     <div class="col">
-                                        {{ $suratDispensasiList->links() }}
+                                        {{ $pengajuanSuratKeteranganList->appends(['page' => $pengajuanSuratKeteranganList->currentPage()])->links() }}
                                     </div>
                                 </div>
                                 @else
@@ -118,10 +102,10 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Tanda Tangan Surat Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Tanda tangan surat dispensasi belum ada.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Pengajuan surat keterangan kelakuan baik belum ada.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -129,23 +113,27 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Surat Dispensasi</h4>
+                                        <h4>Surat Keterangan Kelakuan Baik</h4>
                                     </div>
                                 </div>
                                 <hr class="mb-4">
                                 <div class="row mb-3">
-                                    <div class="col-sm-12 col-md-12">
-                                        {{ Form::open(['url'=>'pimpinan/surat-dispensasi/search','method'=>'GET']) }}
+                                    <div class="col-sm-12">
+                                        {{ Form::open(['url'=>'pegawai/surat-keterangan-kelakuan-baik/search','method'=>'get']) }}
                                         <div class="form-row">
-                                            <div class="col-sm-12 col-md-6 mt-1">
-                                                {{ Form::select('keywords',$nomorSurat,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> '-- Pilih Nomor Surat --']) }}
+                                            <div class="col-sm-4 col-md-4 mt-1">
+                                                {{ Form::select('nomor_surat',$nomorSurat,(request()->get('nomor_surat') != null) ? request()->get('nomor_surat'):null,['class'=>'form-control search','placeholder'=> 'Cari kode surat...']) }}
+                                            </div>
+                                            <div class="col-sm-4 col-md-4 mt-1">
+                                                {{ Form::select('keywords',$mahasiswa,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> 'Cari mahasiswa...']) }}
+                                            </div>
+                                            <div class="col-sm-4 col-md-2 mt-1">
+                                                {{ Form::select('tahun_akademik',$tahunAkademik,(request()->get('tahun_akademik') != null) ? request()->get('tahun_akademik'):null,['class'=>'search btn-margin form-control','placeholder'=> '-- Pilih Tahun Akademik --']) }}
                                             </div>
                                             <div class="col-sm-12 col-md">
                                                 <button class="btn btn-success btn-sm btn-tambah" type="submit">
@@ -157,49 +145,45 @@
                                         {{ Form::close() }}
                                     </div>
                                 </div>
-                                @if ($countSuratDispensasi > 0)
+                                @if ($countSuratKeterangan > 0)
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
                                             <tr>
                                                 <th> No. </th>
                                                 <th> Nomor Surat</th>
-                                                <th> Nama kegiatan</th>
+                                                <th> Nama Mahasiswa</th>
+                                                <th> Semester</th>
                                                 <th> Status</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($suratDispensasiList as $suratDispensasi)
-                                             @php
-                                                $kode = explode('/',$suratDispensasi->kodeSurat->kode_surat);
-                                            @endphp
+                                            @foreach ($suratKeteranganList as $suratKeterangan)
                                             <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($suratDispensasiList->currentPage() - 1)  }}</td>
-                                                @if($suratDispensasi->user->jabatan == 'dekan')
-                                                    <td> {{ $suratDispensasi->nomor_surat.'/'.$suratDispensasi->kodeSurat->kode_surat.'/'.$suratDispensasi->created_at->format('Y') }}</td>
-                                                @else
-                                                    <td> {{ $suratDispensasi->nomor_surat.'/'.$kode[0].'.3/.'.$kode[1].'/'.$suratDispensasi->created_at->format('Y') }}</td>
-                                                @endif
-                                                <td> {{ $suratDispensasi->nama_kegiatan }}</td>
-                                                <td>                                                
-                                                <label class="badge badge-gradient-info">{{ ucwords($suratDispensasi->status) }}</td></label>
-                                                <td> {{ $suratDispensasi->created_at->diffForHumans() }}</td>
-                                                <td> {{ $suratDispensasi->updated_at->diffForHumans() }}</td>
+                                                @php
+                                                    $kode = explode('/',$suratKeterangan->kodeSurat->kode_surat);
+                                                @endphp
+                                                <td> {{ $loop->iteration + $perPage * ($suratKeteranganList->currentPage() - 1) }}</td>
+                                                <td> {{ 'B/'.$suratKeterangan->nomor_surat.'/'.$kode[0].'.4/'.$kode[1].'/'.$suratKeterangan->created_at->year }}</td>
+                                                <td> {{ $suratKeterangan->pengajuanSuratKeterangan->mahasiswa->nama }}</td>
+                                                <td> {{ $suratKeterangan->pengajuanSuratKeterangan->tahunAkademik->tahun_akademik.' - '.ucwords($suratKeterangan->pengajuanSuratKeterangan->tahunAkademik->semester) }}</td>
+                                                <td> 
+                                                    <label class="badge badge-gradient-info">
+                                                        {{ ucwords($suratKeterangan->status) }}
+                                                    </label>
+                                                </td>
                                                 <td>
-                                                    <a href="{{ url('pimpinan/surat-dispensasi/'.$suratDispensasi->id_surat_masuk) }}" class="btn btn-outline-info btn-sm btn-surat-dispensasi-detail" data-toggle="modal" data-target="#exampleModal">
+                                                    <a href="{{ url('pegawai/surat-keterangan-kelakuan-baik/'.$suratKeterangan->id_pengajuan_surat_keterangan) }}" class="btn-surat-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
-                                                        Detail
-                                                    </a>
+                                                        Detail</a>
                                                 </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
                                     <div class="col">
-                                        {{ $suratDispensasiList->links() }}
+                                        {{ $suratKeteranganList->appends(['page_pengajuan' => $pengajuanSuratKeteranganList->currentPage()])->links() }}
                                     </div>
                                 </div>
                                 @else
@@ -210,7 +194,7 @@
                                             {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat dispensasi terlebih dahulu.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat keterangan kelakuan baik terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -226,7 +210,7 @@
 </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content bg-white">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
@@ -234,12 +218,11 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id='surat-dispensasi-detail-content'>
-                
-            </div>
+            <div class="modal-body" id='surat-keterangan-aktif-detail-content'></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+</div>
 @endsection

@@ -13273,7 +13273,7 @@ dl {
           text-align: left;
           top: 0;
           bottom: 0;
-          width: 190px;
+          width: 220px;
           z-index: 1;
           line-height: 1.8; }
           .rtl.sidebar-icon-only .sidebar .nav .nav-item.hover-open .nav-link .menu-title {
@@ -13290,7 +13290,7 @@ dl {
           border-radius: 0 0 5px 0;
           position: absolute;
           left: 70px;
-          width: 190px; }
+          width: 220px; }
           .rtl.sidebar-icon-only .sidebar .nav .nav-item.hover-open .collapse, .rtl.sidebar-icon-only .sidebar .nav .nav-item.hover-open .collapsing {
             left: auto;
             right: 70px;

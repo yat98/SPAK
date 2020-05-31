@@ -23,7 +23,7 @@
                                         class="mdi mdi-file-document-box mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllPengajuanSuratPindah > 0 ? $countAllPengajuanSuratPindah.' Tanda Tangan Surat Persetujuan Pindah' : 'Tanda Tangan Surat Persetujuan Pindah Kosong' }}
+                                    {{ $countAllPengajuanSuratPindah > 0 ? $countAllPengajuanSuratPindah.' Tanda Tangan Surat' : 'Tanda Tangan Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -111,7 +111,7 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Tanda Tangan Surat Persetujuan Pindah Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Tanda Tangan Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
                                             {{ (Session::has('search')) ? Session::get('search') : ' Tanda tangan surat persetujuan pindah belum ada.' }}
@@ -192,10 +192,10 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Surat Persetujuan Pindah Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi surat persetujuan pindah terlebih dahulu.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat persetujuan pindah terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>

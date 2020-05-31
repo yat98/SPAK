@@ -23,7 +23,7 @@
                                         class="mdi mdi-file-document-box mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllPengajuanSuratTugas > 0 ? $countAllPengajuanSuratTugas.' Tanda Tangan Surat Tugas' : 'Tanda Tangan Surat Rekomendasi Kosong' }}
+                                    {{ $countAllPengajuanSuratTugas > 0 ? $countAllPengajuanSuratTugas.' Tanda Tangan Surat' : 'Tanda Tangan Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -111,7 +111,7 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Tanda Tangan Surat Tugas Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Tanda Tangan Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
                                             {{ (Session::has('search')) ? Session::get('search') : ' Tanda tangan surat tugas belum ada.' }}
@@ -193,10 +193,10 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Surat Tugas Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi surat tugas terlebih dahulu.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat tugas terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>
