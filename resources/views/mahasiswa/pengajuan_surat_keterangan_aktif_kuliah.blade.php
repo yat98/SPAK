@@ -55,8 +55,6 @@
                                                 <th> Jenis Surat</th>
                                                 <th> Status</th>
                                                 <th> Keterangan</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -82,8 +80,6 @@
                                                     @endif
                                                 </td>
                                                 <td> {{ $pengajuanSuratKeteranganAktif->keterangan }}</td>
-                                                <td> {{ $pengajuanSuratKeteranganAktif->created_at->diffForHumans() }}</td>
-                                                <td> {{ $pengajuanSuratKeteranganAktif->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah/'.$pengajuanSuratKeteranganAktif->id.'/progress') }}" class="btn-surat-progress btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi mdi-information btn-icon-prepend"></i>

@@ -71,8 +71,6 @@
                                                 <th> Nomor Surat</th>
                                                 <th> Nama kegiatan</th>
                                                 <th> Status</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -95,8 +93,6 @@
                                                 @else
                                                 <label class="badge badge-gradient-info">{{ ucwords($suratDispensasi->status) }}</td></label>
                                                 @endif
-                                                <td> {{ $suratDispensasi->created_at->diffForHumans() }}</td>
-                                                <td> {{ $suratDispensasi->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('pegawai/surat-dispensasi/'.$suratDispensasi->id_surat_masuk) }}" class="btn btn-outline-info btn-sm btn-surat-dispensasi-detail" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>

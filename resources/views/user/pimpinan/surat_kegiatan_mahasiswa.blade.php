@@ -240,91 +240,93 @@
                     </div>
                 </div>
                 @endif
-                <div class="col-12 grid-margin">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row mb-3">
-                                <div class="col-12 col-md-6">
-                                    <h4>Surat Kegiatan Mahasiswa</h4>
-                                </div>
-                            </div>
-                            <hr class="mb-4">
-                            <div class="row mb-3">
-                                <div class="col-sm-12">
-                                    {{ Form::open(['url'=>'pimpinan/surat-kegiatan-mahasiswa/search','method'=>'get']) }}
-                                    <div class="form-row">
-                                        <div class="col-sm-4 col-md-4 mt-1">
-                                            {{ Form::select('keywords',$nomorSurat,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> 'Cari kode surat...']) }}
-                                        </div>
-                                        <div class="col-sm-12 col-md">
-                                            <button class="btn btn-success btn-sm btn-tambah" type="submit">
-                                                <i class="mdi mdi-magnify btn-icon-prepend"></i>
-                                                Cari
-                                            </button>
-                                        </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Surat Kegiatan Mahasiswa</h4>
                                     </div>
-                                    {{ Form::close() }}
                                 </div>
-                            </div>
-                            @if ($countSuratKegiatan > 0)
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th> No. </th>
-                                            <th> Nomor Surat</th>
-                                            <th> Nama Kegiatan</th>
-                                            <th> Ormawa</th>
-                                            <th> Status</th>
-                                            <th> Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($suratKegiatanList as $suratKegiatan)
-                                        <tr>
-                                            <td> {{ $loop->iteration + $perPage * ($suratKegiatanList->currentPage() - 1) }}</td>
-                                            <td> {{ $suratKegiatan->nomor_surat.'/'.$suratKegiatan->kodeSurat->kode_surat.'/'.$suratKegiatan->created_at->year }}</td>
-                                                <td> {{ $suratKegiatan->pengajuanSuratKegiatanMahasiswa->nama_kegiatan }}</td>
-                                            <td> {{ $suratKegiatan->pengajuanSuratKegiatanMahasiswa->mahasiswa->pimpinanOrmawa->ormawa->nama }}</td>
-                                            <td> 
-                                                <label class="badge badge-gradient-info">
-                                                    {{ ucwords($suratKegiatan->status) }}
-                                                </label>
-                                            </td>
-                                            <td>
-                                                  @if($suratKegiatan->status == 'selesai')
-                                                    <a href="{{ url('pimpinan/surat-kegiatan-mahasiswa/'.$suratKegiatan->id_pengajuan_kegiatan) }}" class="btn btn-outline-info btn-sm">
-                                                        <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
-                                                        Detail
-                                                    </a>
-                                                    @else
-                                                     <a href="{{ url('pimpinan/pengajuan/surat-kegiatan-mahasiswa/'.$suratKegiatan->id_pengajuan_kegiatan) }}" class="btn btn-outline-info btn-sm">
-                                                        <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
-                                                        Detail
-                                                    </a>    
-                                                    @endif
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                <div class="col">
-                                    {{ $suratKegiatanList->links() }}
+                                <hr class="mb-4">
+                                <div class="row mb-3">
+                                    <div class="col-sm-12">
+                                        {{ Form::open(['url'=>'pimpinan/surat-kegiatan-mahasiswa/search','method'=>'get']) }}
+                                        <div class="form-row">
+                                            <div class="col-sm-4 col-md-4 mt-1">
+                                                {{ Form::select('keywords',$nomorSurat,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> 'Cari kode surat...']) }}
+                                            </div>
+                                            <div class="col-sm-12 col-md">
+                                                <button class="btn btn-success btn-sm btn-tambah" type="submit">
+                                                    <i class="mdi mdi-magnify btn-icon-prepend"></i>
+                                                    Cari
+                                                </button>
+                                            </div>
+                                        </div>
+                                        {{ Form::close() }}
+                                    </div>
                                 </div>
-                            </div>
-                            @else
-                            <div class="row">
-                                <div class="col text-center">
-                                    <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
-                                    <h4 class="display-4 mt-3">
-                                        {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
-                                    </h4>
-                                    <p class="text-muted">
-                                        {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat kegiatan mahasiswa terlebih dahulu.' }}
-                                    </p>
+                                @if ($countSuratKegiatan > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Nomor Surat</th>
+                                                <th> Nama Kegiatan</th>
+                                                <th> Ormawa</th>
+                                                <th> Status</th>
+                                                <th> Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($suratKegiatanList as $suratKegiatan)
+                                            <tr>
+                                                <td> {{ $loop->iteration + $perPage * ($suratKegiatanList->currentPage() - 1) }}</td>
+                                                <td> {{ $suratKegiatan->nomor_surat.'/'.$suratKegiatan->kodeSurat->kode_surat.'/'.$suratKegiatan->created_at->year }}</td>
+                                                    <td> {{ $suratKegiatan->pengajuanSuratKegiatanMahasiswa->nama_kegiatan }}</td>
+                                                <td> {{ $suratKegiatan->pengajuanSuratKegiatanMahasiswa->mahasiswa->pimpinanOrmawa->ormawa->nama }}</td>
+                                                <td> 
+                                                    <label class="badge badge-gradient-info">
+                                                        {{ ucwords($suratKegiatan->status) }}
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    @if($suratKegiatan->status == 'selesai')
+                                                        <a href="{{ url('pimpinan/surat-kegiatan-mahasiswa/'.$suratKegiatan->id_pengajuan_kegiatan) }}" class="btn btn-outline-info btn-sm">
+                                                            <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
+                                                            Detail
+                                                        </a>
+                                                        @else
+                                                        <a href="{{ url('pimpinan/pengajuan/surat-kegiatan-mahasiswa/'.$suratKegiatan->id_pengajuan_kegiatan) }}" class="btn btn-outline-info btn-sm">
+                                                            <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
+                                                            Detail
+                                                        </a>    
+                                                        @endif
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <div class="col">
+                                        {{ $suratKegiatanList->links() }}
+                                    </div>
                                 </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat kegiatan mahasiswa terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
                             </div>
-                            @endif
                         </div>
                     </div>
                 </div>

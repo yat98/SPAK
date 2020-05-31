@@ -201,6 +201,8 @@
                                                 <th> Nama Mahasiswa</th>
                                                 <th> Semester</th>
                                                 <th> Status</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -218,6 +220,8 @@
                                                         {{ ucwords($suratKeteranganAktif->status) }}
                                                     </label>
                                                 </td>
+                                                <td> {{ $suratKeteranganAktif->created_at->diffForHumans() }}</td>
+                                                <td> {{ $suratKeteranganAktif->updated_at->diffForHumans() }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -260,6 +264,8 @@
                                                 <th> Nama Mahasiswa</th>
                                                 <th> Semester</th>
                                                 <th> Status</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -277,6 +283,8 @@
                                                         {{ ucwords($suratKeterangan->status) }}
                                                     </label>
                                                 </td>
+                                                <td> {{ $suratKeterangan->created_at->diffForHumans() }}</td>
+                                                <td> {{ $suratKeterangan->updated_at->diffForHumans() }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -511,7 +519,8 @@
                                                 <th> Nomor Surat</th>
                                                 <th> Nama Mahasiswa</th>
                                                 <th> Status</th>
-                                                <th> Aksi</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -531,6 +540,8 @@
                                                     </label>
                                                     @endif
                                                 </td>
+                                                <td> {{ $suratPersetujuanPindah->created_at->diffForHumans() }}</td>
+                                                <td> {{ $suratPersetujuanPindah->updated_at->diffForHumans() }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -573,7 +584,6 @@
                                                 <th> Tahun Akademik</th>
                                                 <th> Di Buat</th>
                                                 <th> Di Ubah</th>
-                                                <th> Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -585,7 +595,6 @@
                                                 <td> {{ $loop->iteration  }}</td>
                                                 <td> {{ $suratCuti->nomor_surat.'/'.$kode[0].'.4/.'.$kode[1].'/'.$suratCuti->created_at->format('Y') }}</td>
                                                 <td> {{ $suratCuti->waktuCuti->tahunAkademik->tahun_akademik }} - {{ ucwords($suratCuti->waktuCuti->tahunAkademik->semester) }}</td>
-                                                <td> 
                                                 <td> {{ $suratCuti->created_at->diffForHumans() }}</td>
                                                 <td> {{ $suratCuti->updated_at->diffForHumans() }}</td>
                                             </tr>
@@ -630,7 +639,6 @@
                                                 <th> Status</th>
                                                 <th> Di Buat</th>
                                                 <th> Di Ubah</th>
-                                                <th> Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -688,6 +696,8 @@
                                                 <th> Nama Kegiatan</th>
                                                 <th> Ormawa</th>
                                                 <th> Status</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -702,6 +712,8 @@
                                                         {{ ucwords($suratKegiatan->status) }}
                                                     </label>
                                                 </td>
+                                                <td> {{ $suratKegiatan->created_at->diffForHumans() }}</td>
+                                                <td> {{ $suratKegiatan->updated_at->diffForHumans() }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>

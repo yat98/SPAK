@@ -139,14 +139,14 @@ class Controller extends BaseController
 
     protected function generateNomorSuratBaru(){
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->first();
-        $nomorSurat[] = SuratKeterangan::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratDispensasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratRekomendasi::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratTugas::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratPersetujuanPindah::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratPengantarCuti::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratPengantarBeasiswa::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratKegiatanMahasiswa::orderByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratKeterangan::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratDispensasi::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratRekomendasi::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratTugas::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratPersetujuanPindah::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratPengantarCuti::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratPengantarBeasiswa::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratKegiatanMahasiswa::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
         $nomorSuratBaru = max($nomorSurat);
         return ++$nomorSuratBaru;
     }

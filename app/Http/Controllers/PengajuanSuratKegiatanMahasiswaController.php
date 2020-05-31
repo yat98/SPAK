@@ -140,7 +140,7 @@ class PengajuanSuratKegiatanMahasiswaController extends Controller
             NotifikasiUser::create([
                 'nip'=>$user->nip,
                 'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
-                'isi_notifikasi'=>'disposisi surat kegiatan mahasiswa.',
+                'isi_notifikasi'=>'Disposisi surat kegiatan mahasiswa.',
                 'link_notifikasi'=>url('pimpinan/surat-kegiatan-mahasiswa')
             ]);
         }catch(Exception $e){
@@ -222,6 +222,9 @@ class PengajuanSuratKegiatanMahasiswaController extends Controller
     }
 
     public function createSurat(PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
+        if(!$this->isKodeSuratKegiatanExists() || !$this->isKodeSuratExists()){
+            return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
+        }
         $userList = $this->generatePimpinan();
         $kodeSurat = $this->generateKodeSurat();
         $nomorSuratBaru = $this->generateNomorSuratBaru();
@@ -306,5 +309,14 @@ class PengajuanSuratKegiatanMahasiswaController extends Controller
             if($delete) return true;
             return false;
         }
+    }
+
+    private function isKodeSuratKegiatanExists(){
+        $kodeSurat = KodeSurat::where('jenis_surat','surat kegiatan mahasiswa')->where('status_aktif','aktif')->first();
+        if(empty($kodeSurat)){
+            $this->setFlashData('info','Kode Surat Aktif Tidak Ada','Aktifkan kode surat terlebih dahulu!');
+            return false;
+        }
+        return true;
     }
 }

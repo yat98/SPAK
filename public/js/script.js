@@ -1367,6 +1367,10 @@ $('.btn-pendaftaran-cuti-detail').on('click',function(e){
                                             <td>${label}</td>
                                         </tr>
                                         <tr>
+                                            <th>Alasan Cuti</th>
+                                            <td>${pendaftaran.alasan_cuti}</td>
+                                        </tr>
+                                        <tr>
                                             <th>Di Buat</th>
                                             <td>${pendaftaran.created_at}</td>
                                         </tr>

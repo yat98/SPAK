@@ -202,7 +202,7 @@
    <div class="container">
         @include('surat.kop_surat')
         <div class="border"></div>
-        <div class="content" id="lampiran">
+        <div class="content" id="lampiran" style="color:black !important;">
              <?= $suratKegiatan->pengajuanSuratKegiatanMahasiswa->lampiran_panitia ?></p>
         </div>
         <div class="signature">

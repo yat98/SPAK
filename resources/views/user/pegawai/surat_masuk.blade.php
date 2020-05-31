@@ -73,8 +73,6 @@
                                                 <th> No. </th>
                                                 <th> Nomor Surat</th>
                                                 <th> Instansi</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -84,8 +82,6 @@
                                                 <td> {{ $loop->iteration + $perPage * ($suratMasukList->currentPage() - 1)  }}</td>
                                                 <td> {{ $suratMasuk->nomor_surat }}</td>
                                                 <td> {{ $suratMasuk->instansi }}</td>
-                                                <td> {{ $suratMasuk->created_at->diffForHumans() }}</td>
-                                                <td> {{ $suratMasuk->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('pegawai/surat-masuk/'.$suratMasuk->id) }}" class="btn btn-outline-info btn-sm btn-surat-masuk-detail" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>

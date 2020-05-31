@@ -39,7 +39,7 @@ class SuratPengantarBeasiswaController extends Controller
 
     public function create(){
         if(!$this->isKodeSuratBeasiswaExists() || !$this->isKodeSuratExists() || !$this->isTandaTanganExists()){
-            return redirect($this->segmentUser.'/surat-dispensasi');
+            return redirect($this->segmentUser.'/surat-pengantar-beasiswa');
         }
         $mahasiswa = $this->generateMahasiswa();
         $suratMasuk = SuratMasuk::pluck('nomor_surat','id');

@@ -71,8 +71,6 @@
                                                 <th> Nomor Surat</th>
                                                 <th> Nama kegiatan</th>
                                                 <th> Status</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -88,8 +86,6 @@
                                                 @else
                                                 <label class="badge badge-gradient-info">{{ ucwords($suratTugas->status) }}</td></label>
                                                 @endif
-                                                <td> {{ $suratTugas->created_at->diffForHumans() }}</td>
-                                                <td> {{ $suratTugas->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('pegawai/surat-tugas/'.$suratTugas->id) }}" class="btn btn-outline-info btn-sm btn-surat-tugas-detail" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>

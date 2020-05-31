@@ -54,8 +54,6 @@
                                                 <th> Nama </th>
                                                 <th> Status</th>
                                                 <th> Keterangan</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -80,9 +78,11 @@
                                                     @endif
                                                 </td>
                                                 <td> {{ $pengajuanSuratPindah->keterangan }}</td>
-                                                <td> {{ $pengajuanSuratPindah->created_at->diffForHumans() }}</td>
-                                                <td> {{ $pengajuanSuratPindah->updated_at->diffForHumans() }}</td>
                                                 <td>
+                                                    <a href="{{ url('mahasiswa/pengajuan/surat-persetujuan-pindah/'.$pengajuanSuratPindah->id.'/progress') }}" class="btn-pengajuan-pindah-progress btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                        <i class="mdi mdi mdi-information btn-icon-prepend"></i>
+                                                        Lihat Progress Surat</a>
+                                                        
                                                     @if($pengajuanSuratPindah->status == 'selesai')
                                                     <a href="{{ url('mahasiswa/surat-persetujuan-pindah/'.$pengajuanSuratPindah->id) }}" class="btn-surat-pindah-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#pindahDetail">
                                                     <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
@@ -93,9 +93,7 @@
                                                         Detail</a>
                                                     @endif
 
-                                                    <a href="{{ url('mahasiswa/pengajuan/surat-persetujuan-pindah/'.$pengajuanSuratPindah->id.'/progress') }}" class="btn-pengajuan-pindah-progress btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
-                                                        <i class="mdi mdi mdi-information btn-icon-prepend"></i>
-                                                        Lihat Progress Surat</a>
+                                                  
                                                     @if($pengajuanSuratPindah->status == 'diajukan')
                                                     <a href="{{ url('mahasiswa/pengajuan/surat-persetujuan-pindah/'.$pengajuanSuratPindah->id.'/edit') }}" class="btn btn-sm btn-warning text-dark">
                                                         <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>

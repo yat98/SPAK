@@ -70,8 +70,6 @@
                                                 <th> Ormawa</th>
                                                 <th> Status</th>
                                                 <th> Keterangan</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -92,8 +90,6 @@
                                                     <label class="badge badge-gradient-success">{{ ucwords($pengajuanKegiatan->status) }}</td></label>
                                                 @endif 
                                                 <td> {{ $pengajuanKegiatan->keterangan }}</td>
-                                                <td> {{ $pengajuanKegiatan->created_at->diffForHumans() }}</td>
-                                                <td> {{ $pengajuanKegiatan->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('pegawai/surat-kegiatan-mahasiswa/pengajuan/'.$pengajuanKegiatan->id) }}" class="btn btn-outline-info btn-sm">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>

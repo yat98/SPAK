@@ -15,7 +15,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6 stretch-card grid-margin">
-                        <div class="card bg-gradient-info card-img-holder text-white">
+                        <div class="card bg-gradient-dark card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
@@ -56,8 +56,6 @@
                                                 <th> Alasan Cuti</th>
                                                 <th> Status</th>
                                                 <th> Keterangan</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -77,8 +75,6 @@
                                                 <label class="badge badge-gradient-info">{{ ucwords($pendaftaranCuti->status) }}</td></label>
                                                 @endif
                                                 <td> {{ $pendaftaranCuti->keterangan }}</td>
-                                                <td> {{ $pendaftaranCuti->created_at->diffForHumans() }}</td>
-                                                <td> {{ $pendaftaranCuti->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('mahasiswa/pendaftaran-cuti/'.$pendaftaranCuti->id) }}" class="btn btn-outline-info btn-sm btn-pendaftaran-cuti-detail" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-playlist-check btn-icon-prepend"></i>

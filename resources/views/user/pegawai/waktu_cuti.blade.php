@@ -71,8 +71,6 @@
                                                 <th> Tahun Akademik</th>
                                                 <th> Tanggal Awal Cuti</th>
                                                 <th> Tanggal Akhir Cuti</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -83,8 +81,6 @@
                                                 <td> {{ $waktuCuti->tahunAkademik->tahun_akademik }} - {{ ucwords($waktuCuti->tahunAkademik->semester) }}</td>
                                                 <td> {{ $waktuCuti->tanggal_awal_cuti->isoFormat('D MMMM Y') }}</td>
                                                 <td> {{ $waktuCuti->tanggal_akhir_cuti->isoFormat('D MMMM Y') }}</td>
-                                                <td> {{ $waktuCuti->created_at->diffForHumans() }}</td>
-                                                <td> {{ $waktuCuti->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('pegawai/waktu-cuti/'.$waktuCuti->id.'/edit') }}"
                                                         class="btn btn-warning btn-sm text-dark">

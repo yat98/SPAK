@@ -90,13 +90,10 @@
                                                         Detail</a>
 
                                                     @if ($pengajuanSuratKeterangan->status == 'diajukan')
-                                                    {{ Form::open(['url'=>'pegawai/surat-keterangan-kelakuan-baik/pengajuan/tanda-tangan','class'=>'d-inline-block']) }}
-                                                    {{ Form::hidden('id',$pengajuanSuratKeterangan->id)}}
-                                                    <button type="submit" class="btn btn-info btn-sm simpan-tanda-tangan">
-                                                        <i class="mdi mdi mdi-border-color btn-icon-prepend"></i>
-                                                        Tanda Tangan
-                                                    </button>
-                                                    {{ Form::close() }}
+                                                    <a href="{{ url('pegawai/surat-keterangan-kelakuan-baik/pengajuan/buat-surat/'.$pengajuanSuratKeterangan->id) }}" class="btn btn-sm btn-info">
+                                                        <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
+                                                            Buat Surat
+                                                    </a>
 
                                                     {{ Form::open(['url'=>'pegawai/surat-keterangan-kelakuan-baik/pengajuan/tolak-pengajuan/'.$pengajuanSuratKeterangan->id,'class'=>'d-inline-block','method'=>'PATCH']) }}
                                                     {{ Form::hidden('keterangan','-',['id'=>'keterangan_surat']) }}

@@ -52,8 +52,6 @@
                                                 <th> Ormawa</th>
                                                 <th> Status</th>
                                                 <th> Keterangan</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -75,8 +73,6 @@
                                                 @endif
                                                 </td>
                                                 <td> {{ $pengajuanKegiatan->keterangan }}</td>
-                                                <td> {{ $pengajuanKegiatan->created_at->diffForHumans() }}</td>
-                                                <td> {{ $pengajuanKegiatan->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('mahasiswa/pengajuan/surat-kegiatan-mahasiswa/'.$pengajuanKegiatan->id.'/progress') }}" class=" btn btn-outline-info btn-sm btn-surat-kegiatan-mahasiswa-progress" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi mdi-information btn-icon-prepend"></i>

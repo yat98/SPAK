@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use PDF;
 use Session;
+use App\User;
 use App\KodeSurat;
 use App\SuratKeterangan;
 use App\NotifikasiMahasiswa;
@@ -174,18 +175,31 @@ class SuratKeteranganKelakuanBaikController extends Controller
         return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
     }
 
-    public function tandaTangan(Request $request){
+    public function createSurat(PengajuanSuratKeterangan $pengajuanSuratKeterangan){
         if(!$this->isKodeSuratAktifExists() || !$this->isKodeSuratExists() || !$this->isTandaTanganExists()){
-            return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
+            return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
         }
-        $pengajuanSuratKeterangan = PengajuanSuratKeterangan::findOrFail($request->id);
+        $jenisSurat = ucwords($pengajuanSuratKeterangan->jenis_surat);
         $nomorSuratBaru = $this->generateNomorSuratBaru();
-        $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->first();
+        $userList =$this->generatePimpinan();
+        $kodeSurat = $this->generateKodeSurat();
+        return view('user.pegawai.buat_surat_keterangan',compact('pengajuanSuratKeterangan','jenisSurat','nomorSuratBaru','userList','kodeSurat'));
+    }
+
+    public function storeSurat(Request $request){
+        $this->validate($request,[
+            'id_pengajuan_surat_keterangan'=>'required',
+            'id_kode_surat'=>'required',
+            'nomor_surat'=>'required|numeric|min:1|unique:surat_kegiatan_mahasiswa,nomor_surat|unique:surat_pengantar_beasiswa,nomor_surat|unique:surat_pengantar_cuti,nomor_surat|unique:surat_persetujuan_pindah,nomor_surat|unique:surat_rekomendasi,nomor_surat|unique:surat_tugas,nomor_surat|unique:surat_dispensasi,nomor_surat|unique:surat_keterangan,nomor_surat',
+            'nip'=>'required',
+        ]);
+
+        $pengajuanSuratKeterangan = PengajuanSuratKeterangan::findOrFail($request->id_pengajuan_surat_keterangan);
         $input = [
             'id_pengajuan_surat_keterangan'=>$pengajuanSuratKeterangan->id,
-            'nomor_surat'=>$nomorSuratBaru,
-            'id_kode_surat'=>$kodeSurat->id,
-            'nip' => Session::get('nip'),
+            'nomor_surat'=>$request->nomor_surat,
+            'id_kode_surat'=>$request->id_kode_surat,
+            'nip' => $request->nip,
         ];
         SuratKeterangan::create($input);
         $pengajuanSuratKeterangan->update([
@@ -197,7 +211,7 @@ class SuratKeteranganKelakuanBaikController extends Controller
             'isi_notifikasi'=>'Surat keterangan kelakuan baik telah selesai di buat.',
             'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik')
         ]);
-        $this->setFlashData('success','Berhasil','Tanda tangan surat keterangan kelakuan baik mahasiswa dengan nama '.$pengajuanSuratKeterangan->mahasiswa->nama.' berhasil');
+        $this->setFlashData('success','Berhasil','Surat keterangan kelakuan baik mahasiswa dengan nama '.$pengajuanSuratKeterangan->mahasiswa->nama.' berhasil ditambahkan');
         return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
     }
 
@@ -246,5 +260,21 @@ class SuratKeteranganKelakuanBaikController extends Controller
             return false;
         }
         return true;
+    }
+
+    private function generateKodeSurat(){
+        $kode = [];
+        $kodeSuratList = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->get();
+        foreach ($kodeSuratList as $kodeSurat) {
+            $kode[$kodeSurat->id] = $kodeSurat->kode_surat;
+        }
+        return $kode;
+    }
+
+    private function generatePimpinan(){
+        $user = [];
+        $pimpinan = User::where('jabatan','kasubag kemahasiswaan')->where('status_aktif','aktif')->first();
+        $user[$pimpinan->nip] = strtoupper($pimpinan->jabatan).' - '.$pimpinan->nama;
+        return $user;
     }
 }

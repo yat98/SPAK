@@ -50,13 +50,13 @@
                                     <div class="col-12">
                                         {{ Form::open(['url'=>'admin/tahun-akademik/search','method'=>'GET']) }}
                                         <div class="form-row">
-                                            <div class="col-sm-12 col-md-2">
+                                            <div class="col-sm-12 col-md-3">
                                                 {{ Form::select('tahun_akademik',$tahun,(request()->get('tahun_akademik') != null) ? request()->get('tahun_akademik'):null,['class'=>'btn-margin form-control','placeholder'=> '-- Pilih Tahun Akademik --']) }}
                                             </div>
-                                            <div class="col-sm-12 col-md-2">
+                                            <div class="col-sm-12 col-md-3">
                                                 {{ Form::select('semester',['genap'=>'Genap','ganjil'=>'Ganjil'],(request()->get('semester')!= null) ? request()->get('semester'):null,['class'=>'form-control','placeholder'=> '-- Pilih Semester --']) }}
                                             </div>
-                                            <div class="col-sm-12 col-md-2">
+                                            <div class="col-sm-12 col-md-3">
                                                 {{ Form::select('status_aktif',['aktif'=>'Aktif','non aktif'=>'Non Aktif'],(request()->get('status_aktif') != null) ? request()->get('status_aktif'):null,['class'=>'form-control','placeholder'=> '-- Pilih Status Aktif --']) }}
                                             </div>
                                             <div class="col-sm-12 col-md">

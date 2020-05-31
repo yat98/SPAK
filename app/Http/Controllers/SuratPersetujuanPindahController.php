@@ -65,7 +65,7 @@ class SuratPersetujuanPindahController extends Controller
     public function create()
     {
         if(!$this->isKodeSuratPindahExists() || !$this->isKodeSuratExists()){
-            return redirect($this->segmentUser.'/surat-tugas');
+            return redirect($this->segmentUser.'/surat-persetujuan-pindah');
         }
         $mahasiswa = $this->generateMahasiswa();
         $nomorSuratBaru = $this->generateNomorSuratBaru();

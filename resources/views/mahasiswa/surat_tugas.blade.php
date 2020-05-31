@@ -49,8 +49,6 @@
                                                 <th> Nomor Surat</th>
                                                 <th> Nama kegiatan</th>
                                                 <th> Status</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -66,8 +64,6 @@
                                                 @else
                                                 <label class="badge badge-gradient-info">{{ ucwords($suratTugas->status) }}</td></label>
                                                 @endif
-                                                <td> {{ $suratTugas->created_at->diffForHumans() }}</td>
-                                                <td> {{ $suratTugas->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('mahasiswa/surat-tugas/'.$suratTugas->id.'/progress') }}" class="btn-surat-dispensasi-progress btn btn-outline-info btn-sm" data-toggle="modal" data-target="#rekomendasiMahasiswa">
                                                         <i class="mdi mdi mdi-information btn-icon-prepend"></i>

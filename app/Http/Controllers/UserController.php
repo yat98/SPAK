@@ -157,7 +157,7 @@ class UserController extends Controller
         $suratBeasiswaList = $suratBeasiswaList->take(5);
         $suratKegiatanList = $suratKegiatanList->take(5);
         $waktuCutiList = $waktuCutiList->take(5);
-        $pendaftaranCutiList = $pendaftaranCutiList->count();
+        $pendaftaranCutiList = $pendaftaranCutiList->take(5);
        
         return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','countAllKodeSurat','kodeSuratList','countAllSuratKeteranganAktif','suratMasukList','countAllSuratMasuk','suratKeteranganAktifList','suratKeteranganKelakuanList','countAllSuratKeteranganKelakuan','suratDispensasiList','countAllSuratDispensasi','waktuCuti','tgl','suratRekomendasiList','countAllSuratRekomendasi','suratTugasList','countAllSuratTugas','suratPersetujuanPindahList','countAllSuratPersetujuanPindah','suratCutiList','countAllSuratCuti','suratBeasiswaList','countAllSuratBeasiswa','suratKegiatanList','countAllSuratKegiatan','waktuCutiList','countAllWaktuCuti','pendaftaranCutiList','countAllPendaftaranCuti'));
     }
@@ -172,15 +172,15 @@ class UserController extends Controller
                                         ->orderByDesc('surat_keterangan.updated_at')
                                         ->where('jenis_surat','surat keterangan kelakuan baik')
                                         ->get();
-        $suratDispensasiList = SuratDispensasi::orderBy('status')->get();
-        $suratRekomendasiList = SuratRekomendasi::orderBy('status')->get();
-        $suratTugasList = SuratTugas::orderBy('status')->get();
+        $suratDispensasiList = SuratDispensasi::orderByDesc('created_at')->where('status','selesai')->get();
+        $suratRekomendasiList = SuratRekomendasi::orderByDesc('created_at')->where('status','selesai')->get();
+        $suratTugasList = SuratTugas::orderByDesc('created_at')->where('status','selesai')->get();
         $suratPersetujuanPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan_persetujuan_pindah')
                                         ->orderByDesc('surat_persetujuan_pindah.created_at')
                                         ->orderByDesc('nomor_surat')
                                         ->get();
         $suratCutiList = SuratPengantarCuti::orderByDesc('nomor_surat')->get();
-        $suratBeasiswaList = SuratPengantarBeasiswa::orderBy('status')->get();
+        $suratBeasiswaList = SuratPengantarBeasiswa::orderBy('status')->where('status','selesai')->get();
         $suratKegiatanList =  SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan_kegiatan')
                                 ->where('status','selesai')
                                 ->get();
@@ -205,7 +205,7 @@ class UserController extends Controller
         $suratBeasiswaList = $suratBeasiswaList->take(5);
         $suratKegiatanList = $suratKegiatanList->take(5);
        
-        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','suratKeteranganKelakuanList','suratDispensasiList','suratRekomendasiList','suratTugasList','suratPersetujuanPindahList','suratCutiList','suratBeasiswaList','suratKegiatanList','countAllSuratKeteranganAktif','countAllSuratKeteranganKelakuan','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPersetujuanPindah','countAllSuratCuti','countAllSuratBeasiswa','countAllSuratKegiatan'));
+        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','suratKeteranganAktifList','suratKeteranganKelakuanList','suratDispensasiList','suratRekomendasiList','suratTugasList','suratPersetujuanPindahList','suratCutiList','suratBeasiswaList','suratKegiatanList','countAllSuratKeteranganAktif','countAllSuratKeteranganKelakuan','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPersetujuanPindah','countAllSuratCuti','countAllSuratBeasiswa','countAllSuratKegiatan'));
     }
 
     public function indexTandaTangan(){

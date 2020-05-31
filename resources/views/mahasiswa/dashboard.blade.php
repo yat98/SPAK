@@ -95,7 +95,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllPengajuan > 0 ? $countAllPengajuan.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah') }}" class="text-white">Lihat surat keterangan aktif kuliah</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -110,7 +112,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllPengajuanBaik > 0 ? $countAllPengajuanBaik.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik') }}" class="text-white">Lihat surat keterangan kelakuan baik</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -125,7 +129,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllDispensasi > 0 ? $countAllDispensasi.' Surat Dispensasi' : 'Surat Dispensasi Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('mahasiswa/surat-dispensasi') }}" class="text-white">Lihat surat dispensasi</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -140,7 +146,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllSuratRekomendasi > 0 ? $countAllSuratRekomendasi.' Surat Rekomendasi' : 'Surat Rekomendasi Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('mahasiswa/surat-rekomendasi') }}" class="text-white">Lihat surat rekomendasi</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -155,7 +163,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllSuratTugas > 0 ? $countAllSuratTugas.' Surat Tugas' : 'Surat Tugas Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('mahasiswa/surat-tugas') }}" class="text-white">Lihat surat tugas</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -170,7 +180,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllPengajuanPindah > 0 ? $countAllPengajuanPindah.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('mahasiswa/pengajuan/surat-persetujuan-pindah') }}" class="text-white">Lihat surat persetujuan pindah</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -184,13 +196,15 @@
                                 <h2 class="mb-5">
                                     {{ $countAllPengajuanKegiatan > 0 ? $countAllPengajuanKegiatan.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('mahasiswa/surat-pengajuan-pindah') }}" class="text-white">Lihat surat pengajuan pindah</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
                     @endif
                      <div class="col-md-6 stretch-card grid-margin">
-                        <div class="card bg-gradient-info card-img-holder text-white">
+                        <div class="card bg-gradient-dark card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
@@ -200,7 +214,9 @@
                                 <h2 class="mb-5">
                                     {{ $countPendaftaranCuti > 0 ? $countPendaftaranCuti.' Pendaftaran Cuti' : 'Pendaftaran Cuti Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('mahasiswa/pendaftaran-cuti') }}" class="text-white">Lihat pendaftaran cuti</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -557,7 +573,6 @@
                                                 <th> Keterangan</th>
                                                 <th> Di Buat</th>
                                                 <th> Di Ubah</th>
-                                                <th> Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -583,32 +598,6 @@
                                                 <td> {{ $pengajuanSuratPindah->keterangan }}</td>
                                                 <td> {{ $pengajuanSuratPindah->created_at->diffForHumans() }}</td>
                                                 <td> {{ $pengajuanSuratPindah->updated_at->diffForHumans() }}</td>
-                                                <td>
-                                                    @if($pengajuanSuratPindah->status == 'selesai')
-                                                    <a href="{{ url('mahasiswa/surat-persetujuan-pindah/'.$pengajuanSuratPindah->id) }}" class="btn-surat-pindah-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#pindahDetail">
-                                                    <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
-                                                    Detail</a>
-                                                    @else
-                                                    <a href="{{ url('mahasiswa/pengajuan/surat-persetujuan-pindah/'.$pengajuanSuratPindah->id) }}" class="btn-pengajuan-pindah btn btn-outline-info btn-sm" data-toggle="modal" data-target="#persetujuanDetail">
-                                                        <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
-                                                        Detail</a>
-                                                    @endif
-
-                                                    <a href="{{ url('mahasiswa/pengajuan/surat-persetujuan-pindah/'.$pengajuanSuratPindah->id.'/progress') }}" class="btn-pengajuan-pindah-progress btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
-                                                        <i class="mdi mdi mdi-information btn-icon-prepend"></i>
-                                                        Lihat Progress Surat</a>
-                                                    @if($pengajuanSuratPindah->status == 'diajukan')
-                                                    <a href="{{ url('mahasiswa/pengajuan/surat-persetujuan-pindah/'.$pengajuanSuratPindah->id.'/edit') }}" class="btn btn-sm btn-warning text-dark">
-                                                        <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>
-                                                        Edit</a>
-                                                    </a>
-                                                    @endif
-                                                    @if ($pengajuanSuratPindah->status == 'selesai')
-                                                    <a href="{{ url('mahasiswa/pengajuan/surat-persetujuan-pindah/'.$pengajuanSuratPindah->id.'/cetak') }}" class="btn btn-info btn-sm">
-                                                        <i class="mdi mdi mdi-printer btn-icon-prepend"></i>
-                                                        Cetak</a>
-                                                    @endif
-                                                </td>
                                             </tr>
                                             @endforeach
                                         </tbody>

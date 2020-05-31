@@ -90,7 +90,7 @@
                                                         Detail</a>
                                                      <a href="{{ url('pegawai/surat-persetujuan-pindah/pengajuan/'.$pengajuanSuratPersetujuan->id) }}" class="btn-pengajuan-pindah btn btn-outline-info btn-sm" data-toggle="modal" data-target="#persetujuanDetail">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
-                                                        Detail Pengajuan</a>
+                                                        Detail</a>
                                                         
                                                     @if ($pengajuanSuratPersetujuan->status == 'diajukan')
                                                     <a href="{{ url('pegawai/surat-persetujuan-pindah/pengajuan/'.$pengajuanSuratPersetujuan->id.'/create') }}" class="btn btn-sm btn-info">

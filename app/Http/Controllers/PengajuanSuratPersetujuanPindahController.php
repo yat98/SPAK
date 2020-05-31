@@ -26,6 +26,9 @@ class PengajuanSuratPersetujuanPindahController extends Controller
     }
 
     public function create(){
+        if(!$this->isSuratPindahDiajukanExists()){
+            return redirect($this->segmentUser.'/pengajuan/surat-persetujuan-pindah');
+        }
         return view($this->segmentUser.'.tambah_pengajuan_surat_persetujuan_pindah');
     }
 
@@ -198,5 +201,14 @@ class PengajuanSuratPersetujuanPindahController extends Controller
             if($delete) return true;
             return false;
         }
+    }
+
+    private function isSuratPindahDiajukanExists(){
+        $suratKeterangan = PengajuanSuratPersetujuanPindah::where('status','diajukan')->exists();
+        if($suratKeterangan){
+            $this->setFlashData('info','Pengajuan Surat','Pengajuan surat persetujuan pindah sementara diproses!');
+            return false;
+        }
+        return true;
     }
 }

@@ -16,6 +16,9 @@ use App\Http\Requests\PengajuanSuratKeteranganRequest;
 class PengajuanSuratKeteranganController extends Controller
 {
     public function createPengajuanKeteranganAktif(){
+        if(!$this->isSuratAktifDiajukanExists()){
+            return redirect($this->segmentUser.'/pengajuan/surat-keterangan-aktif-kuliah');
+        }
         $statusMahasiswa = Mahasiswa::where('nim',Session::get('nim'))->with(['tahunAkademik'=>function($query){
             $query->orderByDesc('created_at');
         }])->first();
@@ -56,6 +59,9 @@ class PengajuanSuratKeteranganController extends Controller
     }
 
     public function createPengajuanKelakuanBaik(){
+        if(!$this->isSuratKelakuanDiajukanExists()){
+            return redirect($this->segmentUser.'/pengajuan/surat-keterangan-kelakuan-baik');
+        }
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
         $tahunAkademikTerakhir = ($tahunAkademikAktif != null) ? $tahunAkademikAktif:TahunAkademik::orderByDesc('created_at')->first();
         $tahunAkademik = [];
@@ -124,5 +130,24 @@ class PengajuanSuratKeteranganController extends Controller
         DB::commit();
         $this->setFlashData('success','Berhasil','Pengajuan surat keterangan aktif kuliah berhasil dibuat.');
         return redirect($this->segmentUser.'/pengajuan/surat-keterangan-aktif-kuliah');
+    }
+
+    
+    private function isSuratAktifDiajukanExists(){
+        $suratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')->where('status','diajukan')->exists();
+        if($suratKeterangan){
+            $this->setFlashData('info','Pengajuan Surat','Pengajuan surat keterangan aktif kuliah sementara diproses!');
+            return false;
+        }
+        return true;
+    }
+
+    private function isSuratKelakuanDiajukanExists(){
+        $suratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')->where('status','diajukan')->exists();
+        if($suratKeterangan){
+            $this->setFlashData('info','Pengajuan Surat','Pengajuan surat keterangan kelakuan baik sementara diproses!');
+            return false;
+        }
+        return true;
     }
 }

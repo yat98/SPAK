@@ -71,8 +71,6 @@
                                                 <th> Nomor Surat</th>
                                                 <th> Nama kegiatan</th>
                                                 <th> Status</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -95,8 +93,6 @@
                                                 @else
                                                 <label class="badge badge-gradient-info">{{ ucwords($suratRekomendasi->status) }}</td></label>
                                                 @endif
-                                                <td> {{ $suratRekomendasi->created_at->diffForHumans() }}</td>
-                                                <td> {{ $suratRekomendasi->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('pegawai/surat-rekomendasi/'.$suratRekomendasi->id) }}" class="btn btn-outline-info btn-sm btn-surat-rekomendasi-detail" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
