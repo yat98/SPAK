@@ -181,7 +181,7 @@ class PendaftaranCutiController extends Controller
                 NotifikasiUser::create([
                     'nip'=>$user->nip,
                     'judul_notifikasi'=>'Pendaftaran Cuti',
-                    'isi_notifikasi'=>'Mahasiswa dengan nama '.$pendaftaran->mahasiswa->nama.' melakukan pendaftaran cuti pindah.',
+                    'isi_notifikasi'=>'Mahasiswa dengan nama '.$pendaftaran->mahasiswa->nama.' melakukan pendaftaran cuti.',
                     'link_notifikasi'=>url('pegawai/pendaftaran-cuti')
                 ]);
             }

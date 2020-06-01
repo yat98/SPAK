@@ -21,4 +21,16 @@ class NotifikasiMahasiswaController extends Controller
         ]);
         return redirect($notifikasiMahasiswa->link_notifikasi);
     }
+
+    public function allRead(){
+        NotifikasiMahasiswa::where('nim',Session::get('nim'))->update(['status'=>'dilihat']);
+        $this->setFlashData('success','Berhasil','Semua notifikasi telah ditandai dilihat');
+        return redirect($this->segmentUser.'/notifikasi');
+    }
+
+    public function allDelete(){
+        NotifikasiMahasiswa::where('nim',Session::get('nim'))->delete();
+        $this->setFlashData('success','Berhasil','Semua notifikasi telah dihapus');
+        return redirect($this->segmentUser.'/notifikasi');
+    }
 }

@@ -207,7 +207,7 @@ class SuratKeteranganKelakuanBaikController extends Controller
         ]);
         NotifikasiMahasiswa::create([
             'nim'=>$pengajuanSuratKeterangan->nim,
-            'judul_notifikasi'=>'Pengajuan Surat Keterangan',
+            'judul_notifikasi'=>'Surat Keterangan Kelakuan Baik',
             'isi_notifikasi'=>'Surat keterangan kelakuan baik telah selesai di buat.',
             'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik')
         ]);
@@ -225,7 +225,7 @@ class SuratKeteranganKelakuanBaikController extends Controller
             ]);
             NotifikasiMahasiswa::create([
                 'nim'=>$pengajuanSuratKeterangan->nim,
-                'judul_notifikasi'=>'Pengajuan Surat Keterangan',
+                'judul_notifikasi'=>'Surat Keterangan Kelakuan Baik',
                 'isi_notifikasi'=>'Pengajuan surat keterangan kelakuan baik di tolak.',
                 'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik')
             ]);

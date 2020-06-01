@@ -21,4 +21,16 @@ class NotifikasiUserController extends Controller
         ]);
         return redirect($notifikasiUser->link_notifikasi);
     }
+
+    public function allRead(){
+        NotifikasiUser::where('nip',Session::get('nip'))->update(['status'=>'dilihat']);
+        $this->setFlashData('success','Berhasil','Semua notifikasi telah ditandai dilihat');
+        return redirect($this->segmentUser.'/notifikasi');
+    }
+
+    public function allDelete(){
+        NotifikasiUser::where('nip',Session::get('nip'))->delete();
+        $this->setFlashData('success','Berhasil','Semua notifikasi telah dihapus');
+        return redirect($this->segmentUser.'/notifikasi');
+    }
 }

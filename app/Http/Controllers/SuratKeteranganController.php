@@ -23,7 +23,7 @@ class SuratKeteranganController extends Controller
 {
     public function show(SuratKeterangan $suratKeterangan){
         $surat = collect($suratKeterangan->load(['kodeSurat','pengajuanSuratKeterangan.mahasiswa.prodi.jurusan','pengajuanSuratKeterangan.tahunAkademik','user']));
-        $tanggal = $suratKeterangan->created_at->format('d M Y - H:i:m');
+        $tanggal = $suratKeterangan->created_at->isoFormat('D MMMM Y');
         $kode = explode('/',$suratKeterangan->kodeSurat->kode_surat);
         $surat->put('created',$tanggal);
         $surat->put('kode',$kode[0].'.4/'.$kode[1]);

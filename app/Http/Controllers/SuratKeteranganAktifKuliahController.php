@@ -291,7 +291,7 @@ class SuratKeteranganAktifKuliahController extends Controller
         ]);
         NotifikasiMahasiswa::create([
             'nim'=>$pengajuanSuratKeterangan->nim,
-            'judul_notifikasi'=>'Pengajuan Surat Keterangan',
+            'judul_notifikasi'=>'Surat Keterangan Aktif Kuliah',
             'isi_notifikasi'=>'Surat keterangan aktif kuliah telah selesai di buat.',
             'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah')
         ]);
@@ -320,7 +320,7 @@ class SuratKeteranganAktifKuliahController extends Controller
             ]);
             NotifikasiMahasiswa::create([
                 'nim'=>$pengajuanSuratKeterangan->nim,
-                'judul_notifikasi'=>'Pengajuan Surat Keterangan',
+                'judul_notifikasi'=>'Surat Keterangan Aktif Kuliah',
                 'isi_notifikasi'=>'Pengajuan surat keterangan aktif kuliah di tolak.',
                 'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah')
             ]);

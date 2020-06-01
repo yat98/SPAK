@@ -81,8 +81,6 @@
                                                 <th> Nama Kegiatan</th>
                                                 <th> Ormawa</th>
                                                 <th> Status</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -102,8 +100,6 @@
                                                 @else
                                                     <label class="badge badge-gradient-success">{{ ucwords($disposisi->status) }}</label>
                                                 @endif
-                                                <td> {{ $disposisi->created_at->diffForHumans() }}</td>
-                                                <td> {{ $disposisi->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('pimpinan/surat-kegiatan-mahasiswa/'.$disposisi->id) }}" class="btn btn-outline-info btn-sm">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
@@ -171,8 +167,6 @@
                                                 <th> Nama Kegiatan</th>
                                                 <th> Ormawa</th>
                                                 <th> Status</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -192,8 +186,6 @@
                                                 @else
                                                     <label class="badge badge-gradient-success">{{ ucwords($tandaTangan->status) }}</label>
                                                 @endif
-                                                <td> {{ $tandaTangan->created_at->diffForHumans() }}</td>
-                                                <td> {{ $tandaTangan->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('pimpinan/surat-kegiatan-mahasiswa/'.$tandaTangan->id) }}" class="btn btn-outline-info btn-sm">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>

@@ -18,8 +18,21 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row mb-3">
-                                    <div class="col-12 col-md-6">
+                                    <div class="col-12 col-md-4">
                                         <h4>Notifikasi</h4>
+                                    </div>
+                                    <div class="col-12 col-md-8 text-right mt-4 mt-md-0 mt-lg-0">
+                                        {{ Form::open(['url'=>'mahasiswa/notifikasi/allread','class'=>'d-inline-block btn-tambah']) }}
+                                        <button type="submit" class="btn-sm btn btn-tambah mt-3 mt-md-0 mt-lg-0 btn-margin btn-outline-dark">
+                                            <i class="mdi mdi-check btn-icon-prepend"></i>
+                                            Tandai Semua Dilihat</button>
+                                        {{ Form::close() }}
+                                        
+                                        {{ Form::open(['url'=>'mahasiswa/notifikasi/alldelete','class'=>'d-inline-block btn-tambah']) }}
+                                        <button type="submit" class="sweet-delete btn-sm btn btn-danger btn-tambah mt-3 mt-md-0 mt-lg-0 btn-margin">
+                                            <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
+                                            Hapus Semua Notifikasi</button>
+                                        {{ Form::close() }}
                                     </div>
                                 </div>
                                 <hr class="mb-4">

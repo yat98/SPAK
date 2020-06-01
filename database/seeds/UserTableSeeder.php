@@ -68,6 +68,17 @@ class UserTableSeeder extends Seeder
             'password'=>Hash::make('197208282005011002')
         ]);
 
+        User::create([
+            'nip'=>'197602115685091002',
+            'nama'=>'Siti Asna Sari Djafar Ishak, S.Pd',
+            'jabatan'=>'kasubag pendidikan dan pengajaran',
+            'status_aktif'=>'aktif',
+            'pangkat'=>'pembina',
+            'golongan'=>'IV/a',
+            'tanda_tangan'=>null,
+            'password'=>Hash::make('197602115685091002')
+        ]);
+
         $this->command->info('Berhasil menambahkan 4 data pada table admin');
     }
 }

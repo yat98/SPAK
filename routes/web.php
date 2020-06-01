@@ -30,9 +30,6 @@ Route::group(['prefix' => 'mahasiswa'],function(){
     Route::middleware(['mahasiswa'])->group(function(){
         // Dashboard
         Route::get('/','MahasiswaController@dashboard');
-        // Notifikasi
-        Route::get('notifikasi/{notifikasi_mahasiswa}','NotifikasiMahasiswaController@show');
-        Route::get('notifikasi','NotifikasiMahasiswaController@index');
         // Pengajuan Surat
         Route::group(['prefix' => 'pengajuan'],function(){
             // Surat Keterangan Aktif Kuliah
@@ -88,6 +85,11 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         // Pendaftaran Cuti
         Route::get('pendaftaran-cuti','PendaftaranCutiController@pendaftaranCutiMahasiswa');
         Route::resource('pendaftaran-cuti','PendaftaranCutiController')->except('index');
+        // Notifikasi
+        Route::get('notifikasi/{notifikasi_mahasiswa}','NotifikasiMahasiswaController@show');
+        Route::get('notifikasi','NotifikasiMahasiswaController@index');
+        Route::post('notifikasi/allread','NotifikasiMahasiswaController@allRead');
+        Route::post('notifikasi/alldelete','NotifikasiMahasiswaController@allDelete');
         // Password
         Route::get('password','MahasiswaController@password');
         Route::post('password','MahasiswaController@updatePassword');
@@ -114,8 +116,8 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@show');
         Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}/cetak','SuratKeteranganAktifKuliahController@cetak');
         Route::group(['prefix'=>'surat-keterangan-aktif-kuliah/pengajuan'],function(){
-            Route::get('buat-surat/{pengajuan_surat_keterangan}','SuratKeteranganAktifKuliahController@createSurat');
-            Route::post('buat-surat','SuratKeteranganAktifKuliahController@storeSurat');
+            Route::post('/','SuratKeteranganAktifKuliahController@storeSurat');
+            Route::get('create/{pengajuan_surat_keterangan}','SuratKeteranganAktifKuliahController@createSurat');
             Route::patch('tolak-pengajuan/{pengajuan_surat_keterangan}','SuratKeteranganAktifKuliahController@tolakPengajuan');
         });
         // Surat Keterangan Kelakuan Baik
@@ -124,8 +126,8 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}','SuratKeteranganController@show');
         Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}/cetak','SuratKeteranganKelakuanBaikController@cetak');
         Route::group(['prefix'=>'surat-keterangan-kelakuan-baik/pengajuan'],function(){
-            Route::get('buat-surat/{pengajuan_surat_keterangan}','SuratKeteranganKelakuanBaikController@createSurat');
-            Route::post('buat-surat','SuratKeteranganKelakuanBaikController@storeSurat');
+            Route::post('/','SuratKeteranganKelakuanBaikController@storeSurat');
+            Route::get('create/{pengajuan_surat_keterangan}','SuratKeteranganKelakuanBaikController@createSurat');
             Route::patch('tolak-pengajuan/{pengajuan_surat_keterangan}','SuratKeteranganKelakuanBaikController@tolakPengajuan');
         });
         // Surat Masuk
@@ -181,6 +183,8 @@ Route::group(['prefix' => 'pegawai'],function(){
         // Notifikasi
         Route::get('notifikasi/{notifikasi_user}','NotifikasiUserController@show');
         Route::get('notifikasi','NotifikasiUserController@index');
+        Route::post('notifikasi/allread','NotifikasiUserController@allRead');
+        Route::post('notifikasi/alldelete','NotifikasiUserController@allDelete');
         // Profil
         Route::get('profil','UserController@profil');
         Route::get('profil/password','UserController@profilPassword');
@@ -296,6 +300,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
          // Notifikasi
         Route::get('notifikasi/{notifikasi_user}','NotifikasiUserController@show');
         Route::get('notifikasi','NotifikasiUserController@index');
+        Route::post('notifikasi/allread','NotifikasiUserController@allRead');
+        Route::post('notifikasi/alldelete','NotifikasiUserController@allDelete');
         // Tanda Tangan
         Route::get('tanda-tangan','UserController@indexTandaTangan');
         Route::post('tanda-tangan','UserController@updateTandaTangan');

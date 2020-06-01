@@ -81,7 +81,7 @@ class PengajuanSuratKeteranganController extends Controller
             $user = User::where('jabatan','kasubag kemahasiswaan')->where('status_aktif','aktif')->first();
             NotifikasiUser::create([
                 'nip'=>$user->nip,
-                'judul_notifikasi'=>'Pengajuan Surat Keterangan Kelakuan Baik',
+                'judul_notifikasi'=>'Surat Keterangan Kelakuan Baik',
                 'isi_notifikasi'=>'Mahasiswa dengan nama '.$mahasiswa->nama.' membuat pengajuan surat keterangan kelakuan baik.',
                 'link_notifikasi'=>url('pegawai/surat-keterangan-kelakuan-baik')
             ]);
@@ -111,7 +111,7 @@ class PengajuanSuratKeteranganController extends Controller
             $user = User::where('jabatan','kasubag kemahasiswaan')->where('status_aktif','aktif')->first();
             NotifikasiUser::create([
                 'nip'=>$user->nip,
-                'judul_notifikasi'=>'Pengajuan Surat Keterangan Aktif Kuliah',
+                'judul_notifikasi'=>'Surat Keterangan Aktif Kuliah',
                 'isi_notifikasi'=>'Mahasiswa dengan nama '.$mahasiswa->nama.' membuat pengajuan surat keterangan aktif kuliah.',
                 'link_notifikasi'=>url('pegawai/surat-keterangan-aktif-kuliah')
             ]);

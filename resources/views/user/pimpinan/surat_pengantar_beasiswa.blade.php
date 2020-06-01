@@ -63,8 +63,6 @@
                                                 <th> No. </th>
                                                 <th> Nomor Surat</th>
                                                 <th> Status</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -86,8 +84,6 @@
                                                 @else
                                                 <label class="badge badge-gradient-info">{{ ucwords($pengajuanBeasiswa->status) }}</td></label>
                                                 @endif
-                                                <td> {{ $pengajuanBeasiswa->created_at->diffForHumans() }}</td>
-                                                <td> {{ $pengajuanBeasiswa->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('pimpinan/surat-pengantar-beasiswa/'.$pengajuanBeasiswa->id) }}" class="btn btn-outline-info btn-sm btn-surat-pengantar-beasiswa-detail" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
@@ -163,8 +159,6 @@
                                                 <th> No. </th>
                                                 <th> Nomor Surat</th>
                                                 <th> Status</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -182,8 +176,6 @@
                                                 @endif
                                                 <td>                                                
                                                 <label class="badge badge-gradient-info">{{ ucwords($suratBeasiswa->status) }}</td></label>
-                                                <td> {{ $suratBeasiswa->created_at->diffForHumans() }}</td>
-                                                <td> {{ $suratBeasiswa->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                      <a href="{{ url('pimpinan/surat-pengantar-beasiswa/'.$suratBeasiswa->id) }}" class="btn btn-outline-info btn-sm btn-surat-pengantar-beasiswa-detail" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>

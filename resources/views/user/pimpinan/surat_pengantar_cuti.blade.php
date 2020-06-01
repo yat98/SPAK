@@ -42,7 +42,7 @@
                                 <hr class="mb-4">
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-md-12">
-                                        {{ Form::open(['url'=>'pegawai/surat-pengantar-cuti/search','method'=>'GET']) }}
+                                        {{ Form::open(['url'=>'pimpinan/surat-pengantar-cuti/search','method'=>'GET']) }}
                                         <div class="form-row">
                                             <div class="col-sm-12 col-md-6 mt-1">
                                                 {{ Form::select('keywords',$nomorSurat,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> '-- Pilih Nomor Surat --']) }}
@@ -65,8 +65,6 @@
                                                 <th> No. </th>
                                                 <th> Nomor Surat</th>
                                                 <th> Tahun Akademik</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -79,11 +77,8 @@
                                                 <td> {{ $loop->iteration + $perPage * ($suratCutiList->currentPage() - 1)  }}</td>
                                                 <td> {{ $suratCuti->nomor_surat.'/'.$kode[0].'.4/.'.$kode[1].'/'.$suratCuti->created_at->format('Y') }}</td>
                                                 <td> {{ $suratCuti->waktuCuti->tahunAkademik->tahun_akademik }} - {{ ucwords($suratCuti->waktuCuti->tahunAkademik->semester) }}</td>
-                                                <td> 
-                                                <td> {{ $suratCuti->created_at->diffForHumans() }}</td>
-                                                <td> {{ $suratCuti->updated_at->diffForHumans() }}</td>
                                                 <td>
-                                                    <a href="{{ url('pegawai/surat-pengantar-cuti/'.$suratCuti->id) }}" class="btn btn-outline-info btn-sm btn-surat-pengantar-cuti-detail" data-toggle="modal" data-target="#exampleModal">
+                                                    <a href="{{ url('pimpinan/surat-pengantar-cuti/'.$suratCuti->id) }}" class="btn btn-outline-info btn-sm btn-surat-pengantar-cuti-detail" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
                                                         Detail</a>
                                                 </td>

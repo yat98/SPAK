@@ -90,7 +90,7 @@
                                                         Detail</a>
 
                                                     @if ($pengajuanSuratKeterangan->status == 'diajukan')
-                                                    <a href="{{ url('pegawai/surat-keterangan-kelakuan-baik/pengajuan/buat-surat/'.$pengajuanSuratKeterangan->id) }}" class="btn btn-sm btn-info">
+                                                    <a href="{{ url('pegawai/surat-keterangan-kelakuan-baik/pengajuan/create/'.$pengajuanSuratKeterangan->id) }}" class="btn btn-sm btn-info">
                                                         <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
                                                             Buat Surat
                                                     </a>

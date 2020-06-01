@@ -64,8 +64,6 @@
                                                 <th> Nomor Surat</th>
                                                 <th> Nama Mahasiswa</th>
                                                 <th> Status</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -81,8 +79,6 @@
                                                 @else
                                                 <label class="badge badge-gradient-info">{{ ucwords($suratPindah->status) }}</td></label>
                                                 @endif
-                                                <td> {{ $suratPindah->created_at->diffForHumans() }}</td>
-                                                <td> {{ $suratPindah->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                     <a href="{{ url('pimpinan/surat-persetujuan-pindah/pengajuan/'.$suratPindah->id_pengajuan_persetujuan_pindah) }}" class="btn btn-outline-info btn-sm btn-pengajuan-pindah" data-toggle="modal" data-target="#persetujuanDetail">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
@@ -159,8 +155,6 @@
                                                 <th> Nomor Surat</th>
                                                 <th> Nama Mahasiswa</th>
                                                 <th> Status</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
@@ -172,8 +166,6 @@
                                                 <td> {{ $suratPindah->pengajuanSuratPersetujuanPindah->mahasiswa->nama }}</td>
                                                 <td>                                                
                                                 <label class="badge badge-gradient-info">{{ ucwords($suratPindah->status) }}</td></label>
-                                                <td> {{ $suratPindah->created_at->diffForHumans() }}</td>
-                                                <td> {{ $suratPindah->updated_at->diffForHumans() }}</td>
                                                 <td>
                                                      <a href="{{ url('pimpinan/surat-persetujuan-pindah/'.$suratPindah->id_pengajuan_persetujuan_pindah) }}" class="btn-surat-pindah-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#pindahDetail">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
