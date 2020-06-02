@@ -17,7 +17,7 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Tambah Surat Kegiatan Mahasiswa</h3>
+                                <h3 class="mb-5">Tambah Pengajuan Surat Kegiatan Mahasiswa</h3>
                                 {{ Form::open(['url'=>'pegawai/surat-kegiatan-mahasiswa','files'=>true]) }}
                                 <div class="row">
                                     <div class="col-md-10">

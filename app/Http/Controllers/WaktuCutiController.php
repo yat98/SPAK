@@ -27,6 +27,7 @@ class WaktuCutiController extends Controller
     public function store(WaktuCutiRequest $request)
     {
         $input = $request->all();
+        $input['tanggal_akhir_cuti'] = $request->tanggal_akhir_cuti+' 23:59:59';
         $waktuCuti = WaktuCuti::create($input);
         $this->setFlashData('success','Berhasil','Data waktu cuti tahun akademik '.$waktuCuti->tahunAkademik->tahun_akademik.' - '.$waktuCuti->tahunAkademik->semester.' berhasil ditambahkan');
         return redirect($this->segmentUser.'/waktu-cuti');
@@ -59,6 +60,7 @@ class WaktuCutiController extends Controller
     public function update(WaktuCutiRequest $request, WaktuCuti $waktuCuti)
     {
         $input = $request->all();
+        $input['tanggal_akhir_cuti'] = $request->tanggal_akhir_cuti+' 23:59:59';
         $waktuCuti->update($input);
         $this->setFlashData('success','Berhasil','Data waktu cuti tahun akademik '.$waktuCuti->tahunAkademik->tahun_akademik.' - '.$waktuCuti->tahunAkademik->semester.' berhasil diubah');
         return redirect($this->segmentUser.'/waktu-cuti');

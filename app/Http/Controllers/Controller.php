@@ -129,7 +129,11 @@ class Controller extends BaseController
     }
 
     protected function isKodeSuratExists(){
-        $kodeSurat = KodeSurat::all()->count();
+        if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
+            $kodeSurat = KodeSurat::whereIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->count();
+        }else{
+            $kodeSurat = KodeSurat::whereNotIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->count();
+        }
         if($kodeSurat < 1){
             $this->setFlashData('info','Kode Surat Kosong','Tambahkan kode surat terlebih dahulu!');
             return false;

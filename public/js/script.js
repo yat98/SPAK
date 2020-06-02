@@ -2218,3 +2218,207 @@ $('.ormawa-list').on('change',function(){
 
     namaOrmawaOld = namaOrmawa;
 });
+ 
+$('.btn-pengajuan-surat-lulus-detail').on('click',function(e){
+    e.preventDefault();
+    $('#surat-keterangan-lulus-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let suratLulus = result;
+            let label;
+            if(suratLulus.status == 'diajukan' || suratLulus.status == 'menunggu tanda tangan'){
+                label = `<label class="badge badge-gradient-warning text-dark">${suratLulus.status.ucwords()}</label>`;
+            }else{
+                label = `<label class="badge badge-gradient-info">${suratLulus.status.ucwords()}</label>`;
+            }
+            let html = `<div class="table-responsive">
+                                    <table class="table">
+                                        <tr>
+                                            <th>NIM</th>
+                                            <td>${suratLulus.mahasiswa.nim}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <td>${suratLulus.mahasiswa.nama}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Program Studi</th>
+                                            <td>${suratLulus.mahasiswa.prodi.strata} - ${suratLulus.mahasiswa.prodi.nama_prodi}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Jurusan</th>
+                                            <td>${suratLulus.mahasiswa.prodi.jurusan.nama_jurusan}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>IPK</th>
+                                            <td>${suratLulus.ipk}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Status</th>
+                                            <td>${suratLulus.status.ucwords()}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Keterangan</th>
+                                            <td>${suratLulus.keterangan}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>File Surat Rekomendasi Jurusan</th>
+                                            <td>
+                                                <a href="${suratLulus.file_rekomendasi_jurusan}" class="btn btn-info btn-sm" data-lightbox="${suratLulus.nama_file_rekomendasi_jurusan}">
+                                                <i class="mdi mdi mdi-eye"></i>
+                                                Lihat File</a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>File Berita Acara Ujian</th>
+                                            <td>
+                                                <a href="${suratLulus.file_berita_acara_ujian}" class="btn btn-info btn-sm" data-lightbox="${suratLulus.file_berita_acara_ujian}">
+                                                <i class="mdi mdi mdi-eye"></i>
+                                                Lihat File</a>
+                                            </td>
+                                        </tr>   
+                                        <tr>
+                                            <th>Di Buat</th>
+                                            <td>${suratLulus.created_at}</td>
+                                        </tr>
+                                    </table>
+                                </div>`;
+            $('#surat-keterangan-lulus-detail-content').html(html);
+        });
+});
+
+$('.btn-surat-lulus').on('click',function(e){
+    $('#surat-progress-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let pengajuanSurat = result;
+            if(pengajuanSurat.status == 'diajukan'){
+                html = `<div class="row">
+                            <div class="col-4 text-center">
+                                <p class="h6 m-0 mb-1 text-dark">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    Diajukan
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-4 text-center"></div>
+                            <div class="col-4 text-center"></div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 33.3%" aria-valuenow="33.3" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 text-center"></div>
+                                <div class="col-4 text-center"></div>
+                                <div class="col-4 text-center"></div>
+                            </div>
+                        </div>`;
+            }else if(pengajuanSurat.status == 'menunggu tanda tangan'){
+                html = `<div class="row">
+                            <div class="col-4 text-center">
+                                <p class="h6 m-0 mb-1 text-dark">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    Diajukan
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
+                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-4 text-center"></div>
+                            <div class="col-4 text-center"></div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 66.6%" aria-valuenow="66.6   " aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 text-center"></div>
+                                <div class="col-4 text-center">
+                                    <div class="bg-gradient-info mx-auto position-progress-pole"></div>
+                                    <div class="bg-gradient-info mx-auto position-progress-round"></div>
+                                    <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_tunggu_tanda_tangan}</small></p>
+                                    <p class="h6 mt-1 text-dark">
+                                        <i class="mdi mdi-border-color icon-sm text-info"></i>
+                                        Menunggu Tanda Tangan
+                                    </p> 
+                                </div>
+                                <div class="col-4 text-center"></div>
+                            </div>
+                        </div>`;
+            }else if(pengajuanSurat.status == 'selesai'){
+                html = `<div class="row">
+                            <div class="col-4 text-center">
+                                <p class="h6 m-0 mb-1 text-dark">
+                                    <i class="mdi mdi-marker-check icon-sm text-success"></i>
+                                    Diajukan
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
+                                <div class="bg-gradient-success mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-success mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-4 text-center"></div>
+                            <div class="col-4 text-center">
+                                <p class="h6 m-0 mb-1 text-dark">
+                                    <i class="mdi mdi-marker-check icon-sm text-success"></i>
+                                    Selesai
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_selesai}</small></p>
+                                <div class="bg-gradient-success mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-success mx-auto position-progress-pole"></div>
+                            </div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 100%" aria-valuenow="100   " aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 text-center"></div>
+                                <div class="col-4 text-center">
+                                    <div class="bg-gradient-success mx-auto position-progress-pole"></div>
+                                    <div class="bg-gradient-success mx-auto position-progress-round"></div>
+                                    <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_tunggu_tanda_tangan}</small></p>
+                                    <p class="h6 mt-1 text-dark">
+                                        <i class="mdi mdi-border-color icon-sm text-success"></i>
+                                        Menunggu Tanda Tangan
+                                    </p> 
+                                </div>
+                                <div class="col-4 text-center"></div>
+                            </div>
+                        </div>`;
+            }else if(pengajuanSurat.status == 'ditolak'){
+                html = `<div class="row">
+                            <div class="col-6 text-center">
+                                <p class="h6 m-0 mb-1 text-dark">
+                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
+                                    Diajukan
+                                </p> 
+                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
+                                <div class="bg-gradient-danger mx-auto position-progress-round"></div>
+                                <div class="bg-gradient-danger mx-auto position-progress-pole"></div>
+                            </div>
+                            <div class="col-6 text-center"></div>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-gradient-danger" role="progressbar" style="width: 100%" aria-valuenow="100   " aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 text-center"></div>
+                                <div class="col-6 text-center">
+                                    <div class="bg-gradient-danger mx-auto position-progress-pole"></div>
+                                    <div class="bg-gradient-danger mx-auto position-progress-round"></div>
+                                    <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_ditolak}</small></p>
+                                    <p class="h6 mt-1 text-dark">
+                                        <i class="mdi mdi mdi-close-circle icon-sm text-danger"></i>
+                                        Di Tolak
+                                    </p> 
+                                </div>
+                            </div>
+                        </div>`;
+            }
+        $('#surat-progress-content').html(html);
+    })
+});

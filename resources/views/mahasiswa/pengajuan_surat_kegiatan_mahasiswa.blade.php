@@ -79,15 +79,15 @@
                                                         Lihat Progress Surat</a>
 
                                                     @if($pengajuanKegiatan->status == 'selesai')
-                                                    <a href="{{ url('mahasiswa/surat-kegiatan-mahasiswa/'.$pengajuanKegiatan->id) }}" class="btn btn-outline-info btn-sm">
-                                                        <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
-                                                        Detail
-                                                    </a>
+                                                        <a href="{{ url('mahasiswa/surat-kegiatan-mahasiswa/'.$pengajuanKegiatan->id) }}" class="btn btn-outline-info btn-sm">
+                                                            <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
+                                                            Detail
+                                                        </a>
                                                     @else
-                                                     <a href="{{ url('mahasiswa/pengajuan/surat-kegiatan-mahasiswa/'.$pengajuanKegiatan->id) }}" class="btn btn-outline-info btn-sm">
-                                                        <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
-                                                        Detail
-                                                    </a>    
+                                                        <a href="{{ url('mahasiswa/pengajuan/surat-kegiatan-mahasiswa/'.$pengajuanKegiatan->id) }}" class="btn btn-outline-info btn-sm">
+                                                            <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
+                                                            Detail
+                                                        </a>    
                                                     @endif
                                                     
                                                     @if($pengajuanKegiatan->status == 'selesai' && $pengajuanKegiatan->jumlah_cetak <= 2) <a href="{{ url('mahasiswa/surat-kegiatan-mahasiswa/'.$pengajuanKegiatan->id.'/cetak') }}" class="btn btn-info btn-sm">

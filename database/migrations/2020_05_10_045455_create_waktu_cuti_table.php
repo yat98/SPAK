@@ -16,8 +16,8 @@ class CreateWaktuCutiTable extends Migration
         Schema::create('waktu_cuti', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('id_tahun_akademik')->unsigned();
-            $table->date('tanggal_awal_cuti');
-            $table->date('tanggal_akhir_cuti');
+            $table->datetime('tanggal_awal_cuti');
+            $table->datetime('tanggal_akhir_cuti');
             $table->timestamps();
         });
     }

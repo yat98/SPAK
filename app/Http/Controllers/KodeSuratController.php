@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Session;
 use App\KodeSurat;
 use Illuminate\Http\Request;
 use App\Http\Requests\KodeSuratRequest;
@@ -12,8 +13,12 @@ class KodeSuratController extends Controller
     {
         $jenisSurat = $this->getJenisSurat();
         $perPage=$this->perPage;
-        $kodeSuratList = KodeSurat::paginate($perPage);
-        $countKodeSurat = KodeSurat::all()->count();
+        if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
+            $kodeSuratList = KodeSurat::whereIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->paginate($perPage);
+        }else{
+            $kodeSuratList = KodeSurat::whereNotIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->paginate($perPage);
+        }
+        $countKodeSurat = $kodeSuratList->count();
         $countAllKodeSurat = $countKodeSurat;
         return view('user.'.$this->segmentUser.'.kode_surat',compact('kodeSuratList','countKodeSurat','countAllKodeSurat','perPage','jenisSurat'));
     }
@@ -57,7 +62,11 @@ class KodeSuratController extends Controller
             $countAllKodeSurat = KodeSurat::all()->count();
             $perPage=$this->perPage;
             $kodeSurat = isset($keywords['keyword']) ? $keywords['keyword']:'';
-            $kodeSuratList = KodeSurat::where('kode_surat','like',"%$kodeSurat%");
+            if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
+                $kodeSuratList = KodeSurat::whereIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->where('kode_surat','like',"%$kodeSurat%");
+            }else{
+                $kodeSuratList = KodeSurat::whereNotIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->where('kode_surat','like',"%$kodeSurat%");
+            }
             (isset($keywords['jenis_surat'])) ? $kodeSuratList = $kodeSuratList->where('jenis_surat',$keywords['jenis_surat']) : '';
             $kodeSuratList = $kodeSuratList->paginate($perPage)->appends($request->except('page'));
             $countKodeSurat = count($kodeSuratList);
@@ -72,15 +81,26 @@ class KodeSuratController extends Controller
     }
 
     private function getJenisSurat (){
-        return [
-            'surat keterangan'=>'Surat Keterangan',
-            'surat dispensasi'=>'Surat Dispensasi',
-            'surat pengantar cuti'=>'Surat Pengantar Cuti',
-            'surat rekomendasi'=>'Surat Rekomendasi',
-            'surat persetujuan pindah'=>'Surat Persetujuan Pindah',
-            'surat tugas'=>'Surat Tugas',
-            'surat pengantar beasiswa'=>'Surat Pengantar Beasiswa',
-            'surat kegiatan mahasiswa'=>'Surat Kegiatan Mahasiswa'
-        ];
+        if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
+            $kodeSurat = [
+                'surat keterangan'=>'Surat Keterangan',
+                'surat dispensasi'=>'Surat Dispensasi',
+                'surat pengantar cuti'=>'Surat Pengantar Cuti',
+                'surat rekomendasi'=>'Surat Rekomendasi',
+                'surat persetujuan pindah'=>'Surat Persetujuan Pindah',
+                'surat tugas'=>'Surat Tugas',
+                'surat pengantar beasiswa'=>'Surat Pengantar Beasiswa',
+                'surat kegiatan mahasiswa'=>'Surat Kegiatan Mahasiswa'
+            ];
+        }else{
+            $kodeSurat = [
+                'surat keterangan lulus'=>'Surat Keterangan Lulus',
+                'surat permohonan pengambilan material'=>'Surat Dispensasi',
+                'surat permohonan survei'=>'Surat Permohonan Survei',
+                'surat rekomendasi penelitian'=>'Surat Rekomendasi Penelitian',
+                'surat permohonan data awal'=>'Surat Permohonan Data Awal',
+            ];
+        }
+        return $kodeSurat;
     }
 }

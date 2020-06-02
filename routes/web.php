@@ -61,6 +61,14 @@ Route::group(['prefix' => 'mahasiswa'],function(){
             Route::patch('surat-kegiatan-mahasiswa/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@update');
             Route::get('surat-kegiatan-mahasiswa/{pengajuan_kegiatan_mahasiswa}/edit','PengajuanSuratKegiatanMahasiswaController@edit');
             Route::post('surat-kegiatan-mahasiswa','PengajuanSuratKegiatanMahasiswaController@store');
+            // Surat Keterangan Lulus
+            Route::get('surat-keterangan-lulus','PengajuanSuratKeteranganLulusController@index');
+            Route::get('surat-keterangan-lulus/create','PengajuanSuratKeteranganLulusController@create');
+            Route::get('surat-keterangan-lulus/{pengajuan_surat_keterangan_lulus}','PengajuanSuratKeteranganLulusController@show');
+            Route::get('surat-keterangan-lulus/{pengajuan_surat_keterangan_lulus}/progress','PengajuanSuratKeteranganLulusController@progress');
+            Route::patch('surat-keterangan-lulus/{pengajuan_surat_keterangan_lulus}','PengajuanSuratKeteranganLulusController@update');
+            Route::get('surat-keterangan-lulus/{pengajuan_surat_keterangan_lulus}/edit','PengajuanSuratKeteranganLulusController@edit');
+            Route::post('surat-keterangan-lulus','PengajuanSuratKeteranganLulusController@store');
         });
         //  Surat Dispensasi
         Route::get('surat-dispensasi/{surat_dispensasi}/cetak', 'SuratDispensasiController@cetakSuratDispensasi');
@@ -82,6 +90,8 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         // Surat Kegiatan Mahasiswa
         Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}/cetak', 'SuratKegiatanMahasiswaController@cetakSuratKegiatan');
         Route::resource('surat-kegiatan-mahasiswa','SuratKegiatanMahasiswaController')->only('show');
+        // Surat Keterangan Lulus
+        Route::get('surat-keterangan-lulus/{surat_kegiatan_mahasiswa}/cetak', 'SuratKegiatanMahasiswaController@cetakSuratKegiatan');
         // Pendaftaran Cuti
         Route::get('pendaftaran-cuti','PendaftaranCutiController@pendaftaranCutiMahasiswa');
         Route::resource('pendaftaran-cuti','PendaftaranCutiController')->except('index');

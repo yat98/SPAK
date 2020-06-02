@@ -87,18 +87,18 @@ class PengajuanSuratKeteranganController extends Controller
             ]);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan surat keterangan kelakuan baik gagal dibuat.');
+            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan surat keterangan kelakuan baik gagal ditambahkan.');
         }
 
         try{ 
             PengajuanSuratKeterangan::create($input);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan surat keterangan kelakuan baik gagal dibuat.');
+            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan surat keterangan kelakuan baik gagal ditambahkan.');
         }
 
         DB::commit();
-        $this->setFlashData('success','Berhasil','Pengajuan surat keterangan kelakuan baik berhasil dibuat.');
+        $this->setFlashData('success','Berhasil','Pengajuan surat keterangan kelakuan baik berhasil ditambahkan.');
         return redirect($this->segmentUser.'/pengajuan/surat-keterangan-kelakuan-baik');
     }
 
@@ -117,18 +117,18 @@ class PengajuanSuratKeteranganController extends Controller
             ]);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan surat keterangan aktif kuliah gagal dibuat.');
+            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan surat keterangan aktif kuliah gagal ditambahkan.');
         }
 
         try{ 
             PengajuanSuratKeterangan::create($input);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan surat keterangan aktif kuliah gagal dibuat.');
+            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan surat keterangan aktif kuliah gagal ditambahkan.');
         }
 
         DB::commit();
-        $this->setFlashData('success','Berhasil','Pengajuan surat keterangan aktif kuliah berhasil dibuat.');
+        $this->setFlashData('success','Berhasil','Pengajuan surat keterangan aktif kuliah berhasil ditambahkan.');
         return redirect($this->segmentUser.'/pengajuan/surat-keterangan-aktif-kuliah');
     }
 

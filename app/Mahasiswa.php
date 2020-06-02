@@ -79,4 +79,8 @@ class Mahasiswa extends Model
     public function pengajuanSuratKegiatanMahasiswa(){
         return $this->hasMany('App\PengajuanSuratKegiatanMahasiswa','nim');
     }
+
+    public function pengajuanSuratKeteranganLulus(){
+        return $this->hasMany('App\PengajuanSuratKeteranganLulus','nim');
+    }
 }

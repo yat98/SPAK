@@ -51,6 +51,7 @@ class LoginController extends Controller
                 if($request->jenis_user == 'mahasiswa'){
                     $session['nim'] = $user->nim; 
                     $session['status'] = 'mahasiswa';
+                    $session['ipk'] = $user->ipk;
                 }else{
                     $session['status'] = ($request->jenis_user == 'pimpinan') ? 'pimpinan':'pegawai';
                     $session['nip'] = $user->nip;

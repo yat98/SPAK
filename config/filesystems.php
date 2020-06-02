@@ -47,6 +47,16 @@ return [
             'root' => public_path('upload_surat_masuk'),
         ],
 
+        'file_berita_acara_ujian' => [
+            'driver' => 'local',
+            'root' => public_path('upload_berita_acara_ujian'),
+        ],
+
+        'file_rekomendasi_jurusan' => [
+            'driver' => 'local',
+            'root' => public_path('upload_rekomendasi_jurusan'),
+        ],
+
         'file_persetujuan_pindah' => [
             'driver' => 'local',
             'root' => public_path('upload_persetujuan_pindah'),

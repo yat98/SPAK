@@ -13,6 +13,7 @@ use App\SuratKegiatanMahasiswa;
 use App\SuratPengantarBeasiswa;
 use App\PengajuanSuratKeterangan;
 use Illuminate\Support\Facades\Route;
+use App\PengajuanSuratKeteranganLulus;
 use App\PengajuanSuratKegiatanMahasiswa;
 use App\PengajuanSuratPersetujuanPindah;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -58,6 +59,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('surat_pengantar_beasiswa', SuratPengantarBeasiswa::class);
         Route::model('pengajuan_kegiatan_mahasiswa', PengajuanSuratKegiatanMahasiswa::class);
         Route::model('surat_kegiatan_mahasiswa', SuratKegiatanMahasiswa::class);
+        Route::model('pengajuan_surat_keterangan_lulus', PengajuanSuratKeteranganLulus::class);
     }
 
     /**
