@@ -63,7 +63,7 @@
                                                 <td> {{ $loop->iteration }}</td>
                                                 <td> {{ $pengajuanSuratLulus->mahasiswa->nama }}</td>
                                                 <td>
-                                                    @if ($pengajuanSuratLulus->status == 'diajukan')
+                                                    @if ($pengajuanSuratLulus->status == 'diajukan' || $pengajuanSuratLulus->status == 'menunggu tanda tangan')
                                                     <label class="badge badge-gradient-warning text-dark">
                                                         {{ ucwords($pengajuanSuratLulus->status) }}
                                                     </label>
@@ -83,8 +83,8 @@
                                                         <i class="mdi mdi mdi-information btn-icon-prepend"></i>
                                                         Lihat Progress Surat</a>
 
-                                                    @if($pengajuanSuratLulus->status == 'selesai')
-                                                        <a href="{{ url('mahasiswa/surat-keterangan-lulus/'.$pengajuanSuratLulus->id) }}" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#suratLulus">
+                                                    @if($pengajuanSuratLulus->status == 'selesai' || $pengajuanSuratLulus->status == 'menunggu tanda tangan')
+                                                        <a href="{{ url('mahasiswa/surat-keterangan-lulus/'.$pengajuanSuratLulus->id) }}" class="btn-surat-lulus-detail  btn btn-outline-info btn-sm" data-toggle="modal" data-target="#suratLulus">
                                                             <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
                                                             Detail
                                                         </a>
@@ -96,7 +96,7 @@
                                                     @endif
 
                                                     @if ($pengajuanSuratLulus->status == 'selesai' && $pengajuanSuratLulus->suratKeteranganLulus->jumlah_cetak <= 2)
-                                                    <a href="{{ url('mahasiswa/pengajuan/surat-keterangan-lulus/'.$pengajuanSuratLulus->suratKeteranganLulus->id_pengajuan_surat_keterangan.'/cetak') }}" class="btn btn-info btn-sm">
+                                                    <a href="{{ url('mahasiswa/pengajuan/surat-keterangan-lulus/'.$pengajuanSuratLulus->id.'/cetak') }}" class="btn btn-info btn-sm">
                                                         <i class="mdi mdi mdi-printer btn-icon-prepend"></i>
                                                         Cetak</a>
                                                     @endif

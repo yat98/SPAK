@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
@@ -21,8 +22,12 @@ class Mahasiswa extends Model
         'strata',
         'ipk',
         'password',
-        'id_prodi'
+        'id_prodi',
+        'tanggal_lahir',
+        'tempat_lahir',
     ];
+
+    protected $dates = ['tanggal_lahir'];
 
     public function setNamaAttribute($value){
         $this->attributes['nama'] = strtolower($value);
@@ -31,7 +36,7 @@ class Mahasiswa extends Model
     public function getNamaAttribute($nama){
         return ucwords($nama);
     }
-    
+
     public function prodi(){
         return $this->belongsTo('App\ProgramStudi','id_prodi');
     }

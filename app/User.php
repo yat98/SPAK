@@ -62,4 +62,8 @@ class User extends Model
     public function disposisiPengajuanKegiatan(){
         return $this->belongsToMany('App\PengajuanSuratKegiatanMahasiswa','disposisi_surat_kegiatan_mahasiswa','id_pengajuan','nip')->withPivot('catatan')->withTimestamps();
     }
+
+    public function suratKeteranganLulus(){
+        return $this->hasMany('App\SuratKeteranganLulus','nip');
+    }
 }

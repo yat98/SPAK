@@ -132,11 +132,6 @@ class PengajuanSuratKeteranganLulusController extends Controller
         return redirect($this->segmentUser.'/pengajuan/surat-keterangan-lulus');
     }
 
-    public function destroy($id)
-    {
-        //
-    }
-
     private function uploadImage($imageFieldName, $request, $uploadPath){
         $image = $request->file($imageFieldName);
         $ext = $image->getClientOriginalExtension();

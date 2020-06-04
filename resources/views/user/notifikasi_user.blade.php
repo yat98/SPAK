@@ -22,7 +22,7 @@
                                         <h4>Notifikasi</h4>
                                     </div>
                                      <div class="col-12 col-md-8 text-right mt-4 mt-md-0 mt-lg-0">
-                                        @if(Session::get('jabatan') == 'kasubag kemahasiswaan')
+                                        @if(Session::get('jabatan') == 'kasubag kemahasiswaan' || Session::get('jabatan') == 'kasubag pendidikan dan pengajaran')
                                             {{ Form::open(['url'=>'pegawai/notifikasi/allread','class'=>'d-inline-block btn-tambah']) }}
                                             <button type="submit" class="btn-sm btn btn-tambah mt-3 mt-md-0 mt-lg-0 btn-margin btn-outline-dark">
                                                 <i class="mdi mdi-check btn-icon-prepend"></i>

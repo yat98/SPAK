@@ -16,11 +16,16 @@ class PengajuanSuratKeteranganLulus extends Model
         'tanggal_wisuda',
         'ipk',
         'keterangan',
+        'status'
     ];
 
     protected $dates = ['tanggal_wisuda'];
 
     public function mahasiswa(){
         return $this->belongsTo('App\Mahasiswa','nim');
+    }
+
+    public function suratKeteranganLulus(){
+        return $this->hasOne('App\SuratKeteranganLulus','id_pengajuan_surat_lulus');
     }
 }

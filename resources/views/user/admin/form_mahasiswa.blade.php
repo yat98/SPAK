@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="form-group">
             {{ Form::label('nim','NIM') }}
             @if ($errors->any())
@@ -25,6 +25,34 @@
             @else
             {{ Form::text('nama',null,['class'=>'form-control form-control-lg','id'=>'nama']) }}
             @endif
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-7">
+                {{ Form::label('tempat_lahir','Tempat Lahir') }}
+                @if ($errors->any())
+                @if ($errors->has('tempat_lahir'))
+                {{ Form::text('tempat_lahir',null,['class'=>'form-control form-control-lg is-invalid','id'=>'tempat_lahir']) }}
+                <div class="invalid-feedback">{{ $errors->first('tempat_lahir') }}</div>
+                @else
+                {{ Form::text('tempat_lahir',null,['class'=>'form-control form-control-lg is-valid','id'=>'tempat_lahir']) }}
+                @endif
+                @else
+                {{ Form::text('tempat_lahir',null,['class'=>'form-control form-control-lg','id'=>'tempat_lahir']) }}
+                @endif
+            </div>
+            <div class="form-group col-md-5">
+                {{ Form::label('tanggal_lahir','Tanggal Lahir') }}
+                @if ($errors->any())
+                @if ($errors->has('tanggal_lahir'))
+                {{ Form::text('tanggal_lahir',isset($mahasiswa)?$mahasiswa->tanggal_lahir->format('Y-m-d'):null,['class'=>'tanggal form-control is-invalid','id'=>'tanggal_lahir','placeholder'=>'yyyy-mm-dd']) }}
+                <div class="invalid-feedback">{{ $errors->first('tanggal_lahir') }}</div>
+                @else
+                {{ Form::text('tanggal_lahir',isset($mahasiswa)?$mahasiswa->tanggal_lahir->format('Y-m-d'):null,['class'=>'tanggal form-control is-valid','id'=>'tanggal_lahir','placeholder'=>'yyyy-mm-dd']) }}
+                @endif
+                @else
+                {{ Form::text('tanggal_lahir',isset($mahasiswa)?$mahasiswa->tanggal_lahir->format('Y-m-d'):null,['class'=>'tanggal form-control','id'=>'tanggal_lahir','placeholder'=>'yyyy-mm-dd']) }}
+                @endif 
+            </div>
         </div>
         <div class="form-group">
             {{ Form::label('sex','Jenis Kelamin') }}

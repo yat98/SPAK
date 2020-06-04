@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Mahasiswa;
+use Carbon\Carbon;
 use App\ProgramStudi;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Concerns\ToModel;
@@ -34,7 +35,9 @@ class MahasiswaImport implements ToModel, WithValidation, WithBatchInserts, With
             'angkatan'=>$row['angkatan'],
             'ipk'=>$row['ipk'],
             'password'=>Hash::make($row['nim']),
-            'id_prodi'=> $idProdi
+            'id_prodi'=> $idProdi,
+            'tempat_lahir'=>$row['tempat_lahir'],
+            'tanggal_lahir'=>$this->transformDate($row['tanggal_lahir'])->format('Y-m-d'),
         ];
         Mahasiswa::updateOrCreate(['nim'=>$mahasiswa['nim']],$mahasiswa);
     }
@@ -49,6 +52,15 @@ class MahasiswaImport implements ToModel, WithValidation, WithBatchInserts, With
                 }
             },
         ];
+    }
+
+    public function transformDate($value, $format = 'Y-m-d')
+    {
+        try {
+            return \Carbon\Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value));
+        } catch (\ErrorException $e) {
+            return \Carbon\Carbon::createFromFormat($format, $value);
+        }
     }
 
     public function chunkSize(): int

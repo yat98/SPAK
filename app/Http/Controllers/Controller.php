@@ -14,6 +14,7 @@ use App\SuratDispensasi;
 use App\SuratKeterangan;
 use App\SuratRekomendasi;
 use App\SuratPengantarCuti;
+use App\SuratKeteranganLulus;
 use App\SuratKegiatanMahasiswa;
 use App\SuratPengantarBeasiswa;
 use App\SuratPersetujuanPindah;
@@ -142,15 +143,18 @@ class Controller extends BaseController
     }
 
     protected function generateNomorSuratBaru(){
-        $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->first();
-        $nomorSurat[] = SuratKeterangan::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratDispensasi::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratRekomendasi::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratTugas::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratPersetujuanPindah::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratPengantarCuti::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratPengantarBeasiswa::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        $nomorSurat[] = SuratKegiatanMahasiswa::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
+            $nomorSurat[] = SuratKeterangan::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+            $nomorSurat[] = SuratDispensasi::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+            $nomorSurat[] = SuratRekomendasi::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+            $nomorSurat[] = SuratTugas::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+            $nomorSurat[] = SuratPersetujuanPindah::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+            $nomorSurat[] = SuratPengantarCuti::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+            $nomorSurat[] = SuratPengantarBeasiswa::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+            $nomorSurat[] = SuratKegiatanMahasiswa::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        }else{
+            $nomorSurat[] = SuratKeteranganLulus::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        }
         $nomorSuratBaru = max($nomorSurat);
         return ++$nomorSuratBaru;
     }

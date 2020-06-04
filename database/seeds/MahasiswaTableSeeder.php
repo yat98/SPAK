@@ -22,7 +22,9 @@ class MahasiswaTableSeeder extends Seeder
             'angkatan'=>'2016',
             'ipk'=>'3.76',
             'password'=>Hash::make('531416055'),
-            'id_prodi'=>$prodi->id
+            'id_prodi'=>$prodi->id,
+            'tanggal_lahir'=>'1998-08-23',
+            'tempat_lahir'=>'Gorontalo',
         ]);
 
         Mahasiswa::create([
@@ -32,7 +34,9 @@ class MahasiswaTableSeeder extends Seeder
             'angkatan'=>'2016',
             'ipk'=>'2.62',
             'password'=>Hash::make('531416042'),
-            'id_prodi'=>$prodi->id
+            'id_prodi'=>$prodi->id,
+            'tanggal_lahir'=>'1998-08-23',
+            'tempat_lahir'=>'Gorontalo',
         ]);
 
         Mahasiswa::create([
@@ -42,7 +46,9 @@ class MahasiswaTableSeeder extends Seeder
             'angkatan'=>'2016',
             'ipk'=>'3.41',
             'password'=>Hash::make('531416038'),
-            'id_prodi'=>$prodi->id
+            'id_prodi'=>$prodi->id,
+            'tanggal_lahir'=>'1998-08-23',
+            'tempat_lahir'=>'Gorontalo',
         ]);
 
         Mahasiswa::create([
@@ -52,7 +58,9 @@ class MahasiswaTableSeeder extends Seeder
             'angkatan'=>'2016',
             'ipk'=>'2.96',
             'password'=>Hash::make('531416038'),
-            'id_prodi'=>$prodi->id
+            'id_prodi'=>$prodi->id,
+            'tanggal_lahir'=>'1998-08-23',
+            'tempat_lahir'=>'Gorontalo',
         ]);
 
         Mahasiswa::create([
@@ -62,7 +70,9 @@ class MahasiswaTableSeeder extends Seeder
             'angkatan'=>'2016',
             'ipk'=>'3.39',
             'password'=>Hash::make('531416020'),
-            'id_prodi'=>$prodi->id
+            'id_prodi'=>$prodi->id,
+            'tanggal_lahir'=>'1998-08-23',
+            'tempat_lahir'=>'Gorontalo',
         ]);
 
         Mahasiswa::create([
@@ -72,7 +82,9 @@ class MahasiswaTableSeeder extends Seeder
             'angkatan'=>'2016',
             'ipk'=>'3.32',
             'password'=>Hash::make('531417001'),
-            'id_prodi'=>$prodi->id
+            'id_prodi'=>$prodi->id,
+            'tanggal_lahir'=>'1998-08-23',
+            'tempat_lahir'=>'Gorontalo',
         ]);
         
         Mahasiswa::create([
@@ -82,7 +94,9 @@ class MahasiswaTableSeeder extends Seeder
             'angkatan'=>'2016',
             'ipk'=>'3.02',
             'password'=>Hash::make('531416017'),
-            'id_prodi'=>$prodi->id
+            'id_prodi'=>$prodi->id,
+            'tanggal_lahir'=>'1998-08-23',
+            'tempat_lahir'=>'Gorontalo',
         ]);
         $this->command->info('Berhasil menambahkan 7 data mahasiswa');
     }

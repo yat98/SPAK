@@ -9,6 +9,7 @@ use App\TahunAkademik;
 use App\PimpinanOrmawa;
 use App\SuratKeterangan;
 use App\SuratPengantarCuti;
+use App\SuratKeteranganLulus;
 use App\SuratKegiatanMahasiswa;
 use App\SuratPengantarBeasiswa;
 use App\PengajuanSuratKeterangan;
@@ -60,6 +61,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('pengajuan_kegiatan_mahasiswa', PengajuanSuratKegiatanMahasiswa::class);
         Route::model('surat_kegiatan_mahasiswa', SuratKegiatanMahasiswa::class);
         Route::model('pengajuan_surat_keterangan_lulus', PengajuanSuratKeteranganLulus::class);
+        Route::model('surat_keterangan_lulus', SuratKeteranganLulus::class);
     }
 
     /**

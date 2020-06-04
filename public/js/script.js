@@ -110,8 +110,10 @@ $('.btn-detail').on('click', function (e) {
     let a = fetch(url)
         .then(response => response.json())
         .then(result => {
-            let mahasiswa = result[0];
+            let mahasiswa = result;
             let tableStatus = '';
+            console.log(mahasiswa);
+            
             if(mahasiswa.tahun_akademik.length > 0){
                 mahasiswa.tahun_akademik.forEach((status)=>{
                     tableStatus+=`
@@ -146,6 +148,10 @@ $('.btn-detail').on('click', function (e) {
                                 <tr>
                                     <th>Jenis Kelamin</th>
                                     <td>${(mahasiswa.sex == 'L') ? 'Laki-Laki' : 'Perempuan'}</td>
+                                </tr>
+                                <tr>
+                                    <th>Tempat Tanggal Lahir</th>
+                                    <td>${mahasiswa.tempat_lahir}, ${mahasiswa.tanggal_lahir}</td>
                                 </tr>
                                 <tr>
                                     <th>Angkatan</th>
@@ -2257,7 +2263,7 @@ $('.btn-pengajuan-surat-lulus-detail').on('click',function(e){
                                         </tr>
                                         <tr>
                                             <th>Status</th>
-                                            <td>${suratLulus.status.ucwords()}</td>
+                                            <td>${label}</td>
                                         </tr>
                                         <tr>
                                             <th>Keterangan</th>
@@ -2421,4 +2427,85 @@ $('.btn-surat-lulus').on('click',function(e){
             }
         $('#surat-progress-content').html(html);
     })
+});
+
+$('.btn-surat-lulus-detail').on('click',function(e){
+    $('#surat-keterangan-lulus-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let suratLulus = result.pengajuan_surat_keterangan_lulus;
+            let label;
+            if(suratLulus.status == 'diajukan' || suratLulus.status == 'menunggu tanda tangan'){
+                label = `<label class="badge badge-gradient-warning text-dark">${suratLulus.status.ucwords()}</label>`;
+            }else{
+                label = `<label class="badge badge-gradient-info">${suratLulus.status.ucwords()}</label>`;
+            }
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>Nomor Surat</th>
+                                    <td>${result.nomor_surat}</td>
+                                </tr>
+                                <tr>
+                                    <th>Di Tandangani Oleh</th>
+                                    <td>${result.user.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jumlah Cetak</th>
+                                    <td>${result.jumlah_cetak}</td>
+                                </tr>
+                                <tr>
+                                    <th>NIM</th>
+                                    <td>${suratLulus.mahasiswa.nim}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nama</th>
+                                    <td>${suratLulus.mahasiswa.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Program Studi</th>
+                                    <td>${suratLulus.mahasiswa.prodi.strata} - ${suratLulus.mahasiswa.prodi.nama_prodi}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jurusan</th>
+                                    <td>${suratLulus.mahasiswa.prodi.jurusan.nama_jurusan}</td>
+                                </tr>
+                                <tr>
+                                    <th>IPK</th>
+                                    <td>${suratLulus.ipk}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>${label}</td>
+                                </tr>
+                                <tr>
+                                    <th>Keterangan</th>
+                                    <td>${suratLulus.keterangan}</td>
+                                </tr>
+                                <tr>
+                                    <th>File Surat Rekomendasi Jurusan</th>
+                                    <td>
+                                        <a href="${result.file_rekomendasi_jurusan}" class="btn btn-info btn-sm" data-lightbox="${result.nama_file_rekomendasi_jurusan}">
+                                        <i class="mdi mdi mdi-eye"></i>
+                                        Lihat File</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>File Berita Acara Ujian</th>
+                                    <td>
+                                        <a href="${result.file_berita_acara_ujian}" class="btn btn-info btn-sm" data-lightbox="${result.file_berita_acara_ujian}">
+                                        <i class="mdi mdi mdi-eye"></i>
+                                        Lihat File</a>
+                                    </td>
+                                </tr>   
+                                <tr>
+                                    <th>Di Buat</th>
+                                    <td>${result.created_at}</td>
+                                </tr>
+                            </table>
+                        </div>`;
+            $('#surat-keterangan-lulus-detail-content').html(html);
+        });
 });

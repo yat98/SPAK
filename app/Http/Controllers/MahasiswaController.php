@@ -60,11 +60,12 @@ class MahasiswaController extends Controller
         return view('user.'.$this->segmentUser.'.tambah_mahasiswa',compact('prodiList','angkatan','formPassword'));
     }
 
-    public function show($nim){
-        $mahasiswa = Mahasiswa::where('nim',$nim)->with(['prodi.jurusan','tahunAkademik'=>function($query){
+    public function show(Mahasiswa $mahasiswa){
+        $mhs = collect($mahasiswa->load(['prodi.jurusan','tahunAkademik'=>function($query){
             $query->orderByDesc('created_at');
-        }])->get();
-        return $mahasiswa->toJson();
+        }]));
+        $mhs->put('tanggal_lahir',$mahasiswa->tanggal_lahir->isoFormat('D MMMM Y'));
+        return $mhs->toJson();
     }
 
     public function search(Request $request){

@@ -38,7 +38,9 @@ class MahasiswaRequest extends FormRequest
             'angkatan'=>'required|numeric|digits:4',
             'ipk'=>'required|numeric|min:0|max:4|regex:/^\d+(\.\d{1,2})?$/',
             'password'=>$passwordRules,
-            'id_prodi'=>'required|numeric'
+            'id_prodi'=>'required|numeric',
+            'tempat_lahir'=>'required|string',
+            'tanggal_lahir'=>'required|date',
         ];
     }
 }

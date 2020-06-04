@@ -19,6 +19,8 @@ class CreateMahasiswaTable extends Migration
             $table->string('nama',100);
             $table->enum('sex',['L','P']);
             $table->year('angkatan');
+            $table->string('tempat_lahir');
+            $table->string('tanggal_lahir');
             $table->double('ipk',3,2);
             $table->string('password',60);
             $table->timestamps();
