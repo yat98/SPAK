@@ -5,7 +5,7 @@
             @if ($errors->any())
             @if ($errors->has('nip'))
             {{ Form::text('nip',null,['class'=>'form-control form-control-lg is-invalid','id'=>'nip']) }}
-            <div class="invalid-feedback">{{ $errors->first('username') }}</div>
+            <div class="invalid-feedback">{{ $errors->first('nip') }}</div>
             @else
             {{ Form::text('nip',null,['class'=>'form-control form-control-lg is-valid','id'=>'nip']) }}
             @endif
@@ -18,7 +18,7 @@
             @if ($errors->any())
             @if ($errors->has('nama'))
             {{ Form::text('nama',null,['class'=>'form-control form-control-lg is-invalid','id'=>'nama']) }}
-            <div class="invalid-feedback">{{ $errors->first('username') }}</div>
+            <div class="invalid-feedback">{{ $errors->first('nama') }}</div>
             @else
             {{ Form::text('nama',null,['class'=>'form-control form-control-lg is-valid','id'=>'nama']) }}
             @endif
@@ -31,7 +31,7 @@
             @if ($errors->any())
             @if ($errors->has('jabatan'))
             {{ Form::text('jabatan',null,['class'=>'form-control form-control-lg is-invalid','id'=>'jabatan','disabled'=>'disabled']) }}
-            <div class="invalid-feedback">{{ $errors->first('username') }}</div>
+            <div class="invalid-feedback">{{ $errors->first('jabatan') }}</div>
             @else
             {{ Form::text('jabatan',null,['class'=>'form-control form-control-lg is-valid','id'=>'jabatan','disabled'=>'disabled']) }}
             @endif

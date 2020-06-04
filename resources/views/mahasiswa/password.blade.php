@@ -18,7 +18,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h3 class="mb-5">Ubah Password</h3>
-                                {{ Form::open(['url'=>'mahasiswa/password']) }}                          
+                                {{ Form::open(['url'=>'mahasiswa/profil/password']) }}                          
                                     <div class="form-group password-group">
                                         {{ Form::label('password_lama','Password Lama') }}
                                         @if ($errors->any())

@@ -102,8 +102,11 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         Route::post('notifikasi/allread','NotifikasiMahasiswaController@allRead');
         Route::post('notifikasi/alldelete','NotifikasiMahasiswaController@allDelete');
         // Password
-        Route::get('password','MahasiswaController@password');
-        Route::post('password','MahasiswaController@updatePassword');
+        Route::get('profil','MahasiswaController@profil');
+        Route::patch('profil/{mahasiswa}','MahasiswaController@updateProfil');
+
+        Route::get('profil/password','MahasiswaController@password');
+        Route::post('profil/password','MahasiswaController@updatePassword');
     });
 });
 

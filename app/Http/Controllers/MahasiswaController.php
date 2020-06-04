@@ -157,6 +157,27 @@ class MahasiswaController extends Controller
         }
     }
 
+    public function profil(){
+        $nim = Session::get('nim');
+        $mahasiswa = Mahasiswa::findOrFail($nim);
+        return view($this->segmentUser.'.profil',compact('mahasiswa'));
+    }
+
+    public function updateProfil(Request $request,Mahasiswa $mahasiswa){
+        $this->validate($request,[
+            'tempat_lahir'=>'required|string',
+            'tanggal_lahir'=>'required|date',
+        ]);
+        $mahasiswa->update($request->all());
+        Session::forget(['nim','username']);
+        Session::put([
+            'nim'=>$request->nim,
+            'username'=>$request->nama,
+        ]);
+        $this->setFlashData('success','Berhasil','Profil berhasil diubah');
+        return redirect($this->segmentUser);
+    }
+
     public function password(){
         return view($this->segmentUser.'.password');
     }
