@@ -78,7 +78,7 @@ class Mahasiswa extends Model
     }
 
     public function suratPengantarBeasiswa(){
-        return $this->belongsToMany('App\SuratPengantarCuti','daftar_beasiswa_mahasiswa','id_surat_beasiswa','nim');
+        return $this->belongsToMany('App\SuratPengantarBeasiswa','daftar_beasiswa_mahasiswa','id_surat_beasiswa','nim');
     }
 
     public function pengajuanSuratKegiatanMahasiswa(){
@@ -87,5 +87,13 @@ class Mahasiswa extends Model
 
     public function pengajuanSuratKeteranganLulus(){
         return $this->hasMany('App\PengajuanSuratKeteranganLulus','nim');
+    }
+
+    public function pengajuanSuratPermohonanPengambilanMaterial(){
+        return $this->hasMany('App\PengajuanSuratPermohonanPengambilanMaterial', 'nim');
+    }
+
+    public function daftarKelompok(){
+        return $this->belongsToMany('App\PengajuanSuratPermohonanPengambilanMaterial','daftar_kelompok_pengambilan_material','id_pengajuan','nim')->withTimeStamps();
     }
 }

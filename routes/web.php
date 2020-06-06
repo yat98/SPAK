@@ -70,6 +70,18 @@ Route::group(['prefix' => 'mahasiswa'],function(){
             Route::patch('surat-keterangan-lulus/{pengajuan_surat_keterangan_lulus}','PengajuanSuratKeteranganLulusController@update');
             Route::get('surat-keterangan-lulus/{pengajuan_surat_keterangan_lulus}/edit','PengajuanSuratKeteranganLulusController@edit');
             Route::post('surat-keterangan-lulus','PengajuanSuratKeteranganLulusController@store');
+            // Surat Permohonan Pengambilan Material
+            Route::get('surat-permohonan-pengambilan-material/create','PengajuanSuratPermohonanPengambilanMaterialController@create');
+            Route::get('surat-permohonan-pengambilan-material/{pengajuan_surat_material}','PengajuanSuratPermohonanPengambilanMaterialController@show');
+            Route::get('surat-permohonan-pengambilan-material/{pengajuan_surat_material}/edit','PengajuanSuratPermohonanPengambilanMaterialController@edit');
+            Route::get('surat-permohonan-pengambilan-material','PengajuanSuratPermohonanPengambilanMaterialController@index');
+            Route::post('surat-permohonan-pengambilan-material','PengajuanSuratPermohonanPengambilanMaterialController@store');
+            Route::patch('surat-permohonan-pengambilan-material/{pengajuan_surat_material}','PengajuanSuratPermohonanPengambilanMaterialController@update');
+            Route::get('surat-permohonan-pengambilan-material/{pengajuan_surat_material}/progress','PengajuanSuratPermohonanPengambilanMaterialController@progress');
+
+
+
+
         });
         //  Surat Dispensasi
         Route::get('surat-dispensasi/{surat_dispensasi}/cetak', 'SuratDispensasiController@cetakSuratDispensasi');
@@ -104,7 +116,6 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         // Password
         Route::get('profil','MahasiswaController@profil');
         Route::patch('profil/{mahasiswa}','MahasiswaController@updateProfil');
-
         Route::get('profil/password','MahasiswaController@password');
         Route::post('profil/password','MahasiswaController@updatePassword');
     });
@@ -322,6 +333,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::get('surat-kegiatan-mahasiswa/{pengajuan_kegiatan_mahasiswa}/disposisi','PengajuanSuratKegiatanMahasiswaController@detailDisposisi');
         Route::post('surat-kegiatan-mahasiswa/pengajuan/tanda-tangan','SuratKegiatanMahasiswaController@tandaTanganKegiatan');
         Route::post('surat-kegiatan-mahasiswa/disposisi','PengajuanSuratKegiatanMahasiswaController@disposisi');
+        // Detail Mahasiswa
+        Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Surat Keterangan Lulus
         Route::get('surat-keterangan-lulus/search', 'SuratKeteranganLulusController@searchPimpinan');
         Route::get('surat-keterangan-lulus', 'SuratKeteranganLulusController@suratLulusPimpinan');

@@ -59,6 +59,18 @@ class KodeSuratTableSeeder extends Seeder
             'status_aktif'=>'aktif',
             'jenis_surat'=>'surat Kegiatan Mahasiswa'
         ]);
+
+        KodeSurat::create([
+            'kode_surat'=>'UN47.B5/PK.05.06',
+            'status_aktif'=>'aktif',
+            'jenis_surat'=>'surat keterangan lulus'
+        ]);
+
+        KodeSurat::create([
+            'kode_surat'=>'UN47.B5/KM.07',
+            'status_aktif'=>'aktif',
+            'jenis_surat'=>'surat permohonan pengambilan material'
+        ]);
         
         $this->command->info('Berhasil menambahkan 7 data kode surat');
     }

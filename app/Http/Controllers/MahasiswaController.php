@@ -22,9 +22,11 @@ use App\PengajuanSuratKeterangan;
 use App\DaftarDispensasiMahasiswa;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\PengajuanSuratKeteranganLulus;
 use App\Http\Requests\MahasiswaRequest;
 use App\PengajuanSuratKegiatanMahasiswa;
 use App\PengajuanSuratPersetujuanPindah;
+use App\PengajuanSuratPermohonanPengambilanMaterial;
 use Maatwebsite\Excel\Validators\ValidationException;
 use App\Http\Requests\PengajuanSuratKeteranganRequest;
 
@@ -236,6 +238,12 @@ class MahasiswaController extends Controller
                                                ->where('nim',Session::get('nim'))
                                                ->orderByDesc('surat_tugas.created_at')
                                                ->get();
+
+        $pengajuanSuratLulusList = PengajuanSuratKeteranganLulus::where('nim',Session::get('nim'))->get();
+        $pengajuanSuratMaterialList = PengajuanSuratPermohonanPengambilanMaterial::join('daftar_kelompok_pengambilan_material','daftar_kelompok_pengambilan_material.id_pengajuan','=','pengajuan_surat_permohonan_pengambilan_material.id')
+                                        ->where('daftar_kelompok_pengambilan_material.nim',Session::get('nim'))
+                                        ->get();
+
         if(isset($mahasiswa->pimpinanOrmawa)){
             $pengajuanKegiatanList = PengajuanSuratKegiatanMahasiswa::join('mahasiswa','mahasiswa.nim','=','pengajuan_surat_kegiatan_mahasiswa.nim')
                                         ->join('pimpinan_ormawa','pimpinan_ormawa.nim','=','mahasiswa.nim')
@@ -255,6 +263,8 @@ class MahasiswaController extends Controller
         $countAllSuratTugas =    $suratTugasList->count();
         $countAllPengajuanKegiatan = ($pengajuanKegiatanList != null) ? $pengajuanKegiatanList->count() : 0;
         $countPendaftaranCuti = $pendaftaranCutiList->count();
+        $countAllPengajuanLulus = $pengajuanSuratLulusList->count();
+        $countAllPengajuanMaterial = $pengajuanSuratMaterialList->count();
 
         $pengajuanSuratKeteranganAktifList = $pengajuanSuratKeteranganAktifList->take(5);
         $pengajuanSuratKeteranganList = $pengajuanSuratKeteranganList->take(5);
@@ -264,8 +274,10 @@ class MahasiswaController extends Controller
         $suratTugasList = $suratTugasList->take(5);
         $pengajuanKegiatanList =  ($pengajuanKegiatanList != null) ? $pengajuanKegiatanList->take(5) : null;
         $pendaftaranCutiList = $pendaftaranCutiList->take(5);
+        $pengajuanSuratLulusList = $pengajuanSuratLulusList->take(5);
+        $pengajuanSuratMaterialList = $pengajuanSuratMaterialList->take(5);
             
-        return view($this->segmentUser.'.dashboard',compact('tahunAkademikAktif','tgl','waktuCuti','pengajuanSuratKeteranganAktifList','countAllPengajuan','pengajuanSuratKeteranganList','countAllPengajuanBaik','pengajuanSuratKeteranganList','pengajuanSuratPindahList','countAllPengajuanPindah','suratDispensasiList','countAllDispensasi','countAllSuratRekomendasi','suratRekomendasiList','suratTugasList','countAllSuratTugas','pengajuanKegiatanList','countAllPengajuanKegiatan','pendaftaranCutiList','countPendaftaranCuti'));
+        return view($this->segmentUser.'.dashboard',compact('tahunAkademikAktif','tgl','waktuCuti','pengajuanSuratKeteranganAktifList','countAllPengajuan','pengajuanSuratKeteranganList','countAllPengajuanBaik','pengajuanSuratKeteranganList','pengajuanSuratPindahList','countAllPengajuanPindah','suratDispensasiList','countAllDispensasi','countAllSuratRekomendasi','suratRekomendasiList','suratTugasList','countAllSuratTugas','pengajuanKegiatanList','countAllPengajuanKegiatan','pendaftaranCutiList','countPendaftaranCuti','pengajuanSuratLulusList','countAllPengajuanLulus','pengajuanSuratMaterialList','countAllPengajuanMaterial'));
     }
     
     public function logout(){

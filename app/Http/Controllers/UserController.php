@@ -16,6 +16,7 @@ use App\SuratKeterangan;
 use App\SuratRekomendasi;
 use App\SuratPengantarCuti;
 use Illuminate\Http\Request;
+use App\SuratKeteranganLulus;
 use App\SuratKegiatanMahasiswa;
 use App\SuratPengantarBeasiswa;
 use App\SuratPersetujuanPindah;
@@ -134,6 +135,10 @@ class UserController extends Controller
         $waktuCutiList = WaktuCuti::all();
         $pendaftaranCutiList = PendaftaranCuti::where('status','diterima')->orderByDesc('created_at')->get();
         $waktuCuti = isset($tahunAkademikAktif) ? WaktuCuti::where('id_tahun_akademik',$tahunAkademikAktif->id)->first():null;
+        $suratLulusList =  SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','pengajuan_surat_keterangan_lulus.id','=','surat_keterangan_lulus.id_pengajuan_surat_lulus')
+                            ->whereIn('status',['selesai','menunggu tanda tangan'])
+                            ->orderBy('status')
+                            ->get();
 
         $countAllKodeSurat = $kodeSuratList->count();
         $countAllSuratKeteranganAktif = $suratKeteranganAktifList->count();
@@ -148,6 +153,7 @@ class UserController extends Controller
         $countAllSuratKegiatan = $suratKegiatanList->count();
         $countAllWaktuCuti = $waktuCutiList->count();
         $countAllPendaftaranCuti = $pendaftaranCutiList->count();
+        $countAllsuratLulus = $suratLulusList->count();
       
         $kodeSuratList = $kodeSuratList->take(5);
         $suratMasukList = $suratMasukList->take(5);
@@ -162,8 +168,9 @@ class UserController extends Controller
         $suratKegiatanList = $suratKegiatanList->take(5);
         $waktuCutiList = $waktuCutiList->take(5);
         $pendaftaranCutiList = $pendaftaranCutiList->take(5);
+        $suratLulusList = $suratLulusList->take(5);
        
-        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','countAllKodeSurat','kodeSuratList','countAllSuratKeteranganAktif','suratMasukList','countAllSuratMasuk','suratKeteranganAktifList','suratKeteranganKelakuanList','countAllSuratKeteranganKelakuan','suratDispensasiList','countAllSuratDispensasi','waktuCuti','tgl','suratRekomendasiList','countAllSuratRekomendasi','suratTugasList','countAllSuratTugas','suratPersetujuanPindahList','countAllSuratPersetujuanPindah','suratCutiList','countAllSuratCuti','suratBeasiswaList','countAllSuratBeasiswa','suratKegiatanList','countAllSuratKegiatan','waktuCutiList','countAllWaktuCuti','pendaftaranCutiList','countAllPendaftaranCuti'));
+        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','countAllKodeSurat','kodeSuratList','countAllSuratKeteranganAktif','suratMasukList','countAllSuratMasuk','suratKeteranganAktifList','suratKeteranganKelakuanList','countAllSuratKeteranganKelakuan','suratDispensasiList','countAllSuratDispensasi','waktuCuti','tgl','suratRekomendasiList','countAllSuratRekomendasi','suratTugasList','countAllSuratTugas','suratPersetujuanPindahList','countAllSuratPersetujuanPindah','suratCutiList','countAllSuratCuti','suratBeasiswaList','countAllSuratBeasiswa','suratKegiatanList','countAllSuratKegiatan','waktuCutiList','countAllWaktuCuti','pendaftaranCutiList','countAllPendaftaranCuti','suratLulusList','countAllsuratLulus'));
     }
 
     public function pimpinanDashboard(){
@@ -188,6 +195,10 @@ class UserController extends Controller
         $suratKegiatanList =  SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan_kegiatan')
                                 ->where('status','selesai')
                                 ->get();
+        $suratLulusList =  SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','pengajuan_surat_keterangan_lulus.id','=','surat_keterangan_lulus.id_pengajuan_surat_lulus')
+                            ->whereIn('status',['selesai'])
+                            ->orderBy('status')
+                            ->get();
 
         $countAllSuratKeteranganAktif = $suratKeteranganAktifList->count();
         $countAllSuratKeteranganKelakuan = $suratKeteranganKelakuanList->count();
@@ -198,7 +209,8 @@ class UserController extends Controller
         $countAllSuratCuti = $suratCutiList->count();
         $countAllSuratBeasiswa = $suratBeasiswaList->count();
         $countAllSuratKegiatan = $suratKegiatanList->count();
-      
+        $countAllsuratLulus = $suratLulusList->count();
+
         $suratKeteranganAktifList = $suratKeteranganAktifList->take(5);
         $suratKeteranganKelakuanList = $suratKeteranganKelakuanList->take(5);
         $suratDispensasiList = $suratDispensasiList->take(5);
@@ -208,8 +220,9 @@ class UserController extends Controller
         $suratCutiList = $suratCutiList->take(5);
         $suratBeasiswaList = $suratBeasiswaList->take(5);
         $suratKegiatanList = $suratKegiatanList->take(5);
+        $suratLulusList = $suratLulusList->take(5);
        
-        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','suratKeteranganAktifList','suratKeteranganKelakuanList','suratDispensasiList','suratRekomendasiList','suratTugasList','suratPersetujuanPindahList','suratCutiList','suratBeasiswaList','suratKegiatanList','countAllSuratKeteranganAktif','countAllSuratKeteranganKelakuan','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPersetujuanPindah','countAllSuratCuti','countAllSuratBeasiswa','countAllSuratKegiatan'));
+        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','suratKeteranganAktifList','suratKeteranganKelakuanList','suratDispensasiList','suratRekomendasiList','suratTugasList','suratPersetujuanPindahList','suratCutiList','suratBeasiswaList','suratKegiatanList','countAllSuratKeteranganAktif','countAllSuratKeteranganKelakuan','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPersetujuanPindah','countAllSuratCuti','countAllSuratBeasiswa','countAllSuratKegiatan','suratLulusList','countAllsuratLulus'));
     }
 
     public function indexTandaTangan(){

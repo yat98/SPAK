@@ -75,6 +75,8 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'profil';
             } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-lulus') {
                 $halaman = 'surat-keterangan-lulus';
+            } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-permohonan-pengambilan-material') {
+                $halaman = 'surat-permohonan-pengambilan-material';
             }
         } elseif (request()->segment(1) == 'pegawai') {
             $posisi = 'pegawai';

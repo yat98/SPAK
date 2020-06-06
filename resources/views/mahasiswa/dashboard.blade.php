@@ -203,6 +203,36 @@
                         </div>
                     </div>
                     @endif
+                    <div class="col-md-6 stretch-card grid-margin">
+                        <div class="card bg-gradient-info card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Pengajuan Surat Keterangan Lulus<i
+                                        class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countAllPengajuanLulus > 0 ? $countAllPengajuanLulus.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
+                                </h2>
+                                <h6 class="card-text"></h6>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="col-md-6 stretch-card grid-margin">
+                        <div class="card bg-gradient-info card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Pengajuan Surat Pengambilan Material<i
+                                        class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countAllPengajuanMaterial > 0 ? $countAllPengajuanMaterial.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
+                                </h2>
+                                <h6 class="card-text"></h6>
+                            </div>
+                        </div>
+                    </div>
                      <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-dark card-img-holder text-white">
                             <div class="card-body">
@@ -688,6 +718,139 @@
                     </div>
                 </div>
                 @endif
+                 <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Pengajuan Surat Keterangan Lulus</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countAllPengajuanLulus > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Nama </th>
+                                                <th> Status</th>
+                                                <th> Keterangan</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($pengajuanSuratLulusList as $pengajuanSuratLulus)
+                                            <tr>
+                                                <td> {{ $loop->iteration }}</td>
+                                                <td> {{ $pengajuanSuratLulus->mahasiswa->nama }}</td>
+                                                <td>
+                                                    @if ($pengajuanSuratLulus->status == 'diajukan' || $pengajuanSuratLulus->status == 'menunggu tanda tangan')
+                                                    <label class="badge badge-gradient-warning text-dark">
+                                                        {{ ucwords($pengajuanSuratLulus->status) }}
+                                                    </label>
+                                                    @elseif($pengajuanSuratLulus->status == 'ditolak')
+                                                    <label class="badge badge-gradient-danger">
+                                                        {{ ucwords($pengajuanSuratLulus->status) }}
+                                                    </label>
+                                                    @else
+                                                    <label class="badge badge-gradient-info">
+                                                        {{ ucwords($pengajuanSuratLulus->status) }}
+                                                    </label>
+                                                    @endif
+                                                </td>
+                                                <td> {{ $pengajuanSuratLulus->keterangan }}</td>
+                                                <td> {{ $pengajuanSuratLulus->created_at->diffForHumans() }}</td>
+                                                <td> {{ $pengajuanSuratLulus->updated_at->diffForHumans() }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Surat Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Pengajuan surat keterangan lulus belum ada.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Pengajuan Surat Permohonan Pengambilan Material</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countAllPengajuanMaterial > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Nama Kegiatan </th>
+                                                <th> Status</th>
+                                                <th> Keterangan</th>
+                                                <th> Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($pengajuanSuratMaterialList as $pengajuanSuratMaterial)
+                                            <tr>
+                                                <td> {{ $loop->iteration }}</td>
+                                                <td> {{ $pengajuanSuratMaterial->nama_kegiatan }}</td>
+                                                <td>
+                                                    @if ($pengajuanSuratMaterial->status == 'diajukan' || $pengajuanSuratMaterial->status == 'menunggu tanda tangan')
+                                                    <label class="badge badge-gradient-warning text-dark">
+                                                        {{ ucwords($pengajuanSuratMaterial->status) }}
+                                                    </label>
+                                                    @elseif($pengajuanSuratMaterial->status == 'ditolak')
+                                                    <label class="badge badge-gradient-danger">
+                                                        {{ ucwords($pengajuanSuratMaterial->status) }}
+                                                    </label>
+                                                    @else
+                                                    <label class="badge badge-gradient-info">
+                                                        {{ ucwords($pengajuanSuratMaterial->status) }}
+                                                    </label>
+                                                    @endif
+                                                </td>
+                                                <td> {{ $pengajuanSuratMaterial->keterangan }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Surat Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Pengajuan surat permohonan pengambilan material belum ada.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">

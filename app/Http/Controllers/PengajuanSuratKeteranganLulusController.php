@@ -48,21 +48,16 @@ class PengajuanSuratKeteranganLulusController extends Controller
         }
 
         DB::beginTransaction();
-        try{
+
+        try{ 
             $user = User::where('jabatan','kasubag pendidikan dan pengajaran')->where('status_aktif','aktif')->first();
+            PengajuanSuratKeteranganLulus::create($input);
             NotifikasiUser::create([
                 'nip'=>$user->nip,
                 'judul_notifikasi'=>'Surat Keterangan Lulus',
                 'isi_notifikasi'=>'Mahasiswa dengan nama '.$mahasiswa->nama.' membuat pengajuan surat keterangan lulus.',
                 'link_notifikasi'=>url('pegawai/surat-keterangan-lulus')
             ]);
-        }catch(Exception $e){
-            DB::rollback();
-            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan surat keterangan lulus gagal dibuat.');
-        }
-
-        try{ 
-            PengajuanSuratKeteranganLulus::create($input);
         }catch(Exception $e){
             DB::rollback();
             $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan surat keterangan lulus gagal dibuat.');
@@ -96,7 +91,7 @@ class PengajuanSuratKeteranganLulusController extends Controller
 
     public function show(PengajuanSuratKeteranganLulus $pengajuanSuratLulus)
     {
-    $pengajuan = collect($pengajuanSuratLulus->load('mahasiswa.prodi.jurusan'));
+        $pengajuan = collect($pengajuanSuratLulus->load('mahasiswa.prodi.jurusan'));
         $pengajuan->put('created_at',$pengajuanSuratLulus->created_at->isoFormat('D MMMM Y'));
         $pengajuan->put('tanggal_wisuda',$pengajuanSuratLulus->tanggal_wisuda->isoFormat('D MMMM Y'));
         $pengajuan->put('file_rekomendasi_jurusan',asset('upload_rekomendasi_jurusan/'.$pengajuanSuratLulus->file_rekomendasi_jurusan));

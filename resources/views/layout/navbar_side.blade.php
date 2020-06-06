@@ -266,7 +266,7 @@
         </li>
         <li class="nav-item {{ ($halaman == 'profil') ? 'active':'' }}">
             <a class="nav-link" href="{{ url(Request::segment(1).'/profil') }}">
-                <span class="menu-title">Ubah Profil</span>
+                <span class="menu-title">Ubah Profil    </span>
                 <i class="mdi mdi mdi mdi-settings menu-icon"></i>
             </a>
         </li>

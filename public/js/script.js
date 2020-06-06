@@ -2509,3 +2509,95 @@ $('.btn-surat-lulus-detail').on('click',function(e){
             $('#surat-keterangan-lulus-detail-content').html(html);
         });
 });
+
+$('.btn-pengajuan-surat-material-detail').on('click',function(e){
+    e.preventDefault();
+    $('#surat-material-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let suratMaterial = result;
+            let label = '';
+            let daftarKelompok = '';
+            if(suratMaterial.status == 'diajukan' || suratMaterial.status == 'menunggu tanda tangan'){
+                label = `<label class="badge badge-gradient-warning text-dark">${suratMaterial.status.ucwords()}</label>`;
+            }else{
+                label = `<label class="badge badge-gradient-info">${suratMaterial.status.ucwords()}</label>`;
+            }
+            
+            if(suratMaterial.daftar_kelompok.length > 0){
+                suratMaterial.daftar_kelompok.forEach((mhs)=>{
+                    daftarKelompok += `<tr>
+                                           <td>${mhs.nim}</td>
+                                           <td>${mhs.nama}</td>
+                                       </tr>`;
+                });
+            }
+            let html = `<div class="row">
+                            <div class="col-5">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tr>
+                                            <th>Nama Kegiatan</th>
+                                            <td>${suratMaterial.nama_kegiatan}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Kepada</th>
+                                            <td>${suratMaterial.kepada}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Nama Kelompok</th>
+                                            <td>${suratMaterial.nama_kelompok}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Diajukan Oleh</th>
+                                            <td>${suratMaterial.mahasiswa.nama}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Status</th>
+                                            <td>${label}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Keterangan</th>
+                                            <td>${suratMaterial.keterangan}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>File Surat Rekomendasi Jurusan</th>
+                                            <td>
+                                                <a href="${suratMaterial.file_rekomendasi_jurusan}" class="btn btn-info btn-sm" data-lightbox="${suratMaterial.nama_file_rekomendasi_jurusan}">
+                                                <i class="mdi mdi mdi-eye"></i>
+                                                Lihat File</a>
+                                            </td>
+                                        </tr> 
+                                        <tr>
+                                            <th>Di Buat</th>
+                                            <td>${suratMaterial.created_at}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tr>
+                                            <td>Daftar kelompok</td>
+                                            <td>
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <tr>
+                                                            <td>NIM</td>
+                                                            <td>Nama</td>
+                                                        </tr>
+                                                        ${daftarKelompok}
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>`;
+            $('#surat-material-detail-content').html(html);
+        });
+});

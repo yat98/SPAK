@@ -83,6 +83,9 @@
                                                 <label class="badge badge-gradient-info">{{ ucwords($suratLulus->status) }}</td></label>
                                                 @endif
                                                 <td>
+                                                    <a href="{{ url('pimpinan/detail/mahasiswa/'.$suratLulus->nim) }}" class="btn-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                        <i class="mdi mdi-account btn-icon-prepend"></i>
+                                                        Detail</a>
                                                     <a href="{{ url('pimpinan/surat-keterangan-lulus/'.$suratLulus->id) }}" class="btn btn-outline-info btn-sm btn-surat-lulus-detail" data-toggle="modal" data-target="#suratLulus">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
                                                         Detail
@@ -223,6 +226,23 @@
             <div class="modal-body" id='surat-keterangan-lulus-detail-content'>
                 
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='surat-keterangan-aktif-detail-content'></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
             </div>

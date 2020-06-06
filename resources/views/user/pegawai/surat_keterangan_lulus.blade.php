@@ -38,7 +38,7 @@
                                         class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllsuratLulus > 0 ? $countAllsuratLulus.' Surat Keterangan Kelakuan Baik' : 'Surat Keterangan Lulus Kosong' }}
+                                    {{ $countAllsuratLulus > 0 ? $countAllsuratLulus.' Surat Keterangan Lulus' : 'Surat Keterangan Lulus Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -83,6 +83,10 @@
                                                     @endif
                                                 </td>
                                                 <td>
+                                                    <a href="{{ url('pegawai/detail/mahasiswa/'.$pengajuanSuratLulus->nim) }}" class="btn-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                        <i class="mdi mdi-account btn-icon-prepend"></i>
+                                                        Detail</a>
+
                                                     <a href="{{ url('pegawai/surat-keterangan-lulus/pengajuan/'.$pengajuanSuratLulus->id) }}" class="btn-pengajuan-surat-lulus-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#suratLulus">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
                                                         Detail
