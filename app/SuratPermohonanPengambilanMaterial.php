@@ -8,6 +8,8 @@ class SuratPermohonanPengambilanMaterial extends Model
 {
     protected $table = 'surat_permohonan_pengambilan_material';
 
+    protected $primaryKey = 'id_pengajuan';
+
     protected $fillable = [
         'id_pengajuan',
         'nip',
@@ -18,6 +20,10 @@ class SuratPermohonanPengambilanMaterial extends Model
 
     public function user(){
         return $this->belongsTo('App\User','nip');
+    }
+
+    public function kodeSurat(){
+        return $this->belongsTo('App\KodeSurat','id_kode_surat');
     }
 
     public function pengajuanSuratPermohonanPengambilanMaterial(){

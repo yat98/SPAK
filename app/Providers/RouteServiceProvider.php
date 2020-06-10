@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 use App\PengajuanSuratKeteranganLulus;
 use App\PengajuanSuratKegiatanMahasiswa;
 use App\PengajuanSuratPersetujuanPindah;
+use App\SuratPermohonanPengambilanMaterial;
 use App\PengajuanSuratPermohonanPengambilanMaterial;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -64,6 +65,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('pengajuan_surat_keterangan_lulus', PengajuanSuratKeteranganLulus::class);
         Route::model('surat_keterangan_lulus', SuratKeteranganLulus::class);
         Route::model('pengajuan_surat_material', PengajuanSuratPermohonanPengambilanMaterial::class);
+        Route::model('surat_material', SuratPermohonanPengambilanMaterial::class);
 }
 
     /**

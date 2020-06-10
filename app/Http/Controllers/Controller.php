@@ -18,6 +18,7 @@ use App\SuratKeteranganLulus;
 use App\SuratKegiatanMahasiswa;
 use App\SuratPengantarBeasiswa;
 use App\SuratPersetujuanPindah;
+use App\SuratPermohonanPengambilanMaterial;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -154,6 +155,7 @@ class Controller extends BaseController
             $nomorSurat[] = SuratKegiatanMahasiswa::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
         }else{
             $nomorSurat[] = SuratKeteranganLulus::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+            $nomorSurat[] = SuratPermohonanPengambilanMaterial::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
         }
         $nomorSuratBaru = max($nomorSurat);
         return ++$nomorSuratBaru;

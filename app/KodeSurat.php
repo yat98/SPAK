@@ -41,4 +41,8 @@ class KodeSurat extends Model
     public function suratPengantarBeasiswa(){
         return $this->hasMany('App\SuratPengantarBeasiswa','id_kode_surat');
     }
+
+    public function suratPermohonanPengambilanMaterial(){
+        return $this->hasMany('App\SuratPermohonanPengambilanMaterial','id_kode_surat');
+    }
 }

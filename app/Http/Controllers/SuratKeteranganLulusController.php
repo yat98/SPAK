@@ -79,7 +79,7 @@ class SuratKeteranganLulusController extends Controller
             'isi_notifikasi'=>'Surat keterangan lulus telah di tanda tangani.',
             'link_notifikasi'=>url('pegawai/surat-keterangan-lulus')
         ]);
-        $this->setFlashData('success','Berhasil','Surat keterangan lulus mahasiswa dengan nama '.$pengajuanSuratLulus->mahasiswa->nama.' berhasil ditambahkan');
+        $this->setFlashData('success','Berhasil','Surat keterangan lulus mahasiswa dengan nama '.$pengajuanSuratLulus->mahasiswa->nama.' berhasil ditanda tangani');
         return redirect($this->segmentUser.'/surat-keterangan-lulus');
     }
 
@@ -108,6 +108,9 @@ class SuratKeteranganLulusController extends Controller
 
     public function create()
     {
+        if(!$this->isKodeSuratLulusExists() || !$this->isKodeSuratExists()){
+            return redirect($this->segmentUser.'/surat-keterangan-lulus');
+        }
         $kodeSurat = $this->generateKodeSurat();
         $mahasiswa = $this->generateMahasiswa();
         $userList =$this->generatePimpinan();
@@ -237,7 +240,7 @@ class SuratKeteranganLulusController extends Controller
         $this->validate($request,[
             'id_pengajuan_surat_lulus'=>'required',
             'id_kode_surat'=>'required',
-            'nomor_surat'=>'required|numeric|min:1|unique:surat_kegiatan_mahasiswa,nomor_surat|unique:surat_pengantar_beasiswa,nomor_surat|unique:surat_pengantar_cuti,nomor_surat|unique:surat_persetujuan_pindah,nomor_surat|unique:surat_rekomendasi,nomor_surat|unique:surat_tugas,nomor_surat|unique:surat_dispensasi,nomor_surat|unique:surat_keterangan,nomor_surat',
+            'nomor_surat'=>'required|numeric|min:1|unique:surat_keterangan_lulus,nomor_surat|unique:surat_permohonan_pengambilan_material,nomor_surat',
             'nip'=>'required',
         ]);
         $pengajuanSuratLulus = PengajuanSuratKeteranganLulus::findOrFail($request->id_pengajuan_surat_lulus);
@@ -289,8 +292,8 @@ class SuratKeteranganLulusController extends Controller
                     ->where('status','selesai')
                     ->orderBy('status')
                     ->paginate($perPage,['*'],'page');
-            $countAllPengajuanSuratLulus = $pengajuanSuratLulusList->count();
-            $countAllSuratLulus = $suratLulusList->count();
+            $countAllpengajuanSuratLulus = $pengajuanSuratLulusList->count();
+            $countAllsuratLulus = $suratLulusList->count();
 
             $pengajuanSuratLulusList =  PengajuanSuratKeteranganLulus::whereNotIn('status',['menunggu tanda tangan','selesai'])
                                             ->orderByDesc('created_at')
@@ -314,7 +317,7 @@ class SuratKeteranganLulusController extends Controller
             if($countSuratLulus < 1){
                 $this->setFlashData('search','Hasil Pencarian','Surat keterangan lulus tidak ditemukan!');
             }
-            return view('user.'.$this->segmentUser.'.surat_keterangan_lulus',compact('perPage','mahasiswa','pengajuanSuratLulusList','suratLulusList','countAllPengajuanSuratLulus','countAllSuratLulus','countPengajuanSuratLulus','countSuratLulus','nomorSurat'));
+            return view('user.'.$this->segmentUser.'.surat_keterangan_lulus',compact('perPage','mahasiswa','pengajuanSuratLulusList','suratLulusList','countAllpengajuanSuratLulus','countAllsuratLulus','countPengajuanSuratLulus','countSuratLulus','nomorSurat'));
         }else{
             return redirect($this->segmentUser.'/surat-keterangan-lulus');
         }
@@ -361,7 +364,7 @@ class SuratKeteranganLulusController extends Controller
     public function cetak(SuratketeranganLulus $suratLulus){
         if(Session::has('nim')){
             if($suratLulus->jumlah_cetak >= 3){
-                $this->setFlashData('info','Cetak Surat Keterangna Lulus','Anda telah mencetak surat keterangan lulus sebanyak 3 kali.');
+                $this->setFlashData('info','Cetak Surat Keterangan Lulus','Anda telah mencetak surat keterangan lulus sebanyak 3 kali.');
                 return redirect('mahasiswa/pengajuan/surat-keterangan-lulus');
             }
         }

@@ -2236,8 +2236,10 @@ $('.btn-pengajuan-surat-lulus-detail').on('click',function(e){
             let label;
             if(suratLulus.status == 'diajukan' || suratLulus.status == 'menunggu tanda tangan'){
                 label = `<label class="badge badge-gradient-warning text-dark">${suratLulus.status.ucwords()}</label>`;
-            }else{
+            }else if(suratLulus.status == 'selesai'){
                 label = `<label class="badge badge-gradient-info">${suratLulus.status.ucwords()}</label>`;
+            }else{
+                label = `<label class="badge badge-gradient-danger">${suratLulus.status.ucwords()}</label>`;
             }
             let html = `<div class="table-responsive">
                                     <table class="table">
@@ -2522,8 +2524,10 @@ $('.btn-pengajuan-surat-material-detail').on('click',function(e){
             let daftarKelompok = '';
             if(suratMaterial.status == 'diajukan' || suratMaterial.status == 'menunggu tanda tangan'){
                 label = `<label class="badge badge-gradient-warning text-dark">${suratMaterial.status.ucwords()}</label>`;
-            }else{
+            }else if(suratMaterial.status == 'selesai'){
                 label = `<label class="badge badge-gradient-info">${suratMaterial.status.ucwords()}</label>`;
+            }else{
+                label = `<label class="badge badge-gradient-danger">${suratMaterial.status.ucwords()}</label>`;
             }
             
             if(suratMaterial.daftar_kelompok.length > 0){
@@ -2565,7 +2569,7 @@ $('.btn-pengajuan-surat-material-detail').on('click',function(e){
                                         <tr>
                                             <th>File Surat Rekomendasi Jurusan</th>
                                             <td>
-                                                <a href="${suratMaterial.file_rekomendasi_jurusan}" class="btn btn-info btn-sm" data-lightbox="${suratMaterial.nama_file_rekomendasi_jurusan}">
+                                                <a href="${result.file_rekomendasi_jurusan}" class="btn btn-info btn-sm" data-lightbox="${suratMaterial.nama_file_rekomendasi_jurusan}">
                                                 <i class="mdi mdi mdi-eye"></i>
                                                 Lihat File</a>
                                             </td>
@@ -2581,7 +2585,113 @@ $('.btn-pengajuan-surat-material-detail').on('click',function(e){
                                 <div class="table-responsive">
                                     <table class="table">
                                         <tr>
-                                            <td>Daftar kelompok</td>
+                                            <th>Daftar kelompok</th>
+                                            <td>
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <tr>
+                                                            <td>NIM</td>
+                                                            <td>Nama</td>
+                                                        </tr>
+                                                        ${daftarKelompok}
+                                                    </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>`;
+            $('#surat-material-detail-content').html(html);
+        });
+});
+
+$('.btn-surat-material-detail').on('click',function(e){
+    $('#surat-material-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let suratMaterial = result.pengajuan_surat_permohonan_pengambilan_material;
+            
+            let label = '';
+            let daftarKelompok = '';
+            if(suratMaterial.status == 'diajukan' || suratMaterial.status == 'menunggu tanda tangan'){
+                label = `<label class="badge badge-gradient-warning text-dark">${suratMaterial.status.ucwords()}</label>`;
+            }else if(suratMaterial.status == 'selesai'){
+                label = `<label class="badge badge-gradient-info">${suratMaterial.status.ucwords()}</label>`;
+            }else{
+                label = `<label class="badge badge-gradient-danger">${suratMaterial.status.ucwords()}</label>`;
+            }
+            
+            if(suratMaterial.daftar_kelompok.length > 0){
+                suratMaterial.daftar_kelompok.forEach((mhs)=>{
+                    daftarKelompok += `<tr>
+                                           <td>${mhs.nim}</td>
+                                           <td>${mhs.nama}</td>
+                                       </tr>`;
+                });
+            }
+            let html = `<div class="row">
+                            <div class="col-5">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tr>
+                                            <th>Nomor Surat</th>
+                                            <td>${result.nomor_surat}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Ditanda Tangani Oleh</th>
+                                            <td>${result.user.nama}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Jumlah Cetak</th>
+                                            <td>${result.jumlah_cetak}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Nama Kegiatan</th>
+                                            <td>${suratMaterial.nama_kegiatan}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Kepada</th>
+                                            <td>${suratMaterial.kepada}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Nama Kelompok</th>
+                                            <td>${suratMaterial.nama_kelompok}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Diajukan Oleh</th>
+                                            <td>${suratMaterial.mahasiswa.nama}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Status</th>
+                                            <td>${label}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Keterangan</th>
+                                            <td>${suratMaterial.keterangan}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>File Surat Rekomendasi Jurusan</th>
+                                            <td>
+                                                <a href="${result.file_rekomendasi_jurusan}" class="btn btn-info btn-sm" data-lightbox="${result.nama_file_rekomendasi_jurusan}">
+                                                <i class="mdi mdi mdi-eye"></i>
+                                                Lihat File</a>
+                                            </td>
+                                        </tr> 
+                                        <tr>
+                                            <th>Di Buat</th>
+                                            <td>${result.created_at}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tr>
+                                            <th>Daftar kelompok</th>
                                             <td>
                                                 <div class="table-responsive">
                                                     <table class="table">

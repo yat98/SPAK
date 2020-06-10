@@ -73,7 +73,7 @@
                 
                 @endif
                 <div class="row">
-                    <div class="col-md-4 stretch-card grid-margin">
+                    <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-danger card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
@@ -87,7 +87,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4 stretch-card grid-margin">
+                    <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-primary card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
@@ -309,7 +309,7 @@
                             </div>
                         </div>
                     @else
-                        <div class="col-md-4 stretch-card grid-margin">
+                        <div class="col-md-6 stretch-card grid-margin">
                             <div class="card bg-gradient-info card-img-holder text-white">
                                 <div class="card-body">
                                     <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
@@ -322,6 +322,23 @@
                                     </h2>
                                     <h6 class="card-text">
                                         <a href="{{ url('pegawai/surat-keterangan-lulus') }}" class="text-white">Lihat surat keterangan lulus</a>
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="col-md-6 stretch-card grid-margin">
+                            <div class="card bg-gradient-info card-img-holder text-white">
+                                <div class="card-body">
+                                    <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                        alt="circle-image" />
+                                    <h4 class="font-weight-normal mb-3">surat permohonan pengambilan material <i
+                                            class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
+                                    </h4>
+                                    <h2 class="mb-5">
+                                        {{ $countAllSuratMaterial > 0 ? $countAllSuratMaterial.' Surat Permohonan Pengambilan Material' : 'Surat Permohonan Pengambilan Material Kosong' }}
+                                    </h2>
+                                    <h6 class="card-text">
+                                        <a href="{{ url('pegawai/surat-permohonan-pengambilan-material') }}" class="text-white">Lihat surat permohonan pengambilan material</a>
                                     </h6>
                                 </div>
                             </div>
@@ -1176,6 +1193,73 @@
                                         </h4>
                                         <p class="text-muted">
                                             {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat keterangan lulus terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Surat permohonan pengambilan material</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countAllSuratMaterial > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Nomor Surat</th>
+                                                <th> Nama Kegiatan</th>
+                                                <th> Status</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($suratMaterialList as $suratMaterial)
+                                            <tr>
+                                                @php
+                                                    $kode = explode('/',$suratMaterial->kodeSurat->kode_surat);
+                                                @endphp
+                                                <td> {{ $loop->iteration }}</td>
+                                                <td> {{ 'B/'.$suratMaterial->nomor_surat.'/'.$kode[0].'.4/'.$kode[1].'/'.$suratMaterial->created_at->year }}</td>
+                                                <td> {{ $suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->nama_kegiatan }}</td>
+                                                <td> 
+                                                    @if($suratMaterial->status == 'menunggu tanda tangan')
+                                                         <label class="badge badge-gradient-warning text-dark">
+                                                            {{ ucwords($suratMaterial->status) }}
+                                                        </label>
+                                                    @else
+                                                    <label class="badge badge-gradient-info">
+                                                        {{ ucwords($suratMaterial->status) }}
+                                                    </label>
+                                                    @endif
+                                                </td>
+                                                <td> {{ $suratMaterial->created_at->diffForHumans() }}</td>
+                                                <td> {{ $suratMaterial->updated_at->diffForHumans() }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat permohonan pengambilan material terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>

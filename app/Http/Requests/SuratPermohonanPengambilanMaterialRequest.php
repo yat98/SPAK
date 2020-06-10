@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SuratKeteranganLulusRequest extends FormRequest
+class SuratPermohonanPengambilanMaterialRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,22 +25,21 @@ class SuratKeteranganLulusRequest extends FormRequest
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
             $fileRekomendasiJurusanRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
-            $fileBeritaAcaraUjianRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
-            $nomorSuratRules = 'required|numeric|min:1|unique:surat_keterangan_lulus,nomor_surat,'.$this->get('id').',id_pengajuan_surat_lulus|unique:surat_permohonan_pengambilan_material,nomor_surat';
+            $nomorSuratRules = 'required|numeric|min:1|unique:surat_keterangan_lulus,nomor_surat|unique:surat_permohonan_pengambilan_material,nomor_surat,'.$this->get('id').',id_pengajuan';
         }else{
             $fileRekomendasiJurusanRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
-            $fileBeritaAcaraUjianRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
             $nomorSuratRules = 'required|numeric|min:1|unique:surat_keterangan_lulus,nomor_surat|unique:surat_permohonan_pengambilan_material,nomor_surat';
         }
         return [
-            'nim'=>'required',
-            'id_kode_surat'=>'required',
+            'daftar_kelompok'=>'required',
             'file_rekomendasi_jurusan'=>$fileRekomendasiJurusanRules,
-            'file_berita_acara_ujian'=>$fileBeritaAcaraUjianRules,
-            'tanggal_wisuda'=>'required|date',
-            'ipk'=>'required',
+            'kepada'=>'required|string',
+            'nama_kegiatan'=>'required|string',
+            'nama_kelompok'=>'required|string',
+            'id_kode_surat'=>'required',
+            'nomor_surat'=>$nomorSuratRules,
             'nip'=>'required',
-            'nomor_surat'=>$nomorSuratRules
+            'nim'=>'required',
         ];
     }
 }

@@ -114,6 +114,8 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-kegiatan-mahasiswa';
             } else if($segment == 'surat-keterangan-lulus'){
                 $halaman = 'surat-keterangan-lulus';
+            } else if($segment == 'surat-permohonan-pengambilan-material'){
+                $halaman = 'surat-permohonan-pengambilan-material';
             }
         } elseif (request()->segment(1) == 'pimpinan') {
             $posisi = 'pimpinan';
@@ -143,6 +145,8 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'profil';
             } else if($segment == 'surat-keterangan-lulus'){
                 $halaman = 'surat-keterangan-lulus';
+            } else if($segment == 'surat-permohonan-pengambilan-material'){
+                $halaman = 'surat-permohonan-pengambilan-material';
             }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi]);

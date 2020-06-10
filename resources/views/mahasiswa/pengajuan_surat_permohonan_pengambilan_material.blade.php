@@ -95,7 +95,7 @@
                                                         </a>    
                                                     @endif
 
-                                                    @if ($pengajuanSuratMaterial->status == 'selesai' && $pengajuanSuratMaterial->suratKeteranganLulus->jumlah_cetak <= 2)
+                                                    @if ($pengajuanSuratMaterial->status == 'selesai' && $pengajuanSuratMaterial->suratPermohonanPengambilanMaterial->jumlah_cetak <= 2)
                                                     <a href="{{ url('mahasiswa/pengajuan/surat-permohonan-pengambilan-material/'.$pengajuanSuratMaterial->id.'/cetak') }}" class="btn btn-info btn-sm">
                                                         <i class="mdi mdi mdi-printer btn-icon-prepend"></i>
                                                         Cetak</a>
