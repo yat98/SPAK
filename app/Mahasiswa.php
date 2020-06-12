@@ -96,4 +96,12 @@ class Mahasiswa extends Model
     public function daftarKelompok(){
         return $this->belongsToMany('App\PengajuanSuratPermohonanPengambilanMaterial','daftar_kelompok_pengambilan_material','id_pengajuan','nim')->withTimeStamps();
     }
+
+    public function pengajuanSuratPermohonanSurvei(){
+        return $this->hasMany('App\PengajuanSuratPermohonanSurvei', 'nim');
+    }
+
+    public function pengajuanSuratRekomendasiPenelitian(){
+        return $this->hasMany('App\PengajuanSuratRekomendasiPenelitian', 'nim');
+    }
 }

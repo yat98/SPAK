@@ -14,7 +14,7 @@
                         {{ Form::open(['url'=>'login','class'=>'pt-3']) }}
                         <div class="form-group">
                             {{ Form::label('jenis-user','Jenis User') }}
-                            {{ Form::select('jenis_user',['mahasiswa'=>'Mahasiswa','pegawai'=>'Pegawai','pimpinan'=>'Pimpinan'],old('jenis_user'),['class'=>'form-control form-control-lg','id'=>'jenis-user']) }}
+                            {{ Form::select('jenis_user',['mahasiswa'=>'Mahasiswa','pegawai'=>'Pegawai','pimpinan'=>'Pimpinan'],Session::get('jenis_user'),['class'=>'form-control form-control-lg','id'=>'jenis-user']) }}
                         </div>
                         <div class="form-group">
                             {{ Form::label('username','Username') }}

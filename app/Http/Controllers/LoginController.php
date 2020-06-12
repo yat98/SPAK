@@ -63,6 +63,7 @@ class LoginController extends Controller
             }
         }
         Session::flash('username',$username);
+        Session::flash('jenis_user',$request->jenis_user);
         $this->setFlashData('error','Login Gagal','Username atau password salah.');
         return redirect('/');
     }

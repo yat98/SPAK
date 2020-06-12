@@ -77,6 +77,12 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-keterangan-lulus';
             } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-permohonan-pengambilan-material') {
                 $halaman = 'surat-permohonan-pengambilan-material';
+            } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-permohonan-survei') {
+                $halaman = 'surat-permohonan-survei';
+            } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-rekomendasi-penelitian') {
+                $halaman = 'surat-rekomendasi-penelitian';
+            } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-permohonan-pengambilan-data-awal') {
+                $halaman = 'surat-permohonan-pengambilan-data-awal';
             }
         } elseif (request()->segment(1) == 'pegawai') {
             $posisi = 'pegawai';
