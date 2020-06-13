@@ -27,6 +27,7 @@ class NavServiceProvider extends ServiceProvider
     {
         $halaman = '';
         $posisi = '';
+        $show = true;
         $segment = request()->segment(2);
         if (request()->segment(1) == 'admin') {
             $posisi = 'admin'  ;
@@ -54,6 +55,7 @@ class NavServiceProvider extends ServiceProvider
         } else if (request()->segment(1) == 'mahasiswa') {
             $posisi = 'mahasiswa';
             if ($segment == '') {
+                $show = false;
                 $halaman = 'dashboard-mahasiswa';
             } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-aktif-kuliah') {
                 $halaman = 'surat-keterangan-aktif-kuliah';
@@ -68,10 +70,12 @@ class NavServiceProvider extends ServiceProvider
             } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-persetujuan-pindah') {
                 $halaman = 'surat-persetujuan-pindah';
             } else if ($segment == 'pendaftaran-cuti') {
+                $show = false;
                 $halaman = 'pendaftaran-cuti';
             } else if (($segment == 'pengajuan' && request()->segment(3) == 'surat-kegiatan-mahasiswa') || $segment == 'surat-kegiatan-mahasiswa') {
                 $halaman = 'surat-kegiatan-mahasiswa';
             } else if ($segment == 'profil') {
+                $show = false;
                 $halaman = 'profil';
             } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-lulus') {
                 $halaman = 'surat-keterangan-lulus';
@@ -155,6 +159,6 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-permohonan-pengambilan-material';
             }
         }
-        view()->share(['halaman'=>$halaman,'posisi'=>$posisi]);
+        view()->share(['halaman'=>$halaman,'posisi'=>$posisi,'show'=>$show]);
     }
 }

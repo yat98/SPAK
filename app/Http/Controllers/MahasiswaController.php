@@ -24,8 +24,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\PengajuanSuratKeteranganLulus;
 use App\Http\Requests\MahasiswaRequest;
+use App\PengajuanSuratPermohonanSurvei;
 use App\PengajuanSuratKegiatanMahasiswa;
 use App\PengajuanSuratPersetujuanPindah;
+use App\PengajuanSuratRekomendasiPenelitian;
+use App\PengajuanSuratPermohonanPengambilanDataAwal;
 use App\PengajuanSuratPermohonanPengambilanMaterial;
 use Maatwebsite\Excel\Validators\ValidationException;
 use App\Http\Requests\PengajuanSuratKeteranganRequest;
@@ -243,6 +246,9 @@ class MahasiswaController extends Controller
         $pengajuanSuratMaterialList = PengajuanSuratPermohonanPengambilanMaterial::join('daftar_kelompok_pengambilan_material','daftar_kelompok_pengambilan_material.id_pengajuan','=','pengajuan_surat_permohonan_pengambilan_material.id')
                                         ->where('daftar_kelompok_pengambilan_material.nim',Session::get('nim'))
                                         ->get();
+        $pengajuanSuratSurveiList = PengajuanSuratPermohonanSurvei::where('nim',Session::get('nim'))->get();
+        $pengajuanSuratPenelitianList = PengajuanSuratRekomendasiPenelitian::where('nim',Session::get('nim'))->get();
+        $pengajuanSuratDataAwalList = PengajuanSuratPermohonanPengambilanDataAwal::where('nim',Session::get('nim'))->get();
 
         if(isset($mahasiswa->pimpinanOrmawa)){
             $pengajuanKegiatanList = PengajuanSuratKegiatanMahasiswa::join('mahasiswa','mahasiswa.nim','=','pengajuan_surat_kegiatan_mahasiswa.nim')
@@ -265,6 +271,9 @@ class MahasiswaController extends Controller
         $countPendaftaranCuti = $pendaftaranCutiList->count();
         $countAllPengajuanLulus = $pengajuanSuratLulusList->count();
         $countAllPengajuanMaterial = $pengajuanSuratMaterialList->count();
+        $countAllPengajuanSurvei = $pengajuanSuratSurveiList->count();
+        $countAllPengajuanPenelitian = $pengajuanSuratPenelitianList->count();
+        $countAllPengajuanDataAwal = $pengajuanSuratDataAwalList->count();
 
         $pengajuanSuratKeteranganAktifList = $pengajuanSuratKeteranganAktifList->take(5);
         $pengajuanSuratKeteranganList = $pengajuanSuratKeteranganList->take(5);
@@ -276,8 +285,12 @@ class MahasiswaController extends Controller
         $pendaftaranCutiList = $pendaftaranCutiList->take(5);
         $pengajuanSuratLulusList = $pengajuanSuratLulusList->take(5);
         $pengajuanSuratMaterialList = $pengajuanSuratMaterialList->take(5);
+        $pengajuanSuratSurveiList = $pengajuanSuratSurveiList->take(5) ;
+        $pengajuanSuratPenelitianList = $pengajuanSuratPenelitianList->take(5) ;
+        $pengajuanSuratDataAwalList = $pengajuanSuratDataAwalList->take(5) ;
             
-        return view($this->segmentUser.'.dashboard',compact('tahunAkademikAktif','tgl','waktuCuti','pengajuanSuratKeteranganAktifList','countAllPengajuan','pengajuanSuratKeteranganList','countAllPengajuanBaik','pengajuanSuratKeteranganList','pengajuanSuratPindahList','countAllPengajuanPindah','suratDispensasiList','countAllDispensasi','countAllSuratRekomendasi','suratRekomendasiList','suratTugasList','countAllSuratTugas','pengajuanKegiatanList','countAllPengajuanKegiatan','pendaftaranCutiList','countPendaftaranCuti','pengajuanSuratLulusList','countAllPengajuanLulus','pengajuanSuratMaterialList','countAllPengajuanMaterial'));
+        return view($this->segmentUser.'.dashboard',compact('tahunAkademikAktif','tgl','waktuCuti','pengajuanSuratKeteranganAktifList','countAllPengajuan','pengajuanSuratKeteranganList','countAllPengajuanBaik','pengajuanSuratKeteranganList','pengajuanSuratPindahList','countAllPengajuanPindah','suratDispensasiList','countAllDispensasi','countAllSuratRekomendasi','suratRekomendasiList','suratTugasList','countAllSuratTugas','pengajuanKegiatanList','countAllPengajuanKegiatan','pendaftaranCutiList','countPendaftaranCuti','pengajuanSuratLulusList','countAllPengajuanLulus','pengajuanSuratMaterialList','countAllPengajuanMaterial','pengajuanSuratSurveiList','pengajuanSuratPenelitianList','pengajuanSuratDataAwalList','countAllPengajuanSurvei','countAllPengajuanPenelitian','countAllPengajuanDataAwal',
+    ));
     }
     
     public function logout(){

@@ -59,6 +59,55 @@ class PengajuanSuratRekomendasiPenelitianController extends Controller
         return redirect($this->segmentUser.'/pengajuan/surat-rekomendasi-penelitian');
     }
 
+    public function edit(PengajuanSuratRekomendasiPenelitian $pengajuanSuratPenelitian)
+    {
+        return view($this->segmentUser.'.edit_pengajuan_surat_rekomendasi_penelitian',compact('pengajuanSuratPenelitian'));        
+    }
+
+    public function update(PengajuanSuratRekomendasiPenelitianRequest $request, PengajuanSuratRekomendasiPenelitian $pengajuanSuratPenelitian){
+        $input = $request->all();
+        if($request->has('file_rekomendasi_jurusan')){
+            $imageFieldName = 'file_rekomendasi_jurusan'; 
+            $uploadPath = 'upload_rekomendasi_jurusan';
+            $this->deleteImage($imageFieldName,$pengajuanSuratPenelitian->file_rekomendasi_jurusan);
+            $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
+        }
+        $pengajuanSuratPenelitian->update($input);
+        $this->setFlashData('success','Berhasil','Pengajuan surat rekomendasi penelitian berhasil diubah.');
+        return redirect($this->segmentUser.'/pengajuan/surat-rekomendasi-penelitian');
+    }
+
+    public function progress(PengajuanSuratRekomendasiPenelitian $pengajuanSuratPenelitian){
+        $pengajuan = $pengajuanSuratPenelitian->load(['mahasiswa']);
+        $data = collect($pengajuan);
+        $tanggalDiajukan = $pengajuanSuratPenelitian->created_at->isoFormat('D MMMM Y - HH:m:s');
+        $data->put('tanggal_diajukan',$tanggalDiajukan);
+
+        if($pengajuanSuratPenelitian->status == 'selesai'){
+            $tanggalSelesai = $pengajuanSuratPenelitian->updated_at->isoFormat('D MMMM Y - HH:m:s');
+            $tanggalTunggu = $pengajuanSuratPenelitian->suratKeteranganLulus->created_at->isoFormat('D MMMM Y - HH:m:s');
+            $data->put('tanggal_tunggu_tanda_tangan',$tanggalTunggu);
+            $data->put('tanggal_selesai',$tanggalSelesai);
+        }else if($pengajuanSuratPenelitian->status == 'ditolak'){
+            $tanggalDitolak = $pengajuanSuratPenelitian->updated_at->isoFormat('D MMMM Y - HH:m:s');
+            $data->put('tanggal_ditolak',$tanggalDitolak);
+        }else if($pengajuanSuratPenelitian->status == 'menunggu tanda tangan'){
+            $tanggalTunggu = $pengajuanSuratPenelitian->updated_at->isoFormat('D MMMM Y - HH:m:s');
+            $data->put('tanggal_tunggu_tanda_tangan',$tanggalTunggu);
+        }
+        return $data->toJson();
+    }
+
+    public function show(PengajuanSuratRekomendasiPenelitian $pengajuanSuratPenelitian)
+    {
+        $pengajuan = collect($pengajuanSuratPenelitian->load('mahasiswa.prodi.jurusan'));
+        $pengajuan->put('created_at',$pengajuanSuratPenelitian->created_at->isoFormat('D MMMM Y'));
+        $pengajuan->put('file_rekomendasi_jurusan',asset('upload_rekomendasi_jurusan/'.$pengajuanSuratPenelitian->file_rekomendasi_jurusan));
+
+        $pengajuan->put('nama_file_rekomendasi_jurusan',explode('.',$pengajuanSuratPenelitian->file_rekomendasi_jurusan)[0]);
+        return $pengajuan->toJson();
+    }
+
     private function uploadImage($imageFieldName, $request, $uploadPath){
         $image = $request->file($imageFieldName);
         $ext = $image->getClientOriginalExtension();

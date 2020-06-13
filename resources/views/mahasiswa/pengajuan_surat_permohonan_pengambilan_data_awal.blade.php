@@ -40,8 +40,9 @@
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
                                         <a href="{{ url('mahasiswa/pengajuan/surat-permohonan-pengambilan-data-awal/create')}}"
-                                            class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">+
-                                            Buat Pengajuan Surat Permohonan Pengambilan Data Awal</a>
+                                            class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">
+                                            <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
+                                            Buat Pengajuan</a>
                                     </div>
                                 </div>
                                 <hr class="mb-4">
@@ -84,12 +85,12 @@
                                                         Lihat Progress Surat</a>
 
                                                     @if($pengajuanSuratDataAwal->status == 'selesai' || $pengajuanSuratDataAwal->status == 'menunggu tanda tangan')
-                                                        <a href="{{ url('mahasiswa/surat-permohonan-pengambilan-data-awal/'.$pengajuanSuratDataAwal->id) }}" class="btn-surat-lulus-detail  btn btn-outline-info btn-sm" data-toggle="modal" data-target="#suratDataAwal">
+                                                        <a href="{{ url('mahasiswa/surat-permohonan-pengambilan-data-awal/'.$pengajuanSuratDataAwal->id) }}" class="btn-surat-data-awal-detail  btn btn-outline-info btn-sm" data-toggle="modal" data-target="#suratDataAwal">
                                                             <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
                                                             Detail
                                                         </a>
                                                     @else
-                                                        <a href="{{ url('mahasiswa/pengajuan/surat-permohonan-pengambilan-data-awal/'.$pengajuanSuratDataAwal->id) }}" class="btn-pengajuan-surat-lulus-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#suratDataAwal">
+                                                        <a href="{{ url('mahasiswa/pengajuan/surat-permohonan-pengambilan-data-awal/'.$pengajuanSuratDataAwal->id) }}" class="btn-pengajuan-surat-data-awal-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#suratDataAwal">
                                                             <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
                                                             Detail
                                                         </a>    
@@ -159,7 +160,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id='surat-keterangan-survei-detail-content'>
+            <div class="modal-body" id='surat-data-awal-detail-content'>
                 
             </div>
             <div class="modal-footer">

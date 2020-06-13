@@ -37,8 +37,9 @@
                                         <h4>Pengajuan Surat Kegiatan Mahasiswa</h4>
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
-                                        <a href="{{ url('mahasiswa/pengajuan/surat-kegiatan-mahasiswa/create')}}" class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">+
-                                            Buat Pengajuan Surat Kegiatan Mahasiswa</a>
+                                        <a href="{{ url('mahasiswa/pengajuan/surat-kegiatan-mahasiswa/create')}}" class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">
+                                            <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
+                                            Buat Pengajuan</a>
                                     </div>
                                 </div>
                                 <hr class="mb-4">

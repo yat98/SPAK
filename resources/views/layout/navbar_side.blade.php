@@ -213,7 +213,7 @@
                 <i class="menu-arrow"></i>
                 <i class="mdi mdi-file-document-box menu-icon"></i>
             </a>
-            <div class="collapse" id="ui-basic">
+            <div class="collapse {{ ($show) ? 'show':''}}" id="ui-basic">
                 <ul class="nav flex-column sub-menu overflow-hidden">
                     <li class="nav-item">
                         <a class="nav-link {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/pengajuan/surat-keterangan-aktif-kuliah') }}">

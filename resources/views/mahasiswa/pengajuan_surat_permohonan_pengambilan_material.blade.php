@@ -14,7 +14,7 @@
                         </span> Surat Permohonan Pengambilan Material</h3>
                 </div>
                 <div class="row">
-                    <div class="col-md-5 stretch-card grid-margin">
+                    <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
@@ -41,7 +41,7 @@
                                     <div class="col-12 col-md-6 text-right">
                                         <a href="{{ url('mahasiswa/pengajuan/surat-permohonan-pengambilan-material/create')}}"
                                             class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">+
-                                            Buat Pengajuan Surat Permohonan Pengambilan Material</a>
+                                            Buat Pengajuan</a>
                                     </div>
                                 </div>
                                 <hr class="mb-4">

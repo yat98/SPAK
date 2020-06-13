@@ -83,7 +83,7 @@ Route::group(['prefix' => 'mahasiswa'],function(){
             Route::get('surat-permohonan-survei/{surat_survei}/cetak', 'SuratPermohonanSurveiController@cetak');
             Route::get('surat-permohonan-survei/create','PengajuanSuratPermohonanSurveiController@create');
             Route::get('surat-permohonan-survei/{pengajuan_surat_survei}','PengajuanSuratPermohonanSurveiController@show');
-            Route::get('surat-permohonan-survei/{pengajuan_surat_survei}/edit','PengajuanSuratPermohonanPengambilanMaterialController@edit');
+            Route::get('surat-permohonan-survei/{pengajuan_surat_survei}/edit','PengajuanSuratPermohonanSurveiController@edit');
             Route::get('surat-permohonan-survei','PengajuanSuratPermohonanSurveiController@index');
             Route::post('surat-permohonan-survei','PengajuanSuratPermohonanSurveiController@store');
             Route::patch('surat-permohonan-survei/{pengajuan_surat_survei}','PengajuanSuratPermohonanSurveiController@update');

@@ -59,6 +59,55 @@ class PengajuanSuratPermohonanPengambilanDataAwalController extends Controller
         return redirect($this->segmentUser.'/pengajuan/surat-permohonan-pengambilan-data-awal');
     }
 
+    public function edit(PengajuanSuratPermohonanPengambilanDataAwal $pengajuanSuratDataAwal)
+    {
+        return view($this->segmentUser.'.edit_pengajuan_surat_permohonan_pengambilan_data_awal',compact('pengajuanSuratDataAwal'));        
+    }
+
+    public function update(PengajuanSuratPermohonanPengambilanDataAwalRequest $request, PengajuanSuratPermohonanPengambilanDataAwal $pengajuanSuratDataAwal){
+        $input = $request->all();
+        if($request->has('file_rekomendasi_jurusan')){
+            $imageFieldName = 'file_rekomendasi_jurusan'; 
+            $uploadPath = 'upload_rekomendasi_jurusan';
+            $this->deleteImage($imageFieldName,$pengajuanSuratDataAwal->file_rekomendasi_jurusan);
+            $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
+        }
+        $pengajuanSuratDataAwal->update($input);
+        $this->setFlashData('success','Berhasil','Pengajuan surat permohonan pengambilan data awal berhasil diubah.');
+        return redirect($this->segmentUser.'/pengajuan/surat-permohonan-pengambilan-data-awal');
+    }
+
+    public function progress(PengajuanSuratPermohonanPengambilanDataAwal $pengajuanSuratDataAwal){
+        $pengajuan = $pengajuanSuratDataAwal->load(['mahasiswa']);
+        $data = collect($pengajuan);
+        $tanggalDiajukan = $pengajuanSuratDataAwal->created_at->isoFormat('D MMMM Y - HH:m:s');
+        $data->put('tanggal_diajukan',$tanggalDiajukan);
+
+        if($pengajuanSuratDataAwal->status == 'selesai'){
+            $tanggalSelesai = $pengajuanSuratDataAwal->updated_at->isoFormat('D MMMM Y - HH:m:s');
+            $tanggalTunggu = $pengajuanSuratDataAwal->suratKeteranganLulus->created_at->isoFormat('D MMMM Y - HH:m:s');
+            $data->put('tanggal_tunggu_tanda_tangan',$tanggalTunggu);
+            $data->put('tanggal_selesai',$tanggalSelesai);
+        }else if($pengajuanSuratDataAwal->status == 'ditolak'){
+            $tanggalDitolak = $pengajuanSuratDataAwal->updated_at->isoFormat('D MMMM Y - HH:m:s');
+            $data->put('tanggal_ditolak',$tanggalDitolak);
+        }else if($pengajuanSuratDataAwal->status == 'menunggu tanda tangan'){
+            $tanggalTunggu = $pengajuanSuratDataAwal->updated_at->isoFormat('D MMMM Y - HH:m:s');
+            $data->put('tanggal_tunggu_tanda_tangan',$tanggalTunggu);
+        }
+        return $data->toJson();
+    }
+
+    public function show(PengajuanSuratPermohonanPengambilanDataAwal $pengajuanSuratDataAwal)
+    {
+        $pengajuan = collect($pengajuanSuratDataAwal->load('mahasiswa.prodi.jurusan'));
+        $pengajuan->put('created_at',$pengajuanSuratDataAwal->created_at->isoFormat('D MMMM Y'));
+        $pengajuan->put('file_rekomendasi_jurusan',asset('upload_rekomendasi_jurusan/'.$pengajuanSuratDataAwal->file_rekomendasi_jurusan));
+
+        $pengajuan->put('nama_file_rekomendasi_jurusan',explode('.',$pengajuanSuratDataAwal->file_rekomendasi_jurusan)[0]);
+        return $pengajuan->toJson();
+    }
+
     private function uploadImage($imageFieldName, $request, $uploadPath){
         $image = $request->file($imageFieldName);
         $ext = $image->getClientOriginalExtension();

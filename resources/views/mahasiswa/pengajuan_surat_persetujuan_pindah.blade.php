@@ -40,8 +40,9 @@
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
                                         <a href="{{ url('mahasiswa/pengajuan/surat-persetujuan-pindah/create')}}"
-                                            class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">+
-                                            Buat Pengajuan Surat Persetujuan Pindah</a>
+                                            class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">
+                                            <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
+                                            Buat Pengajuan</a>
                                     </div>
                                 </div>
                                 <hr class="mb-4">
