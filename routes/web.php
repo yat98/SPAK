@@ -12,9 +12,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-// Route::get('test',function(){
-//     return App\SuratDispensasi::with(['pengajuanSuratDispensasi.user','user','pengajuanSuratDispensasi.suratMasuk','pengajuanSuratDispensasi.tahapanKegiatanMahasiswa','pengajuanSuratDispensasi.mahasiswa'])->get()->toJson();
-// });
+
 // Login
 Route::get('/', 'LoginController@login');
 Route::group(['prefix'=>'login'],function(){
@@ -131,6 +129,12 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         Route::resource('surat-keterangan-lulus','SuratKeteranganLulusController')->only('show');
         // Surat Permohonan Pengambilan Material
         Route::get('surat-permohonan-pengambilan-material/{surat_material}','SuratPermohonanPengambilanMaterialController@show');
+        // Surat Permohonan Survei
+        Route::resource('surat-permohonan-survei','SuratPermohonanSurveiController')->only('show');
+        // Surat Rekomendasi Penelitian
+        Route::resource('surat-rekomendasi-penelitian','SuratRekomendasiPenelitianController')->only('show');
+        // Surat Permohonan Pengambilan Data Awal
+        Route::get('surat-permohonan-pengambilan-data-awal/{surat_data_awal}','SuratPermohonanPengambilanDataAwalController@show');
         // Pendaftaran Cuti
         Route::get('pendaftaran-cuti','PendaftaranCutiController@pendaftaranCutiMahasiswa');
         Route::resource('pendaftaran-cuti','PendaftaranCutiController')->except('index');
@@ -256,6 +260,42 @@ Route::group(['prefix' => 'pegawai'],function(){
             Route::post('/','SuratPermohonanPengambilanMaterialController@storeSurat');
             Route::get('create/{pengajuan_surat_material}','SuratPermohonanPengambilanMaterialController@createSurat');
             Route::patch('tolak-pengajuan/{pengajuan_surat_material}','SuratPermohonanPengambilanMaterialController@tolakPengajuan');
+        });
+        // Surat Permohonan Survei
+        Route::get('surat-permohonan-survei/search', 'SuratPermohonanSurveiController@search');
+        Route::get('surat-permohonan-survei/{pengajuan_surat_survei}/cetak', 'SuratPermohonanSurveiController@cetakSuratLulus');
+        Route::group(['prefix'=>'surat-permohonan-survei/pengajuan'],function(){
+            Route::post('/','SuratPermohonanSurveiController@storeSurat');
+            Route::get('/{pengajuan_surat_survei}','PengajuanSuratPermohonanSurveiController@show');
+            Route::get('create/{pengajuan_surat_survei}','SuratPermohonanSurveiController@createSurat');
+            Route::patch('tolak-pengajuan/{pengajuan_surat_survei}','SuratPermohonanSurveiController@tolakPengajuan');
+        });
+        Route::resource('surat-permohonan-survei','SuratPermohonanSurveiController');
+        // Surat Rekomedasi penelitian
+        Route::get('surat-rekomendasi-penelitian/search', 'SuratRekomendasiPenelitianController@search');
+        Route::get('surat-rekomendasi-penelitian/{pengajuan_surat_survei}/cetak', 'SuratRekomendasiPenelitianController@cetakSuratLulus');
+        Route::group(['prefix'=>'surat-rekomendasi-penelitian/pengajuan'],function(){
+            Route::get('/{pengajuan_surat_penelitian}','PengajuanSuratRekomendasiPenelitianController@show');
+            Route::post('/','SuratRekomendasiPenelitianController@storeSurat');
+            Route::get('create/{pengajuan_surat_penelitian}','SuratRekomendasiPenelitianController@createSurat');
+            Route::patch('tolak-pengajuan/{pengajuan_surat_penelitian}','SuratRekomendasiPenelitianController@tolakPengajuan');
+        });
+        Route::resource('surat-rekomendasi-penelitian','SuratRekomendasiPenelitianController');
+        // Surat Permohonan Pengambilan Data Awal
+        Route::get('surat-permohonan-pengambilan-data-awal','SuratPermohonanPengambilanDataAwalController@index');
+        Route::delete('surat-permohonan-pengambilan-data-awal/{surat_data_awal}','SuratPermohonanPengambilanDataAwalController@destroy');
+        Route::post('surat-permohonan-pengambilan-data-awal','SuratPermohonanPengambilanDataAwalController@store');
+        Route::get('surat-permohonan-pengambilan-data-awal/create','SuratPermohonanPengambilanDataAwalController@create');
+        Route::get('surat-permohonan-pengambilan-data-awal/{surat_data_awal}/edit','SuratPermohonanPengambilanDataAwalController@edit');
+        Route::get('surat-permohonan-pengambilan-data-awal/search', 'SuratPermohonanPengambilanDataAwalController@search');
+        Route::patch('surat-permohonan-pengambilan-data-awal/{surat_data_awal}','SuratPermohonanPengambilanDataAwalController@update');
+        Route::get('surat-permohonan-pengambilan-data-awal/{surat_data_awal}','SuratPermohonanPengambilanDataAwalController@show');
+        Route::get('surat-permohonan-pengambilan-data-awal/{surat_data_awal}/cetak', 'SuratPermohonanPengambilanDataAwalController@cetak');
+        Route::group(['prefix'=>'surat-permohonan-pengambilan-data-awal/pengajuan'],function(){
+            Route::get('/{pengajuan_surat_data_awal}','PengajuanSuratPermohonanPengambilanDataAwalController@show');
+            Route::post('/','SuratPermohonanPengambilanDataAwalController@storeSurat');
+            Route::get('create/{pengajuan_surat_data_awal}','SuratPermohonanPengambilanDataAwalController@createSurat');
+            Route::patch('tolak-pengajuan/{pengajuan_surat_data_awal}','SuratPermohonanPengambilanDataAwalController@tolakPengajuan');
         });
         // Notifikasi
         Route::get('notifikasi/{notifikasi_user}','NotifikasiUserController@show');

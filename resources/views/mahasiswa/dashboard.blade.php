@@ -197,7 +197,7 @@
                                     {{ $countAllPengajuanKegiatan > 0 ? $countAllPengajuanKegiatan.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text">
-                                    <a href="{{ url('mahasiswa/surat-pengajuan-pindah') }}" class="text-white">Lihat surat pengajuan pindah</a>
+                                    <a href="{{ url('mahasiswa/pengajuan/surat-kegiatan-mahasiswa') }}" class="text-white">Lihat surat kegiatan mahasiswa</a>
                                 </h6>
                             </div>
                         </div>
@@ -214,7 +214,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllPengajuanLulus > 0 ? $countAllPengajuanLulus.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('mahasiswa/pengajuan/surat-keterangan-lulus') }}" class="text-white">Lihat surat keterangan lulus</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -223,13 +225,15 @@
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Pengajuan Surat Pengambilan Material<i
+                                <h4 class="font-weight-normal mb-3">Pengajuan Surat Permohonan Pengambilan Material<i
                                         class="mdi mdi-file-document-box mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
                                     {{ $countAllPengajuanMaterial > 0 ? $countAllPengajuanMaterial.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('mahasiswa/pengajuan/surat-permohonan-pengambilan-material') }}" class="text-white">Lihat surat permohonan pengambilan material</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -244,7 +248,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllPengajuanSurvei > 0 ? $countAllPengajuanSurvei.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('mahasiswa/pengajuan/surat-permohonan-survei') }}" class="text-white">Lihat surat permohonan survei</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -259,7 +265,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllPengajuanPenelitian > 0 ? $countAllPengajuanPenelitian.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('mahasiswa/pengajuan/surat-rekomendasi-penelitian') }}" class="text-white">Lihat surat rekomendasi penelitian</a>
+                                </h6>
                             </div>
                         </div>
                     </div>
@@ -274,7 +282,9 @@
                                 <h2 class="mb-5">
                                     {{ $countAllPengajuanDataAwal > 0 ? $countAllPengajuanDataAwal.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
                                 </h2>
-                                <h6 class="card-text"></h6>
+                                <h6 class="card-text">
+                                    <a href="{{ url('mahasiswa/pengajuan/surat-permohonan-pengambilan-data-awal') }}" class="text-white">Lihat surat permohonan pengambilan data awal   </a>
+                                </h6>
                             </div>
                         </div>
                     </div>

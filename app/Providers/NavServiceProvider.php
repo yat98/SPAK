@@ -91,16 +91,20 @@ class NavServiceProvider extends ServiceProvider
         } elseif (request()->segment(1) == 'pegawai') {
             $posisi = 'pegawai';
             if ($segment == '') {
+                $show = false;
                 $halaman = 'dashboard-pegawai';
             } else if ($segment == 'kode-surat') {
+                $show = false;
                 $halaman = 'kode-surat';
             } else if ($segment == 'tanda-tangan') {
+                $show = false;
                 $halaman = 'tanda-tangan';
             } else if ($segment == 'surat-keterangan-aktif-kuliah') {
                 $halaman = 'surat-keterangan-aktif-kuliah';
             } else if ($segment == 'surat-keterangan-kelakuan-baik') {
                 $halaman = 'surat-keterangan-kelakuan-baik';
             } else if ($segment == 'profil') {
+                $show = false;
                 $halaman = 'profil';
             } else if($segment == 'surat-masuk'){
                 $halaman = 'surat-masuk';
@@ -126,6 +130,12 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-keterangan-lulus';
             } else if($segment == 'surat-permohonan-pengambilan-material'){
                 $halaman = 'surat-permohonan-pengambilan-material';
+            } else if ($segment == 'surat-permohonan-survei') {
+                $halaman = 'surat-permohonan-survei';
+            } else if ($segment == 'surat-rekomendasi-penelitian') {
+                $halaman = 'surat-rekomendasi-penelitian';
+            } else if ($segment == 'surat-permohonan-pengambilan-data-awal') {
+                $halaman = 'surat-permohonan-pengambilan-data-awal';
             }
         } elseif (request()->segment(1) == 'pimpinan') {
             $posisi = 'pimpinan';

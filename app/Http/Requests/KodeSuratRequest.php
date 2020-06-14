@@ -30,10 +30,10 @@ class KodeSuratRequest extends FormRequest
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
             $kodeSuratRules = 'required|string|regex:/.+\/+./|unique_with:kode_surat,jenis_surat,'.$this->get('id');
-            $jenisSuratRules = 'required|string|in:surat kegiatan mahasiswa,surat keterangan,surat dispensasi,surat pengantar cuti,surat rekomendasi,surat tugas,surat persetujuan pindah,surat pengantar beasiswa,surat keterangan lulus,surat permohonan pengambilan material,surat permohonan survei,surat rekomendasi penelitian,surat permohonan data awal|unique_with:kode_surat,kode_surat,'.$this->get('id');
+            $jenisSuratRules = 'required|string|in:surat kegiatan mahasiswa,surat keterangan,surat dispensasi,surat pengantar cuti,surat rekomendasi,surat tugas,surat persetujuan pindah,surat pengantar beasiswa,surat keterangan lulus,surat permohonan pengambilan material,surat permohonan survei,surat rekomendasi penelitian,surat permohonan pengambilan data awal|unique_with:kode_surat,kode_surat,'.$this->get('id');
         }else{
             $kodeSuratRules = 'required|string|regex:/.+\/+./|unique_with:kode_surat,jenis_surat';
-            $jenisSuratRules = 'required|string|in:surat kegiatan mahasiswa,surat keterangan,surat dispensasi,surat pengantar cuti,surat rekomendasi,surat tugas,surat persetujuan pindah,surat pengantar beasiswa,surat keterangan lulus,surat permohonan pengambilan material,surat permohonan survei,surat rekomendasi penelitian,surat permohonan data awal|unique_with:kode_surat,kode_surat';
+            $jenisSuratRules = 'required|string|in:surat kegiatan mahasiswa,surat keterangan,surat dispensasi,surat pengantar cuti,surat rekomendasi,surat tugas,surat persetujuan pindah,surat pengantar beasiswa,surat keterangan lulus,surat permohonan pengambilan material,surat permohonan survei,surat rekomendasi penelitian,surat permohonan pengambilan data awal|unique_with:kode_surat,kode_surat';
         }
         return[
             'kode_surat'=>$kodeSuratRules,

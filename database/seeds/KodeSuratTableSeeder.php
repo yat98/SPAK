@@ -71,6 +71,24 @@ class KodeSuratTableSeeder extends Seeder
             'status_aktif'=>'aktif',
             'jenis_surat'=>'surat permohonan pengambilan material'
         ]);
+
+        KodeSurat::create([
+            'kode_surat'=>'UN47.B5/KM.07',
+            'status_aktif'=>'aktif',
+            'jenis_surat'=>'surat permohonan survei'
+        ]);
+
+        KodeSurat::create([
+            'kode_surat'=>'UN47.B5/PT.01.05',
+            'status_aktif'=>'aktif',
+            'jenis_surat'=>'surat rekomendasi penelitian'
+        ]);
+
+        KodeSurat::create([
+            'kode_surat'=>'UN47.B5/PT.01.05',
+            'status_aktif'=>'aktif',
+            'jenis_surat'=>'surat permohonan pengambilan data awal'
+        ]);
         
         $this->command->info('Berhasil menambahkan 7 data kode surat');
     }

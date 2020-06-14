@@ -17,12 +17,15 @@ use App\SuratRekomendasi;
 use App\SuratPengantarCuti;
 use Illuminate\Http\Request;
 use App\SuratKeteranganLulus;
+use App\SuratPermohonanSurvei;
 use App\SuratKegiatanMahasiswa;
 use App\SuratPengantarBeasiswa;
 use App\SuratPersetujuanPindah;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\DB;
+use App\SuratRekomendasiPenelitian;
 use Illuminate\Support\Facades\Hash;
+use App\SuratPermohonanPengambilanDataAwal;
 use App\SuratPermohonanPengambilanMaterial;
 
 class UserController extends Controller
@@ -136,12 +139,24 @@ class UserController extends Controller
         $waktuCutiList = WaktuCuti::all();
         $pendaftaranCutiList = PendaftaranCuti::where('status','diterima')->orderByDesc('created_at')->get();
         $waktuCuti = isset($tahunAkademikAktif) ? WaktuCuti::where('id_tahun_akademik',$tahunAkademikAktif->id)->first():null;
+
         $suratLulusList =  SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','pengajuan_surat_keterangan_lulus.id','=','surat_keterangan_lulus.id_pengajuan_surat_lulus')
                             ->whereIn('status',['selesai','menunggu tanda tangan'])
                             ->orderBy('status')
-                            ->get();
-                            
+                            ->get();                         
         $suratMaterialList =  SuratPermohonanPengambilanMaterial::join('pengajuan_surat_permohonan_pengambilan_material','pengajuan_surat_permohonan_pengambilan_material.id','=','surat_permohonan_pengambilan_material.id_pengajuan')
+                                ->whereIn('status',['selesai','menunggu tanda tangan'])
+                                ->orderBy('status')
+                                ->get();
+        $suratSurveiList =  SuratPermohonanSurvei::join('pengajuan_surat_permohonan_survei','pengajuan_surat_permohonan_survei.id','=','surat_permohonan_survei.id_pengajuan')
+                                ->whereIn('status',['selesai','menunggu tanda tangan'])
+                                ->orderByDesc('surat_permohonan_survei.created_at')
+                                ->get();
+        $suratPenelitianList =  SuratRekomendasiPenelitian::join('pengajuan_surat_rekomendasi_penelitian','pengajuan_surat_rekomendasi_penelitian.id','=','surat_rekomendasi_penelitian.id_pengajuan')
+                                ->whereIn('status',['selesai','menunggu tanda tangan'])
+                                ->orderByDesc('surat_rekomendasi_penelitian.created_at')
+                                ->get();
+        $suratDataAwalList =  SuratPermohonanPengambilanDataAwal::join('pengajuan_surat_permohonan_pengambilan_data_awal','pengajuan_surat_permohonan_pengambilan_data_awal.id','=','surat_permohonan_pengambilan_data_awal.id_pengajuan')
                                 ->whereIn('status',['selesai','menunggu tanda tangan'])
                                 ->orderBy('status')
                                 ->get();
@@ -161,6 +176,9 @@ class UserController extends Controller
         $countAllPendaftaranCuti = $pendaftaranCutiList->count();
         $countAllsuratLulus = $suratLulusList->count();
         $countAllSuratMaterial = $suratMaterialList->count();
+        $countAllSuratSurvei = $suratSurveiList->count();
+        $countAllSuratPenelitian = $suratPenelitianList->count();
+        $countAllSuratDataAwal = $suratDataAwalList->count();
       
         $kodeSuratList = $kodeSuratList->take(5);
         $suratMasukList = $suratMasukList->take(5);
@@ -177,8 +195,11 @@ class UserController extends Controller
         $pendaftaranCutiList = $pendaftaranCutiList->take(5);
         $suratLulusList = $suratLulusList->take(5);
         $suratMaterialList = $suratMaterialList->take(5);
+        $suratSurveiList = $suratSurveiList->take(5);
+        $suratPenelitianList = $suratPenelitianList->take(5);
+        $suratDataAwalList = $suratDataAwalList->take(5);
        
-        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','countAllKodeSurat','kodeSuratList','countAllSuratKeteranganAktif','suratMasukList','countAllSuratMasuk','suratKeteranganAktifList','suratKeteranganKelakuanList','countAllSuratKeteranganKelakuan','suratDispensasiList','countAllSuratDispensasi','waktuCuti','tgl','suratRekomendasiList','countAllSuratRekomendasi','suratTugasList','countAllSuratTugas','suratPersetujuanPindahList','countAllSuratPersetujuanPindah','suratCutiList','countAllSuratCuti','suratBeasiswaList','countAllSuratBeasiswa','suratKegiatanList','countAllSuratKegiatan','waktuCutiList','countAllWaktuCuti','pendaftaranCutiList','countAllPendaftaranCuti','suratLulusList','countAllsuratLulus','suratMaterialList','countAllSuratMaterial'));
+        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','countAllKodeSurat','kodeSuratList','countAllSuratKeteranganAktif','suratMasukList','countAllSuratMasuk','suratKeteranganAktifList','suratKeteranganKelakuanList','countAllSuratKeteranganKelakuan','suratDispensasiList','countAllSuratDispensasi','waktuCuti','tgl','suratRekomendasiList','countAllSuratRekomendasi','suratTugasList','countAllSuratTugas','suratPersetujuanPindahList','countAllSuratPersetujuanPindah','suratCutiList','countAllSuratCuti','suratBeasiswaList','countAllSuratBeasiswa','suratKegiatanList','countAllSuratKegiatan','waktuCutiList','countAllWaktuCuti','pendaftaranCutiList','countAllPendaftaranCuti','suratLulusList','countAllsuratLulus','suratMaterialList','countAllSuratMaterial','suratSurveiList','suratPenelitianList','suratDataAwalList','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal'));
     }
 
     public function pimpinanDashboard(){

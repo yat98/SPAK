@@ -11,7 +11,7 @@
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
                             <i class="mdi mdi-file-document-box"></i>
-                        </span> Surat Permohonan Pengambilan Material </h3>
+                        </span> Surat Permohonan Pengambilan Data Awal </h3>
                 </div>
                 <div class="row">
                     <div class="col-md-6 stretch-card grid-margin">
@@ -19,11 +19,11 @@
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Pengajuan surat permohonan pengambilan material<i
+                                <h4 class="font-weight-normal mb-3">Pengajuan Surat Permohonan Pengambilan Data Awal<i
                                         class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllPengajuanSuratMaterial > 0 ? $countAllPengajuanSuratMaterial.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
+                                    {{ $countAllPengajuanDataAwal > 0 ? $countAllPengajuanDataAwal.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -34,11 +34,11 @@
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Surat Permohonan Pengambilan Material <i
+                                <h4 class="font-weight-normal mb-3">Surat Permohonan Pengambilan Data Awal <i
                                         class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllSuratMaterial > 0 ? $countAllSuratMaterial.' Surat Permohonan Pengambilan Material' : 'Surat Permohonan Pengambilan Material Kosong' }}
+                                    {{ $countAllSuratDataAwal > 0 ? $countAllSuratDataAwal.' Surat Permohonan Pengambilan Data Awal' : 'Surat Permohonan Pengambilan Data Awal Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -51,56 +51,56 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Pengajuan Surat Permohonan Pengambilan Material</h4>
+                                        <h4>Pengajuan Surat Permohonan Pengambilan Data Awal</h4>
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countPengajuanSuratMaterial > 0)
+                                @if ($countPengajuanDataAwal > 0)
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
                                             <tr>
                                                 <th> No. </th>
                                                 <th> Nama Mahasiswa</th>
-                                                <th> Nama Kegiatan</th>
                                                 <th> Status</th>
+                                                <th> Keterangan</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($pengajuanSuratMaterialList as $pengajuansuratMaterial)
+                                            @foreach ($pengajuanSuratDataAwalList as $pengajuanSuratDataAwal)
                                             <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($pengajuanSuratMaterialList->currentPage() - 1) }}</td>
-                                                <td> {{ $pengajuansuratMaterial->mahasiswa->nama }}</td>
-                                                <td> {{ $pengajuansuratMaterial->nama_kegiatan }}</td>
+                                                <td> {{ $loop->iteration + $perPage * ($pengajuanSuratDataAwalList->currentPage() - 1) }}</td>
+                                                <td> {{ $pengajuanSuratDataAwal->mahasiswa->nama }}</td>
                                                 <td> 
-                                                    @if ($pengajuansuratMaterial->status == 'diajukan')
+                                                    @if ($pengajuanSuratDataAwal->status == 'diajukan')
                                                     <label class="badge badge-gradient-warning text-dark">
-                                                        {{ ucwords($pengajuansuratMaterial->status) }}
+                                                        {{ ucwords($pengajuanSuratDataAwal->status) }}
                                                     </label>
-                                                    @elseif($pengajuansuratMaterial->status == 'ditolak')
+                                                    @elseif($pengajuanSuratDataAwal->status == 'ditolak')
                                                     <label class="badge badge-gradient-danger">
-                                                        {{ ucwords($pengajuansuratMaterial->status) }}
+                                                        {{ ucwords($pengajuanSuratDataAwal->status) }}
                                                     </label>
                                                     @endif
                                                 </td>
+                                                <td> {{ $pengajuanSuratDataAwal->keterangan }}</td>
                                                 <td>
-                                                    <a href="{{ url('pegawai/detail/mahasiswa/'.$pengajuansuratMaterial->nim) }}" class="btn-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                    <a href="{{ url('pegawai/detail/mahasiswa/'.$pengajuanSuratDataAwal->nim) }}" class="btn-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-account btn-icon-prepend"></i>
                                                         Detail</a>
 
-                                                    <a href="{{ url('pegawai/surat-permohonan-pengambilan-material/pengajuan/'.$pengajuansuratMaterial->id) }}" class="btn-pengajuan-surat-material-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#suratMaterial">
+                                                    <a href="{{ url('pegawai/surat-permohonan-pengambilan-data-awal/pengajuan/'.$pengajuanSuratDataAwal->id) }}" class="btn-pengajuan-surat-data-awal-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#suratDataAwal">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
                                                         Detail
-                                                    </a>       
+                                                    </a>    
 
-                                                    @if ($pengajuansuratMaterial->status == 'diajukan')
-                                                    <a href="{{ url('pegawai/surat-permohonan-pengambilan-material/pengajuan/create/'.$pengajuansuratMaterial->id) }}" class="btn btn-sm btn-info">
+                                                    @if ($pengajuanSuratDataAwal->status == 'diajukan')
+                                                    <a href="{{ url('pegawai/surat-permohonan-pengambilan-data-awal/pengajuan/create/'.$pengajuanSuratDataAwal->id) }}" class="btn btn-sm btn-info">
                                                         <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
                                                             Buat Surat
                                                     </a>
 
-                                                    {{ Form::open(['url'=>'pegawai/surat-permohonan-pengambilan-material/pengajuan/tolak-pengajuan/'.$pengajuansuratMaterial->id,'class'=>'d-inline-block','method'=>'PATCH']) }}
+                                                    {{ Form::open(['url'=>'pegawai/surat-permohonan-pengambilan-data-awal/pengajuan/tolak-pengajuan/'.$pengajuanSuratDataAwal->id,'class'=>'d-inline-block','method'=>'PATCH']) }}
                                                     {{ Form::hidden('keterangan','-',['id'=>'keterangan_surat']) }}
                                                     <button type="submit" class="btn btn-danger btn-sm tolak-surat">
                                                         <i class="mdi mdi mdi-close btn-icon-prepend"></i>
@@ -114,7 +114,7 @@
                                         </tbody>
                                     </table>
                                     <div class="col">
-                                        {{ $pengajuanSuratMaterialList->appends(['page' => $pengajuanSuratMaterialList->currentPage()])->links() }}
+                                        {{ $pengajuanSuratDataAwalList->appends(['page' => $pengajuanSuratDataAwalList->currentPage()])->links() }}
                                     </div>
                                 </div>
                                 @else
@@ -125,7 +125,7 @@
                                             Pengajuan Surat Kosong!
                                         </h4>
                                         <p class="text-muted">
-                                           Pengajuan surat permohonan pengambilan material belum ada.
+                                            Pengajuan surat permohonan pengambilan data awal belum ada.
                                         </p>
                                     </div>
                                 </div>
@@ -138,18 +138,18 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Surat Permohonan Pengambilan Material</h4>
+                                        <h4>Surat Permohonan Pengambilan Data Awal</h4>
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
-                                        <a href="{{ url('pegawai/surat-permohonan-pengambilan-material/create')}}"
+                                        <a href="{{ url('pegawai/surat-permohonan-pengambilan-data-awal/create')}}"
                                             class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">+
-                                            Tambah surat permohonan pengambilan material</a>
+                                            Tambah Surat Permohonan Pengambilan Data Awal</a>
                                     </div>
                                 </div>
                                 <hr class="mb-4">
                                 <div class="row mb-3">
                                     <div class="col-sm-12">
-                                        {{ Form::open(['url'=>'pegawai/surat-permohonan-pengambilan-material/search','method'=>'get']) }}
+                                        {{ Form::open(['url'=>'pegawai/surat-permohonan-pengambilan-data-awal/search','method'=>'get']) }}
                                         <div class="form-row">
                                             <div class="col-sm-4 col-md-4 mt-1">
                                                 {{ Form::select('nomor_surat',$nomorSurat,(request()->get('nomor_surat') != null) ? request()->get('nomor_surat'):null,['class'=>'form-control search','placeholder'=> 'Cari kode surat...']) }}
@@ -167,53 +167,53 @@
                                         {{ Form::close() }}
                                     </div>
                                 </div>
-                                @if ($countSuratMaterial > 0)
+                                @if ($countSuratDataAwal > 0)
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
                                             <tr>
                                                 <th> No. </th>
                                                 <th> Nomor Surat</th>
-                                                <th> Nama Kegiatan</th>
+                                                <th> Nama Mahasiswa</th>
                                                 <th> Status</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($suratMaterialList as $suratMaterial)
+                                            @foreach ($suratDataAwalList as $suratDataAwal)
                                             <tr>
                                                 @php
-                                                    $kode = explode('/',$suratMaterial->kodeSurat->kode_surat);
+                                                    $kode = explode('/',$suratDataAwal->kodeSurat->kode_surat);
                                                 @endphp
-                                                <td> {{ $loop->iteration + $perPage * ($suratMaterialList->currentPage() - 1) }}</td>
-                                                <td> {{ 'B/'.$suratMaterial->nomor_surat.'/'.$kode[0].'.4/'.$kode[1].'/'.$suratMaterial->created_at->year }}</td>
-                                                <td> {{ $suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->nama_kegiatan }}</td>
+                                                <td> {{ $loop->iteration + $perPage * ($suratDataAwalList->currentPage() - 1) }}</td>
+                                                <td> {{ 'B/'.$suratDataAwal->nomor_surat.'/'.$kode[0].'.1/'.$kode[1].'/'.$suratDataAwal->created_at->year }}</td>
+                                                <td> {{ $suratDataAwal->pengajuanSuratPermohonanPengambilanDataAwal->mahasiswa->nama }}</td>
                                                 <td> 
-                                                    @if($suratMaterial->status == 'menunggu tanda tangan')
+                                                    @if($suratDataAwal->status == 'menunggu tanda tangan')
                                                          <label class="badge badge-gradient-warning text-dark">
-                                                            {{ ucwords($suratMaterial->status) }}
+                                                            {{ ucwords($suratDataAwal->status) }}
                                                         </label>
                                                     @else
                                                     <label class="badge badge-gradient-info">
-                                                        {{ ucwords($suratMaterial->status) }}
+                                                        {{ ucwords($suratDataAwal->status) }}
                                                     </label>
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <a href="{{ url('pegawai/surat-permohonan-pengambilan-material/'.$suratMaterial->id_pengajuan) }}" class="btn-surat-material-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#suratMaterial">
+                                                    <a href="{{ url('pegawai/surat-permohonan-pengambilan-data-awal/'.$suratDataAwal->id_pengajuan) }}" class="btn-surat-data-awal-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#suratDataAwal">
                                                         <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
                                                         Detail</a>
-                                                    @if($suratMaterial->status == 'selesai')
-                                                    <a href="{{ url('pegawai/surat-permohonan-pengambilan-material/'.$suratMaterial->id_pengajuan.'/cetak') }}" class="btn btn-info btn-sm" target="_blank">
+                                                    @if($suratDataAwal->status == 'selesai')
+                                                    <a href="{{ url('pegawai/surat-permohonan-pengambilan-data-awal/'.$suratDataAwal->id_pengajuan.'/cetak') }}" class="btn btn-info btn-sm" target="_blank">
                                                         <i class="mdi mdi mdi-printer btn-icon-prepend"></i>
                                                         Cetak</a>
                                                     @endif
-                                                    <a href="{{ url('pegawai/surat-permohonan-pengambilan-material/'.$suratMaterial->id_pengajuan.'/edit') }}"
+                                                    <a href="{{ url('pegawai/surat-permohonan-pengambilan-data-awal/'.$suratDataAwal->id_pengajuan.'/edit') }}"
                                                         class="btn btn-warning btn-sm text-dark">
                                                         <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>
                                                         Edit
                                                     </a>
-                                                    {{ Form::open(['method'=>'DELETE','action'=>['SuratPermohonanPengambilanMaterialController@destroy',$suratMaterial->id_pengajuan],'class'=>'d-inline-block']) }}
+                                                    {{ Form::open(['method'=>'DELETE','action'=>['SuratPermohonanPengambilanDataAwalController@destroy',$suratDataAwal->id_pengajuan],'class'=>'d-inline-block']) }}
                                                     <button type="submit" class="btn btn-danger btn-sm sweet-delete">
                                                         <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
                                                         Hapus
@@ -225,7 +225,7 @@
                                         </tbody>
                                     </table>
                                     <div class="col">
-                                        {{ $suratMaterialList->appends(['page_pengajuan' => $pengajuanSuratMaterialList->currentPage()])->links() }}
+                                        {{ $suratDataAwalList->appends(['page_pengajuan' => $pengajuanSuratDataAwalList->currentPage()])->links() }}
                                     </div>
                                 </div>
                                 @else
@@ -236,7 +236,7 @@
                                             {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat permohonan pengambilan material terlebih dahulu.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat permohonan pengambilan data awal terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -267,7 +267,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="suratMaterial" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="suratDataAwal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content bg-white">
@@ -277,7 +277,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id='surat-material-detail-content'>
+            <div class="modal-body" id='surat-data-awal-detail-content'>
                 
             </div>
             <div class="modal-footer">

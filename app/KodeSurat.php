@@ -45,4 +45,16 @@ class KodeSurat extends Model
     public function suratPermohonanPengambilanMaterial(){
         return $this->hasMany('App\SuratPermohonanPengambilanMaterial','id_kode_surat');
     }
+
+    public function suratPermohonanSurvei(){
+        return $this->hasMany('App\SuratPermohonanSurvei','id_kode_surat');
+    }
+
+    public function suratRekomendasiPenelitian(){
+        return $this->hasMany('App\SuratRekomendasiPenelitian','id_kode_surat');
+    }
+
+    public function suratPermohonanPengambilanDataAwal(){
+        return $this->hasMany('App\SuratPermohonanPengambilanDataAwal','id_kode_surat');
+    }
 }

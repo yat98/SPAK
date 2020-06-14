@@ -286,7 +286,7 @@ class SuratPermohonanPengambilanMaterialController extends Controller
         $this->validate($request,[
             'id_pengajuan'=>'required',
             'id_kode_surat'=>'required',
-            'nomor_surat'=>'required|numeric|min:1|unique:surat_keterangan_lulus,nomor_surat|unique:surat_permohonan_pengambilan_material,nomor_surat',
+            'nomor_surat'=>'required|numeric|min:1|unique:surat_keterangan_lulus,nomor_surat|unique:surat_permohonan_pengambilan_material,nomor_surat|unique:surat_permohonan_survei,nomor_surat|unique:surat_rekomendasi_penelitian,nomor_surat|unique:surat_permohonan_pengambilan_data_awal,nomor_surat',
             'nip'=>'required',
         ]);
         $pengajuanSuratMaterial = PengajuanSuratPermohonanPengambilanMaterial::findOrFail($request->id_pengajuan);

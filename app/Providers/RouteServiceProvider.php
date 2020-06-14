@@ -10,16 +10,20 @@ use App\PimpinanOrmawa;
 use App\SuratKeterangan;
 use App\SuratPengantarCuti;
 use App\SuratKeteranganLulus;
+use App\SuratPermohonanSurvei;
 use App\SuratKegiatanMahasiswa;
 use App\SuratPengantarBeasiswa;
 use App\PengajuanSuratKeterangan;
+use App\SuratRekomendasiPenelitian;
 use Illuminate\Support\Facades\Route;
 use App\PengajuanSuratKeteranganLulus;
 use App\PengajuanSuratPermohonanSurvei;
 use App\PengajuanSuratKegiatanMahasiswa;
 use App\PengajuanSuratPersetujuanPindah;
+use App\SuratPermohonanPengambilanDataAwal;
 use App\SuratPermohonanPengambilanMaterial;
 use App\PengajuanSuratRekomendasiPenelitian;
+use App\PengajuanSuratPermohonanPengambilanDataAwal;
 use App\PengajuanSuratPermohonanPengambilanMaterial;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -70,6 +74,10 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('surat_material', SuratPermohonanPengambilanMaterial::class);
         Route::model('pengajuan_surat_survei', PengajuanSuratPermohonanSurvei::class);
         Route::model('pengajuan_surat_penelitian', PengajuanSuratRekomendasiPenelitian::class);
+        Route::model('pengajuan_surat_data_awal', PengajuanSuratPermohonanPengambilanDataAwal::class);
+        Route::model('surat_permohonan_survei', SuratPermohonanSurvei::class);
+        Route::model('surat_rekomendasi_penelitian',SuratRekomendasiPenelitian::class);
+        Route::model('surat_data_awal',SuratPermohonanPengambilanDataAwal::class);
 }
 
     /**

@@ -240,7 +240,7 @@ class SuratKeteranganLulusController extends Controller
         $this->validate($request,[
             'id_pengajuan_surat_lulus'=>'required',
             'id_kode_surat'=>'required',
-            'nomor_surat'=>'required|numeric|min:1|unique:surat_keterangan_lulus,nomor_surat|unique:surat_permohonan_pengambilan_material,nomor_surat',
+            'nomor_surat'=>'required|numeric|min:1|unique:surat_keterangan_lulus,nomor_surat|unique:surat_permohonan_pengambilan_material,nomor_surat|unique:surat_permohonan_survei,nomor_surat|unique:surat_rekomendasi_penelitian,nomor_surat|unique:surat_permohonan_pengambilan_data_awal,nomor_surat',
             'nip'=>'required',
         ]);
         $pengajuanSuratLulus = PengajuanSuratKeteranganLulus::findOrFail($request->id_pengajuan_surat_lulus);
@@ -283,36 +283,25 @@ class SuratKeteranganLulusController extends Controller
             $perPage = $this->perPage;
             $mahasiswa = $this->generateMahasiswa();
             $nomorSurat = $this->generateNomorSuratLulus(['menunggu tanda tangan','selesai']);
-
-            $pengajuanSuratLulusList= PengajuanSuratKeteranganLulus::where('status','menunggu tanda tangan')
-                        ->orderByDesc('created_at')
-                        ->orderBy('status')
-                        ->paginate($perPage,['*'],'page_pengajuan');
-            $suratLulusList = SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','pengajuan_surat_keterangan_lulus.id','=','surat_keterangan_lulus.id_pengajuan_surat_lulus')
-                    ->where('status','selesai')
-                    ->orderBy('status')
-                    ->paginate($perPage,['*'],'page');
-            $countAllpengajuanSuratLulus = $pengajuanSuratLulusList->count();
-            $countAllsuratLulus = $suratLulusList->count();
-
+            
             $pengajuanSuratLulusList =  PengajuanSuratKeteranganLulus::whereNotIn('status',['menunggu tanda tangan','selesai'])
                                             ->orderByDesc('created_at')
                                             ->orderBy('status')
                                             ->paginate($perPage,['*'],'page_pengajuan');
-            $countAllPengajuanSuratLulus = $pengajuanSuratLulusList->count();
+                                    
+            $countAllpengajuanSuratLulus = $pengajuanSuratLulusList->count();
             $countPengajuanSuratLulus = $pengajuanSuratLulusList->count();
             
             $suratLulusList =  SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','pengajuan_surat_keterangan_lulus.id','=','surat_keterangan_lulus.id_pengajuan_surat_lulus')
                                 ->whereIn('status',['selesai','menunggu tanda tangan'])
                                 ->orderBy('status');
            
-            
             (isset($keyword['nomor_surat'])) ? $suratLulusList = $suratLulusList->where('nomor_surat',$keyword['nomor_surat']):'';
             (isset($keyword['keywords'])) ? $suratLulusList = $suratLulusList->where('nim',$keyword['keywords']):'';
 
             $suratLulusList = $suratLulusList->paginate($perPage)->appends($request->except('page'));
 
-            $countAllSuratLulus = $suratLulusList->count();
+            $countAllsuratLulus = $suratLulusList->count();
             $countSuratLulus = $suratLulusList->count();
             if($countSuratLulus < 1){
                 $this->setFlashData('search','Hasil Pencarian','Surat keterangan lulus tidak ditemukan!');

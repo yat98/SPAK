@@ -61,7 +61,7 @@
                                                     <label class="badge badge-gradient-info">{{ ucwords($ntfksi->status) }}</label>
                                                     @endif 
                                                 </td>
-                                                <td> {{ $ntfksi->created_at->format('d F Y - H:i:s') }}</td>
+                                                <td> {{ $ntfksi->created_at->isoFormat('D MMMM Y H:mm:ss') }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>
