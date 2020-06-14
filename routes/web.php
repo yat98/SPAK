@@ -263,7 +263,7 @@ Route::group(['prefix' => 'pegawai'],function(){
         });
         // Surat Permohonan Survei
         Route::get('surat-permohonan-survei/search', 'SuratPermohonanSurveiController@search');
-        Route::get('surat-permohonan-survei/{pengajuan_surat_survei}/cetak', 'SuratPermohonanSurveiController@cetakSuratLulus');
+        Route::get('surat-permohonan-survei/{surat_survei}/cetak', 'SuratPermohonanSurveiController@cetak');
         Route::group(['prefix'=>'surat-permohonan-survei/pengajuan'],function(){
             Route::post('/','SuratPermohonanSurveiController@storeSurat');
             Route::get('/{pengajuan_surat_survei}','PengajuanSuratPermohonanSurveiController@show');
@@ -273,7 +273,7 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::resource('surat-permohonan-survei','SuratPermohonanSurveiController');
         // Surat Rekomedasi penelitian
         Route::get('surat-rekomendasi-penelitian/search', 'SuratRekomendasiPenelitianController@search');
-        Route::get('surat-rekomendasi-penelitian/{pengajuan_surat_survei}/cetak', 'SuratRekomendasiPenelitianController@cetakSuratLulus');
+        Route::get('surat-rekomendasi-penelitian/{surat_penelitian}/cetak', 'SuratRekomendasiPenelitianController@cetak');
         Route::group(['prefix'=>'surat-rekomendasi-penelitian/pengajuan'],function(){
             Route::get('/{pengajuan_surat_penelitian}','PengajuanSuratRekomendasiPenelitianController@show');
             Route::post('/','SuratRekomendasiPenelitianController@storeSurat');
@@ -426,6 +426,21 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::get('surat-permohonan-pengambilan-material','SuratPermohonanPengambilanMaterialController@suratMaterialPimpinan');
         Route::get('surat-permohonan-pengambilan-material/{surat_material}','SuratPermohonanPengambilanMaterialController@show');
         Route::post('surat-permohonan-pengambilan-material/pengajuan/tanda-tangan','SuratPermohonanPengambilanMaterialController@tandaTanganMaterial');
+        // Surat Permohonan Survei
+        Route::get('surat-permohonan-survei','SuratPermohonanSurveiController@suratSurveiPimpinan');
+        Route::get('surat-permohonan-survei/search', 'SuratPermohonanSurveiController@searchPimpinan');
+        Route::get('surat-permohonan-survei/{surat_permohonan_survei}','SuratPermohonanSurveiController@show');
+        Route::post('surat-permohonan-survei/pengajuan/tanda-tangan','SuratPermohonanSurveiController@tandaTanganSurvei');
+        // Surat Rekomendasi Penelitian
+        Route::get('surat-rekomendasi-penelitian','SuratRekomendasiPenelitianController@suratPenelitianPimpinan');
+        Route::get('surat-rekomendasi-penelitian/search', 'SuratRekomendasiPenelitianController@searchPimpinan');
+        Route::get('surat-rekomendasi-penelitian/{surat_rekomendasi_penelitian}','SuratRekomendasiPenelitianController@show');
+        Route::post('surat-rekomendasi-penelitian/pengajuan/tanda-tangan','SuratRekomendasiPenelitianController@tandaTanganPenelitian');
+        // Surat Permohonan Pengambilan Data Awal
+        Route::get('surat-permohonan-pengambilan-data-awal','SuratPermohonanPengambilanDataAwalController@suratDataAwalPimpinan');
+        Route::get('surat-permohonan-pengambilan-data-awal/search', 'SuratPermohonanPengambilanDataAwalController@searchPimpinan');
+        Route::get('surat-permohonan-pengambilan-data-awal/{surat_data_awal}','SuratPermohonanPengambilanDataAwalController@show');
+        Route::post('surat-permohonan-pengambilan-data-awal/pengajuan/tanda-tangan','SuratPermohonanPengambilanDataAwalController@tandaTanganDataAwal');
          // Notifikasi
         Route::get('notifikasi/{notifikasi_user}','NotifikasiUserController@show');
         Route::get('notifikasi','NotifikasiUserController@index');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use Session;
 use Storage;
 use App\User;
@@ -34,6 +35,27 @@ class SuratPermohonanPengambilanDataAwalController extends Controller
         $countPengajuanDataAwal = $pengajuanSuratDataAwalList->count();
         $countSuratDataAwal = $suratDataAwalList->count();
         return view('user.'.$this->segmentUser.'.surat_permohonan_pengambilan_data_awal',compact('perPage','mahasiswa','nomorSurat','pengajuanSuratDataAwalList','suratDataAwalList','countAllPengajuanDataAwal','countAllSuratDataAwal','countPengajuanDataAwal','countSuratDataAwal'));
+    }
+
+    public function suratDataAwalPimpinan(){
+        $perPage = $this->perPage;
+        $mahasiswa = $this->generateMahasiswa();
+        $nomorSurat = $this->generateNomorSuratDataAwal(['selesai']);
+        $pengajuanSuratDataAwalList= PengajuanSuratPermohonanPengambilanDataAwal::where('status','menunggu tanda tangan')
+                                    ->orderByDesc('created_at')
+                                    ->orderBy('status')
+                                    ->paginate($perPage,['*'],'page_pengajuan');
+        $suratDataAwalList = SuratPermohonanPengambilanDataAwal::join('pengajuan_surat_permohonan_pengambilan_data_awal','pengajuan_surat_permohonan_pengambilan_data_awal.id','=','surat_permohonan_pengambilan_data_awal.id_pengajuan')
+                                ->where('status','selesai')
+                                ->orderBy('status')
+                                ->paginate($perPage,['*'],'page');
+        $countAllSuratDataAwal = SuratPermohonanPengambilanDataAwal::join('pengajuan_surat_permohonan_pengambilan_data_awal','pengajuan_surat_permohonan_pengambilan_data_awal.id','=','surat_permohonan_pengambilan_data_awal.id_pengajuan')
+                                ->where('status','selesai')
+                                ->orderBy('status')
+                                ->count();
+        $countAllPengajuanSuratDataAwal = $pengajuanSuratDataAwalList->count();
+        $countsuratDataAwal = $suratDataAwalList->count();
+        return view('user.'.$this->segmentUser.'.surat_permohonan_pengambilan_data_awal',compact('countsuratDataAwal','perPage','mahasiswa','nomorSurat','pengajuanSuratDataAwalList','suratDataAwalList','countAllSuratDataAwal','countAllPengajuanSuratDataAwal'));
     }
 
     public function create(){
@@ -240,6 +262,84 @@ class SuratPermohonanPengambilanDataAwalController extends Controller
         }else{
             return redirect($this->segmentUser.'/surat-permohonan-pengambilan-data-awal');
         }
+    }
+
+    public function searchPimpinan(Request $request){
+        $keyword = $request->all();
+        if(isset($keyword['keywords']) || isset($keyword['nomor_surat'])){
+            $perPage = $this->perPage;
+            $mahasiswa = $this->generateMahasiswa();
+            $nomorSurat = $this->generateNomorSuratDataAwal(['menunggu tanda tangan','selesai']);
+            $pengajuanSuratDataAwalList = PengajuanSuratPermohonanPengambilanDataAwal::whereIn('status',['menunggu tanda tangan'])
+                                            ->orderByDesc('created_at')
+                                            ->orderBy('status')
+                                            ->paginate($perPage,['*'],'page_pengajuan');
+            $countAllPengajuanSuratDataAwal = $pengajuanSuratDataAwalList->count();
+            $countPengajuanSuratDataAwal = $pengajuanSuratDataAwalList  ->count();
+            
+            $suratDataAwalList = SuratPermohonanPengambilanDataAwal::join('pengajuan_surat_permohonan_pengambilan_data_awal','pengajuan_surat_permohonan_pengambilan_data_awal.id','=','surat_permohonan_pengambilan_data_awal.id_pengajuan')
+                                ->whereIn('status',['selesai'])
+                                ->orderBy('status');
+           
+            (isset($keyword['nomor_surat'])) ? $suratDataAwalList = $suratDataAwalList->where('nomor_surat',$keyword['nomor_surat']):'';
+            (isset($keyword['keywords'])) ? $suratDataAwalList = $suratDataAwalList->where('nim',$keyword['keywords']):'';
+
+            $suratDataAwalList = $suratDataAwalList->paginate($perPage)->appends($request->except('page'));
+
+            $countAllSuratDataAwal = SuratPermohonanPengambilanDataAwal::join('pengajuan_surat_permohonan_pengambilan_data_awal','pengajuan_surat_permohonan_pengambilan_data_awal.id','=','surat_permohonan_pengambilan_data_awal.id_pengajuan')
+                                    ->where('status','selesai')
+                                    ->orderBy('status')
+                                    ->count();
+            $countsuratDataAwal = $suratDataAwalList->count();
+
+            if($countsuratDataAwal < 1){
+                $this->setFlashData('search','Hasil Pencarian','Surat permohonan pengambilan data awal tidak ditemukan!');
+            }
+
+            return view('user.'.$this->segmentUser.'.surat_permohonan_pengambilan_data_awal',compact('countsuratDataAwal','perPage','mahasiswa','nomorSurat','pengajuanSuratDataAwalList','suratDataAwalList','countAllSuratDataAwal','countAllPengajuanSuratDataAwal'));
+        }else{
+            return redirect($this->segmentUser.'/surat-permohonan-pengambilan-data-awal');
+        }
+    }
+
+    public function tandaTanganDataAwal(Request $request){
+        if(!$this->isTandaTanganExists()){
+            return redirect($this->segmentUser.'/surat-permohonan-pengambilan-data-awal');
+        }
+        $user  = User::where('status_aktif','aktif')->where('jabatan','kasubag pendidikan dan pengajaran')->first();
+        $pengajuanSuratDataAwal = PengajuanSuratPermohonanPengambilanDataAwal::where('id',$request->id)->first();
+        $pengajuanSuratDataAwal->update([
+            'status'=>'selesai',
+        ]);
+        NotifikasiMahasiswa::create([
+            'nim'=>$pengajuanSuratDataAwal->nim,
+            'judul_notifikasi'=>'Surat Permohonan Pengambilan Data Awal',
+            'isi_notifikasi'=>'Surat permohonan pengambilan data awal telah di tanda tangani.',
+            'link_notifikasi'=>url('mahasiswa/pengajuan/surat-permohonan-pengambilan-data-awal')
+        ]);
+        NotifikasiUser::create([
+            'nip'=>$user->nip,
+            'judul_notifikasi'=>'Surat Permohonan Pengambilan Data Awal',
+            'isi_notifikasi'=>'Surat permohonan pengambilan data awal telah di tanda tangani.',
+            'link_notifikasi'=>url('pegawai/surat-permohonan-pengambilan-data-awal')
+        ]);
+        $this->setFlashData('success','Berhasil','Surat pengambilan data awal mahasiswa dengan nama '.$pengajuanSuratDataAwal->mahasiswa->nama.' berhasil ditanda tangani');
+        return redirect($this->segmentUser.'/surat-permohonan-pengambilan-data-awal');
+    }
+
+    public function cetak(SuratPermohonanPengambilanDataAwal $suratDataAwal){
+        if(Session::has('nim')){
+            if($suratDataAwal->jumlah_cetak >= 3){
+                $this->setFlashData('info','Cetak Surat Permohonan Pengambilan Data Awal','Anda telah mencetak surat permohonan pengambilan data awal sebanyak 3 kali.');
+                return redirect('mahasiswa/pengajuan/surat-permohonan-pengambilan-data-awal');
+            }
+        }
+        $jumlahCetak = ++$suratDataAwal->jumlah_cetak;
+        $suratDataAwal->update([
+            'jumlah_cetak'=>$jumlahCetak
+        ]);
+        $pdf = PDF::loadview('surat.surat_permohonan_pengambilan_data_awal',compact('suratDataAwal'))->setPaper('a4', 'potrait');
+        return $pdf->stream('surat-permohonan-pengambilan-data-awal'.' - '.$suratDataAwal->created_at->format('dmY-Him').'.pdf');
     }
 
     private function generateNomorSuratDataAwal($status){

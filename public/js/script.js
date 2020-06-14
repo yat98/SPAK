@@ -112,7 +112,6 @@ $('.btn-detail').on('click', function (e) {
         .then(result => {
             let mahasiswa = result;
             let tableStatus = '';
-            console.log(mahasiswa);
             
             if(mahasiswa.tahun_akademik.length > 0){
                 mahasiswa.tahun_akademik.forEach((status)=>{
@@ -181,8 +180,6 @@ $('.btn-detail').on('click', function (e) {
                         </div>`;
             $('#mahasiswa-detail-content').html(html);
             $('#surat-keterangan-aktif-detail-content').html(html);
-            console.log(html);
-            
         });
 })
 
@@ -308,8 +305,6 @@ $('.btn-surat-detail').on('click', function (e) {
                                 </tr>
                             </table>
                         </div>`;
-                        console.log(tahun.slice(0,4));
-                        
             $('#surat-keterangan-aktif-detail-content').html(html);
         });
 })
@@ -368,7 +363,6 @@ tolakSurat.on('click', function(e){
                             if (value.trim() === undefined || value.trim() == null || value.length <= 0) {
                                 resolve('Keterangan wajib diisi.')
                             } else {
-                                console.log(value);
                                 $('#keterangan_surat').val(value);
                                 let form = $(this).parents('form');
                                 form.submit();
@@ -968,7 +962,6 @@ $('.btn-pengajuan-pindah').on('click',function(e){
                 .then(response => response.json())
                 .then(result => {
                     let pengajuan =result;
-                    console.log(pengajuan);
                     
                     let label;
                     if(pengajuan.status == 'menunggu tanda tangan' || pengajuan.status == 'diajukan'){
@@ -1464,7 +1457,6 @@ tolak.on('click', function(e){
                             if (value.trim() === undefined || value.trim() == null || value.length <= 0) {
                                 resolve('Keterangan wajib diisi.')
                             } else {
-                                console.log(value);
                                 $('#keterangan_surat').val(value);
                                 let form = $(this).parents('form');
                                 form.submit();
@@ -2165,7 +2157,6 @@ disposisi.on('click',function(e){
                             if (value.trim() === undefined || value.trim() == null || value.length <= 0) {
                                 resolve('Catatan wajib diisi.')
                             } else {
-                                console.log(value);
                                 $('#catatan_disposisi').val(value);
                                 let form = $(this).parents('form');
                                 form.submit();

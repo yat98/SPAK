@@ -95,7 +95,7 @@ class PengajuanSuratPermohonanSurveiController extends Controller
 
         if($pengajuanSuratSurvei->status == 'selesai'){
             $tanggalSelesai = $pengajuanSuratSurvei->updated_at->isoFormat('D MMMM Y - HH:m:s');
-            $tanggalTunggu = $pengajuanSuratSurvei->suratKeteranganLulus->created_at->isoFormat('D MMMM Y - HH:m:s');
+            $tanggalTunggu = $pengajuanSuratSurvei->suratPermohonanSurvei->created_at->isoFormat('D MMMM Y - HH:m:s');
             $data->put('tanggal_tunggu_tanda_tangan',$tanggalTunggu);
             $data->put('tanggal_selesai',$tanggalSelesai);
         }else if($pengajuanSuratSurvei->status == 'ditolak'){

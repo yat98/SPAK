@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use Session;
 use Storage;
 use App\User;
@@ -34,6 +35,27 @@ class SuratPermohonanSurveiController extends Controller
         $countPengajuanSuratSurvei = $pengajuanSuratSurveiList->count();
         $countSuratSurvei = $suratSurveiList->count();
         return view('user.'.$this->segmentUser.'.surat_permohonan_survei',compact('perPage','mahasiswa','nomorSurat','pengajuanSuratSurveiList','suratSurveiList','countAllPengajuanSuratSurvei','countAllSuratSurvei','countPengajuanSuratSurvei','countSuratSurvei'));
+    }
+
+    public function suratSurveiPimpinan(){
+        $perPage = $this->perPage;
+        $mahasiswa = $this->generateMahasiswa();
+        $nomorSurat = $this->generateNomorSuratSurvei(['selesai']);
+        $pengajuanSuratSurveiList= PengajuanSuratPermohonanSurvei::where('status','menunggu tanda tangan')
+                                    ->orderByDesc('created_at')
+                                    ->orderBy('status')
+                                    ->paginate($perPage,['*'],'page_pengajuan');
+        $suratSurveiList = SuratPermohonanSurvei::join('pengajuan_surat_permohonan_survei','pengajuan_surat_permohonan_survei.id','=','surat_permohonan_survei.id_pengajuan')
+                                ->where('status','selesai')
+                                ->orderBy('status')
+                                ->paginate($perPage,['*'],'page');
+        $countAllSuratSurvei = SuratPermohonanSurvei::join('pengajuan_surat_permohonan_survei','pengajuan_surat_permohonan_survei.id','=','surat_permohonan_survei.id_pengajuan')
+                                ->where('status','selesai')
+                                ->orderBy('status')
+                                ->count();
+        $countAllPengajuanSuratSurvei = $pengajuanSuratSurveiList->count();
+        $countsuratSurvei = $suratSurveiList->count();
+        return view('user.'.$this->segmentUser.'.surat_permohonan_survei',compact('countsuratSurvei','perPage','mahasiswa','nomorSurat','pengajuanSuratSurveiList','suratSurveiList','countAllSuratSurvei','countAllPengajuanSuratSurvei'));
     }
 
     public function show(SuratPermohonanSurvei $suratSurvei)
@@ -212,6 +234,31 @@ class SuratPermohonanSurveiController extends Controller
         return redirect($this->segmentUser.'/surat-permohonan-survei');
     }
 
+    public function tandaTanganSurvei(Request $request){
+        if(!$this->isTandaTanganExists()){
+            return redirect($this->segmentUser.'/surat-permohonan-survei');
+        }
+        $user  = User::where('status_aktif','aktif')->where('jabatan','kasubag pendidikan dan pengajaran')->first();
+        $pengajuanSuratSurvei = PengajuanSuratPermohonanSurvei::where('id',$request->id)->first();
+        $pengajuanSuratSurvei->update([
+            'status'=>'selesai',
+        ]);
+        NotifikasiMahasiswa::create([
+            'nim'=>$pengajuanSuratSurvei->nim,
+            'judul_notifikasi'=>'Surat Permohonan Survei',
+            'isi_notifikasi'=>'Surat permohonan survei telah di tanda tangani.',
+            'link_notifikasi'=>url('mahasiswa/pengajuan/surat-permohonan-survei')
+        ]);
+        NotifikasiUser::create([
+            'nip'=>$user->nip,
+            'judul_notifikasi'=>'Surat Permohonan Survei',
+            'isi_notifikasi'=>'Surat permohonan survei telah di tanda tangani.',
+            'link_notifikasi'=>url('pegawai/surat-permohonan-survei')
+        ]);
+        $this->setFlashData('success','Berhasil','Surat permohonan survei mahasiswa dengan nama '.$pengajuanSuratSurvei->mahasiswa->nama.' berhasil ditanda tangani');
+        return redirect($this->segmentUser.'/surat-permohonan-survei');
+    }
+
     public function search(Request $request){
         $keyword = $request->all();
         if(isset($keyword['keywords']) || isset($keyword['nomor_surat'])){
@@ -245,6 +292,58 @@ class SuratPermohonanSurveiController extends Controller
         }else{
             return redirect($this->segmentUser.'/surat-permohonan-survei');
         }
+    }
+
+    public function searchPimpinan(Request $request){
+        $keyword = $request->all();
+        if(isset($keyword['keywords']) || isset($keyword['nomor_surat'])){
+            $perPage = $this->perPage;
+            $mahasiswa = $this->generateMahasiswa();
+            $nomorSurat = $this->generateNomorSuratSurvei(['menunggu tanda tangan','selesai']);
+            $pengajuanSuratSurveiList =  PengajuanSuratPermohonanSurvei::whereIn('status',['menunggu tanda tangan'])
+                                            ->orderByDesc('created_at')
+                                            ->orderBy('status')
+                                            ->paginate($perPage,['*'],'page_pengajuan');
+            $countAllPengajuanSuratSurvei = $pengajuanSuratSurveiList->count();
+            $countPengajuanSuratSurvei = $pengajuanSuratSurveiList  ->count();
+            
+            $suratSurveiList =  SuratPermohonanSurvei::join('pengajuan_surat_permohonan_survei','pengajuan_surat_permohonan_survei.id','=','surat_permohonan_survei.id_pengajuan')
+                                ->whereIn('status',['selesai'])
+                                ->orderBy('status');
+           
+            (isset($keyword['nomor_surat'])) ? $suratSurveiList = $suratSurveiList->where('nomor_surat',$keyword['nomor_surat']):'';
+            (isset($keyword['keywords'])) ? $suratSurveiList = $suratSurveiList->where('nim',$keyword['keywords']):'';
+
+            $suratSurveiList = $suratSurveiList->paginate($perPage)->appends($request->except('page'));
+
+            $countAllSuratSurvei = SuratPermohonanSurvei::join('pengajuan_surat_permohonan_survei','pengajuan_surat_permohonan_survei.id','=','surat_permohonan_survei.id_pengajuan')
+                                    ->where('status','selesai')
+                                    ->orderBy('status')
+                                    ->count();
+            $countsuratSurvei = $suratSurveiList->count();
+
+            if($countsuratSurvei < 1){
+                $this->setFlashData('search','Hasil Pencarian','Surat permohonan survei tidak ditemukan!');
+            }
+            return view('user.'.$this->segmentUser.'.surat_permohonan_survei',compact('countsuratSurvei','perPage','mahasiswa','nomorSurat','pengajuanSuratSurveiList','suratSurveiList','countAllSuratSurvei','countAllPengajuanSuratSurvei'));
+        }else{
+            return redirect($this->segmentUser.'/surat-permohonan-survei');
+        }
+    }
+
+    public function cetak(SuratPermohonanSurvei $suratSurvei){
+        if(Session::has('nim')){
+            if($suratSurvei->jumlah_cetak >= 3){
+                $this->setFlashData('info','Cetak Surat Permohonan Survei','Anda telah mencetak surat permohonan survei sebanyak 3 kali.');
+                return redirect('mahasiswa/pengajuan/surat-permohonan-survei');
+            }
+        }
+        $jumlahCetak = ++$suratSurvei->jumlah_cetak;
+        $suratSurvei->update([
+            'jumlah_cetak'=>$jumlahCetak
+        ]);
+        $pdf = PDF::loadview('surat.surat_permohonan_survei',compact('suratSurvei'))->setPaper('a4', 'potrait');
+        return $pdf->stream('surat-permohonan_survei'.' - '.$suratSurvei->created_at->format('dmY-Him').'.pdf');
     }
 
     private function generateNomorSuratSurvei($status){

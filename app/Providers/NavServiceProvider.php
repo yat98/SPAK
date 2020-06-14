@@ -140,8 +140,10 @@ class NavServiceProvider extends ServiceProvider
         } elseif (request()->segment(1) == 'pimpinan') {
             $posisi = 'pimpinan';
             if ($segment == '') {
+                $show = false;
                 $halaman = 'dashboard-pimpinan';
             } else if ($segment == 'tanda-tangan') {
+                $show = false;
                 $halaman = 'tanda-tangan';
             } else if ($segment == 'surat-keterangan-aktif-kuliah') {
                 $halaman = 'surat-keterangan-aktif-kuliah';
@@ -162,11 +164,18 @@ class NavServiceProvider extends ServiceProvider
             } else if($segment == 'surat-kegiatan-mahasiswa'){
                 $halaman = 'surat-kegiatan-mahasiswa';
             } else if ($segment == 'profil') {
+                $show = false;
                 $halaman = 'profil';
             } else if($segment == 'surat-keterangan-lulus'){
                 $halaman = 'surat-keterangan-lulus';
             } else if($segment == 'surat-permohonan-pengambilan-material'){
                 $halaman = 'surat-permohonan-pengambilan-material';
+            } else if ($segment == 'surat-permohonan-survei') {
+                $halaman = 'surat-permohonan-survei';
+            } else if ($segment == 'surat-rekomendasi-penelitian') {
+                $halaman = 'surat-rekomendasi-penelitian';
+            } else if ($segment == 'surat-permohonan-pengambilan-data-awal') {
+                $halaman = 'surat-permohonan-pengambilan-data-awal';
             }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi,'show'=>$show]);

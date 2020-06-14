@@ -1338,6 +1338,8 @@
                                                 <th> Nomor Surat</th>
                                                 <th> Nama Mahasiswa</th>
                                                 <th> Status</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1346,7 +1348,7 @@
                                                 @php
                                                     $kode = explode('/',$suratSurvei->kodeSurat->kode_surat);
                                                 @endphp
-                                                <td> {{ $loop->iteration + $perPage * ($suratSurveiList->currentPage() - 1) }}</td>
+                                                <td> {{ $loop->iteration }}</td>
                                                 <td> {{ 'B/'.$suratSurvei->nomor_surat.'/'.$kode[0].'.1/'.$kode[1].'/'.$suratSurvei->created_at->year }}</td>
                                                 <td> {{ $suratSurvei->pengajuanSuratPermohonanSurvei->mahasiswa->nama }}</td>
                                                 <td> 
@@ -1360,6 +1362,8 @@
                                                     </label>
                                                     @endif
                                                 </td>
+                                                <td> {{ $suratSurvei->created_at->diffForHumans() }}</td>
+                                                <td> {{ $suratSurvei->updated_at->diffForHumans() }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -1401,6 +1405,8 @@
                                                 <th> Nomor Surat</th>
                                                 <th> Nama Mahasiswa</th>
                                                 <th> Status</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1409,7 +1415,7 @@
                                                 @php
                                                     $kode = explode('/',$suratPenelitian->kodeSurat->kode_surat);
                                                 @endphp
-                                                <td> {{ $loop->iteration + $perPage * ($suratPenelitianList->currentPage() - 1) }}</td>
+                                                <td> {{ $loop->iteration }}</td>
                                                 <td> {{ 'B/'.$suratPenelitian->nomor_surat.'/'.$kode[0].'.1/'.$kode[1].'/'.$suratPenelitian->created_at->year }}</td>
                                                 <td> {{ $suratPenelitian->pengajuanSuratRekomendasiPenelitian->mahasiswa->nama }}</td>
                                                 <td> 
@@ -1423,6 +1429,8 @@
                                                     </label>
                                                     @endif
                                                 </td>
+                                                <td> {{ $suratPenelitian->created_at->diffForHumans() }}</td>
+                                                <td> {{ $suratPenelitian->updated_at->diffForHumans() }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -1464,6 +1472,8 @@
                                                 <th> Nomor Surat</th>
                                                 <th> Nama Mahasiswa</th>
                                                 <th> Status</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1472,7 +1482,7 @@
                                                 @php
                                                     $kode = explode('/',$suratDataAwal->kodeSurat->kode_surat);
                                                 @endphp
-                                                <td> {{ $loop->iteration + $perPage * ($suratDataAwalList->currentPage() - 1) }}</td>
+                                                <td> {{ $loop->iteration }}</td>
                                                 <td> {{ 'B/'.$suratDataAwal->nomor_surat.'/'.$kode[0].'.1/'.$kode[1].'/'.$suratDataAwal->created_at->year }}</td>
                                                 <td> {{ $suratDataAwal->pengajuanSuratPermohonanPengambilanDataAwal->mahasiswa->nama }}</td>
                                                 <td> 
@@ -1486,6 +1496,8 @@
                                                     </label>
                                                     @endif
                                                 </td>
+                                                <td> {{ $suratDataAwal->created_at->diffForHumans() }}</td>
+                                                <td> {{ $suratDataAwal->updated_at->diffForHumans() }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>

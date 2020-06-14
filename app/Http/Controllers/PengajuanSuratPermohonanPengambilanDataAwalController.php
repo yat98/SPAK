@@ -85,7 +85,7 @@ class PengajuanSuratPermohonanPengambilanDataAwalController extends Controller
 
         if($pengajuanSuratDataAwal->status == 'selesai'){
             $tanggalSelesai = $pengajuanSuratDataAwal->updated_at->isoFormat('D MMMM Y - HH:m:s');
-            $tanggalTunggu = $pengajuanSuratDataAwal->suratKeteranganLulus->created_at->isoFormat('D MMMM Y - HH:m:s');
+            $tanggalTunggu = $pengajuanSuratDataAwal->suratPermohonanPengambilanDataAwal->created_at->isoFormat('D MMMM Y - HH:m:s');
             $data->put('tanggal_tunggu_tanda_tangan',$tanggalTunggu);
             $data->put('tanggal_selesai',$tanggalSelesai);
         }else if($pengajuanSuratDataAwal->status == 'ditolak'){

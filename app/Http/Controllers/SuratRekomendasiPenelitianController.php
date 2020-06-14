@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use Session;
 use Storage;
 use App\User;
@@ -34,6 +35,27 @@ class SuratRekomendasiPenelitianController extends Controller
         $countPengajuanSuratPenelitian = $pengajuanSuratPenelitianList->count();
         $countSuratPenelitian = $suratPenelitianList->count();
         return view('user.'.$this->segmentUser.'.surat_rekomendasi_penelitian',compact('perPage','mahasiswa','nomorSurat','pengajuanSuratPenelitianList','suratPenelitianList','countAllPengajuanSuratPenelitian','countAllSuratPenelitian','countPengajuanSuratPenelitian','countSuratPenelitian'));
+    }
+
+    public function suratPenelitianPimpinan(){
+        $perPage = $this->perPage;
+        $mahasiswa = $this->generateMahasiswa();
+        $nomorSurat = $this->generateNomorSuratPenelitian(['selesai']);
+        $pengajuanSuratPenelitianList= PengajuanSuratRekomendasiPenelitian::where('status','menunggu tanda tangan')
+                                    ->orderByDesc('created_at')
+                                    ->orderBy('status')
+                                    ->paginate($perPage,['*'],'page_pengajuan');
+        $suratPenelitianList = SuratRekomendasiPenelitian::join('pengajuan_surat_rekomendasi_penelitian','pengajuan_surat_rekomendasi_penelitian.id','=','surat_rekomendasi_penelitian.id_pengajuan')
+                                ->where('status','selesai')
+                                ->orderBy('status')
+                                ->paginate($perPage,['*'],'page');
+        $countAllSuratPenelitian = SuratRekomendasiPenelitian::join('pengajuan_surat_rekomendasi_penelitian','pengajuan_surat_rekomendasi_penelitian.id','=','surat_rekomendasi_penelitian.id_pengajuan')
+                                ->where('status','selesai')
+                                ->orderBy('status')
+                                ->count();
+        $countAllPengajuanSuratPenelitian = $pengajuanSuratPenelitianList->count();
+        $countsuratPenelitian = $suratPenelitianList->count();
+        return view('user.'.$this->segmentUser.'.surat_rekomendasi_penelitian',compact('countsuratPenelitian','perPage','mahasiswa','nomorSurat','pengajuanSuratPenelitianList','suratPenelitianList','countAllSuratPenelitian','countAllPengajuanSuratPenelitian'));
     }
 
     public function create(){
@@ -242,6 +264,83 @@ class SuratRekomendasiPenelitianController extends Controller
         }else{
             return redirect($this->segmentUser.'/surat-rekomendasi-penelitian');
         }
+    }
+
+    public function searchPimpinan(Request $request){
+        $keyword = $request->all();
+        if(isset($keyword['keywords']) || isset($keyword['nomor_surat'])){
+            $perPage = $this->perPage;
+            $mahasiswa = $this->generateMahasiswa();
+            $nomorSurat = $this->generateNomorSuratPenelitian(['menunggu tanda tangan','selesai']);
+            $pengajuanSuratPenelitianList =  PengajuanSuratRekomendasiPenelitian::whereIn('status',['menunggu tanda tangan'])
+                                            ->orderByDesc('created_at')
+                                            ->orderBy('status')
+                                            ->paginate($perPage,['*'],'page_pengajuan');
+            $countAllPengajuanSuratPenelitian = $pengajuanSuratPenelitianList->count();
+            $countPengajuanSuratPenelitian = $pengajuanSuratPenelitianList  ->count();
+            
+            $suratPenelitianList =  SuratRekomendasiPenelitian::join('pengajuan_surat_rekomendasi_penelitian','pengajuan_surat_rekomendasi_penelitian.id','=','surat_rekomendasi_penelitian.id_pengajuan')
+                                ->whereIn('status',['selesai'])
+                                ->orderBy('status');
+           
+            (isset($keyword['nomor_surat'])) ? $suratPenelitianList = $suratPenelitianList->where('nomor_surat',$keyword['nomor_surat']):'';
+            (isset($keyword['keywords'])) ? $suratPenelitianList = $suratPenelitianList->where('nim',$keyword['keywords']):'';
+
+            $suratPenelitianList = $suratPenelitianList->paginate($perPage)->appends($request->except('page'));
+
+            $countAllSuratPenelitian = SuratRekomendasiPenelitian::join('pengajuan_surat_rekomendasi_penelitian','pengajuan_surat_rekomendasi_penelitian.id','=','surat_rekomendasi_penelitian.id_pengajuan')
+                                    ->where('status','selesai')
+                                    ->orderBy('status')
+                                    ->count();
+            $countsuratPenelitian = $suratPenelitianList->count();
+
+            if($countsuratPenelitian < 1){
+                $this->setFlashData('search','Hasil Pencarian','Surat rekomendasi penelitian tidak ditemukan!');
+            }
+            return view('user.'.$this->segmentUser.'.surat_rekomendasi_penelitian',compact('countsuratPenelitian','perPage','mahasiswa','nomorSurat','pengajuanSuratPenelitianList','suratPenelitianList','countAllSuratPenelitian','countAllPengajuanSuratPenelitian'));
+        }else{
+            return redirect($this->segmentUser.'/surat-rekomendasi-penelitian');
+        }
+    }
+
+    public function tandaTanganPenelitian(Request $request){
+        if(!$this->isTandaTanganExists()){
+            return redirect($this->segmentUser.'/surat-rekomendasi-penelitian');
+        }
+        $user  = User::where('status_aktif','aktif')->where('jabatan','kasubag pendidikan dan pengajaran')->first();
+        $pengajuanSuratPenelitian = PengajuanSuratRekomendasiPenelitian::where('id',$request->id)->first();
+        $pengajuanSuratPenelitian->update([
+            'status'=>'selesai',
+        ]);
+        NotifikasiMahasiswa::create([
+            'nim'=>$pengajuanSuratPenelitian->nim,
+            'judul_notifikasi'=>'Surat Rekomendasi Penelitian',
+            'isi_notifikasi'=>'Surat rekomendasi penelitian telah di tanda tangani.',
+            'link_notifikasi'=>url('mahasiswa/pengajuan/surat-rekomendasi-penelitian')
+        ]);
+        NotifikasiUser::create([
+            'nip'=>$user->nip,
+            'judul_notifikasi'=>'Surat Rekomendasi Penelitian',
+            'isi_notifikasi'=>'Surat rekomendasi penelitian telah di tanda tangani.',
+            'link_notifikasi'=>url('pegawai/surat-rekomendasi-penelitian')
+        ]);
+        $this->setFlashData('success','Berhasil','Surat rekomendasi penelitian mahasiswa dengan nama '.$pengajuanSuratPenelitian->mahasiswa->nama.' berhasil ditanda tangani');
+        return redirect($this->segmentUser.'/surat-rekomendasi-penelitian');
+    }
+
+    public function cetak(SuratRekomendasiPenelitian $suratPenelitian){
+        if(Session::has('nim')){
+            if($suratPenelitian->jumlah_cetak >= 3){
+                $this->setFlashData('info','Cetak Surat Rekomendasi Penelitian','Anda telah mencetak surat rekomendasi penelitian sebanyak 3 kali.');
+                return redirect('mahasiswa/pengajuan/surat-rekomendasi-penelitian');
+            }
+        }
+        $jumlahCetak = ++$suratPenelitian->jumlah_cetak;
+        $suratPenelitian->update([
+            'jumlah_cetak'=>$jumlahCetak
+        ]);
+        $pdf = PDF::loadview('surat.surat_rekomendasi_penelitian',compact('suratPenelitian'))->setPaper('a4', 'potrait');
+        return $pdf->stream('surat-rekomendasi-penelitian'.' - '.$suratPenelitian->created_at->format('dmY-Him').'.pdf');
     }
 
     private function generateNomorSuratPenelitian($status){

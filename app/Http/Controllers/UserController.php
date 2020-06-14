@@ -231,7 +231,20 @@ class UserController extends Controller
         $suratMaterialList =  SuratPermohonanPengambilanMaterial::join('pengajuan_surat_permohonan_pengambilan_material','pengajuan_surat_permohonan_pengambilan_material.id','=','surat_permohonan_pengambilan_material.id_pengajuan')
                             ->whereIn('status',['selesai'])
                             ->orderBy('status')
-                            ->get();                    
+                            ->get();     
+        
+        $suratSurveiList = SuratPermohonanSurvei::join('pengajuan_surat_permohonan_survei','pengajuan_surat_permohonan_survei.id','=','surat_permohonan_survei.id_pengajuan')
+                            ->where('status','selesai')
+                            ->orderBy('status')
+                            ->get();
+        $suratPenelitianList = SuratRekomendasiPenelitian::join('pengajuan_surat_rekomendasi_penelitian','pengajuan_surat_rekomendasi_penelitian.id','=','surat_rekomendasi_penelitian.id_pengajuan')
+                            ->where('status','selesai')
+                            ->orderBy('status')
+                            ->get();
+        $suratDataAwalList =  SuratPermohonanPengambilanDataAwal::join('pengajuan_surat_permohonan_pengambilan_data_awal','pengajuan_surat_permohonan_pengambilan_data_awal.id','=','surat_permohonan_pengambilan_data_awal.id_pengajuan')
+                            ->whereIn('status',['selesai','menunggu tanda tangan'])
+                            ->orderBy('status')
+                            ->get();
 
         $countAllSuratKeteranganAktif = $suratKeteranganAktifList->count();
         $countAllSuratKeteranganKelakuan = $suratKeteranganKelakuanList->count();
@@ -244,6 +257,9 @@ class UserController extends Controller
         $countAllSuratKegiatan = $suratKegiatanList->count();
         $countAllsuratLulus = $suratLulusList->count();
         $countAllSuratMaterial=$suratMaterialList->count();
+        $countAllSuratSurvei = $suratSurveiList->count();
+        $countAllSuratPenelitian = $suratPenelitianList->count();
+        $countAllSuratDataAwal = $suratDataAwalList->count();
 
         $suratKeteranganAktifList = $suratKeteranganAktifList->take(5);
         $suratKeteranganKelakuanList = $suratKeteranganKelakuanList->take(5);
@@ -256,8 +272,11 @@ class UserController extends Controller
         $suratKegiatanList = $suratKegiatanList->take(5);
         $suratLulusList = $suratLulusList->take(5);
         $suratMaterialList = $suratMaterialList->take(5);
+        $suratSurveiList = $suratSurveiList->take(5);
+        $suratPenelitianList = $suratPenelitianList->take(5);
+        $suratDataAwalList = $suratDataAwalList->take(5);
        
-        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','suratKeteranganAktifList','suratKeteranganKelakuanList','suratDispensasiList','suratRekomendasiList','suratTugasList','suratPersetujuanPindahList','suratCutiList','suratBeasiswaList','suratKegiatanList','countAllSuratKeteranganAktif','countAllSuratKeteranganKelakuan','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPersetujuanPindah','countAllSuratCuti','countAllSuratBeasiswa','countAllSuratKegiatan','suratLulusList','countAllsuratLulus','suratMaterialList','countAllSuratMaterial'));
+        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','suratKeteranganAktifList','suratKeteranganKelakuanList','suratDispensasiList','suratRekomendasiList','suratTugasList','suratPersetujuanPindahList','suratCutiList','suratBeasiswaList','suratKegiatanList','countAllSuratKeteranganAktif','countAllSuratKeteranganKelakuan','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPersetujuanPindah','countAllSuratCuti','countAllSuratBeasiswa','countAllSuratKegiatan','suratLulusList','countAllsuratLulus','suratMaterialList','countAllSuratMaterial','suratSurveiList','suratPenelitianList','suratDataAwalList','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal'));
     }
 
     public function indexTandaTangan(){

@@ -85,7 +85,7 @@ class PengajuanSuratRekomendasiPenelitianController extends Controller
 
         if($pengajuanSuratPenelitian->status == 'selesai'){
             $tanggalSelesai = $pengajuanSuratPenelitian->updated_at->isoFormat('D MMMM Y - HH:m:s');
-            $tanggalTunggu = $pengajuanSuratPenelitian->suratKeteranganLulus->created_at->isoFormat('D MMMM Y - HH:m:s');
+            $tanggalTunggu = $pengajuanSuratPenelitian->suratRekomendasiPenelitian->created_at->isoFormat('D MMMM Y - HH:m:s');
             $data->put('tanggal_tunggu_tanda_tangan',$tanggalTunggu);
             $data->put('tanggal_selesai',$tanggalSelesai);
         }else if($pengajuanSuratPenelitian->status == 'ditolak'){

@@ -26,8 +26,6 @@
                                     {{ isset($tahunAkademikAktif) ? $tahunAkademikAktif->tahun_akademik.' - '.ucwords($tahunAkademikAktif->semester) : 'Tidak Ada Tahun Akademik Aktif' }}
                                 </h2>
                                 <h6 class="card-text">
-                                    <a href="{{ url('admin/tahun-akademik') }}" class="text-white">Lihat data tahun
-                                        akademik</a>
                                 </h6>
                             </div>
                         </div>
