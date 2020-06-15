@@ -20,6 +20,7 @@ class CreateSuratMasukTable extends Migration
             $table->string('instansi',100);
             $table->string('file_surat_masuk');
             $table->date('tanggal_surat_masuk');
+            $table->enum('bagian',['subbagian kemahasiswaan','subbagian pendidikan dan pengajaran']);
             $table->timestamps();
         });
     }

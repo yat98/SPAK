@@ -506,6 +506,10 @@ $('.btn-surat-masuk-detail').on('click',function(e){
                                             <td>${suratMasuk.instansi}</td>
                                         </tr>
                                         <tr>
+                                            <td><b>Bagian</b></td>
+                                            <td>${suratMasuk.bagian.ucwords()}</td>
+                                        </tr>
+                                        <tr>
                                             <td><b>Tanggal Surat Masuk</b></td>
                                             <td>${suratMasuk.tanggal_surat_masuk}</td>
                                         </tr>

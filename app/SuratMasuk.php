@@ -13,7 +13,8 @@ class SuratMasuk extends Model
         'perihal',
         'instansi',
         'file_surat_masuk',
-        'tanggal_surat_masuk'
+        'tanggal_surat_masuk',
+        'bagian'
     ];
 
     protected $dates = ['tanggal_surat_masuk'];

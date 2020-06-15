@@ -111,15 +111,17 @@ class UserController extends Controller
         $tgl = Carbon::now();
         if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
             $kodeSuratList = KodeSurat::whereIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->get();
+            $suratMasukList = SuratMasuk::where('bagian','subbagian kemahasiswaan')->orderByDesc('created_at')->get();
         }else{
             $kodeSuratList = KodeSurat::whereNotIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->get();
+            $suratMasukList = SuratMasuk::whereNotIn('bagian',['subbagian kemahasiswaan'])->orderByDesc('created_at')->get();
         }
+        
         $suratKeteranganAktifList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
                                         ->orderByDesc('surat_keterangan.updated_at')
                                         ->where('jenis_surat','surat keterangan aktif kuliah')
                                         ->get();
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
-        $suratMasukList = SuratMasuk::orderByDesc('created_at')->get();
         $suratKeteranganKelakuanList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
                                         ->orderByDesc('surat_keterangan.updated_at')
                                         ->where('jenis_surat','surat keterangan kelakuan baik')
