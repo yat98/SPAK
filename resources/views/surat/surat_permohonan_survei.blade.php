@@ -127,7 +127,7 @@
             <div class="content mt-1">
 
             <p class="m-0"style="margin-top:20px">
-                Untuk menunjang pelaksanaan perkuliahan pada mata kuliah <b>{{ $suratSurvei->pengajuanSuratPermohonanSurvei->mata_kuliah }} Program Studi {{ $suratSurvei->pengajuanSuratPermohonanSurvei->mahasiswa->prodi->strata }} {{ $suratSurvei->pengajuanSuratPermohonanSurvei->mahasiswa->prodi->nama_prodi }} {{ $suratSurvei->pengajuanSuratPermohonanSurvei->mahasiswa->prodi->jurusan->nama_jurusan }} Fakultas Teknik Universitas Negeri Gorontalo</b>, maka dengan ini kami sangat mengharapkan kesediaan kiranya dapat memberikan informasi berupa prosedur-prosedur sistem yang ada di kantor Bapak/Ibu
+                Untuk menunjang pelaksanaan perkuliahan pada mata kuliah <b>{{ $suratSurvei->pengajuanSuratPermohonanSurvei->mata_kuliah }} Program Studi {{ $suratSurvei->pengajuanSuratPermohonanSurvei->mahasiswa->prodi->strata }} {{ $suratSurvei->pengajuanSuratPermohonanSurvei->mahasiswa->prodi->nama_prodi }} {{ $suratSurvei->pengajuanSuratPermohonanSurvei->mahasiswa->prodi->jurusan->nama_jurusan }} Fakultas Teknik Universitas Negeri Gorontalo</b>, maka dengan ini kami sangat mengharapkan kesediaan kiranya dapat memberikan informasi berupa {{ $suratSurvei->pengajuanSuratPermohonanSurvei->data_survei }} yang ada di kantor Bapak/Ibu
             </p>
             <p class="m-0">
                 nama mahasiswa sebagai berikut :

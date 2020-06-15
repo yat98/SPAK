@@ -54,9 +54,11 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item preview-item p-4">
                         <div class="row">
-                            <div class="col text-center mx-5">
-                                <img src="{{ asset('image/no_notifikasi.svg')}}" class="illustration-no-notification">
-                                <p class="text-black h4 mt-4">
+                            <div class="col-12 text-center">
+                                <img src="{{ asset('image/no_notifikasi.svg')}}" class="illustration-no-notification text-center">
+                            </div>
+                            <div class="col-12 text-center">
+                                <p class="text-black text-center h4 mt-4 mx-5">
                                     Notifikasi Kosong!
                                 </p>
                             </div>

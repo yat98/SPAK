@@ -297,6 +297,9 @@ Route::group(['prefix' => 'pegawai'],function(){
             Route::get('create/{pengajuan_surat_data_awal}','SuratPermohonanPengambilanDataAwalController@createSurat');
             Route::patch('tolak-pengajuan/{pengajuan_surat_data_awal}','SuratPermohonanPengambilanDataAwalController@tolakPengajuan');
         });
+        // Laporan
+        Route::get('laporan','LaporanController@index');
+        Route::post('laporan','LaporanController@show');
         // Notifikasi
         Route::get('notifikasi/{notifikasi_user}','NotifikasiUserController@show');
         Route::get('notifikasi','NotifikasiUserController@index');

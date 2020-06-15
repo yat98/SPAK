@@ -33,6 +33,7 @@ class PengajuanSuratPermohonanSurveiRequest extends FormRequest
             'file_rekomendasi_jurusan'=>$fileRekomendasiJurusanRules,
             'kepada'=>'required|string',
             'mata_kuliah'=>'required|string',
+            'data_survei'=>'required|string'
         ];
     }
 }

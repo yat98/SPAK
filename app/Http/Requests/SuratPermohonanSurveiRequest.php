@@ -38,7 +38,8 @@ class SuratPermohonanSurveiRequest extends FormRequest
             'mata_kuliah'=>'required|string',
             'id_kode_surat'=>'required',
             'nip'=>'required',
-            'nomor_surat'=>$nomorSuratRules
+            'nomor_surat'=>$nomorSuratRules,
+            'data_survei'=>'required|string'
         ];
     }
 }

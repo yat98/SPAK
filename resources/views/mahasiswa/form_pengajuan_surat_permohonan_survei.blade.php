@@ -54,6 +54,19 @@
             {{ Form::text('mata_kuliah',null,['class'=>'form-control form-control-lg','id'=>'mata_kuliah']) }}
             @endif
         </div>
+         <div class="form-group">
+            {{ Form::label('data_survei','Data Yang Akan Di Survei') }}
+            @if ($errors->any())
+            @if ($errors->has('data_survei'))
+            {{ Form::text('data_survei',null,['class'=>'form-control form-control-lg is-invalid','id'=>'data_survei','placeholder'=>'Contoh : prosedur-prosedur sistem']) }}
+            <div class="invalid-feedback">{{ $errors->first('data_survei') }}</div>
+            @else
+            {{ Form::text('data_survei',null,['class'=>'form-control form-control-lg is-valid','id'=>'data_survei','placeholder'=>'Contoh : prosedur-prosedur sistem']) }}
+            @endif
+            @else
+            {{ Form::text('data_survei',null,['class'=>'form-control form-control-lg','id'=>'data_survei','placeholder'=>'Contoh : prosedur-prosedur sistem']) }}
+            @endif
+        </div>
         <div class="form-group">
             @if(isset($pengajuanSuratSurvei))
                 <div class="form-row">

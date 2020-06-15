@@ -136,6 +136,9 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-rekomendasi-penelitian';
             } else if ($segment == 'surat-permohonan-pengambilan-data-awal') {
                 $halaman = 'surat-permohonan-pengambilan-data-awal';
+            } else if ($segment == 'laporan') {
+                $show = false;
+                $halaman = 'laporan';
             }
         } elseif (request()->segment(1) == 'pimpinan') {
             $posisi = 'pimpinan';

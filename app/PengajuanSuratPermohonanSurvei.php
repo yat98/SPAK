@@ -14,8 +14,13 @@ class PengajuanSuratPermohonanSurvei extends Model
         'kepada',
         'file_rekomendasi_jurusan',
         'status',
+        'data_survei',
         'keterangan',
     ];
+
+    public function setDataSurveiAttribute($value){
+        $this->attributes['data_survei'] = strtolower($value);
+    }
 
     public function mahasiswa(){
         return $this->belongsTo('App\Mahasiswa','nim');

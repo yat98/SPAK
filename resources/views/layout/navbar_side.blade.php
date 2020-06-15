@@ -193,6 +193,12 @@
                 </a>
             </li>
         @endif
+         <li class="nav-item {{ ($halaman == 'laporan') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/laporan') }}">
+                <span class="menu-title">Laporan</span>
+                <i class="mdi mdi mdi mdi-file-pdf menu-icon"></i>
+            </a>
+        </li>
         <li class="nav-item {{ ($halaman == 'profil') ? 'active':'' }}">
             <a class="nav-link" href="{{ url(Request::segment(1).'/profil') }}">
                 <span class="menu-title">Ubah Profil</span>

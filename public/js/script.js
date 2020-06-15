@@ -2750,6 +2750,10 @@ $('.btn-pengajuan-surat-survei-detail').on('click',function(e){
                                             <td>${suratSurvei.mata_kuliah}</td>
                                         </tr>
                                         <tr>
+                                            <th>Data Survei</th>
+                                            <td>${suratSurvei.data_survei}</td>
+                                        </tr>
+                                        <tr>
                                             <th>Status</th>
                                             <td>${label}</td>
                                         </tr>
@@ -2963,6 +2967,10 @@ $('.btn-surat-survei-detail').on('click',function(e){
                                         <tr>
                                             <th>Mata Kuliah</th>
                                             <td>${suratSurvei.mata_kuliah}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Data Survei</th>
+                                            <td>${suratSurvei.data_survei}</td>
                                         </tr>
                                         <tr>
                                             <th>Status</th>

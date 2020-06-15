@@ -19,6 +19,7 @@ class CreatePengajuanSuratPermohonanSurveiTable extends Migration
             $table->string('mata_kuliah');
             $table->string('kepada');
             $table->string('file_rekomendasi_jurusan');
+            $table->string('data_survei');
             $table->enum('status',['diajukan','menunggu tanda tangan','selesai','ditolak'])->default('diajukan');
             $table->string('keterangan')->default('-');
             $table->timestamps();
