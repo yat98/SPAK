@@ -166,7 +166,7 @@ $('.btn-detail').on('click', function (e) {
                                 </tr>
                                 <tr>
                                     <th>IPK</th>
-                                    <td>${mahasiswa.ipk.toFixed(2)}</td>
+                                    <td>${mahasiswa.ipk}</td>
                                 </tr>
                                 <tr>
                                     <th>Status Mahasiswa</th>
