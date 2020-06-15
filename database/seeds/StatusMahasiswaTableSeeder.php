@@ -15,16 +15,16 @@ class StatusMahasiswaTableSeeder extends Seeder
     public function run()
     {
         $mahasiswa = Mahasiswa::where('nim','531416055')->first();
-        $tahunAkademik = TahunAkademik::where('status_aktif','aktif')->first();
+        $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
+        $tahunAkademikNonAktif = TahunAkademik::where('status_aktif','non aktif')->first();
         StatusMahasiswa::create([
             'nim'=>$mahasiswa->nim,
-            'id_tahun_akademik'=>$tahunAkademik->id,
+            'id_tahun_akademik'=>$tahunAkademikNonAktif->id,
             'status'=>'aktif'
         ]);
-        $mahasiswa = Mahasiswa::where('nim','531416038')->first();
         StatusMahasiswa::create([
             'nim'=>$mahasiswa->nim,
-            'id_tahun_akademik'=>$tahunAkademik->id,
+            'id_tahun_akademik'=>$tahunAkademikAktif->id,
             'status'=>'aktif'
         ]);
         $this->command->info('Berhasil menambahkan 1 data status mahasiswa');

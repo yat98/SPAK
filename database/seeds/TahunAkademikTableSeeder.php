@@ -15,6 +15,12 @@ class TahunAkademikTableSeeder extends Seeder
         TahunAkademik::create([
             'tahun_akademik'=>'2019/2020',
             'semester'=>'ganjil',
+            'status_aktif'=>'non aktif'
+        ]);
+        sleep(30);
+        TahunAkademik::create([
+            'tahun_akademik'=>'2019/2020',
+            'semester'=>'genap',
             'status_aktif'=>'aktif'
         ]);
         $this->command->info('Berhasil menambahkan 2 data program-studi');

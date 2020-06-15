@@ -40,6 +40,22 @@ class LoginController extends Controller
             $user = User::whereIn('jabatan',['kasubag kemahasiswaan','kasubag pendidikan dan pengajaran'])->where('nip',$request->username)->first();
         }else{
             $user = Mahasiswa::where('nim',$request->username)->first();
+            if($user->tahunAkademik->count() < 1){
+                Session::flash('username',$username);
+                Session::flash('jenis_user',$request->jenis_user);
+                $this->setFlashData('error','Login Gagal','Username atau password salah.');
+                return redirect('/');
+            }else{
+                $status = $user->load(['tahunAkademik'=>function($query){
+                    $query->orderByDesc('created_at');
+                }])->tahunAkademik->first()->pivot->status;
+                if($status == 'lulus' || $status == 'drop out' || $status == 'keluar'){
+                    Session::flash('username',$username);
+                    Session::flash('jenis_user',$request->jenis_user);
+                    $this->setFlashData('error','Login Gagal','Username atau password salah.');
+                    return redirect('/');
+                }
+            }
         }
         
         if(!empty($user)){
