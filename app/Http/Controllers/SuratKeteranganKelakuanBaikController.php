@@ -94,7 +94,7 @@ class SuratKeteranganKelakuanBaikController extends Controller
     }
 
     public function create(){
-        if(!$this->isKodeSuratKelakuanExists() || !$this->isKodeSuratExists() || !$this->isTandaTanganExists()){
+        if(!$this->isKodeSuratAktifExists() || !$this->isKodeSuratExists() || !$this->isTandaTanganExists()){
             return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
         }
         $nomorSuratBaru = $this->generateNomorSuratbaru();
@@ -176,7 +176,7 @@ class SuratKeteranganKelakuanBaikController extends Controller
     }
 
     public function createSurat(PengajuanSuratKeterangan $pengajuanSuratKeterangan){
-        if(!$this->isKodeSuratKelakuanExists() || !$this->isKodeSuratExists() || !$this->isTandaTanganExists()){
+        if(!$this->isKodeSuratAktifExists() || !$this->isKodeSuratExists() || !$this->isTandaTanganExists()){
             return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
         }
         $jenisSurat = ucwords($pengajuanSuratKeterangan->jenis_surat);
@@ -253,7 +253,7 @@ class SuratKeteranganKelakuanBaikController extends Controller
         return $pdf->stream($suratKeterangan->pengajuanSuratKeterangan->mahasiswa->nama.' - '.$suratKeterangan->created_at->format('dmY-Him').'.pdf');
     }
 
-    private function isKodeSuratKelakuanExists(){
+    private function isKodeSuratAktifExists(){
         $kodeSurat = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->first();
         if(empty($kodeSurat)){
             $this->setFlashData('info','Kode Surat Aktif Tidak Ada','Aktifkan kode surat terlebih dahulu!');
