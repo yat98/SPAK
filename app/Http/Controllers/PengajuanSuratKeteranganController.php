@@ -134,7 +134,7 @@ class PengajuanSuratKeteranganController extends Controller
 
     
     private function isSuratAktifDiajukanExists(){
-        $suratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')->where('status','diajukan')->exists();
+        $suratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')->where('nim',Session::get('nim'))->where('status','diajukan')->exists();
         if($suratKeterangan){
             $this->setFlashData('info','Pengajuan Surat','Pengajuan surat keterangan aktif kuliah sementara diproses!');
             return false;
@@ -143,7 +143,7 @@ class PengajuanSuratKeteranganController extends Controller
     }
 
     private function isSuratKelakuanDiajukanExists(){
-        $suratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')->where('status','diajukan')->exists();
+        $suratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')->where('nim',Session::get('nim'))->where('status','diajukan')->exists();
         if($suratKeterangan){
             $this->setFlashData('info','Pengajuan Surat','Pengajuan surat keterangan kelakuan baik sementara diproses!');
             return false;
