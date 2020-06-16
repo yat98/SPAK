@@ -325,7 +325,7 @@
   }
 }
 
-@media (min-width: 0) and (max-width: 1248px) {
+@media (min-width: 563px) and (max-width: 1248px) {
   .flip-clock-container [class|="flip-item"] .flip-digit > span::after, .flip-clock-container [class|="flip-item"] .flip-digit > span::before {
     font-size:40px;
   }
@@ -334,11 +334,68 @@
     height: 50px;
   }
   .flip-clock-container [class|="flip-item"]::before {
-    font-size: 80px;
-    line-height: 35px;
+    font-size: 40px;
+    line-height: 50px;
+    margin: 0px 0.1px;
   }
   .flip-clock-container [class|="flip-item"] .flip-digit > span::before {
     line-height: 57px;
+  }
+}
+
+@media (min-width: 375px) and (max-width: 532px) {
+  .flip-clock-container [class|="flip-item"] .flip-digit > span::after, .flip-clock-container [class|="flip-item"] .flip-digit > span::before {
+    font-size:28px;
+  }
+  .flip-clock-container [class|="flip-item"] .flip-digit {
+    width: 23px;
+    height: 40px;
+  }
+  .flip-clock-container [class|="flip-item"]::before {
+    font-size: 20px;
+    line-height: 48px;
+    margin: 0px 0.1px;
+  }
+  .flip-clock-container [class|="flip-item"] .flip-digit > span::before {
+    line-height: 45px;
+    border-radius: 8px 8px 0px 0px;
+    border-bottom: 1px solid #000;
+    -webkit-transform-origin: bottom;
+    transform-origin: bottom;
+  }
+  .flip-clock-container [class|="flip-item"] .flip-digit > span::after {
+    border-radius: 0 0 8px 8px;
+    border-top: 1px solid #000;
+    -webkit-transform-origin: top;
+    transform-origin: top;
+  }
+}
+
+@media (min-width: 0px) and (max-width: 374px) {
+  .flip-clock-container [class|="flip-item"] .flip-digit > span::after, .flip-clock-container [class|="flip-item"] .flip-digit > span::before {
+    font-size:18px;
+  }
+  .flip-clock-container [class|="flip-item"] .flip-digit {
+    width: 15px;
+    height: 30px;
+  }
+  .flip-clock-container [class|="flip-item"]::before {
+    font-size: 20px;
+    line-height: 28px;
+    margin: 0px 0.1px;
+  }
+  .flip-clock-container [class|="flip-item"] .flip-digit > span::before {
+    line-height: 35px;
+    border-radius: 5px 5px 0px 0px;
+    border-bottom: 1px solid #000;
+    -webkit-transform-origin: bottom;
+    transform-origin: bottom;
+  }
+  .flip-clock-container [class|="flip-item"] .flip-digit > span::after {
+    border-radius: 0 0 5px 5px;
+    border-top: 1px solid #000;
+    -webkit-transform-origin: top;
+    transform-origin: top;
   }
 }
 /*# sourceMappingURL=flip-clock.css.map */
