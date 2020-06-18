@@ -83,6 +83,12 @@ class SuratPermohonanPengambilanMaterialController extends Controller
     }
 
     public function cetak(SuratPermohonanPengambilanMaterial $suratMaterial){
+        $data = '';
+        foreach ($suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->daftarKelompok as $value) {
+            $data .= $value->nim.' - '.$value->nama.' - '.$value->prodi->nama_prodi.' ';
+        }
+
+        $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",2,2);
         if(Session::has('nim')){
             if($suratMaterial->jumlah_cetak >= 3){
                 $this->setFlashData('info','Cetak Surat Permohonan Pengambialn Material','Anda telah mencetak surat permohonan pengambilan material sebanyak 3 kali.');
@@ -93,7 +99,7 @@ class SuratPermohonanPengambilanMaterialController extends Controller
         $suratMaterial->update([
             'jumlah_cetak'=>$jumlahCetak
         ]);
-        $pdf = PDF::loadview('surat.surat_permohonan_pengambilan_material',compact('suratMaterial'))->setPaper('a4', 'potrait');
+        $pdf = PDF::loadview('surat.surat_permohonan_pengambilan_material',compact('suratMaterial','qrCode'))->setPaper('a4', 'potrait');
         return $pdf->stream('surat-permohonan-pengambilan-material'.' - '.$suratMaterial->created_at->format('dmY-Him').'.pdf');
     }
 

@@ -95,10 +95,10 @@ class KodeSuratController extends Controller
         }else{
             $kodeSurat = [
                 'surat keterangan lulus'=>'Surat Keterangan Lulus',
-                'surat permohonan pengambilan material'=>'Surat Dispensasi',
+                'surat permohonan pengambilan material'=>'Surat Permohonan Pengambilan Material',
                 'surat permohonan survei'=>'Surat Permohonan Survei',
                 'surat rekomendasi penelitian'=>'Surat Rekomendasi Penelitian',
-                'surat permohonan data awal'=>'Surat Permohonan Data Awal',
+                'surat permohonan pengambilan data awal'=>'Surat Permohonan Pengambilan Data Awal',
             ];
         }
         return $kodeSurat;

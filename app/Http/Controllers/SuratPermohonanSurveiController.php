@@ -332,6 +332,8 @@ class SuratPermohonanSurveiController extends Controller
     }
 
     public function cetak(SuratPermohonanSurvei $suratSurvei){
+        $data = $suratSurvei->pengajuanSuratPermohonanSurvei->mahasiswa->nim.' - '.$suratSurvei->pengajuanSuratPermohonanSurvei->mahasiswa->prodi->nama_prodi;
+        $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",4,4);
         if(Session::has('nim')){
             if($suratSurvei->jumlah_cetak >= 3){
                 $this->setFlashData('info','Cetak Surat Permohonan Survei','Anda telah mencetak surat permohonan survei sebanyak 3 kali.');
@@ -342,7 +344,7 @@ class SuratPermohonanSurveiController extends Controller
         $suratSurvei->update([
             'jumlah_cetak'=>$jumlahCetak
         ]);
-        $pdf = PDF::loadview('surat.surat_permohonan_survei',compact('suratSurvei'))->setPaper('a4', 'potrait');
+        $pdf = PDF::loadview('surat.surat_permohonan_survei',compact('suratSurvei','qrCode'))->setPaper('a4', 'potrait');
         return $pdf->stream('surat-permohonan_survei'.' - '.$suratSurvei->created_at->format('dmY-Him').'.pdf');
     }
 

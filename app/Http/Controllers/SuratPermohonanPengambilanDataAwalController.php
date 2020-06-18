@@ -328,6 +328,8 @@ class SuratPermohonanPengambilanDataAwalController extends Controller
     }
 
     public function cetak(SuratPermohonanPengambilanDataAwal $suratDataAwal){
+        $data = $suratDataAwal->pengajuanSuratPermohonanPengambilanDataAwal->mahasiswa->nim.' - '.$suratDataAwal->pengajuanSuratPermohonanPengambilanDataAwal->mahasiswa->prodi->nama_prodi;
+        $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",4,4);
         if(Session::has('nim')){
             if($suratDataAwal->jumlah_cetak >= 3){
                 $this->setFlashData('info','Cetak Surat Permohonan Pengambilan Data Awal','Anda telah mencetak surat permohonan pengambilan data awal sebanyak 3 kali.');
@@ -338,7 +340,7 @@ class SuratPermohonanPengambilanDataAwalController extends Controller
         $suratDataAwal->update([
             'jumlah_cetak'=>$jumlahCetak
         ]);
-        $pdf = PDF::loadview('surat.surat_permohonan_pengambilan_data_awal',compact('suratDataAwal'))->setPaper('a4', 'potrait');
+        $pdf = PDF::loadview('surat.surat_permohonan_pengambilan_data_awal',compact('suratDataAwal','qrCode'))->setPaper('a4', 'potrait');
         return $pdf->stream('surat-permohonan-pengambilan-data-awal'.' - '.$suratDataAwal->created_at->format('dmY-Him').'.pdf');
     }
 

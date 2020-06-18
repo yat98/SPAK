@@ -225,6 +225,12 @@ class SuratTugasController extends Controller
     }
 
     public function cetakSuratTugas(SuratTugas $suratTugas){
+        $data = '';
+        foreach ($suratTugas->mahasiswa as $value) {
+            $data .= $value->nim.' - '.$value->nama.' - '.$value->prodi->nama_prodi.' ';
+        }
+
+        $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",3,3);
         if(Session::has('nim')){
             if($suratTugas->jumlah_cetak >= 3){
                 $this->setFlashData('info','Cetak Surat Tugas','Anda telah mencetak surat tugas sebanyak 3 kali.');
@@ -235,7 +241,7 @@ class SuratTugasController extends Controller
         $suratTugas->update([
             'jumlah_cetak'=>$jumlahCetak
         ]);
-        $pdf = PDF::loadview('surat.surat_tugas',compact('suratTugas'))->setPaper('a4', 'potrait');
+        $pdf = PDF::loadview('surat.surat_tugas',compact('suratTugas','qrCode'))->setPaper('a4', 'potrait');
         return $pdf->stream('surat-tugas'.' - '.$suratTugas->created_at->format('dmY-Him').'.pdf');
     }
 

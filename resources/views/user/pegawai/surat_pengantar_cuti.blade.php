@@ -94,7 +94,7 @@
                                                         <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>
                                                         Edit
                                                     </a>
-                                                    {{ Form::open(['method'=>'DELETE','action'=>['SuratPengantarCutiController@destroy',$suratCuti->id],'class'=>'d-inline-block']) }}
+                                                    {{ Form::open(['method'=>'DELETE','url'=>'pegawai/surat-pengantar-cuti/'.$suratCuti->id,'class'=>'d-inline-block']) }}
                                                     <button type="submit" class="btn btn-danger btn-sm sweet-delete">
                                                         <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
                                                         Hapus
@@ -149,4 +149,5 @@
             </div>
         </div>
     </div>
+</div>
 @endsection

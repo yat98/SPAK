@@ -150,6 +150,9 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'tanda-tangan';
             } else if ($segment == 'surat-keterangan-aktif-kuliah') {
                 $halaman = 'surat-keterangan-aktif-kuliah';
+            } else if ($segment == 'mahasiswa') {
+                $show = false;
+                $halaman = 'mahasiswa';
             } else if ($segment == 'surat-keterangan-kelakuan-baik') {
                 $halaman = 'surat-keterangan-kelakuan-baik';
             } else if($segment == 'surat-dispensasi'){

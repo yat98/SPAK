@@ -51,9 +51,9 @@
             @endif
         </div>
         <div class="form-group">
-            {{ Form::submit($buttonLabel,['class'=>'btn btn-info btn-sm font-weight-medium auth-form-btn']) }}
-            <a href="{{ url('pegawai/profil/password') }}" class="btn btn-warning btn-sm btn-password-edit ">Ubah Password</a>
-            <input type="reset" value="Reset" class="btn btn-danger btn-sm">
+            {{ Form::submit($buttonLabel,['class'=>'btn btn-info btn-sm font-weight-medium auth-form-btn btn-margin btn-tambah mt-2 mb-2']) }}
+            <a href="{{ url('pegawai/profil/password') }}" class="btn btn-warning btn-sm btn-password-edit btn-margin btn-tambah mx-md-2 mt-2 mb-2">Ubah Password</a>
+            <input type="reset" value="Reset" class="text-center btn btn-danger btn-sm btn-margin btn-tambah mt-2 mb-2"> 
         </div>
     </div>
 </div>

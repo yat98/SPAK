@@ -376,6 +376,8 @@ class SuratPersetujuanPindahController extends Controller
     }
 
     public function cetakSuratPindah(SuratPersetujuanPindah $suratPersetujuanPindah){
+        $data = $suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->nim.' - '.$suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->mahasiswa->nama.' - '.$suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->mahasiswa->prodi->nama_prodi;
+        $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",5,5);
         if(Session::has('nim')){
             if($suratPersetujuanPindah->jumlah_cetak >= 3){
                 $this->setFlashData('info','Cetak Surat Persetujuan Pindah','Anda telah mencetak surat persetujuan pindah sebanyak 3 kali.');
@@ -386,7 +388,7 @@ class SuratPersetujuanPindahController extends Controller
         $suratPersetujuanPindah->update([
             'jumlah_cetak'=>$jumlahCetak
         ]);
-        $pdf = PDF::loadview('surat.surat_persetujuan_pindah',compact('suratPersetujuanPindah'))->setPaper('a4', 'potrait');
+        $pdf = PDF::loadview('surat.surat_persetujuan_pindah',compact('suratPersetujuanPindah','qrCode'))->setPaper('a4', 'potrait');
         return $pdf->stream('surat-persetujuan-pindah'.' - '.$suratPersetujuanPindah->created_at->format('dmY-Him').'.pdf');
     }
 

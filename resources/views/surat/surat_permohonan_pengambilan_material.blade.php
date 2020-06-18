@@ -148,7 +148,10 @@
                 <p class="m-0"><b>NIP. {{substr($suratMaterial->user->nip,0,8)}} {{substr($suratMaterial->user->nip,8,6)}} {{substr($suratMaterial->user->nip,14,1)}} {{substr($suratMaterial->user->nip,15,3)}}</b></p>
             </div>
         </div>
-         <div style="height:560px"></div>
+        <div class="content" style="padding-top:105px">
+            <?= $qrCode ?>
+        </div>
+         <div style="height:325px"></div>
             <p class="m-0">
                 <b>Lampiran :</b>
             </p>

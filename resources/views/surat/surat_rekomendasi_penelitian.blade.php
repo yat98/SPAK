@@ -172,6 +172,9 @@
                 <p class="m-0"><b>NIP. {{substr($suratPenelitian->user->nip,0,8)}} {{substr($suratPenelitian->user->nip,8,6)}} {{substr($suratPenelitian->user->nip,14,1)}} {{substr($suratPenelitian->user->nip,15,3)}}</b></p>
             </div>
         </div>
+        <div class="content" style="padding-top:90px">
+            <?= $qrCode ?>
+        </div>
         <div style="clear:both;margin-top:20px">
             <p>
                 <i style="margin-bottom:-14px;display:inline-block;margin-left:19px">

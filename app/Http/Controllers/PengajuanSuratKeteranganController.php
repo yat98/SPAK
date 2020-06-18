@@ -36,11 +36,9 @@ class PengajuanSuratKeteranganController extends Controller
         $tahunAkademikTerakhir = ($tahunAkademikAktif != null) ? $tahunAkademikAktif:TahunAkademik::orderByDesc('created_at')->first();
         $status = StatusMahasiswa::where('nim',Session::get('nim'))->orderByDesc('created_at')->get();
 
-        foreach ($status as $value) {
-            if($value->status == 'aktif'){
-                $tahunAkademik[$value->tahunAkademik->id] = $value->tahunAkademik->tahun_akademik.' - '.ucwords($value->tahunAkademik->semester);
-                break;
-            }
+        if($status->where('status','aktif')->count() > 0){
+            $this->setFlashData('info','Pengajuan Gagal','Maaf anda tidak dapat membuat pengajuan surat keterangan aktif kuliah karena status anda tidak aktif');
+            return redirect('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah');
         }
 
         if(count($tahunAkademik) == 0){
@@ -48,13 +46,6 @@ class PengajuanSuratKeteranganController extends Controller
             return redirect('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah');
         }
 
-        foreach ($status as $value) {
-            if ($value->id_tahun_akademik == $tahunAkademikTerakhir->id) {
-                if ($value->status != 'aktif') {
-                    $this->setFlashData('info-badge', 'Status Mahasiswa', 'Maaf anda tidak dapat melakukan pengajuan surat keterangan aktif kuliah pada tahun akademik '.$tahunAkademikTerakhir->tahun_akademik.' - '.ucwords($tahunAkademikTerakhir->semester).' dikarenakan status anda adalah '.$value->status.', tetapi anda dapat melakukan pengajuan surat keterangan aktif kuliah dengan tahun akademik '.current($tahunAkademik));
-                }
-            }
-        }
         return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_aktif_kuliah',compact('tahunAkademik'));
     }
 

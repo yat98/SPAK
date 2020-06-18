@@ -59,30 +59,32 @@
         @if($mahasiswa->tahunAkademik->count() > 0)
             <div class="form-group pt-3">
                 {{ Form::label('status_mahasiswa','Status Mahasiswa') }}
-                <table class="table">
-                    <tr>
-                        <td>Tahun Akademik</td>
-                        <td>Status</td>
-                    </tr>
-                    <tr>
-                        @foreach($mahasiswa->tahunAkademik as $statusMahasiswa)   
-                            <td>{{ $statusMahasiswa->tahun_akademik }} - {{ ucwords($statusMahasiswa->semester) }}</td> 
-                            <td>
-                                @if ($statusMahasiswa->pivot->status == 'aktif')
-                                    <label class="badge badge-gradient-info">{{ ucwords($statusMahasiswa->pivot->status) }}</label>
-                                @elseif($statusMahasiswa->pivot->status == 'lulus')
-                                    <label class="badge badge-gradient-success">{{ ucwords($statusMahasiswa->pivot->status) }}</label>
-                                @elseif($statusMahasiswa->pivot->status == 'drop out' || $statusMahasiswa->pivot->status  == 'keluar')
-                                    <label class="badge badge-gradient-danger">{{ ucwords($statusMahasiswa->pivot->status) }}</label>
-                                @elseif($statusMahasiswa->pivot->status == 'cuti')
-                                    <label class="badge badge-gradient-warning text-dark">{{ ucwords($statusMahasiswa->pivot->status) }}</label>
-                                @else
-                                    <label class="badge badge-gradient-dark">{{ ucwords($statusMahasiswa->pivot->status) }}</label>
-                                @endif
-                            </td>
-                        @endforeach
-                    </tr>
-                </table>
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+                            <td>Tahun Akademik</td>
+                            <td>Status</td>
+                        </tr>
+                        <tr>
+                            @foreach($mahasiswa->tahunAkademik as $statusMahasiswa)   
+                                <td>{{ $statusMahasiswa->tahun_akademik }} - {{ ucwords($statusMahasiswa->semester) }}</td> 
+                                <td>
+                                    @if ($statusMahasiswa->pivot->status == 'aktif')
+                                        <label class="badge badge-gradient-info">{{ ucwords($statusMahasiswa->pivot->status) }}</label>
+                                    @elseif($statusMahasiswa->pivot->status == 'lulus')
+                                        <label class="badge badge-gradient-success">{{ ucwords($statusMahasiswa->pivot->status) }}</label>
+                                    @elseif($statusMahasiswa->pivot->status == 'drop out' || $statusMahasiswa->pivot->status  == 'keluar')
+                                        <label class="badge badge-gradient-danger">{{ ucwords($statusMahasiswa->pivot->status) }}</label>
+                                    @elseif($statusMahasiswa->pivot->status == 'cuti')
+                                        <label class="badge badge-gradient-warning text-dark">{{ ucwords($statusMahasiswa->pivot->status) }}</label>
+                                    @else
+                                        <label class="badge badge-gradient-dark">{{ ucwords($statusMahasiswa->pivot->status) }}</label>
+                                    @endif
+                                </td>
+                            @endforeach
+                        </tr>
+                    </table>
+                </div>
             </div>
         @else
         <div class="form-group pt-3">
@@ -91,10 +93,9 @@
             <label class="badge badge-gradient-dark">Belum ada data status mahasiswa</label>
         </div>
         @endif
-        <div class="form-group">
-            {{ Form::submit($buttonLabel,['class'=>'btn btn-info btn-sm font-weight-medium auth-form-btn']) }}
-            <a href="{{ url('mahasiswa/profil/password') }}" class="btn btn-warning btn-sm btn-password-edit ">Ubah Password</a>
-            <input type="reset" value="Reset" class="btn btn-danger btn-sm">
-        </div>
+        <div class="form-row">
+            {{ Form::submit($buttonLabel,['class'=>'btn btn-info btn-sm font-weight-medium auth-form-btn btn-margin btn-tambah mt-2 mb-2']) }}
+            <a href="{{ url('mahasiswa/profil/password') }}" class="btn btn-warning btn-sm btn-password-edit btn-margin btn-tambah mx-md-2 mt-2 mb-2">Ubah Password</a>
+            <input type="reset" value="Reset" class="text-center btn btn-danger btn-sm btn-margin btn-tambah mt-2 mb-2"> 
     </div>
 </div>

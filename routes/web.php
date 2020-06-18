@@ -237,7 +237,7 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Surat Keterangan Lulus
         Route::get('surat-keterangan-lulus/search', 'SuratKeteranganLulusController@search');
-        Route::get('surat-keterangan-lulus/{surat_keterangan_lulus}/cetak', 'SuratKeteranganLulusController@cetakSuratLulus');
+        Route::get('surat-keterangan-lulus/{surat_keterangan_lulus}/cetak', 'SuratKeteranganLulusController@cetak');
         Route::group(['prefix'=>'surat-keterangan-lulus/pengajuan'],function(){
             Route::get('/{pengajuan_surat_keterangan_lulus}','PengajuanSuratKeteranganLulusController@show');
             Route::post('/','SuratKeteranganLulusController@storeSurat');
@@ -417,8 +417,11 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::get('surat-kegiatan-mahasiswa/{pengajuan_kegiatan_mahasiswa}/disposisi','PengajuanSuratKegiatanMahasiswaController@detailDisposisi');
         Route::post('surat-kegiatan-mahasiswa/pengajuan/tanda-tangan','SuratKegiatanMahasiswaController@tandaTanganKegiatan');
         Route::post('surat-kegiatan-mahasiswa/disposisi','PengajuanSuratKegiatanMahasiswaController@disposisi');
-        // Detail Mahasiswa
+        // Mahasiswa
+        Route::get('mahasiswa/search', 'MahasiswaController@search');
+        Route::get('mahasiswa', 'MahasiswaController@mahasiswaPimpinan');
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
+        Route::get('mahasiswa/{mahasiswa}','MahasiswaController@showPimpinan');
         // Surat Keterangan Lulus
         Route::get('surat-keterangan-lulus/search', 'SuratKeteranganLulusController@searchPimpinan');
         Route::get('surat-keterangan-lulus', 'SuratKeteranganLulusController@suratLulusPimpinan');

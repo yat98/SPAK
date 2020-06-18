@@ -290,6 +290,12 @@
                 <i class="mdi mdi mdi mdi-border-color menu-icon"></i>
             </a>
         </li>
+        <li class="nav-item {{ ($halaman == 'mahasiswa') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/mahasiswa') }}">
+                <span class="menu-title">Mahasiswa</span>
+                <i class="mdi mdi mdi-account menu-icon"></i>
+            </a>
+        </li>
         <li class="nav-item {{ ($halaman == 'surat-keterangan-aktif-kuliah' || $halaman == 'surat-keterangan-kelakuan-baik' || $halaman == 'surat-dispensasi' || $halaman == 'surat-rekomendasi' || $halaman == 'surat-tugas' || $halaman == 'surat-persetujuan-pindah' || $halaman == 'surat-pengantar-beasiswa' || $halaman == 'surat-kegiatan-mahasiswa' || $halaman == 'surat-pengantar-cuti' || $halaman == 'surat-keterangan-lulus' || $halaman == 'surat-permohonan-pengambilan-material' ||  $halaman == 'surat-permohonan-survei' || $halaman == 'surat-rekomendasi-penelitian' || $halaman == 'surat-permohonan-pengambilan-data-awal') ? 'active':'' }}">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <span class="menu-title">

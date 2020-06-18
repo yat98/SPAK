@@ -17,10 +17,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    public function __construct(){
-        parent::__construct();
-    }
-    
     public function index(){
         $jurusanList = Jurusan::all()->sortBy('updated_at');
         $prodiList = ProgramStudi::all()->sortBy('updated_at');

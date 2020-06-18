@@ -351,6 +351,8 @@ class SuratKeteranganLulusController extends Controller
     }
 
     public function cetak(SuratketeranganLulus $suratLulus){
+        $data = $suratLulus->pengajuanSuratKeteranganLulus->mahasiswa->nim.' - '.$suratLulus->pengajuanSuratKeteranganLulus->mahasiswa->prodi->nama_prodi;
+        $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",4,4);
         if(Session::has('nim')){
             if($suratLulus->jumlah_cetak >= 3){
                 $this->setFlashData('info','Cetak Surat Keterangan Lulus','Anda telah mencetak surat keterangan lulus sebanyak 3 kali.');
@@ -361,7 +363,7 @@ class SuratKeteranganLulusController extends Controller
         $suratLulus->update([
             'jumlah_cetak'=>$jumlahCetak
         ]);
-        $pdf = PDF::loadview('surat.surat_keterangan_lulus',compact('suratLulus'))->setPaper('a4', 'potrait');
+        $pdf = PDF::loadview('surat.surat_keterangan_lulus',compact('suratLulus','qrCode'))->setPaper('a4', 'potrait');
         return $pdf->stream('surat-keterangan-lulus'.' - '.$suratLulus->created_at->format('dmY-Him').'.pdf');
     }
 

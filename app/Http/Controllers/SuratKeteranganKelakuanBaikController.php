@@ -239,6 +239,8 @@ class SuratKeteranganKelakuanBaikController extends Controller
     }
 
     public function cetak(SuratKeterangan $suratKeterangan){
+        $data = $suratKeterangan->pengajuanSuratKeterangan->nim.' - '.$suratKeterangan->pengajuanSuratKeterangan->mahasiswa->nama.' - '.$suratKeterangan->pengajuanSuratKeterangan->mahasiswa->prodi->nama_prodi;
+        $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",5,5);
         if(Session::has('nim')){
             if($suratKeterangan->jumlah_cetak >= 3){
                 $this->setFlashData('info','Cetak Surat Keterangan','Anda telah mencetak surat keterangan kelakuan baik sebanyak 3 kali.');
@@ -249,7 +251,7 @@ class SuratKeteranganKelakuanBaikController extends Controller
         $suratKeterangan->update([
             'jumlah_cetak'=>$jumlahCetak
         ]);
-        $pdf = PDF::loadview('surat.surat_keterangan_kelakuan_baik',compact('suratKeterangan'))->setPaper('a4', 'potrait');
+        $pdf = PDF::loadview('surat.surat_keterangan_kelakuan_baik',compact('suratKeterangan','qrCode'))->setPaper('a4', 'potrait');
         return $pdf->stream($suratKeterangan->pengajuanSuratKeterangan->mahasiswa->nama.' - '.$suratKeterangan->created_at->format('dmY-Him').'.pdf');
     }
 

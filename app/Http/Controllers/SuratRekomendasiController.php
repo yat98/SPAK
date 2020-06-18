@@ -220,6 +220,12 @@ class SuratRekomendasiController extends Controller
     }
 
     public function cetakSuratRekomendasi(SuratRekomendasi $suratRekomendasi){
+        $data = '';
+        foreach ($suratRekomendasi->mahasiswa as $value) {
+            $data .= $value->nim.' - '.$value->nama.' - '.$value->prodi->nama_prodi.' ';
+        }
+        
+        $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",3,3);
         if(Session::has('nim')){
             if($suratRekomendasi->jumlah_cetak >= 3){
                 $this->setFlashData('info','Cetak Surat Rekomendasi','Anda telah mencetak surat rekomendasi sebanyak 3 kali.');
@@ -230,7 +236,7 @@ class SuratRekomendasiController extends Controller
         $suratRekomendasi->update([
             'jumlah_cetak'=>$jumlahCetak
         ]);
-        $pdf = PDF::loadview('surat.surat_rekomendasi',compact('suratRekomendasi'))->setPaper('a4', 'potrait');
+        $pdf = PDF::loadview('surat.surat_rekomendasi',compact('suratRekomendasi','qrCode'))->setPaper('a4', 'potrait');
         return $pdf->stream('surat-rekomendasi'.' - '.$suratRekomendasi->created_at->format('dmY-Him').'.pdf');
     }
 

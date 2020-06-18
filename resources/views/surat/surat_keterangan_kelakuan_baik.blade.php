@@ -131,6 +131,9 @@
                 <p class="m-0"><b>NIP. {{substr($suratKeterangan->user->nip,0,8)}} {{substr($suratKeterangan->user->nip,8,6)}} {{substr($suratKeterangan->user->nip,14,1)}} {{substr($suratKeterangan->user->nip,15,3)}}</b></p>
             </div>
         </div>
+        <div class="content" style="padding-top:105px">
+            <?= $qrCode ?>
+        </div>
    </div>
 </body>
 </html>

@@ -184,6 +184,8 @@ return [
         App\Providers\NavServiceProvider::class,
         // DomPDF
         Barryvdh\DomPDF\ServiceProvider::class,
+        // Milion Barcode
+        Milon\Barcode\BarcodeServiceProvider::class,
     ],
 
     /*
@@ -242,6 +244,9 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         // DomPDF
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        // Milion Barcode
+        'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+        'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
     ],
 
 ];

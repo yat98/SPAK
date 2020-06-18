@@ -125,7 +125,7 @@ class SuratDispensasiController extends Controller
             NotifikasiUser::create([
                 'nip'=>$request->nip,
                 'judul_notifikasi'=>'Surat Dispensasi',
-                'isi_notifikasi'=>'Pengajuan surat dispensasi.',
+                'isi_notifikasi'=>'Tanda tangan surat dispensasi.',
                 'link_notifikasi'=>url('pimpinan/surat-dispensasi')
             ]);
         }catch(Exception $e){
@@ -233,6 +233,12 @@ class SuratDispensasiController extends Controller
     }
 
     public function cetakSuratDispensasi(SuratDispensasi $suratDispensasi){
+        $data = '';
+        foreach ($suratDispensasi->mahasiswa as $value) {
+            $data .= $value->nim.' - '.$value->nama.' - '.$value->prodi->nama_prodi.' ';
+        }
+
+        $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",3,3);
         if(Session::has('nim')){
             if($suratDispensasi->jumlah_cetak >= 3){
                 $this->setFlashData('info','Cetak Surat Dispensasi','Anda telah mencetak surat dispensasi sebanyak 3 kali.');
@@ -243,7 +249,7 @@ class SuratDispensasiController extends Controller
         $suratDispensasi->update([
             'jumlah_cetak'=>$jumlahCetak
         ]);
-        $pdf = PDF::loadview('surat.surat_dispensasi',compact('suratDispensasi'))->setPaper('a4', 'potrait');
+        $pdf = PDF::loadview('surat.surat_dispensasi',compact('suratDispensasi','qrCode'))->setPaper('a4', 'potrait');
         return $pdf->stream('surat-dispensasi'.' - '.$suratDispensasi->created_at->format('dmY-Him').'.pdf');
     }
 

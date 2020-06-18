@@ -169,6 +169,7 @@ class SuratKegiatanMahasiswaController extends Controller
             $input['status'] = 'diterima';
             $mahasiswa = PimpinanOrmawa::where('id_ormawa',$request->ormawa)->where('jabatan','sekretaris')->first();
             $user = User::where('nip',Session::get('nip'))->first();
+            $dekan = User::where('jabatan','dekan')->where('status_aktif','aktif')->first();
             $input['nim'] = $mahasiswa->nim;
             $input['nip'] = $user->nip;
             if ($request->has('file_surat_permohonan_kegiatan')) {
@@ -182,6 +183,12 @@ class SuratKegiatanMahasiswaController extends Controller
                 'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
                 'isi_notifikasi'=>'Surat Kegiatan Mahasiswa telah diterima.',
                 'link_notifikasi'=>url('mahasiswa/pengajuan/surat-kegiatan-mahasiswa')
+            ]);
+            NotifikasiUser::create([
+                'nip'=>$dekan->nip,
+                'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
+                'isi_notifikasi'=>'Disposisi surat kegiatan mahasiswa.',
+                'link_notifikasi'=>url('pimpinan/surat-kegiatan-mahasiswa')
             ]);
         }catch(Exception $e){
             DB::rollback();
@@ -249,6 +256,8 @@ class SuratKegiatanMahasiswaController extends Controller
     }
 
     public function cetakSuratKegiatan(SuratKegiatanMahasiswa $suratKegiatan){
+        $data = $suratKegiatan->pengajuanSuratKegiatanMahasiswa->mahasiswa->pimpinanOrmawa->ormawa->nama.' - '.$suratKegiatan->pengajuanSuratKegiatanMahasiswa->nama_kegiatan;
+        $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",3,3);
         if(Session::has('nim')){
             if($suratKegiatan->jumlah_cetak >= 3){
                 $this->setFlashData('info','Cetak Surat Kegiatan Mahasiswa','Anda telah mencetak surat kegiatan mahasiswa sebanyak 3 kali.');
@@ -259,7 +268,7 @@ class SuratKegiatanMahasiswaController extends Controller
         $suratKegiatan->update([
             'jumlah_cetak'=>$jumlahCetak
         ]);
-        $pdf = PDF::loadview('surat.surat_kegiatan_mahasiswa',compact('suratKegiatan'))->setPaper('a4', 'potrait');
+        $pdf = PDF::loadview('surat.surat_kegiatan_mahasiswa',compact('suratKegiatan','qrCode'))->setPaper('a4', 'potrait');
         return $pdf->stream('surat-kegiatan-mahasiswa'.' - '.$suratKegiatan->created_at->format('dmY-Him').'.pdf');
     }
 

@@ -196,6 +196,9 @@
                 <p class="m-0"><b>NIP. {{substr($suratKegiatan->user->nip,0,8)}} {{substr($suratKegiatan->user->nip,8,6)}} {{substr($suratKegiatan->user->nip,14,1)}} {{substr($suratKegiatan->user->nip,15,3)}}</b></p>
             </div>
         </div>
+        <div class="content" style="padding-top:60px;margin-bottom:15px">
+            <?= $qrCode ?>
+        </div>
    </div>
    <br style="clear:both">
    <div style="height:200px"></div>
@@ -216,6 +219,9 @@
                 <p class="m-0"><b>{{$suratKegiatan->user->nama}}</b></p>
                 <p class="m-0"><b>NIP. {{substr($suratKegiatan->user->nip,0,8)}} {{substr($suratKegiatan->user->nip,8,6)}} {{substr($suratKegiatan->user->nip,14,1)}} {{substr($suratKegiatan->user->nip,15,3)}}</b></p>
             </div>
+        </div>
+        <div class="content" style="padding-top:60px;margin-bottom:15px">
+            <?= $qrCode ?>
         </div>
     </div>
     <script>
