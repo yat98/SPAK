@@ -42,15 +42,19 @@ $jumlah = $suratDispensasi->tahapanKegiatanDispensasi->count();
             {{ Form::label('nomor_surat','Nomor Surat') }}
             <div class="form-row">
                 <div class="col-md-4 col-sm-6 mt-1">
-                @if ($errors->any())
-                @if ($errors->has('nomor_surat'))
-                {{ Form::text('nomor_surat',(isset($nomorSuratBaru)) ? $nomorSuratBaru : null ,['class'=>'form-control form-control-lg is-invalid','id'=>'nomor_surat']) }}
-                <div class="text-danger-red mt-1"><small>{{ $errors->first('nomor_surat') }}</small></div>
+                @if (!isset($suratDispensasi))
+                    @if ($errors->any())
+                    @if ($errors->has('nomor_surat'))
+                    {{ Form::text('nomor_surat',(isset($nomorSuratBaru)) ? $nomorSuratBaru : null ,['class'=>'form-control form-control-lg is-invalid','id'=>'nomor_surat']) }}
+                    <div class="text-danger-red mt-1"><small>{{ $errors->first('nomor_surat') }}</small></div>
+                    @else
+                    {{ Form::text('nomor_surat',(isset($nomorSuratBaru)) ? $nomorSuratBaru : null ,['class'=>'form-control form-control-lg is-valid','id'=>'nomor_surat']) }}
+                    @endif
+                    @else
+                    {{ Form::text('nomor_surat',(isset($nomorSuratBaru)) ? $nomorSuratBaru : null ,['class'=>'form-control form-control-lg','id'=>'nomor_surat']) }}
+                    @endif
                 @else
-                {{ Form::text('nomor_surat',(isset($nomorSuratBaru)) ? $nomorSuratBaru : null ,['class'=>'form-control form-control-lg is-valid','id'=>'nomor_surat']) }}
-                @endif
-                @else
-                {{ Form::text('nomor_surat',(isset($nomorSuratBaru)) ? $nomorSuratBaru : null ,['class'=>'form-control form-control-lg','id'=>'nomor_surat']) }}
+                    {{ Form::text('nomor_surat',(isset($nomorSuratBaru)) ? $nomorSuratBaru : null ,['class'=>'form-control form-control-lg','id'=>'nomor_surat','readonly'=>'readonly']) }}
                 @endif
                 </div>
                 <div class="col-md col-sm-6 mt-1">
