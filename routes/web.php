@@ -372,6 +372,7 @@ Route::group(['prefix' => 'pimpinan'], function () {
     Route::middleware(['pimpinan'])->group(function(){
         // Dashboard
         Route::get('/','UserController@pimpinanDashboard');
+        Route::get('search','UserController@chartPimpinanDashboard');
          // Surat Keterangan Aktif Kuliah
          Route::get('surat-keterangan-aktif-kuliah/search/','SuratKeteranganAktifKuliahController@search');
          Route::resource('surat-keterangan-aktif-kuliah','SuratKeteranganAktifKuliahController')->except('show');

@@ -267,6 +267,90 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body pb-5 pb-md-2">
+                                <div class="chartjs-size-monitor">
+                                    <div class="chartjs-size-monitor-expand">
+                                        <div class=""></div>
+                                    </div>
+                                    <div class="chartjs-size-monitor-shrink">
+                                        <div class=""></div>
+                                    </div>
+                                </div>
+                                <div class="clearfix">
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Subbagian Kemahasiswaan</h4>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        {{ Form::open(['url'=>'pimpinan/search','method'=>'get']) }}
+                                            <div class="form-row">
+                                                <div class="col col-md-4 mt-1">
+                                                    {{ Form::select('bulan',$bulan,(isset($bln)) ? $bln:request()->get('bulan'),['class'=>'form-control search']) }}
+                                                </div>
+                                                <div class="col col-md-4 mt-1">
+                                                    {{ Form::select('tahun',$tahun,(isset($thn)) ? $thn:request()->get('tahun'),['class'=>'form-control search']) }}
+                                                </div>
+                                                <div class="col-sm-12 col-md">
+                                                    <button class="btn btn-success btn-sm btn-tambah mt-2 mt-md-0" type="submit">
+                                                        <i class="mdi mdi-magnify btn-icon-prepend"></i>
+                                                        Tampilkan
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        {{ Form::close() }}
+                                    </div>
+                                </div>
+                                <canvas id="kemahasiswaan" class="mt-4 chartjs-render-monitor  mb-3 mb-md-0" style="display: block; height: 298px; width: 596px;" width="745" height="372"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body pb-5 pb-md-2">
+                                <div class="chartjs-size-monitor">
+                                    <div class="chartjs-size-monitor-expand">
+                                        <div class=""></div>
+                                    </div>
+                                    <div class="chartjs-size-monitor-shrink">
+                                        <div class=""></div>
+                                    </div>
+                                </div>
+                                <div class="clearfix">
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Subbagian Pengajaran Dan Pendidikan</h4>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        {{ Form::open(['url'=>'pimpinan/search','method'=>'get']) }}
+                                            <div class="form-row">
+                                                <div class="col col-md-4 mt-1">
+                                                    {{ Form::select('bulan',$bulan,(isset($bln)) ? $bln:request()->get('bulan'),['class'=>'form-control search']) }}
+                                                </div>
+                                                <div class="col col-md-4 mt-1">
+                                                    {{ Form::select('tahun',$tahun,(isset($thn)) ? $thn:request()->get('tahun'),['class'=>'form-control search']) }}
+                                                </div>
+                                                <div class="col-sm-12 col-md">
+                                                    <button class="btn btn-success btn-sm btn-tambah mt-2 mt-md-0" type="submit">
+                                                        <i class="mdi mdi-magnify btn-icon-prepend"></i>
+                                                        Tampilkan
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        {{ Form::close() }}
+                                    </div>
+                                </div>
+                                <canvas id="pengajaran_pendidikan" class="mt-4 chartjs-render-monitor  mb-3 mb-md-0" style="display: block; height: 298px; width: 596px;" width="745" height="372"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
@@ -1141,4 +1225,90 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('chart-javascript')
+<script>
+    var data = [<?php echo '"'.implode('","', $chartKemahasiswaan).'"' ?>];
+    var dataPendidikan = [<?php echo '"'.implode('","', $chartPendidikanPengajaran).'"' ?>]; 
+    var ctx = document.getElementById('kemahasiswaan').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Surat Keterangan Aktif Kuliah','Surat Keterangan Kelakuan Baik','Surat Dispensasi','Surat Pengantar Cuti','Surat Rekomendasi','Surat Persetujuan Pindah','Surat Tugas','Surat Pengantar Beasiswa','Surat Kegiatan Mahasiswa'],
+            datasets: [{
+                label: '# Data Surat',
+                data: data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(75, 103, 235, 0.2)',
+                    'rgba(125, 92, 14, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(75, 103, 235, 1)',
+                    'rgba(125, 92, 14, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+    
+    var ctx1 = document.getElementById('pengajaran_pendidikan').getContext('2d');
+    var myChart = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+            labels: ['Surat Keterangan Lulus','Surat Permohonan Pengambilan Material','Surat Permohonan Survei','Surat Rekomendasi Penelitian','Surat Permohonan Pengambilan Data Awal'],
+            datasets: [{
+                label: '# Data Surat',
+                data: dataPendidikan,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>
 @endsection

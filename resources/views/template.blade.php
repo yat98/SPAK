@@ -105,6 +105,7 @@
     </script>
     @endif
     @yield('timer-javascript')
+    @yield('chart-javascript')
 </body>
 
 </html>
