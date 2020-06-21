@@ -57,8 +57,8 @@
                                     </div>
                                 </div>
                                 <div class="col-12 mt-5 text-right">
-                                    <a href="#" class="btn btn-success" id="simpan">Simpan</a>
-                                    <a href="#" class="btn btn-danger" id="reset">Reset</a>
+                                    <a href="#" class="btn btn-success btn-margin btn-sm btn-tambah mt-2 mb-2" id="simpan">Simpan</a>
+                                    <a href="#" class="btn btn-danger btn-margin btn-sm btn-tambah mt-2 mb-2" id="reset">Reset</a>
                                 </div>
                             </div>
                         </div>
