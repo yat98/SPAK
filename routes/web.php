@@ -375,11 +375,11 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::get('search','UserController@chartPimpinanDashboard');
          // Surat Keterangan Aktif Kuliah
          Route::get('surat-keterangan-aktif-kuliah/search/','SuratKeteranganAktifKuliahController@search');
-         Route::resource('surat-keterangan-aktif-kuliah','SuratKeteranganAktifKuliahController')->except('show');
+         Route::resource('surat-keterangan-aktif-kuliah','SuratKeteranganAktifKuliahController')->except(['show','destroy']);
          Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@show');
          // Surat Keterangan Kelakuan Baik
          Route::get('surat-keterangan-kelakuan-baik/search/','SuratKeteranganKelakuanBaikController@search');
-         Route::resource('surat-keterangan-kelakuan-baik','SuratKeteranganKelakuanBaikController')->except('show');
+         Route::resource('surat-keterangan-kelakuan-baik','SuratKeteranganKelakuanBaikController')->except(['show','destroy']);
          Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}','SuratKeteranganController@show');
         // Surat Dispensasi
         Route::get('surat-dispensasi', 'SuratDispensasiController@suratDispensasiPimpinan');
