@@ -23,7 +23,7 @@
                                         class="mdi mdi-check-decagram mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllOrmawa > 0 ? $countAllOrmawa.' Jurusan' : 'Data Ormawa Kosong' }}
+                                    {{ $countAllOrmawa > 0 ? $countAllOrmawa.' Ormawa' : 'Data Ormawa Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>

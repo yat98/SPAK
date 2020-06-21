@@ -25,8 +25,7 @@
                             <div class="col text-center">
                                 @if(!empty($user->tanda_tangan))
                                 <div class="border-danger p-3 mt-5">
-                                    <img src="{{ $user->tanda_tangan }}">
-
+                                    <img src="{{ $user->tanda_tangan }}" class="img-fluid">
                                 </div>
                                 @else
                                 <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">

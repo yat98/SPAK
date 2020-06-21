@@ -127,7 +127,7 @@
                                         class="mdi mdi-check-decagram mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countOrmawa > 0 ? $countOrmawa.' Jurusan' : 'Data Ormawa Kosong' }}
+                                    {{ $countOrmawa > 0 ? $countOrmawa.' Ormawa' : 'Data Ormawa Kosong' }}
                                 </h2>
                                 <h6 class="card-text">
                                     <a href="{{ url('admin/ormawa') }}" class="text-white">Lihat data ormawa</a>
