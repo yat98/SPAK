@@ -48,7 +48,9 @@ class SuratDispensasiController extends Controller
         $perPage = $this->perPage;
         $mahasiswa = $this->generateMahasiswa();
         $nomorSurat = $this->generateNomorSuratDispensasi();
-        $suratDispensasiList = SuratDispensasi::join('daftar_dispensasi_mahasiswa','daftar_dispensasi_mahasiswa.id_surat_dispensasi','=','surat_dispensasi.id_surat_masuk')
+        $suratDispensasiList = SuratDispensasi::
+        join('daftar_dispensasi_mahasiswa','daftar_dispensasi_mahasiswa.id_surat_dispensasi','=','surat_dispensasi.id_surat_masuk')
+                                    ->select('*','surat_dispensasi.created_at')
                                     ->where('nim',Session::get('nim'))
                                     ->orderByDesc('surat_dispensasi.created_at')
                                     ->paginate($perPage);
