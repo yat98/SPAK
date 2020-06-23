@@ -404,6 +404,7 @@ class MahasiswaController extends Controller
     
     public function logout(){
         Session::flush();
+        Session::regenerate(true);
         return redirect('/');
     }
 
