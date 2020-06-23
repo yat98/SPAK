@@ -21,6 +21,7 @@ class PengajuanSuratKeteranganController extends Controller
         }
 
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
+        $tahunAkademik[$tahunAkademikAktif->id] = $tahunAkademikAktif->tahun_akademik.' - '.ucwords($tahunAkademikAktif->semester);
         if($tahunAkademikAktif !=  null){
             $status = StatusMahasiswa::where('status','aktif')->where('id_tahun_akademik',$tahunAkademikAktif->id)->where('nim',Session::get('nim'))->first();
             if($status == null){
