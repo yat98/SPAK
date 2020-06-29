@@ -51,6 +51,73 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
+                                        <h4>Pengajuan Surat Keterangan Kelakuan Baik</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countPengajuanSuratKeterangan > 0)
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> No. </th>
+                                                <th> Nama Mahasiswa</th>
+                                                <th> Semester</th>
+                                                <th> Status</th>
+                                                <th> Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($pengajuanSuratKeteranganList as $pengajuanSuratKeterangan)
+                                            <tr>
+                                                <td> {{ $loop->iteration + $perPage * ($pengajuanSuratKeteranganList->currentPage() - 1) }}</td>
+                                                <td> {{ $pengajuanSuratKeterangan->mahasiswa->nama }}</td>
+                                                <td> {{ $pengajuanSuratKeterangan->tahunAkademik->tahun_akademik.' - '.ucwords($pengajuanSuratKeterangan->tahunAkademik->semester) }}</td>
+                                                <td> 
+                                                    @if ($pengajuanSuratKeterangan->status == 'diajukan')
+                                                    <label class="badge badge-gradient-warning text-dark">
+                                                        {{ ucwords($pengajuanSuratKeterangan->status) }}
+                                                    </label>
+                                                    @elseif($pengajuanSuratKeterangan->status == 'ditolak')
+                                                    <label class="badge badge-gradient-danger">
+                                                        {{ ucwords($pengajuanSuratKeterangan->status) }}
+                                                    </label>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <a href="{{ url('pegawai/detail/mahasiswa/'.$pengajuanSuratKeterangan->nim) }}" class="btn-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                        <i class="mdi mdi-account btn-icon-prepend"></i>
+                                                        Detail</a>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <div class="col">
+                                        {{ $pengajuanSuratKeteranganList->appends(['page' => $pengajuanSuratKeteranganList->currentPage()])->links() }}
+                                    </div>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Surat Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Pengajuan surat keterangan kelakuan baik belum ada.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
                                         <h4>Surat Keterangan Kelakuan Baik</h4>
                                     </div>
                                 </div>
