@@ -85,7 +85,7 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <a href="{{ url('pegawai/detail/mahasiswa/'.$pengajuanSuratKeterangan->nim) }}" class="btn-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                    <a href="{{ url('pimpinan/detail/mahasiswa/'.$pengajuanSuratKeterangan->nim) }}" class="btn-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-account btn-icon-prepend"></i>
                                                         Detail</a>
                                                 </td>

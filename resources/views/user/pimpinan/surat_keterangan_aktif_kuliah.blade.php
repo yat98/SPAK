@@ -87,7 +87,7 @@
                                                 </td>
                                                 <td>{{ $pengajuanSuratKeteranganAktif->keterangan }}</td>
                                                 <td>
-                                                    <a href="{{ url('pegawai/detail/mahasiswa/'.$pengajuanSuratKeteranganAktif->nim) }}" class="btn-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
+                                                    <a href="{{ url('pimpinan/detail/mahasiswa/'.$pengajuanSuratKeteranganAktif->nim) }}" class="btn-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
                                                         <i class="mdi mdi-account btn-icon-prepend"></i>
                                                         Detail</a>
                                                 </td>
