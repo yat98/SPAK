@@ -174,8 +174,10 @@ class PengajuanSuratKegiatanMahasiswaController extends Controller
         $isiNotifikasi = 'Disposisi surat kegiatan mahasiswa.';
         DB::beginTransaction();
         try {
-            $pengajuanKegiatan->disposisiUser()->attach([
-                Session::get('nip')=>['catatan' => $request->catatan],
+            DisposisiSuratKegiatanMahasiswa::create([
+                'id_pengajuan'=>$pengajuanKegiatan->id,
+                'nip'=>Session::get('nip'),
+                'catatan'=>$request->catatan,
             ]);
             if(Session::get('jabatan') == 'dekan'){
                 $user = User::where('jabatan','wd1')->where('status_aktif','aktif')->first(); 
