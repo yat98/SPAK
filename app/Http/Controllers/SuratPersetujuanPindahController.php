@@ -82,7 +82,7 @@ class SuratPersetujuanPindahController extends Controller
             $mahasiswa = $this->generateMahasiswa();
             $nomorSurat = $this->generateNomorSuratPindah(['selesai']);
             $suratPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan_persetujuan_pindah')
-                                ->where('nomor_surat','like',"%$nomor%")
+                                ->where('nomor_surat',$nomor)
                                 ->orderByDesc('surat_persetujuan_pindah.created_at')
                                 ->where('status','selesai')
                                 ->paginate($perPage);
@@ -112,7 +112,7 @@ class SuratPersetujuanPindahController extends Controller
             $mahasiswa = $this->generateMahasiswa();
             
             $suratPersetujuanPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan_persetujuan_pindah')
-                                            ->where('nomor_surat','like',"%$nomor%")
+                                            ->where('nomor_surat',$nomor)
                                             ->orderByDesc('surat_persetujuan_pindah.created_at')
                                             ->orderByDesc('nomor_surat')
                                             ->paginate($perPage,['*'],'page');
