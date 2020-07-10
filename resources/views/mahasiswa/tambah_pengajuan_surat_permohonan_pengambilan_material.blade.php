@@ -11,15 +11,15 @@
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
                             <i class="mdi mdi-file-document-box"></i>
-                        </span> Surat Permohonan Pengambilan Material</h3>
+                        </span> Surat Keterangan Bebas Perpustakaan</h3>
                 </div>
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Buat Pengajuan Surat Permohonan Pengambilan Material</h3>
-                                {{ Form::open(['url'=>'mahasiswa/pengajuan/surat-permohonan-pengambilan-material','files'=>true]) }}
-                                @include('mahasiswa.form_pengajuan_surat_permohonan_pengambilan_material',['buttonLabel'=>'Tambah'])
+                                <h3 class="mb-5">Buat Pengajuan Surat Keterangan Bebas Perpustakaan</h3>
+                                {{ Form::open(['url'=>'mahasiswa/pengajuan/surat-keterangan-bebas-perpustakaan','files'=>true]) }}
+                                @include('mahasiswa.form_pengajuan_surat_keterangan_bebas_perpustakaan',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>
                         </div>

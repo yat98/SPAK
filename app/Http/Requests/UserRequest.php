@@ -34,7 +34,7 @@ class UserRequest extends FormRequest
         return [
             'nip'=> $nipRules,
             'nama'=>'required|string|alpha_spaces',
-            'jabatan'=>'required|string|in:dekan,wd1,wd2,wd3,kasubag kemahasiswaan,kasubag pendidikan dan pengajaran',
+            'jabatan'=>'required|string|in:dekan,wd1,wd2,wd3,kasubag kemahasiswaan,kasubag pendidikan dan pengajaran,kasubag umum & bmn,kabag tata usaha',
             'status_aktif'=>'required|string|in:aktif,non aktif',
             'pangkat'=>'required|string|in:penata muda,penata muda tkt. I,penata,penata tkt. I,pembina,pembina tkt. I,pembina utama muda,pembina utama madya,pembina utama',
             'golongan'=>'required|string|in:III/a,III/b,III/c,III/d,IV/a,IV/b,IV/c,IV/d,IV/e',

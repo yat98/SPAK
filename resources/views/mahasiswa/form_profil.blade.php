@@ -65,8 +65,8 @@
                             <td>Tahun Akademik</td>
                             <td>Status</td>
                         </tr>
+                        @foreach($mahasiswa->tahunAkademik as $statusMahasiswa)   
                         <tr>
-                            @foreach($mahasiswa->tahunAkademik as $statusMahasiswa)   
                                 <td>{{ $statusMahasiswa->tahun_akademik }} - {{ ucwords($statusMahasiswa->semester) }}</td> 
                                 <td>
                                     @if ($statusMahasiswa->pivot->status == 'aktif')
@@ -81,8 +81,8 @@
                                         <label class="badge badge-gradient-dark">{{ ucwords($statusMahasiswa->pivot->status) }}</label>
                                     @endif
                                 </td>
-                            @endforeach
                         </tr>
+                        @endforeach
                     </table>
                 </div>
             </div>

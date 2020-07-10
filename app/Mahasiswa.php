@@ -104,4 +104,12 @@ class Mahasiswa extends Model
     public function pengajuanSuratRekomendasiPenelitian(){
         return $this->hasMany('App\PengajuanSuratRekomendasiPenelitian', 'nim');
     }
+
+    public function pengajuanSuratKeteranganBebasPerpustakaan(){
+        return $this->hasMany('App\PengajuanSuratKeteranganBebasPerpustakaan', 'nim');
+    }
+
+    public function pengajuanSuratKeteranganBebasPerlengkapan(){
+        return $this->hasMany('App\PengajuanSuratKeteranganBebasPerlengkapan', 'nim');
+    }
 }

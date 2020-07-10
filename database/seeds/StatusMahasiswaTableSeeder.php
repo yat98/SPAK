@@ -16,12 +16,6 @@ class StatusMahasiswaTableSeeder extends Seeder
     {
         $mahasiswa = Mahasiswa::where('nim','531416055')->first();
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
-        $tahunAkademikNonAktif = TahunAkademik::where('status_aktif','non aktif')->first();
-        StatusMahasiswa::create([
-            'nim'=>$mahasiswa->nim,
-            'id_tahun_akademik'=>$tahunAkademikNonAktif->id,
-            'status'=>'aktif'
-        ]);
         StatusMahasiswa::create([
             'nim'=>$mahasiswa->nim,
             'id_tahun_akademik'=>$tahunAkademikAktif->id,

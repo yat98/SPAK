@@ -87,6 +87,10 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-rekomendasi-penelitian';
             } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-permohonan-pengambilan-data-awal') {
                 $halaman = 'surat-permohonan-pengambilan-data-awal';
+            } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-bebas-perpustakaan') {
+                $halaman = 'surat-keterangan-bebas-perpustakaan';
+            } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-bebas-perlengkapan') {
+                $halaman = 'surat-keterangan-bebas-perlengkapan';
             }
         } elseif (request()->segment(1) == 'pegawai') {
             $posisi = 'pegawai';
@@ -136,6 +140,8 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-rekomendasi-penelitian';
             } else if ($segment == 'surat-permohonan-pengambilan-data-awal') {
                 $halaman = 'surat-permohonan-pengambilan-data-awal';
+            } else if ($segment == 'surat-keterangan-bebas-perpustakaan') {
+                $halaman = 'surat-keterangan-bebas-perpustakaan';
             } else if ($segment == 'laporan') {
                 $show = false;
                 $halaman = 'laporan';

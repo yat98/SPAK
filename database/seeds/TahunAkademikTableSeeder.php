@@ -13,13 +13,7 @@ class TahunAkademikTableSeeder extends Seeder
     public function run()
     {
         TahunAkademik::create([
-            'tahun_akademik'=>'2019/2020',
-            'semester'=>'ganjil',
-            'status_aktif'=>'non aktif'
-        ]);
-        sleep(30);
-        TahunAkademik::create([
-            'tahun_akademik'=>'2019/2020',
+            'tahun_akademik'=>'2020/2021',
             'semester'=>'genap',
             'status_aktif'=>'aktif'
         ]);

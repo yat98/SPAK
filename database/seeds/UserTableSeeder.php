@@ -79,6 +79,28 @@ class UserTableSeeder extends Seeder
             'password'=>Hash::make('197602115685091002')
         ]);
 
+        User::create([
+            'nip'=>'197511172003121002',
+            'nama'=>'Zulawardi S. Mamu, S.Pd, M.Pd',
+            'jabatan'=>'kasubag umum & bmn',
+            'status_aktif'=>'aktif',
+            'pangkat'=>'pembina',
+            'golongan'=>'IV/a',
+            'tanda_tangan'=>null,
+            'password'=>Hash::make('197511172003121002')
+        ]);
+
+        User::create([
+            'nip'=>'19710401200012001',
+            'nama'=>'Yolanda Dungga, S.Pd',
+            'jabatan'=>'kabag tata usaha',
+            'status_aktif'=>'aktif',
+            'pangkat'=>'pembina',
+            'golongan'=>'IV/a',
+            'tanda_tangan'=>null,
+            'password'=>Hash::make('197511172003121002')
+        ]);
+
         $this->command->info('Berhasil menambahkan 4 data pada table admin');
     }
 }

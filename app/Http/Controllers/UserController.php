@@ -112,9 +112,12 @@ class UserController extends Controller
         if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
             $kodeSuratList = KodeSurat::whereIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->get();
             $suratMasukList = SuratMasuk::where('bagian','subbagian kemahasiswaan')->orderByDesc('created_at')->get();
-        }else{
+        }else if(Session::get('jabatan') == 'kasubag pengajaran dan pendidikan'){
             $kodeSuratList = KodeSurat::whereNotIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->get();
-            $suratMasukList = SuratMasuk::whereNotIn('bagian',['subbagian kemahasiswaan'])->orderByDesc('created_at')->get();
+            $suratMasukList = SuratMasuk::where('bagian','subbagian pengajaran dan pendidikan')->orderByDesc('created_at')->get();
+        }else{
+            $kodeSuratList = KodeSurat::whereIn('jenis_surat',['surat keterangan bebas perpustakaan','surat keterangan bebas perlengkapan'])->get();
+            $suratMasukList = SuratMasuk::where('bagian','subbagian umum & bmn')->orderByDesc('created_at')->get();
         }
         
         $suratKeteranganAktifList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')

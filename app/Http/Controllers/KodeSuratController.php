@@ -15,8 +15,10 @@ class KodeSuratController extends Controller
         $perPage=$this->perPage;
         if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
             $kodeSuratList = KodeSurat::whereIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->paginate($perPage);
-        }else{
+        }else if(Session::get('jabatan') == 'kasubag pendidikan dan pengajaran'){
             $kodeSuratList = KodeSurat::whereNotIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->paginate($perPage);
+        }else{
+            $kodeSuratList = KodeSurat::whereIn('jenis_surat',['surat keterangan bebas perpustakaan','surat keterangan bebas perlengkapan'])->paginate($perPage);
         }
         $countKodeSurat = $kodeSuratList->count();
         $countAllKodeSurat = $countKodeSurat;
@@ -92,13 +94,18 @@ class KodeSuratController extends Controller
                 'surat pengantar beasiswa'=>'Surat Pengantar Beasiswa',
                 'surat kegiatan mahasiswa'=>'Surat Kegiatan Mahasiswa'
             ];
-        }else{
+        }else if(Session::get('jabatan') == 'kasubag pendidikan dan pengajaran'){
             $kodeSurat = [
                 'surat keterangan lulus'=>'Surat Keterangan Lulus',
                 'surat permohonan pengambilan material'=>'Surat Permohonan Pengambilan Material',
                 'surat permohonan survei'=>'Surat Permohonan Survei',
                 'surat rekomendasi penelitian'=>'Surat Rekomendasi Penelitian',
                 'surat permohonan pengambilan data awal'=>'Surat Permohonan Pengambilan Data Awal',
+            ];
+        }else{
+            $kodeSurat = [
+                'surat keterangan bebas perpustakaan'=>'Surat Keterangan Bebas Perpustakaan',
+                'surat keterangan bebas perlengkapan'=>'Surat Keterangan Bebas Perlengkapan',
             ];
         }
         return $kodeSurat;

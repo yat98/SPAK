@@ -13,6 +13,7 @@ use App\TahunAkademik;
 use App\PimpinanOrmawa;
 use App\StatusMahasiswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -51,7 +52,7 @@ class AdminController extends Controller
     }
 
     public function profil(){
-        $id = Session::get('id');
+        $id = Auth::user()->id;
         $admin = Admin::where('id',$id)->get()->first();
         return view('user.'.$this->segmentUser.'.profil',compact('admin'));
     }
@@ -61,7 +62,7 @@ class AdminController extends Controller
     }
 
     public function update(Request $request){ 
-        $id = Session::get('id');
+        $id = Auth::user()->id;
         $admin = Admin::where('id',$id)->first();
         $this->validate($request,[
             'username'=>'required|string'
@@ -76,7 +77,7 @@ class AdminController extends Controller
     }
 
     public function updatePassword(Request $request){        
-        $id = Session::get('id');
+        $id = Auth::user()->id;
         $admin = Admin::where('id',$id)->first();
         $this->validate($request,[
             'password_lama'=>function($attr,$val,$fail) use($admin){

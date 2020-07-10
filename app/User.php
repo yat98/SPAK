@@ -66,4 +66,8 @@ class User extends Model
     public function suratKeteranganLulus(){
         return $this->hasMany('App\SuratKeteranganLulus','nip');
     }
+
+    public function suratKeteranganBebasPerlengkapan(){
+        return $this->hasMany('App\SuratKeteranganBebasPerlengkapan','nip');
+    }
 }

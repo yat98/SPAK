@@ -7,8 +7,10 @@
     }else{
         if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
             $bagian = ['subbagian kemahasiswaan'=>'Subbagian Kemahasiswaan'];
-        }else{
+        }elseif(Session::get('jabatan') == 'kasubag pengajaran dan pendidikan'){
             $bagian = ['subbagian pendidikan dan pengajaran'=>'Subbagian Pendidikan Dan Pengajaran'];
+        }else{
+            $bagian = ['subbagian umum & bkn'=>'Subbagian Umum & BKN'];
         }
     }
 @endphp

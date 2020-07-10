@@ -17,9 +17,12 @@ class SuratMasukController extends Controller
         if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
             $nomorSurat = SuratMasuk::where('bagian','subbagian kemahasiswaan')->pluck('nomor_surat','nomor_surat');
             $suratMasukList = SuratMasuk::where('bagian','subbagian kemahasiswaan')->orderByDesc('created_at')->paginate($perPage);
-        }else{
+        }elseif(Session::get('jabatan') == 'kasubag pengajaran dan pendidikan'){
             $nomorSurat = SuratMasuk::whereNotIn('bagian',['subbagian kemahasiswaan'])->pluck('nomor_surat','nomor_surat');
             $suratMasukList = SuratMasuk::whereNotIn('bagian',['subbagian kemahasiswaan'])->orderByDesc('created_at')->paginate($perPage);
+        }else{
+            $nomorSurat = SuratMasuk::where('bagian','subbagian umum & bkn')->pluck('nomor_surat','nomor_surat');
+            $suratMasukList = SuratMasuk::where('bagian','subbagian umum & bkn')->orderByDesc('created_at')->paginate($perPage);
         }
         $countAllSuratMasuk  = $suratMasukList->count();
         $countSuratMasuk = $suratMasukList->count();
@@ -29,8 +32,8 @@ class SuratMasukController extends Controller
     public function show(SuratMasuk $suratMasuk){
         $surat = collect($suratMasuk);
         $surat->put('tanggal_surat_masuk',$suratMasuk->created_at->isoFormat('D MMMM Y'));
-        $surat->put('created',$suratMasuk->created_at->format('d F Y H:i:s'));
-        $surat->put('updated',$suratMasuk->updated_at->format('d F Y H:i:s'));
+        $surat->put('created',$suratMasuk->created_at->isoFormat('D MMMM Y H:m:s'));
+        $surat->put('updated',$suratMasuk->updated_at->isoFormat('D MMMM Y H:m:s'));
         $surat->put('nama_file',explode('.',$suratMasuk->file_surat_masuk)[0]);
         $surat->put('link_file',asset('upload_surat_masuk/'.$suratMasuk->file_surat_masuk));
         return $surat->toJson();

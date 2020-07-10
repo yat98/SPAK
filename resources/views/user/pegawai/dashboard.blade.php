@@ -308,7 +308,7 @@
                                 </div>
                             </div>
                         </div>
-                    @else
+                    @elseif(Session::get('jabatan') == 'kasubag pendidikan dan pengajaran')
                         <div class="col-md-6 stretch-card grid-margin">
                             <div class="card bg-gradient-info card-img-holder text-white">
                                 <div class="card-body">
@@ -1184,7 +1184,7 @@
                         </div>
                     </div>               
                 
-                @else
+                @elseif(Session::get('jabatan') == 'kasubag pendidikan dan pengajaran')
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">

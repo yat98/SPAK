@@ -34,7 +34,7 @@ class SuratMasukRequest extends FormRequest
             'instansi'=>'required|string|max:100',
             'tanggal_surat_masuk'=>'required|date_format:Y-m-d',
             'file_surat_masuk'=>$fileSuratMasukRules,
-            'bagian'=>'required|string|in:subbagian kemahasiswaan,subbagian pendidikan dan pengajaran',
+            'bagian'=>'required|string|in:subbagian kemahasiswaan,subbagian pendidikan dan pengajaran,subbagian umum & bkn',
         ];
     }
 }

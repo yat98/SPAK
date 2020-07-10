@@ -13,8 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Auth::routes([
+    'register' => false,
+    'login' => false,
+    'reset' => false,
+    'verify' => false,
+]);
+
 // Login
-Route::get('/', 'LoginController@login');
+Route::get('/', 'LoginController@login')->name('login');
 Route::group(['prefix'=>'login'],function(){
     Route::get('/', 'LoginController@login');
     Route::post('/','LoginController@checkLogin');
@@ -104,6 +111,15 @@ Route::group(['prefix' => 'mahasiswa'],function(){
             Route::post('surat-permohonan-pengambilan-data-awal','PengajuanSuratPermohonanPengambilanDataAwalController@store');
             Route::patch('surat-permohonan-pengambilan-data-awal/{pengajuan_surat_data_awal}','PengajuanSuratPermohonanPengambilanDataAwalController@update');
             Route::get('surat-permohonan-pengambilan-data-awal/{pengajuan_surat_data_awal}/progress','PengajuanSuratPermohonanPengambilanDataAwalController@progress');
+            // Surat Keterangan Bebas Perpustakaan
+            Route::get('surat-keterangan-bebas-perpustakaan/{surat_keterangan_perpustakaan}/cetak','SuratKeteranganBebasPerpustakaanController@cetak');
+            Route::get('surat-keterangan-bebas-perpustakaan','PengajuanSuratKeteranganBebasPerpustakaanController@index');
+            Route::get('surat-keterangan-bebas-perpustakaan/create','PengajuanSuratKeteranganBebasPerpustakaanController@create');
+            Route::get('surat-keterangan-bebas-perpustakaan/{pengajuan_surat_perpustakaan}','PengajuanSuratKeteranganBebasPerpustakaanController@show');
+            Route::get('surat-keterangan-bebas-perpustakaan/{pengajuan_surat_perpustakaan}/progress','PengajuanSuratKeteranganBebasPerpustakaanController@progress');
+            Route::patch('surat-keterangan-bebas-perpustakaan/{pengajuan_surat_perpustakaan}','PengajuanSuratKeteranganBebasPerpustakaanController@update');
+            Route::get('surat-keterangan-bebas-perpustakaan/{pengajuan_surat_perpustakaan}/edit','PengajuanSuratKeteranganBebasPerpustakaanController@edit');
+            Route::post('surat-keterangan-bebas-perpustakaan','PengajuanSuratKeteranganBebasPerpustakaanController@store');
         });
         //  Surat Dispensasi
         Route::get('surat-dispensasi/{surat_dispensasi}/cetak', 'SuratDispensasiController@cetakSuratDispensasi');
@@ -297,6 +313,9 @@ Route::group(['prefix' => 'pegawai'],function(){
             Route::get('create/{pengajuan_surat_data_awal}','SuratPermohonanPengambilanDataAwalController@createSurat');
             Route::patch('tolak-pengajuan/{pengajuan_surat_data_awal}','SuratPermohonanPengambilanDataAwalController@tolakPengajuan');
         });
+        // Surat Keterangan Bebas Perpustakaan
+        Route::get('surat-keterangan-bebas-perpustakaan','SuratKeteranganBebasPerpustakaanController@index');
+
         // Laporan
         Route::get('laporan','LaporanController@index');
         Route::post('laporan','LaporanController@show');
@@ -316,11 +335,11 @@ Route::group(['prefix' => 'pegawai'],function(){
 // Admin
 Route::group(['prefix' => 'admin'], function () {
     // Login
-    Route::get('login','LoginController@loginAdmin');
-    Route::post('login','LoginController@checkLoginAdmin');
-    Route::get('logout','AdminController@logout');
+    Route::get('login','Auth\AdminAuthController@getLogin');
+    Route::post('login','Auth\AdminAuthController@postLogin');
+    Route::get('logout','Auth\AdminAuthController@postLogout');
 
-    Route::middleware(['admin'])->group(function(){   
+    Route::middleware(['auth:admin'])->group(function(){   
         // Dashbord
         Route::get('/', 'AdminController@index');
         // Jurusan

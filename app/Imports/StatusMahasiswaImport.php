@@ -41,10 +41,12 @@ class StatusMahasiswaImport implements ToModel, WithValidation, WithBatchInserts
             $query->orderByDesc('created_at');
         }])->first();
 
-        if($mahasiswa->tahunAkademik->count() > 0){
-            $status = $mahasiswa->tahunAkademik->first()->pivot->status;
-            if($status == 'lulus' || $status == 'drop out' || $status == 'keluar'){
-                return;
+        if($mahasiswa != null){
+            if($mahasiswa->tahunAkademik->count() > 0){
+                $status = $mahasiswa->tahunAkademik->first()->pivot->status;
+                if($status == 'lulus' || $status == 'drop out' || $status == 'keluar'){
+                    return;
+                }
             }
         }
                 

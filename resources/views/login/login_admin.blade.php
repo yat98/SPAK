@@ -12,13 +12,32 @@
                         </div>
                         <h4 class="text-center mb-5">Sistem Pengelolaan Administrasi Kemahasiswaan</h4>
                         {{ Form::open(['url'=>'admin/login','class'=>'pt-3']) }}
+                        @csrf
                         <div class="form-group">
                             {{ Form::label('username','Username') }}
-                            {{ Form::text('username',(Session::has('username')) ? Session::get('username') : null,['class'=>'form-control form-control-lg','placeholder'=>'Username','id'=>'username']) }}
+                            @if ($errors->any())
+                            @if ($errors->has('username'))
+                             {{ Form::text('username',(Session::has('username')) ? Session::get('username') : null,['class'=>'is-invalid form-control form-control-lg','placeholder'=>'Username','id'=>'username']) }}
+                            <div class="invalid-feedback">{{ $errors->first('username') }}</div>
+                            @else
+                             {{ Form::text('username',(Session::has('username')) ? Session::get('username') : null,['class'=>'form-control form-control-lg','placeholder'=>'Username','id'=>'username']) }}
+                            @endif
+                            @else
+                             {{ Form::text('username',(Session::has('username')) ? Session::get('username') : null,['class'=>'form-control form-control-lg','placeholder'=>'Username','id'=>'username']) }}
+                            @endif
                         </div>
                         <div class="form-group">
                             {{ Form::label('password','Password') }}
-                            {{ Form::password('password',['class'=>'form-control form-control-lg','placeholder'=>'Password','id'=>'password']) }}
+                            @if ($errors->any())
+                            @if ($errors->has('password'))
+                             {{ Form::password('password',['class'=>'is-invalid form-control form-control-lg','placeholder'=>'Password','id'=>'password']) }}
+                            <div class="invalid-feedback">{{ $errors->first('password') }}</div>
+                            @else
+                             {{ Form::password('password',['class'=>'form-control form-control-lg','placeholder'=>'Password','id'=>'password']) }}
+                            @endif
+                            @else
+                             {{ Form::password('password',['class'=>'form-control form-control-lg','placeholder'=>'Password','id'=>'password']) }}
+                            @endif
                         </div>
                         <div class="mt-3">
                             {{ Form::submit('Login',['class'=>'btn btn-block btn-gradient-info btn-lg font-weight-medium auth-form-btn']) }}
