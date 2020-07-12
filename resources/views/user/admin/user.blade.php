@@ -45,76 +45,18 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                <div class="row mb-3">
-                                    <div class="col-sm-12 col-md-6">
-                                        {{ Form::open(['url'=>'admin/user/search','method'=>'get']) }}
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                {{ Form::text('keyword',(request()->get('keyword') != null) ? request()->get('keyword'):null,['placeholder'=>'Cari User...','class'=>'form-control']) }}
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-sm btn-success" type="submit">
-                                                        <i class="mdi mdi-magnify btn-icon-prepend"></i>
-                                                        Cari
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {{ Form::close() }}
-                                    </div>
-                                </div>
-                                @if ($countUser > 0)
+                                @if ($countAllUser > 0)
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table class="table display" id='datatables'>
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
-                                                <th> NIP</th>
                                                 <th> Nama</th>
                                                 <th> Jabatan</th>
                                                 <th> Status Aktif</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($userList as $user)
-                                            <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($userList->currentPage() - 1) }}</td>
-                                                <td> {{ $user->nip }}</td>
-                                                <td> {{ $user->nama }}</td>
-                                                <td> {{ ucwords($user->jabatan) }}</td>
-                                                <td>
-                                                @if ($user->status_aktif == 'aktif')
-                                                <label
-                                                    class="badge badge-gradient-info">{{ ucwords($user->status_aktif) }}</label>
-                                                @else
-                                                <label
-                                                    class="badge badge-gradient-dark">{{ ucwords($user->status_aktif) }}</label>
-                                                @endif
-                                                </td>
-                                                <td> {{ $user->created_at->diffForHumans() }}</td>
-                                                <td> {{ $user->updated_at->diffForHumans() }}</td>
-                                                <td>
-                                                    <a href="{{ url('admin/user/'.$user->nip.'/edit') }}"
-                                                        class="btn btn-warning btn-sm text-dark">
-                                                        <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>
-                                                        Edit
-                                                    </a>
-                                                    {{ Form::open(['method'=>'DELETE','action'=>['UserController@destroy',$user->nip],'class'=>'d-inline-block']) }}
-                                                    <button type="submit" class="btn btn-danger btn-sm sweet-delete">
-                                                        <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
-                                                        Hapus
-                                                    </button>
-                                                    {{ Form::close() }}
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
-                                     <div class="col">
-                                        {{ $userList->links() }}
-                                    </div>
                                 </div>
                                 @else
                                 <div class="row">
@@ -138,4 +80,67 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('datatables-javascript')
+<script>
+    $('#datatables').DataTable({
+        "columnDefs": [{
+            "targets": 2,
+            "data": "status_aktif",
+            "render": function ( data, type, row, meta ) {
+                if(data == 'Aktif'){
+                    return '<label class="badge badge-gradient-info">'+data+'</label>';
+                }else{
+                    return '<label class="badge badge-gradient-dark">'+data+'</label>';
+                }
+            }
+        },
+        {
+            "targets": 0,
+            "data": "nama",
+            "render": function ( data, type, row, meta ) {
+                return '<div class="mb-1">'+row.nama+'</div><span class="text-muted small">NIP. '+row.nip+'</span>';
+            }
+        },
+        {
+            "targets": 3,
+            "data": "aksi",
+            "render": function ( data, type, row, meta ) {
+                return `<a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                            <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                        </a>
+                        <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                            <a href="{{ url('admin/user') }}${'/'+row.nip}/edit" class="dropdown-item">Edit</a>
+                            <form action="{{ url('admin/user') }}/${row.nip}" method="post">
+                                <input name="_method" type="hidden" value="DELETE">
+                                <input name="_token" type="hidden" value="{{ @csrf_token() }}">
+                                <button type="submit" class="dropdown-item sweet-delete">
+                                    Hapus
+                                </button>
+                            </form>
+                        </div>`;
+            }
+        }],
+        autoWidth: false,
+        language: bahasa,
+        processing: true,
+        serverSide: true,
+        ajax: '{{ url('admin/user/all') }}',
+        columns: [{
+                data: 'nip',
+            },
+            {
+                data: 'jabatan',
+            },
+            {
+                data: 'status_aktif',
+            },
+            {
+                data: 'aksi', name: 'aksi', orderable: false, searchable: false
+            }
+        ],
+        "pageLength": {{ $perPage }}
+    });
+</script>
 @endsection

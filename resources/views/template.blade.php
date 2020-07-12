@@ -35,6 +35,9 @@
     <link rel="stylesheet" href="{{ asset('vendors/codemirror/codemirror.min.css') }}">
     {{-- END FROALA --}}
     <link rel="stylesheet" href="{{ asset('vendors/flipclock/css/flip-clock.css') }}">
+    {{-- DATATABLES --}}
+    <link rel="stylesheet" href="{{ asset('vendors/datatables/dataTables.bootstrap4.min.css') }}">
+    {{-- END DATATABLES --}}
     <link rel="stylesheet" href="{{ asset('css/custom-css.css') }}">
 </head>
 
@@ -82,6 +85,10 @@
     {{-- END FROALA --}}
     <script src="{{ asset('vendors/flipclock/js/flip-clock.js') }}"></script>
     <script src="{{ asset('js/form-upload.js') }}"></script>
+     {{-- DATATABLES --}}
+    <script src="{{ asset('vendors/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables/dataTables.bootstrap4.min.js') }}"></script>
+    {{-- END DATATABLES --}}
     <script src="{{ asset('js/script.js') }}"></script>
 
     @if(Session::has('info') && Session::has('info-title'))
@@ -106,6 +113,7 @@
     @endif
     @yield('timer-javascript')
     @yield('chart-javascript')
+    @yield('datatables-javascript')
 </body>
 
 </html>

@@ -6,6 +6,7 @@ use Closure;
 use Session;
 use App\PimpinanOrmawa;
 use App\NotifikasiMahasiswa;
+use Illuminate\Support\Facades\Auth;
 
 class MahasiswaMiddleware
 {
@@ -18,12 +19,8 @@ class MahasiswaMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(Session::get('status') != 'mahasiswa'){
-            return redirect('/');
-        }
-
-        $notifikasi = NotifikasiMahasiswa::all()->where('nim',Session::get('nim'))->where('status','belum dilihat');
-        $pimpinanOrmawa = PimpinanOrmawa::where('nim',Session::get('nim'))->where('status_aktif','aktif')->first();
+        $notifikasi = NotifikasiMahasiswa::all()->where('nim',Auth::user()->nim)->where('status','belum dilihat');
+        $pimpinanOrmawa = PimpinanOrmawa::where('nim',Auth::user()->nim)->where('status_aktif','aktif')->first();
         $countNotifikasi = $notifikasi->count();
         view()->share([
             'notifikasi'=>$notifikasi,

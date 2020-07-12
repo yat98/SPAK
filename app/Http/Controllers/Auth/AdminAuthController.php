@@ -34,6 +34,7 @@ class AdminAuthController extends Controller
         if (auth()->guard('admin')->attempt($request->only('username', 'password'))) {
             $request->session()->regenerate();
             $this->clearLoginAttempts($request);
+            Session::put('jenis_user','admin');
             $this->setFlashData('success-timer','Login Berhasil','Selamat Datang '.$request->username);
             return redirect('admin');
         } else {

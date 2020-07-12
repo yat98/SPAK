@@ -12,11 +12,6 @@ use Maatwebsite\Excel\Validators\ValidationException;
 
 class StatusMahasiswaController extends Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function index()
     {
         $perPage = $this->perPage;

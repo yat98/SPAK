@@ -29,6 +29,7 @@ use App\PengajuanSuratKeterangan;
 use App\DaftarDispensasiMahasiswa;
 use Illuminate\Support\Facades\DB;
 use App\SuratRekomendasiPenelitian;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\PengajuanSuratKeteranganLulus;
 use App\Http\Requests\MahasiswaRequest;
@@ -271,7 +272,7 @@ class MahasiswaController extends Controller
     }
 
     public function profil(){
-        $nim = Session::get('nim');
+        $nim = Auth::user()->nim;
         $mahasiswa = Mahasiswa::findOrFail($nim);
         return view($this->segmentUser.'.profil',compact('mahasiswa'));
     }
@@ -282,11 +283,6 @@ class MahasiswaController extends Controller
             'tanggal_lahir'=>'required|date',
         ]);
         $mahasiswa->update($request->all());
-        Session::forget(['nim','username']);
-        Session::put([
-            'nim'=>$request->nim,
-            'username'=>$request->nama,
-        ]);
         $this->setFlashData('success','Berhasil','Profil berhasil diubah');
         return redirect($this->segmentUser);
     }
@@ -296,7 +292,7 @@ class MahasiswaController extends Controller
     }
     
     public function updatePassword(Request $request){
-        $nim = Session::get('nim');
+        $nim = Auth::user()->nim;
         $mahasiswa = Mahasiswa::where('nim',$nim)->first();
         $this->validate($request,[
             'password_lama'=>function($attr,$val,$fail) use($mahasiswa){
@@ -318,46 +314,46 @@ class MahasiswaController extends Controller
     public function dashboard(){
         $tgl = Carbon::now();
         $pengajuanKegiatanList = null;
-        $mahasiswa = Mahasiswa::where('nim',Session::get('nim'))->first();
+        $mahasiswa = Mahasiswa::where('nim',Auth::user()->nim)->first();
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
         $waktuCuti = isset($tahunAkademikAktif) ? WaktuCuti::where('id_tahun_akademik',$tahunAkademikAktif->id)->first():null;
 
         $pengajuanSuratKeteranganAktifList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
                                                ->orderByDesc('created_at')
                                                ->orderBy('status')
-                                               ->where('nim',Session::get('nim'))
+                                               ->where('nim',Auth::user()->nim)
                                                ->get();
         $pengajuanSuratKeteranganList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
-                                               ->where('nim',Session::get('nim'))
+                                               ->where('nim',Auth::user()->nim)
                                                ->orderByDesc('created_at')
                                                ->orderBy('status')
                                                ->get();
-        $pengajuanSuratPindahList = PengajuanSuratPersetujuanPindah::where('nim',Session::get('nim'))
+        $pengajuanSuratPindahList = PengajuanSuratPersetujuanPindah::where('nim',Auth::user()->nim)
                                                ->orderByDesc('created_at')
                                                ->orderBy('status')
                                                ->get();
         $suratDispensasiList = SuratDispensasi::join('daftar_dispensasi_mahasiswa','daftar_dispensasi_mahasiswa.id_surat_dispensasi','=','surat_dispensasi.id_surat_masuk')
                                                ->select('*','surat_dispensasi.created_at','surat_dispensasi.updated_at')                                                                       
-                                               ->where('nim',Session::get('nim'))
+                                               ->where('nim',Auth::user()->nim)
                                                ->orderByDesc('surat_dispensasi.created_at')
                                                ->get();
         $suratRekomendasiList = SuratRekomendasi::join('daftar_rekomendasi_mahasiswa','daftar_rekomendasi_mahasiswa.id_surat_rekomendasi','=','surat_rekomendasi.id')
-                                               ->where('nim',Session::get('nim'))
+                                               ->where('nim',Auth::user()->nim)
                                                ->orderByDesc('surat_rekomendasi.created_at')
                                                ->get();
         $suratTugasList = SuratTugas::select('*','surat_tugas.created_at','surat_tugas.updated_at')
                                                ->join('daftar_tugas_mahasiswa','daftar_tugas_mahasiswa.id_surat_tugas','=','surat_tugas.id')
-                                               ->where('nim',Session::get('nim'))
+                                               ->where('nim',Auth::user()->nim)
                                                ->orderByDesc('surat_tugas.created_at')
                                                ->get();
 
-        $pengajuanSuratLulusList = PengajuanSuratKeteranganLulus::where('nim',Session::get('nim'))->get();
+        $pengajuanSuratLulusList = PengajuanSuratKeteranganLulus::where('nim',Auth::user()->nim)->get();
         $pengajuanSuratMaterialList = PengajuanSuratPermohonanPengambilanMaterial::join('daftar_kelompok_pengambilan_material','daftar_kelompok_pengambilan_material.id_pengajuan','=','pengajuan_surat_permohonan_pengambilan_material.id')
-                                        ->where('daftar_kelompok_pengambilan_material.nim',Session::get('nim'))
+                                        ->where('daftar_kelompok_pengambilan_material.nim',Auth::user()->nim)
                                         ->get();
-        $pengajuanSuratSurveiList = PengajuanSuratPermohonanSurvei::where('nim',Session::get('nim'))->get();
-        $pengajuanSuratPenelitianList = PengajuanSuratRekomendasiPenelitian::where('nim',Session::get('nim'))->get();
-        $pengajuanSuratDataAwalList = PengajuanSuratPermohonanPengambilanDataAwal::where('nim',Session::get('nim'))->get();
+        $pengajuanSuratSurveiList = PengajuanSuratPermohonanSurvei::where('nim',Auth::user()->nim)->get();
+        $pengajuanSuratPenelitianList = PengajuanSuratRekomendasiPenelitian::where('nim',Auth::user()->nim)->get();
+        $pengajuanSuratDataAwalList = PengajuanSuratPermohonanPengambilanDataAwal::where('nim',Auth::user()->nim)->get();
 
         if(isset($mahasiswa->pimpinanOrmawa)){
             $pengajuanKegiatanList = PengajuanSuratKegiatanMahasiswa::join('mahasiswa','mahasiswa.nim','=','pengajuan_surat_kegiatan_mahasiswa.nim')
@@ -368,7 +364,7 @@ class MahasiswaController extends Controller
                                         ->orderByDesc('pengajuan_surat_kegiatan_mahasiswa.created_at')
                                         ->get();
         }
-        $pendaftaranCutiList = PendaftaranCuti::where('nim',Session::get('nim'))->get();
+        $pendaftaranCutiList = PendaftaranCuti::where('nim',Auth::user()->nim)->get();
 
         $countAllPengajuan =    $pengajuanSuratKeteranganAktifList->count();
         $countAllPengajuanBaik =    $pengajuanSuratKeteranganList->count();

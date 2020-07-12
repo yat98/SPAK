@@ -2,8 +2,10 @@
 
 namespace App\Exceptions;
 
+use Session;
 use Throwable;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -68,11 +70,12 @@ class Handler extends ExceptionHandler
         $guard = Arr::get($exception->guards(), 0);
 
         $route = 'login';
-
-        if ($guard == 'admin') {
-            $route = 'admin/login';
+        switch ($guard) {
+            case 'admin':
+                $route = 'admin/login';
+                break;
         }
-
+        
         return redirect($route);
     }
 }

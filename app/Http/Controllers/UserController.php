@@ -21,27 +21,49 @@ use App\SuratPermohonanSurvei;
 use App\SuratKegiatanMahasiswa;
 use App\SuratPengantarBeasiswa;
 use App\SuratPersetujuanPindah;
+use Yajra\DataTables\DataTables;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\DB;
 use App\SuratRekomendasiPenelitian;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\SuratPermohonanPengambilanDataAwal;
 use App\SuratPermohonanPengambilanMaterial;
 
 class UserController extends Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function index()
     {
         $perPage = $this->perPage;
-        $userList = User::paginate($perPage);
-        $countUser = $userList->count();
-        $countAllUser = $countUser;        
-        return view('user.'.$this->segmentUser.'.user',compact('countUser','userList','countAllUser','perPage'));
+        $countAllUser = User::count();        
+        return view('user.'.$this->segmentUser.'.user',compact('countAllUser','perPage'));
+    }
+
+    public function getAllUser(){
+        return DataTables::of(User::select(['nip','nama','jabatan','status_aktif','created_at','updated_at']))
+                ->editColumn("jabatan", function ($data) {
+                    switch ($data->jabatan) {
+                        case 'wd1':
+                            return ucwords('Wakil Dekan 1');
+                            break;
+                        case 'wd2':
+                            return ucwords('Wakil Dekan 2');
+                            break;
+                        case 'wd3':
+                            return ucwords('Wakil Dekan 3');
+                            break; 
+                        default:
+                            return ucwords($data->jabatan);
+                            break; 
+                    }
+                })
+                ->editColumn("status_aktif", function ($data) {
+                    return ucwords($data->status_aktif);
+                })
+                ->addColumn('aksi', function ($data) {
+                    return $data->nip;
+                })
+                ->make(true);
     }
 
     public function create()
@@ -103,7 +125,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        $this->setFlashData('success','Berhasil','Data user '.strtolower($user->nama).' berhasil dihapus');
+        $this->setFlashData('success','Berhasil','Data user '.$user->nama.' berhasil dihapus');
         return redirect($this->segmentUser.'/user');
     }
 
@@ -550,13 +572,13 @@ class UserController extends Controller
     }
 
     public function indexTandaTangan(){
-        $nip = Session::get('nip');
+        $nip = Auth::user()->nip;
         $user = User::where('nip',$nip)->first();
         return view('user.'.$this->segmentUser.'.tanda_tangan',compact('user'));
     }
 
     public function updateTandaTangan(Request $request){
-        $nip = Session::get('nip');
+        $nip =  Auth::user()->nip;
         $user = User::where('nip',$nip)->first();
         $user->update([
             'tanda_tangan'=>$request->tanda_tangan
@@ -566,7 +588,7 @@ class UserController extends Controller
     }
 
     public function profil(){
-        $nip = Session::get('nip');
+        $nip = Auth::user()->nip;
         $user = User::where('nip',$nip)->get()->first();
         $status = $user->status_aktif;
         return view('user.'.$this->segmentUser.'.profil',compact('user','status'));
@@ -592,7 +614,7 @@ class UserController extends Controller
     }
 
     public function updatePassword(Request $request){
-        $nip = Session::get('nip');
+        $nip =  Auth::user()->nip;
         $user = User::where('nip',$nip)->first();
         $this->validate($request,[
             'password_lama'=>function($attr,$val,$fail) use($user){

@@ -12,6 +12,7 @@
                         </div>
                         <h4 class="text-center mb-5">Sistem Pengelolaan Administrasi Kemahasiswaan</h4>
                         {{ Form::open(['url'=>'login','class'=>'pt-3']) }}
+                        @csrf
                         <div class="form-group">
                             {{ Form::label('jenis-user','Jenis User') }}
                             {{ Form::select('jenis_user',['mahasiswa'=>'Mahasiswa','pegawai'=>'Pegawai','pimpinan'=>'Pimpinan'],Session::get('jenis_user'),['class'=>'form-control form-control-lg','id'=>'jenis-user']) }}
@@ -49,7 +50,6 @@
                         <div class="my-2 d-flex justify-content-between align-items-center">
                             <div class="form-check"></div>
                         </div>
-                        {{ csrf_field() }}
                         {{ Form::close() }}
                     </div>
                 </div>

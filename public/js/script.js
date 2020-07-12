@@ -1,3 +1,22 @@
+let bahasa = {
+    "sProcessing":   '<i class="mdi mdi-sync menu-icon rotate"></i>',
+    "sLengthMenu":   "Tampilan _MENU_ data",
+    "sZeroRecords":  "Data tidak ditemukan",
+    "sInfo":         "Tampilan _START_ sampai _END_ dari _TOTAL_ data",
+    "sInfoEmpty":    "Tampilan 0 hingga 0 dari 0 data",
+    "sInfoFiltered": "(disaring dari _MAX_ data keseluruhan)",
+    "sInfoPostFix":  "",
+    'searchPlaceholder': 'Cari...',
+    'sSearch': '',
+    "sUrl":          "",
+    "oPaginate": {
+        "sFirst":    "Awal",
+        "sPrevious": "Balik",
+        "sNext":     "Lanjut",
+        "sLast":     "Akhir"
+    }
+};
+
 String.prototype.ucwords = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
@@ -77,7 +96,7 @@ $('#jenis-user').on('click', function () {
     username.attr('placeholder', value.toUpperCase());
 });
 
-$('.sweet-delete').on('click', function (e) {
+$('.table-responsive').on('click','.sweet-delete', function (e) {
     e.preventDefault();
     Swal.fire({
         title: 'Yakin?',

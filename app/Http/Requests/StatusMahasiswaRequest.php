@@ -47,8 +47,10 @@ class StatusMahasiswaRequest extends FormRequest
         $validator->after(function($validator) use($mahasiswa) {
             if($mahasiswa->tahunAkademik->count() > 0){
                 $status = $mahasiswa->tahunAkademik->first()->pivot->status;
-                if($status == 'lulus' || $status == 'drop out' || $status == 'keluar'){
-                    $validator->errors()->add('nim','status mahasiswa terakhir '.$mahasiswa->nama.' adalah '.$status);
+                if ($this->method() != 'PATCH' && $this->method() != 'PUT') {
+                    if ($status == 'lulus' || $status == 'drop out' || $status == 'keluar') {
+                        $validator->errors()->add('nim', 'status mahasiswa terakhir '.$mahasiswa->nama.' adalah '.$status);
+                    }
                 }
             }
         });

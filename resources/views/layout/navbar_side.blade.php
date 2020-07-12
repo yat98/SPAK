@@ -7,7 +7,7 @@
                     <span class="login-status online"></span>
                 </div>
                 <div class="nav-profile-text d-flex flex-column overflow-hidden">
-                    <span class="font-weight-bold mb-2">{{ ucwords(Auth::user()->username) }}</span>
+                    <span class="font-weight-bold mb-2">{{ (Session::get('jenis_user') != 'admin') ? ucwords(Auth::user()->nama) : ucwords(Auth::user()->username) }}</span>
                     <span class="text-secondary text-small" >
                         {{ ($posisi == 'admin') ? 'Admin':'' }}
                         {{ ($posisi == 'mahasiswa') ? 'Mahasiswa':'' }}
@@ -56,7 +56,7 @@
                 <i class="menu-arrow"></i>
                 <i class="mdi mdi-account menu-icon"></i>
             </a>
-            <div class="collapse" id="ui-basic">
+            <div class="collapse {{ ($show) ? 'show':''}}" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> 
                         <a class="nav-link {{ ($halaman == 'operator') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/operator') }}">Operator</a>

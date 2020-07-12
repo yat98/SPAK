@@ -70,8 +70,6 @@ class AdminController extends Controller
         $admin->update([
             'username'=>$request->username
         ]);
-        Session::forget('username');
-        Session::put('username',$request->username);
         $this->setFlashData('success','Berhasil','Username berhasil diubah');
         return redirect($this->segmentUser);
     }

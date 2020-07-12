@@ -41,6 +41,16 @@ return [
             'provider' => 'admins',
         ],
 
+        'mahasiswa' => [
+            'driver' => 'session',
+            'provider' => 'mahasiswas',
+         ],
+
+        'user' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
@@ -81,6 +91,10 @@ return [
             'model' => App\Admin::class,
         ],
 
+        'mahasiswas' => [
+            'driver' => 'eloquent',
+            'model' => App\Mahasiswa::class,
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

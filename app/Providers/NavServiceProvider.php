@@ -30,7 +30,8 @@ class NavServiceProvider extends ServiceProvider
         $show = true;
         $segment = request()->segment(2);
         if (request()->segment(1) == 'admin') {
-            $posisi = 'admin'  ;
+            $posisi = 'admin';
+            $show = false;
             if ($segment == '') {
                 $halaman = 'dashboard-admin';
             } else if ($segment == 'jurusan') {
@@ -40,8 +41,10 @@ class NavServiceProvider extends ServiceProvider
             } else if ($segment == 'tahun-akademik') {
                 $halaman = 'tahun-akademik';
             } else if ($segment == 'mahasiswa') {
+                 $show = true;
                 $halaman = 'mahasiswa';
             } else if ($segment == 'user') {
+                 $show = true;
                 $halaman = 'user';
             } else if ($segment == 'status-mahasiswa') {
                 $halaman = 'status-mahasiswa';

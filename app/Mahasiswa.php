@@ -5,9 +5,15 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticable;
+use Illuminate\Notifications\Notifiable;
 
-class Mahasiswa extends Model
+class Mahasiswa extends Authenticable
 {
+    use Notifiable;
+
+    protected $guard = 'mahasiswa';
+
     protected $table = 'mahasiswa';
 
     protected $primaryKey = 'nim';
@@ -28,6 +34,8 @@ class Mahasiswa extends Model
     ];
 
     protected $dates = ['tanggal_lahir'];
+
+    protected $hidden = ['password'];
 
     public function setNamaAttribute($value){
         $this->attributes['nama'] = strtolower($value);

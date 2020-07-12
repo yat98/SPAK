@@ -66,6 +66,37 @@
     border-radius:50%
 }
 
+.custom-select {
+    background: none;
+    height:25px;
+    width:30px;
+    line-height: 1;
+}
+
+.dataTables_info,.dataTables_length{
+    font-size: 14px;
+    color: #9c9fa6;
+}
+
+.dataTables_info,#datatables_paginate{
+    margin-top:25px;
+}
+
+#datatables_paginate{
+    margin-bottom:20px
+}
+
+.rotate {
+    position: absolute;
+    font-size: 30px;
+    -webkit-animation:spin 1s linear infinite;
+    -moz-animation:spin 1s linear infinite;
+    animation:spin 1s linear infinite;
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
 @media (min-width: 1025px) and (max-width: 1280px) {
     .btn-margin {
         margin-top: 20px !important;

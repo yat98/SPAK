@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Session;
 use App\NotifikasiUser;
+use Illuminate\Support\Facades\Auth;
 
 class PimpinanMiddleware
 {
@@ -17,11 +18,7 @@ class PimpinanMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(Session::get('status') != 'pimpinan'){
-            return redirect('/');
-        }
-        
-        $notifikasi = NotifikasiUser::all()->where('nip',Session::get('nip'))->where('status','belum dilihat');
+        $notifikasi = NotifikasiUser::all()->where('nip',Auth::user()->nip)->where('status','belum dilihat');
         $countNotifikasi = $notifikasi->count();
         view()->share([
             'notifikasi'=>$notifikasi,

@@ -3,9 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticable;
+use Illuminate\Notifications\Notifiable;
 
-class User extends Model
+class User extends Authenticable
 {
+    use Notifiable;
+
+    protected $guard = 'user';
+
     protected $table = 'user';
 
     protected $primaryKey = 'nip';
@@ -22,6 +28,8 @@ class User extends Model
         'tanda_tangan',
         'password',
     ];
+
+    protected $hidden = ['password'];
 
     public function suratKeterangan(){
         return $this->hasMany('App\SuratKeterangan','nip','nip');

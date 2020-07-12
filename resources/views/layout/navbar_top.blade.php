@@ -10,7 +10,7 @@
         </button>
         <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item dropdown">
-            @if ($posisi == 'pegawai' || $posisi == 'mahasiswa' || $posisi == 'pimpinan')
+            @if (Session::get('jenis_user') != 'admin')
             @if (isset($notifikasi) && isset($countNotifikasi))
             @if ($countNotifikasi > 0)
                 <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
@@ -83,7 +83,7 @@
                         <span class="availability-status online"></span>
                     </div>
                     <div class="nav-profile-text">
-                        <p class="mb-1 text-black">{{ ucwords(Auth::user()->username) }}</p>
+                        <p class="mb-1 text-black">{{ (Session::get('jenis_user') != 'admin') ? ucwords(Auth::user()->nama) : ucwords(Auth::user()->username) }}</p>
                     </div>
                 </a>
                 <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">

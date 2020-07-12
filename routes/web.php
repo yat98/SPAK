@@ -1,6 +1,8 @@
 <?php
 
+use App\User;
 use Illuminate\Support\Facades\Route;
+use Yajra\DataTables\Facades\DataTables;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,21 +20,26 @@ Auth::routes([
     'login' => false,
     'reset' => false,
     'verify' => false,
+    'confirm' => false,
+    'reset'=>false,
+    'forget'=>false,
 ]);
 
+Route::get('test','UserController@test');
+
 // Login
-Route::get('/', 'LoginController@login')->name('login');
+Route::get('/', 'Auth\AuthController@getLogin')->name('login');
 Route::group(['prefix'=>'login'],function(){
-    Route::get('/', 'LoginController@login');
-    Route::post('/','LoginController@checkLogin');
+    Route::get('/', 'Auth\AuthController@getLogin');
+    Route::post('/','Auth\AuthController@postLogin');
 });
 
 // Mahasiswa
 Route::group(['prefix' => 'mahasiswa'],function(){
     // Logout
-    Route::get('logout','MahasiswaController@logout');
+    Route::get('logout','Auth\AuthController@postLogout');
 
-    Route::middleware(['mahasiswa'])->group(function(){
+    Route::middleware(['auth:mahasiswa','mahasiswa'])->group(function(){
         // Dashboard
         Route::get('/','MahasiswaController@dashboard');
         // Pengajuan Surat
@@ -170,9 +177,9 @@ Route::group(['prefix' => 'mahasiswa'],function(){
 // Pegawai
 Route::group(['prefix' => 'pegawai'],function(){
     // Logout
-    Route::get('logout','UserController@logout');
+    Route::get('logout','Auth\AuthController@postLogout');
 
-    Route::middleware(['pegawai'])->group(function(){
+    Route::middleware(['auth:user','pegawai'])->group(function(){
         // Dashboard
         Route::get('/','UserController@pegawaiDashboard');
         // Kode Surat
@@ -357,6 +364,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('mahasiswa/import-mahasiswa','MahasiswaController@createImport');
         Route::resource('mahasiswa', 'MahasiswaController');
         // User
+        Route::get('user/all','UserController@getAllUser');
         Route::get('user/search','UserController@search');
         Route::resource('user','UserController')->except(['show']);
         // Status Mahasiswa
@@ -386,9 +394,9 @@ Route::group(['prefix' => 'admin'], function () {
 // Pimpinan
 Route::group(['prefix' => 'pimpinan'], function () {
     // Logout
-    Route::get('logout','UserController@logout');
+    Route::get('logout','Auth\AuthController@postLogout');
     
-    Route::middleware(['pimpinan'])->group(function(){
+    Route::middleware(['auth:user','pimpinan'])->group(function(){
         // Dashboard
         Route::get('/','UserController@pimpinanDashboard');
         Route::get('search','UserController@chartPimpinanDashboard');

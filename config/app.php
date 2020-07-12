@@ -186,6 +186,8 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         // Milion Barcode
         Milon\Barcode\BarcodeServiceProvider::class,
+        // Yajra Datatables
+        Yajra\DataTables\DataTablesServiceProvider::class,
     ],
 
     /*
@@ -247,6 +249,8 @@ return [
         // Milion Barcode
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+        // Yajra Datatables
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,
     ],
 
 ];
