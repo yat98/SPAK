@@ -5,17 +5,25 @@ namespace App\Http\Controllers;
 use App\Jurusan;
 use App\ProgramStudi;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 use App\Http\Requests\ProgramStudiRequest;
 
 class ProgramStudiController extends Controller
 {
     public function index()
     {
-        $prodiList = ProgramStudi::all()->sortBy('id_jurusan');
-        $countProdi = $prodiList->count();
-        $countAllProdi = ProgramStudi::all()->count();
-        $countJurusan = Jurusan::all()->count();
-        return view('user.'.$this->segmentUser.'.program_studi',compact('prodiList','countProdi','countJurusan','countAllProdi'));
+        $perPage = $this->perPage;
+        $countAllProdi = ProgramStudi::count();
+        $countAllJurusan = Jurusan::count();
+        return view('user.'.$this->segmentUser.'.program_studi',compact('countAllJurusan','countAllProdi','perPage'));
+    }
+
+    public function getAllProdi(){
+        return DataTables::of(ProgramStudi::with('jurusan'))
+                ->addColumn('aksi', function ($data) {
+                    return $data->id;
+                })
+                ->make(true);
     }
 
     public function create()
@@ -29,21 +37,13 @@ class ProgramStudiController extends Controller
         return view('user.'.$this->segmentUser.'.tambah_prodi',compact('jurusanList'));
     }
 
-    public function search(Request $request){
-        $keyword = $request->all();
-        if(isset($keyword['keyword'])){
-            $countAllProdi = ProgramStudi::all()->count();
-            $countJurusan = Jurusan::all()->count();
-            $nama = $keyword['keyword'] != null ? $keyword['keyword'] : '';
-            $prodiList = ProgramStudi::where('nama_prodi','like','%'.$nama.'%')->get();
-            $countProdi = count($prodiList);
-            if($countProdi < 1){
-                $this->setFlashData('search','Hasil Pencarian','Data program studi tidak ditemukan!');
-            }
-            return view('user.'.$this->segmentUser.'.program_studi',compact('prodiList','countProdi','countJurusan','countAllProdi'));
-        }else{
-            return redirect($this->segmentUser.'/program-studi');
-        }
+    public function show(ProgramStudi $prodi){
+        $data = collect($prodi);
+        $data->put('created_at',$prodi->created_at->isoFormat('D MMMM Y H:mm:ss'));
+        $data->put('updated_at',$prodi->updated_at->isoFormat('D MMMM Y H:mm:ss'));
+        $data->put('nama_jurusan',$prodi->jurusan->nama_jurusan);
+
+        return $data->toJson();
     }
     
     public function store(ProgramStudiRequest $request)

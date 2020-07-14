@@ -40,7 +40,7 @@ class UserController extends Controller
     }
 
     public function getAllUser(){
-        return DataTables::of(User::select(['nip','nama','jabatan','status_aktif','created_at','updated_at']))
+        return DataTables::of(User::select(['*']))
                 ->editColumn("jabatan", function ($data) {
                     switch ($data->jabatan) {
                         case 'wd1':
@@ -66,30 +66,34 @@ class UserController extends Controller
                 ->make(true);
     }
 
+    public function show(User $user){
+        $data = collect($user->makeHidden('tanda_tangan'));
+        $data->put('created_at',$user->created_at->isoFormat('D MMMM Y H:m:ss'));
+        $data->put('updated_at',$user->updated_at->isoFormat('D MMMM Y H:m:ss'));
+        switch ($user->jabatan) {
+            case 'wd1':
+                $data->put('jabatan','Wakil Dekan 1');
+                break;
+            case 'wd2':
+                $data->put('jabatan','Wakil Dekan 2');
+                break;
+            case 'wd3':
+                $data->put('jabatan','Wakil Dekan 3');
+                break; 
+            default:
+                $data->put('jabatan',ucwords($user->jabatan));
+                break; 
+        }
+        $data->put('pangkat',ucwords($user->pangkat));
+        $data->put('status_aktif',ucwords($user->status_aktif));
+
+        return $data->toJson();
+    }
+
     public function create()
     {
         $formPassword = true;
         return view('user.'.$this->segmentUser.'.tambah_user',compact('formPassword'));
-    }
-
-    public function search(Request $request){
-        $perPage = $this->perPage;
-        $keyword = $request->all();
-        if(isset($keyword['keyword'])){
-            $nama = $keyword['keyword'] != null ? $keyword['keyword'] : '';
-            $userList = User::where('nama','like','%'.$nama.'%')
-                            ->paginate($perPage)
-                            ->appends($request
-                            ->except('page'));
-            $countUser = count($userList);
-            $countAllUser = User::all()->count();
-            if($countUser < 1){
-                $this->setFlashData('search','Hasil Pencarian','Data user tidak ditemukan!');
-            }
-            return view('user.'.$this->segmentUser.'.user',compact('countUser','userList','countAllUser','perPage'));
-        }else{
-            return redirect($this->segmentUser.'/user');
-        }
     }
 
     public function store(UserRequest $request)

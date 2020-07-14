@@ -37,6 +37,7 @@
     <link rel="stylesheet" href="{{ asset('vendors/flipclock/css/flip-clock.css') }}">
     {{-- DATATABLES --}}
     <link rel="stylesheet" href="{{ asset('vendors/datatables/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendors/datatables/responsive.bootstrap.min.css') }}">
     {{-- END DATATABLES --}}
     <link rel="stylesheet" href="{{ asset('css/custom-css.css') }}">
 </head>
@@ -88,6 +89,7 @@
      {{-- DATATABLES --}}
     <script src="{{ asset('vendors/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendors/datatables/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables/dataTables.responsive.min.js') }}"></script>
     {{-- END DATATABLES --}}
     <script src="{{ asset('js/script.js') }}"></script>
 

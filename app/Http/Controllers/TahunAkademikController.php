@@ -5,26 +5,42 @@ namespace App\Http\Controllers;
 use Validator;
 use App\TahunAkademik;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 use App\Http\Requests\TahunAkademikRequest;
 
 class TahunAkademikController extends Controller
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
     public function index()
     {
         $perPage = $this->perPage;
-        $tahunAkademikList = TahunAkademik::orderBy('tahun_akademik','DESC')
-                                    ->orderBy('created_at','DESC')
-                                    ->orderBy('status_aktif')
-                                    ->paginate($this->perPage);
         $tahun = $this->generateTahunAkademik();
-        $countTahunAkademik = $tahunAkademikList->count();
+        $countAllTahunAkademik = TahunAkademik::count();
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
-        return view('user.'.$this->segmentUser.'.tahun_akademik',compact('tahunAkademikList','countTahunAkademik','tahunAkademikAktif','tahun','perPage'));
+        return view('user.'.$this->segmentUser.'.tahun_akademik',compact('countAllTahunAkademik','tahunAkademikAktif','tahun','perPage'));
+    }
+
+    public function getAllTahunAkademik(){
+        return DataTables::of(TahunAkademik::select(['*']))
+                ->addColumn('aksi', function ($data) {
+                    return $data->id;
+                })
+                ->editColumn("status_aktif", function ($data) {
+                    return ucwords($data->status_aktif);
+                })
+                ->editColumn("semester", function ($data) {
+                    return ucwords($data->semester);
+                })
+                ->make(true);
+    }
+
+    public function show(TahunAkademik $tahunAkademik){
+        $data = collect($tahunAkademik);
+        $data->put('created_at',$tahunAkademik->created_at->isoFormat('D MMMM Y H:mm:ss'));
+        $data->put('updated_at',$tahunAkademik->updated_at->isoFormat('D MMMM Y H:mm:ss'));
+        $data->put('semester',ucwords($tahunAkademik->semester));
+        $data->put('status_aktif',ucwords($tahunAkademik->status_aktif));
+
+        return $data->toJson();
     }
 
     public function create()

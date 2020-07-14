@@ -4,37 +4,37 @@ namespace App\Http\Controllers;
 
 use App\Jurusan;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 use App\Http\Requests\JurusanRequest;
 
 class JurusanController extends Controller
 {
     public function index()
     {
-        $jurusanList = Jurusan::all();
-        $countJurusan = $jurusanList->count();
-        $countAllJurusan = $jurusanList->count();
-        return view('user.'.$this->segmentUser.'.jurusan',compact('jurusanList','countJurusan','countAllJurusan'));
+        $perPage = $this->perPage;
+        $countAllJurusan = Jurusan::count();
+        return view('user.'.$this->segmentUser.'.jurusan',compact('perPage','countAllJurusan'));
+    }
+
+    public function getAllJurusan(){
+        return DataTables::of(Jurusan::select(['*']))
+                ->addColumn('aksi', function ($data) {
+                    return $data->id;
+                })
+                ->make(true);
+    }
+
+    public function show(Jurusan $jurusan){
+        $data = collect($jurusan);
+        $data->put('created_at',$jurusan->created_at->isoFormat('D MMMM Y H:mm:ss'));
+        $data->put('updated_at',$jurusan->updated_at->isoFormat('D MMMM Y H:mm:ss'));
+
+        return $data->toJson();
     }
 
     public function create()
     {
         return view('user.'.$this->segmentUser.'.tambah_jurusan');
-    }
-
-    public function search(Request $request){
-        $keyword = $request->all();
-        if(isset($keyword['keyword'])){
-            $nama = $keyword['keyword'] != null ? $keyword['keyword'] : '';
-            $jurusanList = Jurusan::where('nama_jurusan','like','%'.$nama.'%')->get();
-            $countAllJurusan = Jurusan::all()->count();
-            $countJurusan = count($jurusanList);
-            if($countJurusan < 1){
-                $this->setFlashData('search','Hasil Pencarian','Data jurusan tidak ditemukan!');
-            }
-            return view('user.'.$this->segmentUser.'.jurusan',compact('jurusanList','countJurusan','countAllJurusan'));
-        }else{
-            return redirect($this->segmentUser.'/jurusan');
-        }
     }
 
     public function store(JurusanRequest $request)

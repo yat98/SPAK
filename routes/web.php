@@ -28,16 +28,16 @@ Auth::routes([
 Route::get('test','UserController@test');
 
 // Login
-Route::get('/', 'Auth\AuthController@getLogin')->name('login');
+Route::get('/', 'Auth\LoginController@getLogin')->name('login');
 Route::group(['prefix'=>'login'],function(){
-    Route::get('/', 'Auth\AuthController@getLogin');
-    Route::post('/','Auth\AuthController@postLogin');
+    Route::get('/', 'Auth\LoginController@getLogin');
+    Route::post('/','Auth\LoginController@postLogin');
 });
 
 // Mahasiswa
 Route::group(['prefix' => 'mahasiswa'],function(){
     // Logout
-    Route::get('logout','Auth\AuthController@postLogout');
+    Route::get('logout','Auth\LoginController@postLogout');
 
     Route::middleware(['auth:mahasiswa','mahasiswa'])->group(function(){
         // Dashboard
@@ -177,7 +177,7 @@ Route::group(['prefix' => 'mahasiswa'],function(){
 // Pegawai
 Route::group(['prefix' => 'pegawai'],function(){
     // Logout
-    Route::get('logout','Auth\AuthController@postLogout');
+    Route::get('logout','Auth\LoginController@postLogout');
 
     Route::middleware(['auth:user','pegawai'])->group(function(){
         // Dashboard
@@ -342,35 +342,35 @@ Route::group(['prefix' => 'pegawai'],function(){
 // Admin
 Route::group(['prefix' => 'admin'], function () {
     // Login
-    Route::get('login','Auth\AdminAuthController@getLogin');
-    Route::post('login','Auth\AdminAuthController@postLogin');
-    Route::get('logout','Auth\AdminAuthController@postLogout');
+    Route::get('login','Auth\LoginController@getLogin');
+    Route::post('login','Auth\LoginController@postLogin');
+    Route::get('logout','Auth\LoginController@postLogout');
 
     Route::middleware(['auth:admin'])->group(function(){   
         // Dashbord
         Route::get('/', 'AdminController@index');
         // Jurusan
-        Route::get('jurusan/search', 'JurusanController@search');
-        Route::resource('jurusan', 'JurusanController')->except(['show']);
+        Route::get('jurusan/all','JurusanController@getAllJurusan');
+        Route::resource('jurusan', 'JurusanController');
         // Program Studi
-        Route::get('program-studi/search', 'ProgramStudiController@search');
-        Route::resource('program-studi', 'ProgramStudiController')->except(['show']);
+        Route::get('program-studi/all','ProgramStudiController@getAllProdi');
+        Route::resource('program-studi', 'ProgramStudiController');
         // Tahun Akademik
-        Route::get('tahun-akademik/search', 'TahunAkademikController@search');
-        Route::resource('tahun-akademik', 'TahunAkademikController')->except(['show']);
+        Route::get('tahun-akademik/all','TahunAkademikController@getAllTahunAkademik');
+        Route::resource('tahun-akademik', 'TahunAkademikController');
         // Mahasiswa
-        Route::get('mahasiswa/search', 'MahasiswaController@search');
+        Route::get('mahasiswa/all','MahasiswaController@getAllMahasiswa');
         Route::post('mahasiswa/import-mahasiswa','MahasiswaController@storeImport');
         Route::get('mahasiswa/import-mahasiswa','MahasiswaController@createImport');
         Route::resource('mahasiswa', 'MahasiswaController');
         // User
         Route::get('user/all','UserController@getAllUser');
-        Route::get('user/search','UserController@search');
-        Route::resource('user','UserController')->except(['show']);
+        Route::resource('user','UserController');
         // Status Mahasiswa
         Route::post('status-mahasiswa/import-status-mahasiswa','StatusMahasiswaController@storeImport');
         Route::get('status-mahasiswa/import-status-mahasiswa','StatusMahasiswaController@createImport');
-        Route::get('status-mahasiswa/search','StatusMahasiswaController@search');
+        Route::get('status-mahasiswa/all','StatusMahasiswaController@getAllStatusMahasiswa');
+        Route::get('status-mahasiswa/{id_tahun_akademik}/{nim}/','StatusMahasiswaController@show');
         Route::post('status-mahasiswa','StatusMahasiswaController@store');
         Route::get('status-mahasiswa','StatusMahasiswaController@index');
         Route::get('status-mahasiswa/create','StatusMahasiswaController@create');
@@ -378,11 +378,11 @@ Route::group(['prefix' => 'admin'], function () {
         Route::delete('status-mahasiswa','StatusMahasiswaController@destroy');
         Route::get('status-mahasiswa/{id_tahun_akademik}/{nim}/edit','StatusMahasiswaController@edit');
         // Ormawa
-        Route::get('ormawa/search','OrmawaController@search');
-        Route::resource('ormawa','OrmawaController')->except(['show']);
+        Route::get('ormawa/all','OrmawaController@getAllOrmawa');
+        Route::resource('ormawa','OrmawaController');
         // Pimpinan Ormawa
-        Route::get('pimpinan-ormawa/search','PimpinanOrmawaController@search');
-        Route::resource('pimpinan-ormawa','PimpinanOrmawaController')->except(['show']);
+        Route::get('pimpinan-ormawa/all','PimpinanOrmawaController@getAllPimpinanOrmawa');
+        Route::resource('pimpinan-ormawa','PimpinanOrmawaController');
         // Profil
         Route::get('profil','AdminController@profil');
         Route::get('profil/password','AdminController@profilPassword');
@@ -394,7 +394,7 @@ Route::group(['prefix' => 'admin'], function () {
 // Pimpinan
 Route::group(['prefix' => 'pimpinan'], function () {
     // Logout
-    Route::get('logout','Auth\AuthController@postLogout');
+    Route::get('logout','Auth\LoginController@postLogout');
     
     Route::middleware(['auth:user','pimpinan'])->group(function(){
         // Dashboard

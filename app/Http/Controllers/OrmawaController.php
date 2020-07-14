@@ -5,17 +5,31 @@ namespace App\Http\Controllers;
 use App\Ormawa;
 use App\Jurusan;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 use App\Http\Requests\OrmawaRequest;
 
 class OrmawaController extends Controller
 {
     public function index(){
         $perPage = $this->perPage;
-        $ormawaList = Ormawa::paginate($perPage);
-        $countOrmawa = $ormawaList->count();
-        $countAllOrmawa = $countOrmawa;
-        $jurusan = Jurusan::pluck('nama_jurusan','id')->toArray();
-        return view('user.'.$this->segmentUser.'.ormawa',compact('ormawaList','countOrmawa','countAllOrmawa','jurusan','perPage'));
+        $countAllOrmawa = Ormawa::count();
+        return view('user.'.$this->segmentUser.'.ormawa',compact('countAllOrmawa','perPage'));
+    }
+
+    public function getAllOrmawa(){
+        return DataTables::of(Ormawa::with('jurusan'))
+                ->addColumn('aksi', function ($data) {
+                    return $data->id;
+                })
+                ->make(true);
+    }
+
+    public function show(Ormawa $ormawa){
+        $data = collect($ormawa->load(['jurusan']));
+        $data->put('created_at',$ormawa->created_at->isoFormat('D MMMM Y H:m:ss'));
+        $data->put('updated_at',$ormawa->updated_at->isoFormat('D MMMM Y H:m:ss'));
+        
+        return $data->toJson();
     }
     
     public function search(Request $request){

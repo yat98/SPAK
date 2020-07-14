@@ -6,6 +6,7 @@ use App\Mahasiswa;
 use App\TahunAkademik;
 use App\StatusMahasiswa;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 use App\Imports\StatusMahasiswaImport;
 use App\Http\Requests\StatusMahasiswaRequest;
 use Maatwebsite\Excel\Validators\ValidationException;
@@ -15,16 +16,40 @@ class StatusMahasiswaController extends Controller
     public function index()
     {
         $perPage = $this->perPage;
-        $mahasiswa = $this->generateMahasiswa();
-        $tahunAkademik = $this->generateAllTahunAkademik();
-        $statusMahasiswaList = StatusMahasiswa::join('tahun_akademik','tahun_akademik.id','=','status_mahasiswa.id_tahun_akademik')
-                                    ->join('mahasiswa','mahasiswa.nim','=','status_mahasiswa.nim')
-                                    ->paginate($perPage);
-        $countMahasiswa = Mahasiswa::all()->count();
-        $countStatusMahasiswa = $statusMahasiswaList->count();
-        $countAllStatusMahasiswa = StatusMahasiswa::all()->count();
+        $countAllMahasiswa = Mahasiswa::count();
+        $countAllStatusMahasiswa = StatusMahasiswa::count();
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
-        return view('user.'.$this->segmentUser.'.status_mahasiswa',compact('statusMahasiswaList','countStatusMahasiswa','countAllStatusMahasiswa','tahunAkademik','perPage','mahasiswa','countMahasiswa','tahunAkademikAktif'));
+        return view('user.'.$this->segmentUser.'.status_mahasiswa',compact('countAllStatusMahasiswa','tahunAkademikAktif','perPage','countAllMahasiswa'));
+    }
+
+    public function getAllStatusMahasiswa(){
+        return DataTables::of(StatusMahasiswa::with(['mahasiswa','tahunAkademik'])
+                                ->join('tahun_akademik', 'tahun_akademik.id', '=', 'status_mahasiswa.id_tahun_akademik')
+                                ->join('mahasiswa', 'mahasiswa.nim', '=', 'status_mahasiswa.nim')
+                                ->select(['*']))
+                ->editColumn("status", function ($data) {
+                    return ucwords($data->status);
+                })
+                ->editColumn("tahun_akademik.semester", function ($data) {
+                    return ucwords($data->tahunAkademik->semester);
+                })
+                ->addColumn('aksi', function ($data) {
+                    return $data->nim;
+                })
+                ->make(true);
+    }
+
+    public function show(Request $request){
+        $statusMahasiswa = StatusMahasiswa::where('nim',$request->nim)
+                                ->where('id_tahun_akademik',$request->id_tahun_akademik)
+                                ->with(['mahasiswa','tahunAkademik'])
+                                ->first();
+        $data = collect($statusMahasiswa);
+        $data->put('created_at',$statusMahasiswa->created_at->isoFormat('D MMMM Y H:m:ss'));
+        $data->put('updated_at',$statusMahasiswa->updated_at->isoFormat('D MMMM Y H:m:ss'));
+        $data->put('status',ucwords($statusMahasiswa->status));
+        
+        return $data->toJson();
     }
 
     public function create()
@@ -73,35 +98,6 @@ class StatusMahasiswaController extends Controller
         $statusMahasiswa->delete();
         $this->setFlashData('success','Berhasil','Data status mahasiswa berhasil dihapus');
         return redirect($this->segmentUser.'/status-mahasiswa');
-    }
-
-    public function search(Request $request){
-        $keyword = $request->all();
-        if(isset($keyword['keywords']) || isset($keyword['tahun_akademik']) || isset($keyword['status'])){
-            $perPage = $this->perPage;
-            $mahasiswa = $this->generateMahasiswa();
-            $tahunAkademik = $this->generateAllTahunAkademik();
-
-            $countMahasiswa = Mahasiswa::all()->count();
-            $countAllStatusMahasiswa = StatusMahasiswa::all()->count();
-            $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
-
-            $nama = isset($keyword['keywords']) ? $keyword['keywords']:'';
-            $statusMahasiswaList = StatusMahasiswa::where('status_mahasiswa.nim','like',"%$nama%")
-            ->join('tahun_akademik','tahun_akademik.id','=','status_mahasiswa.id_tahun_akademik')
-                                    ->join('mahasiswa','mahasiswa.nim','=','status_mahasiswa.nim');
-            (isset($keyword['tahun_akademik'])) ? $statusMahasiswaList = $statusMahasiswaList->where('id_tahun_akademik',$keyword['tahun_akademik']) : '';
-            (isset($keyword['status'])) ? $statusMahasiswaList = $statusMahasiswaList->where('status',$keyword['status']) : '';
-            $statusMahasiswaList = $statusMahasiswaList->paginate($perPage)->appends($request->except('page'));
-            $countStatusMahasiswa = $statusMahasiswaList->count();
-            if($countStatusMahasiswa < 1){
-                $this->setFlashData('search','Hasil Pencarian','Data status mahasiswa tidak ditemukan!');
-            }
-            return view('user.'.$this->segmentUser.'.status_mahasiswa',compact('statusMahasiswaList','countStatusMahasiswa','countAllStatusMahasiswa','tahunAkademik','perPage','mahasiswa','countMahasiswa','tahunAkademikAktif'));
-        }else{
-            return redirect($this->segmentUser.'/status-mahasiswa');
-        }
-        dd($keyword);
     }
 
     public function createImport()

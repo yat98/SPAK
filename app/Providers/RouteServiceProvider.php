@@ -58,7 +58,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('program_studi', ProgramStudi::class);
         Route::model('tahun_akademik', TahunAkademik::class);
         Route::model('kode_surat', KodeSurat::class);
-        Route::model('pimmpinan_ormawa', PimpinanOrmawa::class);
+        Route::model('pimpinan_ormawa', PimpinanOrmawa::class);
         Route::model('pengajuan_surat_keterangan', PengajuanSuratKeterangan::class);
         Route::model('surat_tuga', SuratTugas::class);
         Route::model('pengajuan_persetujuan_pindah', PengajuanSuratPersetujuanPindah::class);

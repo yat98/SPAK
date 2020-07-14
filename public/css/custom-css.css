@@ -89,19 +89,38 @@
 .rotate {
     position: absolute;
     font-size: 30px;
-    -webkit-animation:spin 1s linear infinite;
-    -moz-animation:spin 1s linear infinite;
-    animation:spin 1s linear infinite;
+    -webkit-animation:spin 0.7s linear infinite;
+    -moz-animation:spin 0.7s linear infinite;
+    animation:spin 0.7s linear infinite;
 }
-@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+@-moz-keyframes spin { 100% { -moz-transform: rotate(-360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(-360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(-360deg); transform:rotate(-360deg); } }
+
+.dtr-details{
+    width: 100%;
+}
+
+.dtr-title{
+    width: 30%;
+}
+
+.dtr-data{
+    width: 70%;
+}
+table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td.dtr-control:before, table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th.dtr-control:before {
+    border:none;
+    background-color: #3e4b5b;
+    box-shadow: none;
+    line-height: 15px;
+}
 
 @media (min-width: 1025px) and (max-width: 1280px) {
     .btn-margin {
         margin-top: 20px !important;
     }
 }
+
 
 @media (min-width: 768px) and (max-width: 1024px) {}
 

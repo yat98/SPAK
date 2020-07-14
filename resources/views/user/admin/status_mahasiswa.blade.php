@@ -37,7 +37,7 @@
                                         class="mdi mdi-account mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countMahasiswa > 0 ? $countMahasiswa.' Mahasiswa' : 'Data Mahasiswa Kosong' }}
+                                    {{ $countAllMahasiswa > 0 ? $countAllMahasiswa.' Mahasiswa' : 'Data Mahasiswa Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -76,88 +76,18 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                <div class="row mb-3">
-                                    <div class="col-12">
-                                        {{ Form::open(['url'=>'admin/status-mahasiswa/search','method'=>'GET']) }}
-                                        <div class="form-row">
-                                            <div class="col-sm-12 col-md-4 mt-1">
-                                                {{ Form::select('keywords',$mahasiswa,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> 'Cari mahasiswa...']) }}
-                                            </div>
-                                            <div class="col-sm-12 col-md-3 mt-1">
-                                                {{ Form::select('tahun_akademik',$tahunAkademik,(request()->get('tahun_akademik') != null) ? request()->get('tahun_akademik'):null,['class'=>'search btn-margin form-control','placeholder'=> '-- Pilih Tahun Akademik --']) }}
-                                            </div>
-                                            <div class="col-sm-12 col-md-2 mt-1">
-                                                {{ Form::select('status',['aktif'=>'Aktif','non aktif'=>'Non Aktif','cuti'=>'Cuti','drop out'=>'Drop Out','lulus'=>'Lulus','keluar'=>'Keluar'],(request()->get('status') != null) ? request()->get('status'):null,['class'=>'search btn-margin form-control','placeholder'=> '-- Pilih Status --']) }}
-                                            </div>
-                                            <div class="col-sm-12 col-md">
-                                                <button class="btn btn-success btn-sm btn-tambah" type="submit">
-                                                    <i class="mdi mdi-magnify btn-icon-prepend"></i>
-                                                    Cari
-                                                </button>
-                                            </div>
-                                        </div>
-                                        {{ Form::close() }}
-                                    </div>
-                                </div>
-                                @if ($countStatusMahasiswa > 0)
+                                @if ($countAllStatusMahasiswa > 0)
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table class="table display no-warp" id='datatables' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
-                                                <th> NIM</th>
-                                                <th> Nama</th>
+                                                <th data-priority="1"> Nama</th>
                                                 <th> Tahun Akademik</th>
                                                 <th> Status Aktif</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
-                                                <th> Aksi</th>
+                                                <th data-priority="1"> Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($statusMahasiswaList as $statusMahasiswa)
-                                            <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($statusMahasiswaList->currentPage() - 1) }}</td>
-                                                <td> {{ $statusMahasiswa->nim  }}</td>
-                                                <td> {{ ucwords($statusMahasiswa->nama)  }}</td>
-                                                <td> {{ $statusMahasiswa->tahun_akademik.' - '.ucwords($statusMahasiswa->semester)  }}</td>
-                                                <td>
-                                                    @if ($statusMahasiswa->status == 'aktif')
-                                                        <label class="badge badge-gradient-info">{{ ucwords($statusMahasiswa->status) }}</label>
-                                                    @elseif($statusMahasiswa->status == 'lulus')
-                                                        <label class="badge badge-gradient-success">{{ ucwords($statusMahasiswa->status) }}</label>
-                                                    @elseif($statusMahasiswa->status == 'drop out' || $statusMahasiswa->status == 'keluar')
-                                                        <label class="badge badge-gradient-danger">{{ ucwords($statusMahasiswa->status) }}</label>
-                                                    @elseif($statusMahasiswa->status == 'cuti')
-                                                        <label class="badge badge-gradient-warning">{{ ucwords($statusMahasiswa->status) }}</label>
-                                                    @else
-                                                        <label class="badge badge-gradient-dark">{{ ucwords($statusMahasiswa->status) }}</label>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $statusMahasiswa->created_at->diffForHumans() }}</td>
-                                                <td>{{ $statusMahasiswa->updated_at->diffForHumans() }}</td>
-                                                <td>
-                                                    <a href="{{ url('admin/status-mahasiswa/'.$statusMahasiswa->id_tahun_akademik.'/'.$statusMahasiswa->nim.'/edit') }}"
-                                                        class="btn btn-warning btn-sm text-dark">
-                                                        <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>
-                                                        Edit
-                                                    </a>
-                                                    {{ Form::open(['method'=>'DELETE','action'=>['StatusMahasiswaController@destroy'],'class'=>'d-inline-block']) }}
-                                                    {{ Form::hidden('id_tahun_akademik',$statusMahasiswa->id_tahun_akademik)}}
-                                                    {{ Form::hidden('nim',$statusMahasiswa->nim)}}
-                                                    <button type="submit" class="btn btn-danger btn-sm sweet-delete">
-                                                        <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
-                                                        Hapus
-                                                    </button>
-                                                    {{ Form::close() }}
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
-                                    <div class="col">
-                                        {{ $statusMahasiswaList->links() }}
-                                    </div>
                                 </div>
                                 @else
                                 <div class="row">
@@ -181,4 +111,123 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='status-mahasiswa-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+
+@section('datatables-javascript')
+<script>
+    let link = "{{ url('admin/status-mahasiswa/') }}";
+
+    let datatables = $('#datatables').DataTable({
+        responsive: true,
+        columnDefs: [{
+                        "targets": 0,
+                        "data": "nim",
+                        "render": function ( data, type, row, meta ) {
+                            return `<a href="${link}/${row.tahun_akademik.id}/${row.nim}" class="status-mahasiswa-detail text-dark" data-toggle="modal" data-target="#exampleModal">
+                                        <div class="mb-1">${row.mahasiswa.nama}</div>
+                                        <span class="text-muted small">NIM. ${row.nim}</span>
+                                    </a>`;
+                        }
+                    },
+                    {
+                        "targets": 1,
+                        "data": "tahun_akademik",
+                        "render": function ( data, type, row, meta ) {
+                            return row.tahun_akademik.tahun_akademik+' - '+row.tahun_akademik.semester;
+                        }
+                    },
+                    {
+                        "targets": [4],
+                        "visible": false,
+                    },
+                    {
+                        "targets": [5],
+                        "visible": false,
+                    },
+                    {
+                        "targets": 2,
+                        "data": "status_aktif",
+                        "render": function( data, type, row, met ){
+                            if (row.status == 'Aktif'){
+                                return `<label class="badge badge-gradient-info">${row.status}</label>`;
+                            }else if(row.status == 'lulus'){
+                                return `<label class="badge badge-gradient-success">${row.status}</label>`;
+                            }else if(row.status == 'drop out' || row.status == 'keluar'){
+                                return `<label class="badge badge-gradient-danger">${row.status}</label>`;
+                            }else if(row.status == 'cuti'){
+                                return `<label class="badge badge-gradient-warning">${row.status}</label>`;
+                            }else{
+                                return `<label class="badge badge-gradient-dark">${row.status}</label>`;
+                            }
+                        }
+                    },
+                    {
+                        "targets": 3,
+                        "data": "aksi",
+                        "render": function ( data, type, row, meta ) {
+                            return `<div class="d-inline-block">
+                                        <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                            <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                        </a>
+                                        <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                            <a href="${link+'/'+row.tahun_akademik.id+'/'+row.nim}/edit" class="dropdown-item">Edit</a>
+                                            <form action="${link}" method="post">
+                                                <input name="nim" type="hidden" value="${row.nim}">
+                                                <input name="id_tahun_akademik" type="hidden" value="${row.tahun_akademik.id}">
+                                                <input name="_method" type="hidden" value="DELETE">
+                                                <input name="_token" type="hidden" value="{{ @csrf_token() }}">
+                                                <button type="submit" class="dropdown-item sweet-delete">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>`;
+                    }
+        }],
+        autoWidth: false,
+        language: bahasa,
+        processing: true,
+        serverSide: true,
+        ajax: '{{ url('admin/status-mahasiswa/all') }}',
+        columns: [{
+                data: 'mahasiswa.nim',
+            },
+            {
+                data: 'tahun_akademik.tahun_akademik',
+            },
+            {
+                data: 'status',
+            },
+            {
+                data: 'aksi', name: 'aksi', orderable: false, searchable: false
+            },
+            {
+                data: 'tahun_akademik.semester',
+            },
+            {
+                data: 'mahasiswa.nama',
+            },
+        ],
+        "pageLength": {{ $perPage }}
+    });   
+</script>
 @endsection

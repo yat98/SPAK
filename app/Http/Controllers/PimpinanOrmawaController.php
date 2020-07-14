@@ -6,6 +6,7 @@ use App\Ormawa;
 use App\Jurusan;
 use App\PimpinanOrmawa;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 use App\Http\Requests\PimpinanOrmawaRequest;
 
 class PimpinanOrmawaController extends Controller
@@ -13,13 +14,32 @@ class PimpinanOrmawaController extends Controller
     public function index()
     {
         $perPage = $this->perPage;
-        $pimpinanOrmawaList = PimpinanOrmawa::paginate($perPage);
-        $countPimpinanOrmawa = $pimpinanOrmawaList->count();
-        $countAllPimpinanOrmawa = $countPimpinanOrmawa;
-        $jurusan = Jurusan::pluck('nama_jurusan','id')->toArray();
-        $mahasiswa = $this->generateMahasiswa();
-        $ormawaList = Ormawa::pluck('nama','id')->toArray();
-        return view('user.'.$this->segmentUser.'.pimpinan_ormawa',compact('pimpinanOrmawaList','countPimpinanOrmawa','countAllPimpinanOrmawa','jurusan','perPage','mahasiswa','ormawaList'));
+        $countAllPimpinanOrmawa = PimpinanOrmawa::count();
+        return view('user.'.$this->segmentUser.'.pimpinan_ormawa',compact('countAllPimpinanOrmawa','perPage'));
+    }
+
+    public function getAllPimpinanOrmawa(){
+        return DataTables::of(PimpinanOrmawa::with(['mahasiswa.prodi.jurusan'])
+                                ->join('ormawa', 'ormawa.id', '=', 'pimpinan_ormawa.id_ormawa')
+                                ->join('mahasiswa', 'mahasiswa.nim', '=', 'pimpinan_ormawa.nim')
+                                ->select(['*']))
+                ->editColumn("status_aktif", function ($data) {
+                    return ucwords($data->status_aktif);
+                })
+                ->addColumn('aksi', function ($data) {
+                    return $data->id;
+                })
+                ->make(true);
+    }
+
+    public function show(PimpinanOrmawa $pimpinanOrmawa){
+        $data = collect($pimpinanOrmawa->load(['mahasiswa.prodi.jurusan','ormawa']));
+
+        $data->put('created_at',$pimpinanOrmawa->created_at->isoFormat('D MMMM Y H:m:ss'));
+        $data->put('updated_at',$pimpinanOrmawa->updated_at->isoFormat('D MMMM Y H:m:ss'));
+        $data->put('jabatan',ucwords($pimpinanOrmawa->jabatan));
+        
+        return $data->toJson();
     }
 
     public function create()
@@ -27,33 +47,6 @@ class PimpinanOrmawaController extends Controller
         $ormawaList = Ormawa::pluck('nama','id')->toArray();
         $mahasiswaList = $this->generateMahasiswa();
         return view('user.'.$this->segmentUser.'.tambah_pimpinan_ormawa',compact('mahasiswaList','ormawaList'));
-    }
-
-    public function search(Request $request){
-        $keyword = $request->all();
-        if(isset($keyword['keywords']) || isset($keyword['jurusan']) || isset($keyword['ormawa']) || isset($keyword['status_aktif']) ){
-            $perPage = $this->perPage;
-            $nim = $keyword['keywords'] != null ? $keyword['keywords'] : '';
-            $pimpinanOrmawaList = PimpinanOrmawa::where('pimpinan_ormawa.nim','like','%'.$nim.'%')
-                                    ->join('mahasiswa','mahasiswa.nim','=','pimpinan_ormawa.nim')
-                                    ->join('prodi','prodi.id','=','mahasiswa.id_prodi');
-            (isset($keyword['jurusan'])) ? $pimpinanOrmawaList = $pimpinanOrmawaList->where('id_jurusan',$keyword['jurusan']):'';
-            (isset($keyword['ormawa'])) ? $pimpinanOrmawaList = $pimpinanOrmawaList->where('id_ormawa',$keyword['ormawa']):'';
-            (isset($keyword['status_aktif'])) ? $pimpinanOrmawaList = $pimpinanOrmawaList->where('status_aktif',$keyword['status_aktif']):'';
-            $countAllPimpinanOrmawa = PimpinanOrmawa::all()->count();
-            $jurusan = Jurusan::pluck('nama_jurusan','id')->toArray();
-            $mahasiswa = $this->generateMahasiswa();
-            $ormawaList = Ormawa::pluck('nama','id')->toArray();
-            $pimpinanOrmawaList= $pimpinanOrmawaList->paginate($perPage)->appends($request->except('page'));
-            $countPimpinanOrmawa = $pimpinanOrmawaList->count();
-            if($countPimpinanOrmawa < 1){
-                $this->setFlashData('search','Hasil Pencarian','Data pimpinan ormawa tidak ditemukan!');
-            }
-            return view('user.'.$this->segmentUser.'.pimpinan_ormawa',compact('pimpinanOrmawaList','countPimpinanOrmawa','countAllPimpinanOrmawa','jurusan','perPage','mahasiswa','ormawaList'));
-        }else{
-            return redirect($this->segmentUser.'/pimpinan-ormawa');
-        }
-        dd($keyword);
     }
 
     public function store(PimpinanOrmawaRequest $request)

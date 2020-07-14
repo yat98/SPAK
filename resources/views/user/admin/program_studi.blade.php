@@ -23,7 +23,7 @@
                                         class="mdi mdi-bank mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countJurusan > 0 ? $countJurusan.' Jurusan' : 'Data Jurusan Kosong' }}
+                                    {{ $countAllJurusan > 0 ? $countAllJurusan.' Jurusan' : 'Data Jurusan Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -60,62 +60,16 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                <div class="row mb-3">
-                                    <div class="col-sm-12 col-md-6">
-                                        {{ Form::open(['url'=>'admin/program-studi/search','method'=>'get']) }}
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                {{ Form::text('keyword',(request()->get('keyword') != null) ? request()->get('keyword'):null,['placeholder'=>'Cari Program Studi...','class'=>'form-control']) }}
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-sm btn-success" type="submit">
-                                                        <i class="mdi mdi-magnify btn-icon-prepend"></i>
-                                                        Cari
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {{ Form::close() }}
-                                    </div>
-                                </div>
-                                @if ($countProdi > 0)
+                                @if ($countAllProdi > 0)
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table class="table display no-warp" id='datatables' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
-                                                <th> Nama Program Studi</th>
-                                                <th> Strata</th>
+                                                <th data-priority="1"> Nama Program Studi</th>
                                                 <th> Jurusan</th>
-                                                <th>Di Buat</th>
-                                                <th>Di Ubah</th>
-                                                <th> Aksi</th>
+                                                <th data-priority="2"> Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($prodiList as $prodi)
-                                            <tr>
-                                                <td> {{ $loop->iteration }}</td>
-                                                <td> {{ $prodi->nama_prodi  }}</td>
-                                                <td> {{ $prodi->strata  }}</td>
-                                                <td> {{ $prodi->jurusan->nama_jurusan}}</td>
-                                                <td> {{ $prodi->created_at->diffForHumans() }}</td>
-                                                <td> {{ $prodi->updated_at->diffForHumans() }}</td>
-                                                <td>
-                                                    <a href="{{ url('admin/program-studi/'.$prodi->id.'/edit') }}"
-                                                        class="btn btn-warning btn-sm text-dark">
-                                                        <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>
-                                                        Edit
-                                                    </a>
-                                                    {{ Form::open(['method'=>'DELETE','action'=>['ProgramStudiController@destroy',$prodi->id],'class'=>'d-inline-block']) }}
-                                                    <button type="submit" class="btn btn-danger btn-sm sweet-delete">
-                                                        <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
-                                                        Hapus
-                                                    </button>
-                                                    {{ Form::close() }}
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
                                 </div>
                                 @else
@@ -140,4 +94,78 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='prodi-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('datatables-javascript')
+    <script>
+        let link = "{{ url('admin/program-studi/') }}";
+
+        $('#datatables').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 0,
+                            "data": "nama_prodi",
+                            "render": function ( data, type, row, meta ) {
+                                return `<a href="${link}/${row.id}" class="prodi-detail text-dark" data-toggle="modal" data-target="#exampleModal">
+                                            <div class="mb-1">${row.strata} - ${row.nama_prodi}</div>
+                                        </a>`;
+                            }
+                        },
+                        {
+                            "targets": 2,
+                            "data": "aksi",
+                            "render": function ( data, type, row, meta ) {
+                                return `<div class="d-inline-block">
+                                            <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                            </a>
+                                            <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                <a href="${link+'/'+row.id}/edit" class="dropdown-item">Edit</a>
+                                                <form action="${link+'/'+row.id}" method="post">
+                                                    <input name="_method" type="hidden" value="DELETE">
+                                                    <input name="_token" type="hidden" value="{{ @csrf_token() }}">
+                                                    <button type="submit" class="dropdown-item sweet-delete">
+                                                        Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>`;
+                        }
+            }],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('admin/program-studi/all') }}',
+            columns: [{
+                    data: 'nama_prodi',
+                },
+                {
+                    data: 'jurusan.nama_jurusan',
+                },
+                {
+                    data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                }
+            ],
+            "pageLength": {{ $perPage }}
+        });
+    </script>
 @endsection

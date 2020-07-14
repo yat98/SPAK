@@ -44,44 +44,17 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                <div class="row mb-3">
-                                    <div class="col-12">
-                                        {{ Form::open(['url'=>'admin/tahun-akademik/search','method'=>'GET']) }}
-                                        <div class="form-row">
-                                            <div class="col-sm-12 col-md-3">
-                                                {{ Form::select('tahun_akademik',$tahun,(request()->get('tahun_akademik') != null) ? request()->get('tahun_akademik'):null,['class'=>'btn-margin form-control','placeholder'=> '-- Pilih Tahun Akademik --']) }}
-                                            </div>
-                                            <div class="col-sm-12 col-md-3">
-                                                {{ Form::select('semester',['genap'=>'Genap','ganjil'=>'Ganjil'],(request()->get('semester')!= null) ? request()->get('semester'):null,['class'=>'form-control','placeholder'=> '-- Pilih Semester --']) }}
-                                            </div>
-                                            <div class="col-sm-12 col-md-3">
-                                                {{ Form::select('status_aktif',['aktif'=>'Aktif','non aktif'=>'Non Aktif'],(request()->get('status_aktif') != null) ? request()->get('status_aktif'):null,['class'=>'form-control','placeholder'=> '-- Pilih Status Aktif --']) }}
-                                            </div>
-                                            <div class="col-sm-12 col-md">
-                                                <button class="btn btn-success btn-tambah" type="submit">
-                                                    <i class="mdi mdi-magnify btn-icon-prepend"></i>
-                                                    Cari
-                                                </button>
-                                            </div>
-                                        </div>
-                                        {{ Form::close() }}
-                                    </div>
-                                </div>
-                                @if ($countTahunAkademik > 0)
+                                @if ($countAllTahunAkademik > 0)
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table class="table display no-warp" id='datatables' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
                                                 <th> Tahun Akademik</th>
-                                                <th> Semester</th>
                                                 <th> Status</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
                                                 <th> Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        {{-- <tbody>
                                             @foreach ($tahunAkademikList as $tahunAkademik)
                                             <tr>
                                                 <td> {{ $loop->iteration + $perPage * ($tahunAkademikList->currentPage() - 1) }}</td>
@@ -113,11 +86,8 @@
                                                 </td>
                                             </tr>
                                             @endforeach
-                                        </tbody>
+                                        </tbody> --}}
                                     </table>
-                                    <div class="col">
-                                        {{ $tahunAkademikList->links() }}
-                                    </div>
                                 </div>
                                 @else
                                 <div class="row">
@@ -141,4 +111,90 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='tahun-akademik-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('datatables-javascript')
+    <script>
+        let link = "{{ url('admin/tahun-akademik/') }}";
+
+        $('#datatables').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 0,
+                            "data": "tahun_akademik",
+                            "render": function ( data, type, row, meta ) {
+                                return `<a href="${link}/${row.id}" class="tahun-akademik-detail text-dark" data-toggle="modal" data-target="#exampleModal">
+                                            <div class="mb-1">${row.tahun_akademik} - ${row.semester}</div>
+                                        </a>`;
+                            }
+                        },
+                        {
+                            "targets": 1,
+                            "data": "status_aktif",
+                            "render": function ( data, type, row, meta ) {
+                                if(data == 'Aktif'){
+                                    return '<label class="badge badge-gradient-info">'+data+'</label>';
+                                }else{
+                                    return '<label class="badge badge-gradient-dark">'+data+'</label>';
+                                }
+                            }
+                        },
+                        {
+                            "targets": 2,
+                            "data": "aksi",
+                            "render": function ( data, type, row, meta ) {
+                                return `<div class="d-inline-block">
+                                            <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                            </a>
+                                            <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                <a href="${link+'/'+row.id}/edit" class="dropdown-item">Edit</a>
+                                                <form action="${link+'/'+row.id}" method="post">
+                                                    <input name="_method" type="hidden" value="DELETE">
+                                                    <input name="_token" type="hidden" value="{{ @csrf_token() }}">
+                                                    <button type="submit" class="dropdown-item sweet-delete">
+                                                        Hapus
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>`;
+                        }
+            }],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('admin/tahun-akademik/all') }}',
+            columns: [{
+                    data: 'tahun_akademik',
+                },
+                {
+                    data: 'status_aktif',
+                },
+                {
+                    data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                }
+            ],
+            "pageLength": {{ $perPage }}
+        });
+    </script>
 @endsection

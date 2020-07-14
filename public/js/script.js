@@ -121,7 +121,7 @@ $(window).resize(() => {
 
 $('.btn-upload').on('click', showProgress);
 
-$('.btn-detail').on('click', function (e) {
+$('.table').on('click','.btn-detail', function (e) {
     e.preventDefault();
     $('#mahasiswa-detail-content').empty();
     $('#surat-keterangan-aktif-detail-content').empty();
@@ -3178,3 +3178,308 @@ $('.btn-surat-data-awal-detail').on('click',function(e){
             $('#surat-data-awal-detail-content').html(html);
         });
 });
+
+$('.table-responsive').on('click','.user-detail', function (e) {
+    e.preventDefault();
+    $('#user-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let user = result;
+            let tableStatus = '';
+            
+            if (user.status_aktif == 'Aktif'){
+                tableStatus+=`<label class="badge badge-gradient-info">${user.status_aktif}</label>`;
+            }else{
+                tableStatus+=`<label class="badge badge-gradient-dark">${user.status_aktif}</label>`;
+            }
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>NIP</th>
+                                    <td>${user.nip}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nama</th>
+                                    <td>${user.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jabatan</th>
+                                    <td>${user.jabatan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Pangkat</th>
+                                    <td>${user.pangkat}</td>
+                                </tr>
+                                <tr>
+                                    <th>Golongan</th>
+                                    <td>${user.golongan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status Aktif</th>
+                                    <td>${tableStatus}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dibuat</th>
+                                    <td>${user.created_at}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diubah</th>
+                                    <td>${user.updated_at}</td>
+                                </tr>
+                            </table>
+                        </div>`;
+            $('#user-detail-content').html(html);
+        });
+})
+
+$('.table-responsive').on('click','.jurusan-detail', function (e) {
+    e.preventDefault();
+    $('#jurusan-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let jurusan = result;
+
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>Nama Jurusan</th>
+                                    <td>${jurusan.nama_jurusan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dibuat</th>
+                                    <td>${jurusan.created_at}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diubah</th>
+                                    <td>${jurusan.updated_at}</td>
+                                </tr>
+                            </table>
+                        </div>`;
+            $('#jurusan-detail-content').html(html);
+        });
+})
+
+$('.table-responsive').on('click','.prodi-detail', function (e) {
+    e.preventDefault();
+    $('#prodi-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let prodi = result;
+
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>Nama Program Studi</th>
+                                    <td>${prodi.nama_prodi}</td>
+                                </tr>
+                                <tr>
+                                    <th>Strata</th>
+                                    <td>${prodi.strata}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jurusan</th>
+                                    <td>${prodi.nama_jurusan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dibuat</th>
+                                    <td>${prodi.created_at}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diubah</th>
+                                    <td>${prodi.updated_at}</td>
+                                </tr>
+                            </table>
+                        </div>`;
+            $('#prodi-detail-content').html(html);
+        });
+})
+
+$('.table-responsive').on('click','.tahun-akademik-detail', function (e) {
+    e.preventDefault();
+    console.log('a');
+    $('#tahun-akademik-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let tahunAkademik = result;
+            let tableStatus = '';
+            
+            if (tahunAkademik.status_aktif == 'Aktif'){
+                tableStatus+=`<label class="badge badge-gradient-info">${tahunAkademik.status_aktif}</label>`;
+            }else{
+                tableStatus+=`<label class="badge badge-gradient-dark">${tahunAkademik.status_aktif}</label>`;
+            }
+
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>Tahun Akademik</th>
+                                    <td>${tahunAkademik.tahun_akademik}</td>
+                                </tr>
+                                <tr>
+                                    <th>Semester</th>
+                                    <td>${tahunAkademik.semester}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>${tableStatus}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dibuat</th>
+                                    <td>${tahunAkademik.created_at}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diubah</th>
+                                    <td>${tahunAkademik.updated_at}</td>
+                                </tr>
+                            </table>
+                        </div>`;
+            $('#tahun-akademik-detail-content').html(html);
+        });
+})
+
+
+$('.table-responsive').on('click','.status-mahasiswa-detail', function (e) {
+    e.preventDefault();
+    console.log('a');
+    $('#status-mahasiswa-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let statusMahasiswa = result;
+            let tableStatus = '';
+            
+            if (statusMahasiswa.status == 'Aktif'){
+                tableStatus+=`<label class="badge badge-gradient-info">${statusMahasiswa.status}</label>`;
+            }else if(statusMahasiswa.status == 'Lulus'){
+                tableStatus+=`<label class="badge badge-gradient-success">${statusMahasiswa.status}</label>`;
+            }else if(statusMahasiswa.status == 'Drop Out' || statusMahasiswa.status == 'Keluar'){
+                tableStatus+=`<label class="badge badge-gradient-danger">${status.pivot.status}</label>`;
+            }else if(statusMahasiswa.status == 'Cuti'){
+                tableStatus+=`<label class="badge badge-gradient-warning text-dark">${statusMahasiswa.status}</label>`;
+            }else{
+                tableStatus+=`<label class="badge badge-gradient-dark">${statusMahasiswa.status}</label>`;
+            }
+
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>NIM</th>
+                                    <td>${statusMahasiswa.mahasiswa.nim}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nama</th>
+                                    <td>${statusMahasiswa.mahasiswa.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Tahun Akademik</th>
+                                    <td>${statusMahasiswa.tahun_akademik.tahun_akademik}</td>
+                                </tr>
+                                <tr>
+                                    <th>Semester</th>
+                                    <td>${statusMahasiswa.tahun_akademik.semester.ucwords()}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>${tableStatus}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dibuat</th>
+                                    <td>${statusMahasiswa.created_at}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diubah</th>
+                                    <td>${statusMahasiswa.updated_at}</td>
+                                </tr>
+                            </table>
+                        </div>`;
+            $('#status-mahasiswa-detail-content').html(html);
+        });
+})
+
+$('.table-responsive').on('click','.ormawa-detail', function (e) {
+    e.preventDefault();
+    $('#ormawa-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let ormawa = result;
+
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>Nama Ormawa</th>
+                                    <td>${ormawa.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jurusan</th>
+                                    <td>${ormawa.jurusan.nama_jurusan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dibuat</th>
+                                    <td>${ormawa.created_at}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diubah</th>
+                                    <td>${ormawa.updated_at}</td>
+                                </tr>
+                            </table>
+                        </div>`;
+            $('#ormawa-detail-content').html(html);
+        });
+})
+
+
+$('.table-responsive').on('click','.pimpinan-ormawa-detail', function (e) {
+    e.preventDefault();
+    $('#pimpinan-ormawa-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let pimpinanOrmawa = result;
+
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>NIM</th>
+                                    <td>${pimpinanOrmawa.nim}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nama</th>
+                                    <td>${pimpinanOrmawa.mahasiswa.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jabatan</th>
+                                    <td>${pimpinanOrmawa.jabatan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nama Ormawa</th>
+                                    <td>${pimpinanOrmawa.ormawa.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jurusan</th>
+                                    <td>${pimpinanOrmawa.mahasiswa.prodi.jurusan.nama_jurusan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dibuat</th>
+                                    <td>${pimpinanOrmawa.created_at}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diubah</th>
+                                    <td>${pimpinanOrmawa.updated_at}</td>
+                                </tr>
+                            </table>
+                        </div>`;
+            $('#pimpinan-ormawa-detail-content').html(html);
+        });
+})

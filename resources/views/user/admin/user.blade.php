@@ -47,13 +47,13 @@
                                 <hr class="mb-4">
                                 @if ($countAllUser > 0)
                                 <div class="table-responsive">
-                                    <table class="table display" id='datatables'>
+                                    <table class="table display no-warp" id='datatables' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> Nama</th>
+                                                <th data-priority="1"> Nama</th>
                                                 <th> Jabatan</th>
                                                 <th> Status Aktif</th>
-                                                <th> Aksi</th>
+                                                <th data-priority="2"> Aksi</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -80,47 +80,77 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='user-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('datatables-javascript')
 <script>
+    let link = "{{ url('admin/user/') }}";
+
     $('#datatables').DataTable({
-        "columnDefs": [{
-            "targets": 2,
-            "data": "status_aktif",
-            "render": function ( data, type, row, meta ) {
-                if(data == 'Aktif'){
-                    return '<label class="badge badge-gradient-info">'+data+'</label>';
-                }else{
-                    return '<label class="badge badge-gradient-dark">'+data+'</label>';
-                }
-            }
-        },
-        {
-            "targets": 0,
-            "data": "nama",
-            "render": function ( data, type, row, meta ) {
-                return '<div class="mb-1">'+row.nama+'</div><span class="text-muted small">NIP. '+row.nip+'</span>';
-            }
-        },
-        {
-            "targets": 3,
-            "data": "aksi",
-            "render": function ( data, type, row, meta ) {
-                return `<a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
-                            <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
-                        </a>
-                        <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
-                            <a href="{{ url('admin/user') }}${'/'+row.nip}/edit" class="dropdown-item">Edit</a>
-                            <form action="{{ url('admin/user') }}/${row.nip}" method="post">
-                                <input name="_method" type="hidden" value="DELETE">
-                                <input name="_token" type="hidden" value="{{ @csrf_token() }}">
-                                <button type="submit" class="dropdown-item sweet-delete">
-                                    Hapus
-                                </button>
-                            </form>
-                        </div>`;
-            }
+        responsive: true,
+        columnDefs: [{
+                        "targets": 2,
+                        "data": "status_aktif",
+                        "render": function ( data, type, row, meta ) {
+                            if(data == 'Aktif'){
+                                return '<label class="badge badge-gradient-info">'+data+'</label>';
+                            }else{
+                                return '<label class="badge badge-gradient-dark">'+data+'</label>';
+                            }
+                        }
+                    },
+                    {
+                        "targets": [4],
+                        "visible": false,
+                    },
+                    {
+                        "targets": 0,
+                        "data": "nama",
+                        "render": function ( data, type, row, meta ) {
+                            return `<a href="${link}/${row.nip}" class="user-detail text-dark" data-toggle="modal" data-target="#exampleModal">
+                                        <div class="mb-1">${row.nama}</div>
+                                        <span class="text-muted small">NIP. ${row.nip}</span>
+                                    </a>`;
+                        }
+                    },
+                    {
+                        "targets": 3,
+                        "data": "aksi",
+                        "render": function ( data, type, row, meta ) {
+                            return `<div class="d-inline-block">
+                                        <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                            <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                        </a>
+                                        <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                            <a href="${link+'/'+row.nip}/edit" class="dropdown-item">Edit</a>
+                                            <form action="${link+'/'+row.nip}" method="post">
+                                                <input name="_method" type="hidden" value="DELETE">
+                                                <input name="_token" type="hidden" value="{{ @csrf_token() }}">
+                                                <button type="submit" class="dropdown-item sweet-delete">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>`;
+                    },
         }],
         autoWidth: false,
         language: bahasa,
@@ -138,7 +168,10 @@
             },
             {
                 data: 'aksi', name: 'aksi', orderable: false, searchable: false
-            }
+            },
+            {
+                data: 'nama',
+            },
         ],
         "pageLength": {{ $perPage }}
     });

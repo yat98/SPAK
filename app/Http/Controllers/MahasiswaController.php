@@ -25,6 +25,7 @@ use App\SuratKegiatanMahasiswa;
 use App\SuratPengantarBeasiswa;
 use App\SuratPersetujuanPindah;
 use App\Imports\MahasiswaImport;
+use Yajra\DataTables\DataTables;
 use App\PengajuanSuratKeterangan;
 use App\DaftarDispensasiMahasiswa;
 use Illuminate\Support\Facades\DB;
@@ -49,15 +50,21 @@ class MahasiswaController extends Controller
     public function index()
     {
         $perPage = $this->perPage;
-        $prodiList = $this->generateProdi();
-        $jurusanList = Jurusan::pluck('nama_jurusan','id')->toArray();
-        $angkatan = $this->generateAngkatan();
-        $mahasiswaList = Mahasiswa::orderBy('nim')->with('prodi.jurusan')->paginate($perPage);
         $countAllMahasiswa = Mahasiswa::count();
-        $countMahasiswa = count($mahasiswaList);
-        $countProdi = ProgramStudi::all()->count();
-        $countJurusan = Jurusan::all()->count();
-        return view('user.'.$this->segmentUser.'.mahasiswa',compact('perPage','mahasiswaList','countMahasiswa','countProdi','countJurusan','prodiList','angkatan','jurusanList','countAllMahasiswa'));
+        $countAllProdi = ProgramStudi::all()->count();
+        $countAllJurusan = Jurusan::all()->count(); 
+        return view('user.'.$this->segmentUser.'.mahasiswa',compact('perPage','countAllProdi','countAllJurusan','countAllMahasiswa'));
+    }
+
+    public function getAllMahasiswa(){
+        return DataTables::of(Mahasiswa::with(['prodi.jurusan'])->select(['*']))
+                ->editColumn("status_aktif", function ($data) {
+                    return ucwords($data->status_aktif);
+                })
+                ->addColumn('aksi', function ($data) {
+                    return $data->nim;
+                })
+                ->make(true);
     }
 
     public function mahasiswaPimpinan(){
@@ -180,34 +187,6 @@ class MahasiswaController extends Controller
         }]));
         $mhs->put('tanggal_lahir',$mahasiswa->tanggal_lahir->isoFormat('D MMMM Y'));
         return $mhs->toJson();
-    }
-
-    public function search(Request $request){
-        $keyword = $request->all();
-        if(isset($keyword['angkatan']) || isset($keyword['jurusan']) || isset($keyword['prodi']) || isset($keyword['keyword'])){
-            $countAllMahasiswa = Mahasiswa::count();
-            $countProdi = ProgramStudi::all()->count();
-            $countJurusan = Jurusan::all()->count();
-            $perPage = $this->perPage;
-            $prodiList = $this->generateProdi();
-            $jurusanList = Jurusan::pluck('nama_jurusan','id')->toArray();
-            $angkatan = $this->generateAngkatan();
-            $nama = isset($keyword['keyword']) ? $keyword['keyword']:'';
-            $mahasiswaList = Mahasiswa::where('nama','like','%'.$nama.'%')
-                                ->join('prodi','prodi.id','=','mahasiswa.id_prodi')
-                                ->join('jurusan','jurusan.id','=','prodi.id_jurusan');
-            (isset($keyword['angkatan'])) ? $mahasiswaList = $mahasiswaList->where('angkatan',$keyword['angkatan']) : '';
-            (isset($keyword['jurusan'])) ? $mahasiswaList = $mahasiswaList->where('id_jurusan',$keyword['jurusan']) : '';
-            (isset($keyword['prodi'])) ? $mahasiswaList = $mahasiswaList->where('id_prodi',$keyword['prodi']) : '';
-            $mahasiswaList = $mahasiswaList->paginate($perPage)->appends($request->except('page'));
-            $countMahasiswa = count($mahasiswaList);
-            if($countMahasiswa < 1){
-                $this->setFlashData('search','Hasil Pencarian','Data mahasiswa tidak ditemukan!');
-            }
-            return view('user.'.$this->segmentUser.'.mahasiswa',compact('perPage','mahasiswaList','countMahasiswa','countProdi','countJurusan','prodiList','angkatan','jurusanList','countAllMahasiswa'));
-        }else{
-            return redirect($this->segmentUser.'/mahasiswa');
-        }
     }
 
     public function store(MahasiswaRequest $request)

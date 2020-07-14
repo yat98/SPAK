@@ -21,6 +21,12 @@ class AdminAuthController extends Controller
 
     public function getLogin()
     {
+        $jenisUser = Session::get('jenis_user');
+
+        if($jenisUser != null){
+            return redirect($jenisUser);
+        }
+        
         return view('login.login_admin');
     }
 
