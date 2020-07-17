@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use DataTables;
 use App\Jurusan;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
 use App\Http\Requests\JurusanRequest;
 
 class JurusanController extends Controller
@@ -22,6 +22,17 @@ class JurusanController extends Controller
                     return $data->id;
                 })
                 ->make(true);
+    }
+
+    public function getLimitJurusan(){
+        return DataTables::collection(Jurusan::all()->take(5)->sortByDesc('updated_at'))
+                    ->editColumn("created_at", function ($data) {
+                        return $data->created_at->diffForHumans();
+                    })
+                    ->editColumn("updated_at", function ($data) {
+                        return $data->updated_at->diffForHumans();
+                    })
+                    ->toJson();
     }
 
     public function show(Jurusan $jurusan){

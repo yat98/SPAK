@@ -49,44 +49,11 @@
                                     <table class="table display no-warp" id='datatables' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> Tahun Akademik</th>
+                                                <th data-priority="1"> Tahun Akademik</th>
                                                 <th> Status</th>
-                                                <th> Aksi</th>
+                                                <th data-priority="2"> Aksi</th>
                                             </tr>
                                         </thead>
-                                        {{-- <tbody>
-                                            @foreach ($tahunAkademikList as $tahunAkademik)
-                                            <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($tahunAkademikList->currentPage() - 1) }}</td>
-                                                <td> {{ $tahunAkademik->tahun_akademik  }}</td>
-                                                <td> {{ ucwords($tahunAkademik->semester)  }}</td>
-                                                <td>
-                                                    @if ($tahunAkademik->status_aktif == 'aktif')
-                                                    <label
-                                                        class="badge badge-gradient-info">{{ ucwords($tahunAkademik->status_aktif) }}</label>
-                                                    @else
-                                                    <label
-                                                        class="badge badge-gradient-dark">{{ ucwords($tahunAkademik->status_aktif) }}</label>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $tahunAkademik->created_at->diffForHumans() }}</td>
-                                                <td>{{ $tahunAkademik->updated_at->diffForHumans() }}</td>
-                                                <td>
-                                                    <a href="{{ url('admin/tahun-akademik/'.$tahunAkademik->id.'/edit') }}"
-                                                        class="btn btn-warning btn-sm text-dark">
-                                                        <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>
-                                                        Edit
-                                                    </a>
-                                                    {{ Form::open(['method'=>'DELETE','action'=>['TahunAkademikController@destroy',$tahunAkademik->id],'class'=>'d-inline-block']) }}
-                                                    <button type="submit" class="btn btn-danger btn-sm sweet-delete">
-                                                        <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
-                                                        Hapus
-                                                    </button>
-                                                    {{ Form::close() }}
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody> --}}
                                     </table>
                                 </div>
                                 @else
@@ -111,7 +78,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">

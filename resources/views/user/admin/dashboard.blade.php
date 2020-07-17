@@ -23,7 +23,7 @@
                                     <i class="mdi mdi-bank mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countJurusan > 0 ? $countJurusan.' Jurusan' : 'Data Jurusan Kosong' }}
+                                    {{ $countAllJurusan > 0 ? $countAllJurusan.' Jurusan' : 'Data Jurusan Kosong' }}
                                 </h2>
                                 <h6 class="card-text">
                                     <a href="{{ url('admin/jurusan') }}" class="text-white">Lihat data jurusan</a>
@@ -40,7 +40,7 @@
                                     class="mdi mdi-book-multiple mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countProdi > 0 ? $countProdi.' Program Studi' : 'Data Program Studi Kosong' }}
+                                    {{ $countAllProdi > 0 ? $countAllProdi.' Program Studi' : 'Data Program Studi Kosong' }}
                                 </h2>
                                 <h6 class="card-text">
                                     <a href="{{ url('admin/program-studi') }}" class="text-white">Lihat data program
@@ -76,7 +76,7 @@
                                         class="mdi mdi-account mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countMahasiswa > 0 ? $countMahasiswa.' Mahasiswa' : 'Data Mahasiswa Kosong' }}
+                                    {{ $countAllMahasiswa > 0 ? $countAllMahasiswa.' Mahasiswa' : 'Data Mahasiswa Kosong' }}
                                 </h2>
                                 <h6 class="card-text">
                                     <a href="{{ url('admin/mahasiswa') }}" class="text-white">Lihat data mahasiswa</a>
@@ -93,7 +93,7 @@
                                         class="mdi mdi-account mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countUser > 0 ? $countUser.' User' : 'Data User Kosong' }}
+                                    {{ $countAllUser > 0 ? $countAllUser.' User' : 'Data User Kosong' }}
                                 </h2>
                                 <h6 class="card-text">
                                     <a href="{{ url('admin/user') }}" class="text-white">Lihat data user</a>
@@ -110,7 +110,7 @@
                                         class="mdi mdi-checkbox-multiple-marked mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countStatusMahasiswa > 0 ? $countStatusMahasiswa.' Status Mahasiswa' : 'Data Status Mahasiswa Kosong' }}
+                                    {{ $countAllStatusMahasiswa > 0 ? $countAllStatusMahasiswa.' Status Mahasiswa' : 'Data Status Mahasiswa Kosong' }}
                                 </h2>
                                 <h6 class="card-text">
                                     <a href="{{ url('admin/status-mahasiswa') }}" class="text-white">Lihat data status mahasiswa</a>
@@ -127,7 +127,7 @@
                                         class="mdi mdi-check-decagram mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countOrmawa > 0 ? $countOrmawa.' Ormawa' : 'Data Ormawa Kosong' }}
+                                    {{ $countAllOrmawa > 0 ? $countAllOrmawa.' Ormawa' : 'Data Ormawa Kosong' }}
                                 </h2>
                                 <h6 class="card-text">
                                     <a href="{{ url('admin/ormawa') }}" class="text-white">Lihat data ormawa</a>
@@ -144,7 +144,7 @@
                                         class="mdi mdi-account-multiple mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countPimpinanOrmawa > 0 ? $countPimpinanOrmawa.' Pimpinan Ormawa' : 'Data Pimpinan Ormawa Kosong' }}
+                                    {{ $countAllPimpinanOrmawa > 0 ? $countAllPimpinanOrmawa.' Pimpinan Ormawa' : 'Data Pimpinan Ormawa Kosong' }}
                                 </h2>
                                 <h6 class="card-text">
                                     <a href="{{ url('admin/pimpinan-ormawa') }}" class="text-white">Lihat data pimpinan ormawa</a>
@@ -163,27 +163,16 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countJurusan > 0)
-                                <div class="table-responsive">
-                                    <table class="table">
+                                @if ($countAllJurusan > 0)
+                                <div class="table-responsive dashboard">
+                                    <table class="table display no-warp" id='datatables' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
-                                                <th> Nama Jurusan</th>
+                                                <th data-priority="1"> Nama Jurusan</th>
                                                 <th> Di Buat</th>
                                                 <th> Di Ubah</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($jurusanList as $jurusan)
-                                            <tr>
-                                                <td> {{ $loop->iteration }}</td>
-                                                <td> {{ $jurusan->nama_jurusan  }}</td>
-                                                <td> {{ $jurusan->created_at->diffForHumans() }}</td>
-                                                <td> {{ $jurusan->updated_at->diffForHumans() }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
                                 </div>
                                 @else
@@ -213,31 +202,17 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countProdi> 0)
-                                <div class="table-responsive">
-                                    <table class="table">
+                                @if ($countAllProdi> 0)
+                                <div class="table-responsive dashboard">
+                                    <table class="table display no-warp prodi" id='datatables2' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
+                                                <th data-priority="1"> Nama Program Studi</th>
                                                 <th> Jurusan</th>
-                                                <th> Strata</th>
-                                                <th> Nama Program Studi</th>
                                                 <th> Di Buat</th>
                                                 <th> Di Ubah</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($prodiList as $prodi)
-                                            <tr>
-                                                <td> {{ $loop->iteration }}</td>
-                                                <td> {{ $prodi->jurusan->nama_jurusan}}</td>
-                                                <td> {{ $prodi->strata  }}</td>
-                                                <td> {{ $prodi->nama_prodi  }}</td>
-                                                <td> {{ $prodi->created_at->diffForHumans() }}</td>
-                                                <td> {{ $prodi->updated_at->diffForHumans() }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
                                 </div>
                                 @else
@@ -264,39 +239,17 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countTahunAkademik > 0)
-                                <div class="table-responsive">
-                                    <table class="table">
+                                @if ($countAllTahunAkademik > 0)
+                                 <div class="table-responsive dashboard">
+                                    <table class="table display no-warp prodi" id='datatables3' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
-                                                <th> Tahun Akademik</th>
-                                                <th> Semester</th>
+                                                <th data-priority="1"> Tahun Akademik</th>
                                                 <th> Status</th>
                                                 <th> Di Buat</th>
                                                 <th> Di Ubah</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($tahunAkademikList as $tahunAkademik)
-                                            <tr>
-                                                <td> {{ $loop->iteration }}</td>
-                                                <td> {{ $tahunAkademik->tahun_akademik  }}</td>
-                                                <td> {{ ucwords($tahunAkademik->semester)  }}</td>
-                                                <td>
-                                                    @if ($tahunAkademik->status_aktif == 'aktif')
-                                                    <label
-                                                        class="badge badge-gradient-info">{{ ucwords($tahunAkademik->status_aktif) }}</label>
-                                                    @else
-                                                    <label
-                                                        class="badge badge-gradient-dark">{{ ucwords($tahunAkademik->status_aktif) }}</label>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $tahunAkademik->created_at->diffForHumans() }}</td>
-                                                <td>{{ $tahunAkademik->updated_at->diffForHumans() }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
                                 </div>
                                 @else
@@ -323,36 +276,18 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countMahasiswa > 0)
-                                <div class="table-responsive">
-                                    <table class="table">
+                                @if ($countAllMahasiswa > 0)
+                                <div class="table-responsive dashboard">
+                                    <table class="table display no-warp prodi" id='datatables4' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
-                                                <th> Nim</th>
-                                                <th> Nama</th>
+                                                 <th data-priority="1"> Nama</th>
                                                 <th> Jurusan</th>
-                                                <th> Program Studi</th>
+                                                <th> Angkatan</th>
                                                 <th> Di Buat</th>
                                                 <th> Di Ubah</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($mahasiswaList as $mahasiswa)
-                                            <tr>
-                                                <td> {{ $loop->iteration }}</td>
-                                                <td> {{ $mahasiswa->nim  }}</td>
-                                                <td> {{ ucwords($mahasiswa->nama)  }}</td>
-                                                <td>{{ $mahasiswa->prodi->jurusan->nama_jurusan }}</td>
-                                                <td>
-                                                    {{ $mahasiswa->prodi->strata }} -
-                                                    {{ $mahasiswa->prodi->nama_prodi }}
-                                                </td>
-                                                <td>{{ $mahasiswa->created_at->diffForHumans() }}</td>
-                                                <td>{{ $mahasiswa->updated_at->diffForHumans() }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
                                 </div>
                                 @else
@@ -382,41 +317,18 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countUser > 0)
-                                <div class="table-responsive">
-                                    <table class="table">
+                                @if ($countAllUser > 0)
+                                <div class="table-responsive dashboard">
+                                    <table class="table display no-warp prodi" id='datatables5' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
-                                                <th> NIP</th>
-                                                <th> Nama</th>
+                                                 <th data-priority="1"> Nama</th>
                                                 <th> Jabatan</th>
                                                 <th> Status Aktif</th>
                                                 <th> Di Buat</th>
                                                 <th> Di Ubah</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($userList as $user)
-                                            <tr>
-                                                <td> {{ $loop->iteration }}</td>
-                                                <td> {{  $user->nip }}</td>
-                                                <td> {{  $user->nama }}</td>
-                                                <td> {{  ucwords($user->jabatan) }}</td>
-                                                <td>
-                                                @if ($user->status_aktif == 'aktif')
-                                                <label
-                                                    class="badge badge-gradient-info">{{ ucwords($user->status_aktif) }}</label>
-                                                @else
-                                                <label
-                                                    class="badge badge-gradient-dark">{{ ucwords($user->status_aktif) }}</label>
-                                                @endif
-                                                </td>
-                                                <td> {{ $user->created_at->diffForHumans() }}</td>
-                                                <td> {{ $user->updated_at->diffForHumans() }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
                                 </div>
                                 @else
@@ -446,45 +358,18 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countStatusMahasiswa > 0)
-                                <div class="table-responsive">
-                                    <table class="table">
+                                @if ($countAllStatusMahasiswa > 0)
+                                <div class="table-responsive dashboard">
+                                    <table class="table display no-warp prodi" id='datatables6' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
-                                                <th> NIM</th>
-                                                <th> Nama</th>
+                                                <th data-priority="1"> Nama</th>
                                                 <th> Tahun Akademik</th>
                                                 <th> Status Aktif</th>
                                                 <th> Di Buat</th>
                                                 <th> Di Ubah</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($statusMahasiswaList as $statusMahasiswa)
-                                            <tr>
-                                                <td> {{ $loop->iteration }}</td>
-                                                <td> {{ $statusMahasiswa->nim  }}</td>
-                                                <td> {{ ucwords($statusMahasiswa->nama)  }}</td>
-                                                <td> {{ $statusMahasiswa->tahun_akademik.' - '.ucwords($statusMahasiswa->semester)  }}</td>
-                                                <td>
-                                                    @if ($statusMahasiswa->status == 'aktif')
-                                                        <label class="badge badge-gradient-info">{{ ucwords($statusMahasiswa->status) }}</label>
-                                                    @elseif($statusMahasiswa->status == 'lulus')
-                                                        <label class="badge badge-gradient-success">{{ ucwords($statusMahasiswa->status) }}</label>
-                                                    @elseif($statusMahasiswa->status == 'drop out' || $statusMahasiswa->status == 'keluar')
-                                                        <label class="badge badge-gradient-danger">{{ ucwords($statusMahasiswa->status) }}</label>
-                                                    @elseif($statusMahasiswa->status == 'cuti')
-                                                        <label class="badge badge-gradient-warning">{{ ucwords($statusMahasiswa->status) }}</label>
-                                                    @else
-                                                        <label class="badge badge-gradient-dark">{{ ucwords($statusMahasiswa->status) }}</label>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $statusMahasiswa->created_at->diffForHumans() }}</td>
-                                                <td>{{ $statusMahasiswa->updated_at->diffForHumans() }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
                                 </div>
                                 @else
@@ -514,29 +399,17 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countOrmawa > 0)
-                                <div class="table-responsive">
-                                    <table class="table">
+                                @if ($countAllOrmawa > 0)
+                                <div class="table-responsive dashboard">
+                                    <table class="table display no-warp prodi" id='datatables7' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
-                                                <th> Nama</th>
+                                                <th data-priority="1"> Nama</th>
                                                 <th> Nama Jurusan</th>
                                                 <th> Di Buat</th>
                                                 <th> Di Ubah</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($ormawaList as $ormawa)
-                                            <tr>
-                                                <td> {{ $loop->iteration }}</td>
-                                                <td> {{ $ormawa->nama  }}</td>
-                                                <td> {{ $ormawa->jurusan->nama_jurusan  }}</td>
-                                                <td> {{ $ormawa->created_at->diffForHumans() }}</td>
-                                                <td> {{ $ormawa->updated_at->diffForHumans() }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
                                 </div>
                                 @else
@@ -566,14 +439,12 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countPimpinanOrmawa > 0)
-                                <div class="table-responsive">
-                                    <table class="table">
+                                @if ($countAllPimpinanOrmawa > 0)
+                                <div class="table-responsive dashboard">
+                                    <table class="table display no-warp prodi" id='datatables8' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
-                                                <th> NIM</th>
-                                                <th> Nama</th>
+                                                <th data-priority="1"> Nama</th>
                                                 <th> Jurusan</th>
                                                 <th> Jabatan</th>
                                                 <th> Status</th>
@@ -581,28 +452,6 @@
                                                 <th> Di Ubah</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($pimpinanOrmawaList as $pimpinanOrmawa)
-                                            <tr>
-                                                <td> {{ $loop->iteration }}</td>
-                                                <td> {{ $pimpinanOrmawa->nim  }}</td>
-                                                <td> {{ $pimpinanOrmawa->mahasiswa->nama  }}</td>
-                                                <td> {{ $pimpinanOrmawa->mahasiswa->prodi->jurusan->nama_jurusan }}</td>
-                                                <td> {{ ucwords($pimpinanOrmawa->jabatan)  }}</td>
-                                                <td>
-                                                    @if ($pimpinanOrmawa->status_aktif == 'aktif')
-                                                    <label
-                                                        class="badge badge-gradient-info">{{ ucwords($pimpinanOrmawa->status_aktif) }}</label>
-                                                    @else
-                                                    <label
-                                                        class="badge badge-gradient-dark">{{ ucwords($pimpinanOrmawa->status_aktif) }}</label>
-                                                    @endif
-                                                </td>
-                                                <td> {{ $pimpinanOrmawa->created_at->diffForHumans() }}</td>
-                                                <td> {{ $pimpinanOrmawa->updated_at->diffForHumans() }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
                                 </div>
                                 @else
@@ -627,4 +476,510 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="jurusan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='jurusan-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="prodi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='prodi-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="tahunAkademik" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='tahun-akademik-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="mahasiswa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='mahasiswa-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="user" tabindex="-1" role="dialog" aria-labelledby="user"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='user-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="statusMahasiswa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='status-mahasiswa-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ormawa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        <div class="modal-body" id='ormawa-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="pimpinanOrmawa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='pimpinan-ormawa-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('datatables-javascript')
+<script>
+    let linkJurusan = "{{ url('admin/jurusan/') }}";
+
+        $('#datatables').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 0,
+                            "data": "nama_jurusan",
+                            "render": function ( data, type, row, meta ) {
+                                return `<a href="${linkJurusan}/${row.id}" class="jurusan-detail text-dark" data-toggle="modal" data-target="#jurusan">
+                                            <div class="mb-1">${row.nama_jurusan}</div>
+                                        </a>`;
+                            }
+            }],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('admin/jurusan/limit') }}',
+            columns: [{
+                    data: 'nama_jurusan',
+                },
+                {
+                    data: 'created_at',
+                },
+                {
+                    data: 'updated_at',
+                },
+            ],
+            "pageLength": {{ $perPageDashboard }}
+        });
+
+        let linkProdi = "{{ url('admin/program-studi/') }}";
+
+        $('#datatables2').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 0,
+                            "data": "nama_prodi",
+                            "render": function ( data, type, row, meta ) {
+                                return `<a href="${linkProdi}/${row.id}" class="prodi-detail text-dark" data-toggle="modal" data-target="#prodi">
+                                            <div class="mb-1">${row.strata} - ${row.nama_prodi}</div>
+                                        </a>`;
+                            }
+            }],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('admin/program-studi/limit') }}',
+            columns: [{
+                    data: 'nama_prodi',
+                },
+                {
+                    data: 'jurusan.nama_jurusan',
+                },
+                {
+                    data: 'created_at',
+                },
+                {
+                    data: 'updated_at',
+                },
+            ],
+            "pageLength": {{ $perPageDashboard }}
+        });
+
+        let linkTahunAkademik = "{{ url('admin/tahun-akademik/') }}";
+
+        $('#datatables3').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 0,
+                            "data": "tahun_akademik",
+                            "render": function ( data, type, row, meta ) {
+                                return `<a href="${linkTahunAkademik}/${row.id}" class="tahun-akademik-detail text-dark" data-toggle="modal" data-target="#tahunAkademik">
+                                            <div class="mb-1">${row.tahun_akademik} - ${row.semester}</div>
+                                        </a>`;
+                            }
+                        },
+                        {
+                            "targets": 1,
+                            "data": "status_aktif",
+                            "render": function ( data, type, row, meta ) {
+                                if(data == 'Aktif'){
+                                    return '<label class="badge badge-gradient-info">'+data+'</label>';
+                                }else{
+                                    return '<label class="badge badge-gradient-dark">'+data+'</label>';
+                                }
+                            }
+            }],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('admin/tahun-akademik/limit') }}',
+            columns: [{
+                    data: 'tahun_akademik',
+                },
+                {
+                    data: 'status_aktif',
+                },
+                {
+                    data: 'created_at',
+                },
+                {
+                    data: 'updated_at',
+                },
+            ],
+            "pageLength": {{ $perPageDashboard }}
+        });
+
+        let linkMahasiswa = "{{ url('admin/mahasiswa/') }}";
+
+        let datatables = $('#datatables4').DataTable({
+            responsive: true,
+            columnDefs: [{
+                        "targets": 0,
+                        "data": "nim",
+                        "render": function ( data, type, row, meta ) {
+                            return `<a href="${linkMahasiswa}/${row.nim}" class="btn-detail text-dark" data-toggle="modal" data-target="#mahasiswa">
+                                        <div class="mb-1">${row.nama}</div>
+                                        <span class="text-muted small">NIM. ${row.nim}</span>
+                                    </a>`;
+                        }
+                    }
+            ],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('admin/mahasiswa/limit') }}',
+            columns: [{
+                    data: 'nama',
+                },
+                {
+                    data: 'prodi.jurusan.nama_jurusan',
+                },
+                {
+                    data: 'angkatan',
+                },
+                {
+                    data: 'created_at',
+                },
+                {
+                    data: 'updated_at',
+                },
+            ],
+            "pageLength": {{ $perPageDashboard }}
+    });  
+
+    let linkUser = "{{ url('admin/user/') }}";
+
+    $('#datatables5').DataTable({
+        responsive: true,
+        columnDefs: [{
+                        "targets": 2,
+                        "data": "status_aktif",
+                        "render": function ( data, type, row, meta ) {
+                            if(data == 'Aktif'){
+                                return '<label class="badge badge-gradient-info">'+data+'</label>';
+                            }else{
+                                return '<label class="badge badge-gradient-dark">'+data+'</label>';
+                            }
+                        }
+                    },
+                    {
+                        "targets": 0,
+                        "data": "nama",
+                        "render": function ( data, type, row, meta ) {
+                            return `<a href="${linkUser}/${row.nip}" class="user-detail text-dark" data-toggle="modal" data-target="#user">
+                                        <div class="mb-1">${row.nama}</div>
+                                        <span class="text-muted small">NIP. ${row.nip}</span>
+                                    </a>`;
+                        }
+                    }
+        ],
+        autoWidth: false,
+        language: bahasa,
+        processing: true,
+        serverSide: true,
+        ajax: '{{ url('admin/user/limit') }}',
+        columns: [{
+                data: 'nip',
+            },
+            {
+                data: 'jabatan',
+            },
+            {
+                data: 'status_aktif',
+            },
+            {
+                data: 'created_at',
+            },
+            {
+                data: 'updated_at',
+            },
+        ],
+        "pageLength": {{ $perPageDashboard }}
+    });
+
+    let linkStatusMahasiswa = "{{ url('admin/status-mahasiswa/') }}";
+
+    $('#datatables6').DataTable({
+        responsive: true,
+        columnDefs: [{
+                        "targets": 0,
+                        "data": "nim",
+                        "render": function ( data, type, row, meta ) {
+                            return `<a href="${linkStatusMahasiswa}/${row.tahun_akademik.id}/${row.nim}" class="status-mahasiswa-detail text-dark" data-toggle="modal" data-target="#statusMahasiswa">
+                                        <div class="mb-1">${row.mahasiswa.nama}</div>
+                                        <span class="text-muted small">NIM. ${row.nim}</span>
+                                    </a>`;
+                        }
+                    },
+                    {
+                        "targets": 1,
+                        "data": "tahun_akademik",
+                        "render": function ( data, type, row, meta ) {
+                            return row.tahun_akademik.tahun_akademik+' - '+row.tahun_akademik.semester;
+                        }
+                    },
+                    {
+                        "targets": 2,
+                        "data": "status",
+                        "render": function( data, type, row, met ){
+                            if (row.status == 'Aktif'){
+                                return `<label class="badge badge-gradient-info">${row.status}</label>`;
+                            }else if(row.status == 'lulus'){
+                                return `<label class="badge badge-gradient-success">${row.status}</label>`;
+                            }else if(row.status == 'drop out' || row.status == 'keluar'){
+                                return `<label class="badge badge-gradient-danger">${row.status}</label>`;
+                            }else if(row.status == 'cuti'){
+                                return `<label class="badge badge-gradient-warning">${row.status}</label>`;
+                            }else{
+                                return `<label class="badge badge-gradient-dark">${row.status}</label>`;
+                            }
+                        }
+                    },
+        ],
+        autoWidth: false,
+        language: bahasa,
+        processing: true,
+        serverSide: true,
+        ajax: '{{ url('admin/status-mahasiswa/limit') }}',
+        columns: [{
+                data: 'mahasiswa.nim',
+            },
+            {
+                data: 'tahun_akademik.tahun_akademik',
+            },
+            {
+                data: 'status',
+            },
+            {
+                data: 'created_at',
+            },
+            {
+                data: 'updated_at',
+            },
+        ],
+        "pageLength": {{ $perPageDashboard }}
+    });  
+
+    let linkOrmawa = "{{ url('admin/ormawa/') }}";
+
+    $('#datatables7').DataTable({
+        responsive: true,
+        columnDefs: [{
+                        "targets": 0,
+                        "data": "nama",
+                        "render": function ( data, type, row, meta ) {
+                            return `<a href="${linkOrmawa}/${row.id}" class="ormawa-detail text-dark" data-toggle="modal" data-target="#ormawa">
+                                        <div class="mb-1">${row.nama}</div>
+                                    </a>`;
+                        }
+        }],
+        autoWidth: false,
+        language: bahasa,
+        processing: true,
+        serverSide: true,
+        ajax: '{{ url('admin/ormawa/limit') }}',
+        columns: [{
+                data: 'nama',
+            },
+            {
+                data: 'jurusan.nama_jurusan',
+            },
+            {
+                data: 'created_at',
+            },
+            {
+                data: 'updated_at',
+            },
+        ],
+        "pageLength": {{ $perPageDashboard }}
+    }); 
+
+    let linkPimpinanOrmawa = "{{ url('admin/pimpinan-ormawa/') }}";
+
+    $('#datatables8').DataTable({
+        responsive: true,
+        columnDefs: [{
+                        "targets": 0,
+                        "data": "mahasiswa.nama",
+                        "render": function ( data, type, row, meta ) {
+                            return `<a href="${linkPimpinanOrmawa}/${row.nim}" class="pimpinan-ormawa-detail text-dark" data-toggle="modal" data-target="#pimpinanOrmawa">
+                                            <div class="mb-1">${row.mahasiswa.nama}</div>
+                                    <span class="text-muted small">NIM. ${row.mahasiswa.nim}</span>
+                                    </a>`;
+                        }
+                    },
+                    {
+                        "targets": 2,
+                        "data": "jabatan",
+                        "render": function ( data, type, row, meta ) {
+                            return row.jabatan.ucwords();
+                        }
+                    },
+                    {
+                        "targets": 3,
+                        "data": "status_aktif",
+                        "render": function ( data, type, row, meta ) {
+                            if(data == 'Aktif'){
+                                return '<label class="badge badge-gradient-info">'+data+'</label>';
+                            }else{
+                                return '<label class="badge badge-gradient-dark">'+data+'</label>';
+                            }
+                        }
+                    },
+        ],
+        autoWidth: false,
+        language: bahasa,
+        processing: true,
+        serverSide: true,
+        ajax: '{{ url('admin/pimpinan-ormawa/limit') }}',
+        columns: [{
+                data: 'mahasiswa.nama',
+            },
+            {
+                data: 'mahasiswa.prodi.jurusan.nama_jurusan',
+            },
+            {
+                data: 'jabatan',
+            },
+                {
+                data: 'status_aktif',
+            },
+            {
+                data: 'created_at',
+            },
+            {
+                data: 'updated_at',
+            },
+        ],
+        "pageLength": {{ $perPageDashboard }}
+    });
+</script>
 @endsection

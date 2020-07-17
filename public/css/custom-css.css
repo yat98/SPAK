@@ -73,6 +73,10 @@
     line-height: 1;
 }
 
+.dashboard .dataTables_info,.dashboard .dataTables_length,.dashboard .dataTables_filter,.dashboard .dataTables_paginate{
+    display: none !important;
+}
+
 .dataTables_info,.dataTables_length{
     font-size: 14px;
     color: #9c9fa6;
@@ -108,6 +112,7 @@
 .dtr-data{
     width: 70%;
 }
+
 table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td.dtr-control:before, table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th.dtr-control:before {
     border:none;
     background-color: #3e4b5b;

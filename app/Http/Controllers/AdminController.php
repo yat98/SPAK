@@ -19,36 +19,17 @@ use Illuminate\Support\Facades\Hash;
 class AdminController extends Controller
 {
     public function index(){
-        $jurusanList = Jurusan::all()->sortBy('updated_at');
-        $prodiList = ProgramStudi::all()->sortBy('updated_at');
-        $tahunAkademikList = TahunAkademik::orderBy('status_aktif')->get();
-        $mahasiswaList = Mahasiswa::all()->sortBy('updated_at');
-        $userList = User::all();
-        $ormawaList = Ormawa::all();
-        $pimpinanOrmawaList = PimpinanOrmawa::all();
-        $statusMahasiswaList = StatusMahasiswa::join('tahun_akademik','tahun_akademik.id','=','status_mahasiswa.id_tahun_akademik')
-                                    ->join('mahasiswa','mahasiswa.nim','=','status_mahasiswa.nim')
-                                    ->get()
-                                    ->sortByDesc('created_at');
-        $countUser = $userList->count();
-        $countJurusan = $jurusanList->count();
-        $countProdi = $prodiList->count();
+        $perPageDashboard = $this->perPageDashboard;
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
-        $countMahasiswa = $mahasiswaList->count();
-        $countTahunAkademik = $tahunAkademikList->count();
-        $countTahunAkademik = $tahunAkademikList->count();
-        $countStatusMahasiswa = $statusMahasiswaList->count();
-        $countOrmawa = $ormawaList->count();
-        $countPimpinanOrmawa = $pimpinanOrmawaList->count();
-        $jurusanList = $jurusanList->take(5);
-        $prodiList = $prodiList->take(5);
-        $userList = $userList->take(5);
-        $tahunAkademikList = $tahunAkademikList->take(5);
-        $mahasiswaList = $mahasiswaList->take(5);
-        $statusMahasiswaList = $statusMahasiswaList->take(5);
-        $ormawaList = $ormawaList->take(5);
-        $pimpinanOrmawaListList = $pimpinanOrmawaList->take(5);
-        return view('user.'.$this->segmentUser.'.dashboard',compact('countJurusan','countProdi','countMahasiswa','tahunAkademikAktif','jurusanList','prodiList','tahunAkademikList','mahasiswaList','countTahunAkademik','userList','countUser','countStatusMahasiswa','statusMahasiswaList','ormawaList','countOrmawa','pimpinanOrmawaList','countPimpinanOrmawa'));
+        $countAllJurusan = Jurusan::count();
+        $countAllProdi = ProgramStudi::count();
+        $countAllTahunAkademik = TahunAkademik::count();
+        $countAllMahasiswa = Mahasiswa::count();
+        $countAllUser = User::count();
+        $countAllOrmawa = Ormawa::count();
+        $countAllPimpinanOrmawa = PimpinanOrmawa::count();
+        $countAllStatusMahasiswa = StatusMahasiswa::count();
+        return view('user.'.$this->segmentUser.'.dashboard',compact('perPageDashboard','countAllJurusan','countAllProdi','countAllMahasiswa','countAllTahunAkademik','countAllUser','countAllStatusMahasiswa','countAllOrmawa','countAllPimpinanOrmawa','tahunAkademikAktif'));
     }
 
     public function profil(){

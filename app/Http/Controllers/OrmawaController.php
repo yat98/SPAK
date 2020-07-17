@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Ormawa;
 use App\Jurusan;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
+use DataTables;
 use App\Http\Requests\OrmawaRequest;
 
 class OrmawaController extends Controller
@@ -22,6 +22,17 @@ class OrmawaController extends Controller
                     return $data->id;
                 })
                 ->make(true);
+    }
+
+    public function getLimitOrmawa(){
+        return DataTables::collection(Ormawa::all()->take(5)->sortByDesc('updated_at')->load('jurusan'))
+                    ->editColumn("created_at", function ($data) {
+                        return $data->created_at->diffForHumans();
+                    })
+                    ->editColumn("updated_at", function ($data) {
+                        return $data->updated_at->diffForHumans();
+                    })
+                    ->toJson();
     }
 
     public function show(Ormawa $ormawa){

@@ -165,7 +165,7 @@
                     },
                     {
                         "targets": 2,
-                        "data": "status_aktif",
+                        "data": "status",
                         "render": function( data, type, row, met ){
                             if (row.status == 'Aktif'){
                                 return `<label class="badge badge-gradient-info">${row.status}</label>`;

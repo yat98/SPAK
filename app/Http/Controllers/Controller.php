@@ -32,6 +32,7 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     protected $perPage = 25;
+    protected $perPageDashboard = 5;
 
     protected $segmentUser;
 

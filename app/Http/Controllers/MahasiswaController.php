@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Session;
 use App\User;
+use DataTables;
 use App\Jurusan;
 use App\Mahasiswa;
 use App\WaktuCuti;
@@ -25,7 +26,6 @@ use App\SuratKegiatanMahasiswa;
 use App\SuratPengantarBeasiswa;
 use App\SuratPersetujuanPindah;
 use App\Imports\MahasiswaImport;
-use Yajra\DataTables\DataTables;
 use App\PengajuanSuratKeterangan;
 use App\DaftarDispensasiMahasiswa;
 use Illuminate\Support\Facades\DB;
@@ -65,6 +65,20 @@ class MahasiswaController extends Controller
                     return $data->nim;
                 })
                 ->make(true);
+    }
+
+    public function getLimitMahasiswa(){
+        return DataTables::collection(Mahasiswa::all()->take(5)->sortByDesc('updated_at')->load(['prodi.jurusan']))
+                    ->editColumn("status_aktif", function ($data) {
+                        return ucwords($data->status_aktif);
+                    })
+                    ->editColumn("created_at", function ($data) {
+                        return $data->created_at->diffForHumans();
+                    })
+                    ->editColumn("updated_at", function ($data) {
+                        return $data->updated_at->diffForHumans();
+                    })
+                    ->toJson();
     }
 
     public function mahasiswaPimpinan(){

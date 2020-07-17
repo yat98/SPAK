@@ -7,7 +7,7 @@
                     <span class="login-status online"></span>
                 </div>
                 <div class="nav-profile-text d-flex flex-column overflow-hidden">
-                    <span class="font-weight-bold mb-2">{{ (Session::get('jenis_user') != 'admin') ? ucwords(Auth::user()->nama) : ucwords(Auth::user()->username) }}</span>
+                <span class="font-weight-bold mb-2">{{ (Session::get('jenis_user') != 'admin') ? ucwords(Auth::user()->nama) : ucwords(Auth::user()->username) }}</span>
                     <span class="text-secondary text-small" >
                         {{ ($posisi == 'admin') ? 'Admin':'' }}
                         {{ ($posisi == 'mahasiswa') ? 'Mahasiswa':'' }}

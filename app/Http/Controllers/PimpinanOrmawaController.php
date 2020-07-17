@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Ormawa;
+use DataTables;
 use App\Jurusan;
 use App\PimpinanOrmawa;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
 use App\Http\Requests\PimpinanOrmawaRequest;
 
 class PimpinanOrmawaController extends Controller
@@ -30,6 +30,25 @@ class PimpinanOrmawaController extends Controller
                     return $data->id;
                 })
                 ->make(true);
+    }
+
+    public function getLimitPimpinanOrmawa(){
+        return DataTables::collection(PimpinanOrmawa::join('ormawa', 'ormawa.id', '=', 'pimpinan_ormawa.id_ormawa')
+                                            ->join('mahasiswa', 'mahasiswa.nim', '=', 'pimpinan_ormawa.nim')
+                                            ->get()
+                                            ->take(5)
+                                            ->sortByDesc('updated_at')
+                                            ->load('mahasiswa.prodi.jurusan'))
+                    ->editColumn("status_aktif", function ($data) {
+                        return ucwords($data->status_aktif);
+                    })
+                    ->editColumn("created_at", function ($data) {
+                        return $data->created_at->diffForHumans();
+                    })
+                    ->editColumn("updated_at", function ($data) {
+                        return $data->updated_at->diffForHumans();
+                    })
+                    ->toJson();
     }
 
     public function show(PimpinanOrmawa $pimpinanOrmawa){

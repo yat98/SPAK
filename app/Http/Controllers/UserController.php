@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Session;
 use App\User;
+use DataTables;
 use App\KodeSurat;
 use App\WaktuCuti;
 use Carbon\Carbon;
@@ -21,7 +22,6 @@ use App\SuratPermohonanSurvei;
 use App\SuratKegiatanMahasiswa;
 use App\SuratPengantarBeasiswa;
 use App\SuratPersetujuanPindah;
-use Yajra\DataTables\DataTables;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\DB;
 use App\SuratRekomendasiPenelitian;
@@ -64,6 +64,36 @@ class UserController extends Controller
                     return $data->nip;
                 })
                 ->make(true);
+    }
+
+    public function getLimitUser(){
+        return DataTables::collection(User::all()->take(5)->sortByDesc('updated_at'))
+                    ->editColumn("jabatan", function ($data) {
+                        switch ($data->jabatan) {
+                            case 'wd1':
+                                return ucwords('Wakil Dekan 1');
+                                break;
+                            case 'wd2':
+                                return ucwords('Wakil Dekan 2');
+                                break;
+                            case 'wd3':
+                                return ucwords('Wakil Dekan 3');
+                                break; 
+                            default:
+                                return ucwords($data->jabatan);
+                                break; 
+                        }
+                    })
+                    ->editColumn("status_aktif", function ($data) {
+                        return ucwords($data->status_aktif);
+                    })
+                    ->editColumn("created_at", function ($data) {
+                        return $data->created_at->diffForHumans();
+                    })
+                    ->editColumn("updated_at", function ($data) {
+                        return $data->updated_at->diffForHumans();
+                    })
+                    ->toJson();
     }
 
     public function show(User $user){

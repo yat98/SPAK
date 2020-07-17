@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use DataTables;
 use App\Mahasiswa;
 use App\TahunAkademik;
 use App\StatusMahasiswa;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
 use App\Imports\StatusMahasiswaImport;
 use App\Http\Requests\StatusMahasiswaRequest;
 use Maatwebsite\Excel\Validators\ValidationException;
@@ -37,6 +37,28 @@ class StatusMahasiswaController extends Controller
                     return $data->nim;
                 })
                 ->make(true);
+    }
+
+    public function getLimitStatusMahasiswa(){
+        return DataTables::collection(StatusMahasiswa::join('tahun_akademik', 'tahun_akademik.id', '=', 'status_mahasiswa.id_tahun_akademik')
+                                            ->join('mahasiswa', 'mahasiswa.nim', '=', 'status_mahasiswa.nim')
+                                            ->get()
+                                            ->take(5)
+                                            ->sortByDesc('updated_at')
+                                            ->load(['mahasiswa','tahunAkademik']))
+                    ->editColumn("status", function ($data) {
+                        return ucwords($data->status_aktif);
+                    })
+                    ->editColumn("tahun_akademik.semester", function ($data) {
+                        return ucwords($data->tahunAkademik->semester);
+                    })
+                    ->editColumn("created_at", function ($data) {
+                        return $data->created_at->diffForHumans();
+                    })
+                    ->editColumn("updated_at", function ($data) {
+                        return $data->updated_at->diffForHumans();
+                    })
+                    ->toJson();
     }
 
     public function show(Request $request){

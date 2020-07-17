@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Validator;
+use DataTables;
 use App\TahunAkademik;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
 use App\Http\Requests\TahunAkademikRequest;
 
 class TahunAkademikController extends Controller
@@ -31,6 +31,23 @@ class TahunAkademikController extends Controller
                     return ucwords($data->semester);
                 })
                 ->make(true);
+    }
+
+    public function getLimitTahunAkademik(){
+        return DataTables::collection(TahunAkademik::all()->take(5)->sortByDesc('updated_at'))
+                    ->editColumn("status_aktif", function ($data) {
+                        return ucwords($data->status_aktif);
+                    })
+                    ->editColumn("semester", function ($data) {
+                        return ucwords($data->semester);
+                    })
+                    ->editColumn("created_at", function ($data) {
+                        return $data->created_at->diffForHumans();
+                    })
+                    ->editColumn("updated_at", function ($data) {
+                        return $data->updated_at->diffForHumans();
+                    })
+                    ->toJson();
     }
 
     public function show(TahunAkademik $tahunAkademik){

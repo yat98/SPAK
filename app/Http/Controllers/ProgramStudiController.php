@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Jurusan;
 use App\ProgramStudi;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
+use DataTables;
 use App\Http\Requests\ProgramStudiRequest;
 
 class ProgramStudiController extends Controller
@@ -24,6 +24,17 @@ class ProgramStudiController extends Controller
                     return $data->id;
                 })
                 ->make(true);
+    }
+
+    public function getLimitProdi(){
+        return DataTables::collection(ProgramStudi::all()->take(5)->sortByDesc('updated_at')->load('jurusan'))
+                    ->editColumn("created_at", function ($data) {
+                        return $data->created_at->diffForHumans();
+                    })
+                    ->editColumn("updated_at", function ($data) {
+                        return $data->updated_at->diffForHumans();
+                    })
+                    ->toJson();
     }
 
     public function create()
