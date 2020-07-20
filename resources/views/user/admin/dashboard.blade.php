@@ -561,6 +561,8 @@
                                             <tr>
                                                 <th data-priority="1"> Kode Surat</th>
                                                 <th> Status</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -1207,6 +1209,12 @@
             },
             {
                 data: 'status_aktif',
+            },
+            {
+                data: 'created_at',
+            },
+            {
+                data: 'updated_at',
             },
         ],
         "pageLength": {{ $perPageDashboard }}
