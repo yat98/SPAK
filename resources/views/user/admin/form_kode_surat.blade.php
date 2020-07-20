@@ -17,19 +17,6 @@
             @endif
         </div>
         <div class="form-group">
-            {{ Form::label('jenis_surat','Jenis Surat') }}
-            @if ($errors->any())
-            @if ($errors->has('jenis_surat'))
-            {{ Form::select('jenis_surat',$jenisSurat,null,['class'=>'form-control form-control-lg is-invalid','id'=>'semester','placeholder'=> '-- Pilih Jenis Surat --']) }}
-            <div class="invalid-feedback">{{ $errors->first('jenis_surat') }}</div>
-            @else
-            {{ Form::select('jenis_surat',$jenisSurat,null,['class'=>'form-control form-control-lg is-valid','id'=>'semester','placeholder'=> '-- Pilih Jenis Surat --']) }}
-            @endif
-            @else
-            {{ Form::select('jenis_surat',$jenisSurat,null,['class'=>'form-control form-control-lg','id'=>'semester','placeholder'=> '-- Pilih Jenis Surat --']) }}
-            @endif
-        </div>
-        <div class="form-group">
             {{ Form::label('status_aktif','Status Aktif') }}
             @if ($errors->any())
             @if ($errors->has('status_aktif'))

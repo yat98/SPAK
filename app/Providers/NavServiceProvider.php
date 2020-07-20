@@ -46,12 +46,17 @@ class NavServiceProvider extends ServiceProvider
             } else if ($segment == 'user') {
                  $show = true;
                 $halaman = 'user';
+            } else if ($segment == 'operator') {
+                $show = true;
+                $halaman = 'operator';
             } else if ($segment == 'status-mahasiswa') {
                 $halaman = 'status-mahasiswa';
             } else if ($segment == 'ormawa') {
                 $halaman = 'ormawa';
             } else if ($segment == 'pimpinan-ormawa') {
                 $halaman = 'pimpinan-ormawa';
+            } else if ($segment == 'kode-surat') {
+                $halaman = 'kode-surat';
             } else if ($segment == 'profil') {
                 $halaman = 'profil';
             }
@@ -100,9 +105,6 @@ class NavServiceProvider extends ServiceProvider
             if ($segment == '') {
                 $show = false;
                 $halaman = 'dashboard-pegawai';
-            } else if ($segment == 'kode-surat') {
-                $show = false;
-                $halaman = 'kode-surat';
             } else if ($segment == 'tanda-tangan') {
                 $show = false;
                 $halaman = 'tanda-tangan';

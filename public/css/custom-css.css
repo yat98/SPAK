@@ -28,7 +28,6 @@
 }
 
 .signature-pad{
-    /* border:1px solid black; */
     text-align:center;
 }
 .canvas{
@@ -53,6 +52,16 @@
 .bg-gradient-bloody-mary{
     background: -webkit-gradient(linear, left top, right top, from(#FF512F), to(#DD2476)) !important;
     background: linear-gradient(to right, #FF512F, #DD2476) !important; 
+}
+
+.bg-gradient-quepal{
+    background: -webkit-gradient(linear, left top, right top, from(#38ef7d), to(#38ef7d)) !important;
+    background: linear-gradient(to right, #11998e, #38ef7d) !important; 
+}
+
+.bg-gradient-orange{
+    background: -webkit-gradient(linear, left top, right top, from(#FF8008), to(#FFC837)) !important;
+    background: linear-gradient(to right, #FF8008, #FFC837) !important; 
 }
 
 .position-progress-pole{
@@ -106,11 +115,11 @@
 }
 
 .dtr-title{
-    width: 30%;
+    width: 40%;
 }
 
 .dtr-data{
-    width: 70%;
+    width: 60%;
 }
 
 table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td.dtr-control:before, table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th.dtr-control:before {

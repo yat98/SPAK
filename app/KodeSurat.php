@@ -11,7 +11,6 @@ class KodeSurat extends Model
     protected $fillable = [
         'kode_surat',
         'status_aktif',
-        'jenis_surat'
     ];
 
     public function suratKeterangan(){

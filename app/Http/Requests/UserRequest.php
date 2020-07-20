@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 
 class UserRequest extends FormRequest
 {
@@ -42,4 +44,37 @@ class UserRequest extends FormRequest
             'password'=>$passwordRules
         ];
     }
+
+    public function withValidator(Validator $validator)
+    {
+        switch ($this->get('jabatan')) {
+            case 'wd1':
+                $jabatan = 'wakil dekan 1';
+                break;
+            case 'wd2':
+                $jabatan = 'wakil dekan 2';
+                break;
+            case 'wd3':
+                $jabatan = 'wakil dekan 3';
+                break; 
+            default:
+                $jabatan = $this->get('jabatan');
+                break; 
+        }
+        $error = 'user dengan jabatan '.$jabatan.' dan status aktif sudah ada.';
+        $userAktif = User::where('jabatan',$this->get('jabatan'))->where('status_aktif','aktif');
+        $validator->after(function($validator) use($userAktif,$error) {
+                if($userAktif->exists() && $this->get('status_aktif') == 'aktif'){
+                    if($this->method == 'PATCH' || $this->method == 'PUT'){
+                        if($this->get('nip') != $userAktif->first()->nip){
+                            $validator->errors()->add('status_aktif',$error);
+                            $validator->errors()->add('jabatan',$error);
+                        }
+                    }else{
+                        $validator->errors()->add('status_aktif',$error);
+                        $validator->errors()->add('jabatan',$error);
+                    }
+                }
+        });
+    } 
 }

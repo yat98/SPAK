@@ -68,18 +68,18 @@
                         </div>
                     </div>
                     <div class="col-md-4 stretch-card grid-margin">
-                        <div class="card bg-gradient-primary card-img-holder text-white">
+                        <div class="card bg-gradient-quepal card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Mahasiswa<i
+                                <h4 class="font-weight-normal mb-3">Data Operator <i
                                         class="mdi mdi-account mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllMahasiswa > 0 ? $countAllMahasiswa.' Mahasiswa' : 'Data Mahasiswa Kosong' }}
+                                    {{ $countAllOperator > 0 ? $countAllOperator.' Operator' : 'Data Operator Kosong' }}
                                 </h2>
                                 <h6 class="card-text">
-                                    <a href="{{ url('admin/mahasiswa') }}" class="text-white">Lihat data mahasiswa</a>
+                                    <a href="{{ url('admin/operator') }}" class="text-white">Lihat data operator</a>
                                 </h6>
                             </div>
                         </div>
@@ -97,6 +97,23 @@
                                 </h2>
                                 <h6 class="card-text">
                                     <a href="{{ url('admin/user') }}" class="text-white">Lihat data user</a>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 stretch-card grid-margin">
+                        <div class="card bg-gradient-primary card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Mahasiswa<i
+                                        class="mdi mdi-account mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countAllMahasiswa > 0 ? $countAllMahasiswa.' Mahasiswa' : 'Data Mahasiswa Kosong' }}
+                                </h2>
+                                <h6 class="card-text">
+                                    <a href="{{ url('admin/mahasiswa') }}" class="text-white">Lihat data mahasiswa</a>
                                 </h6>
                             </div>
                         </div>
@@ -148,6 +165,23 @@
                                 </h2>
                                 <h6 class="card-text">
                                     <a href="{{ url('admin/pimpinan-ormawa') }}" class="text-white">Lihat data pimpinan ormawa</a>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 stretch-card grid-margin">
+                        <div class="card bg-gradient-orange card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Kode Surat <i
+                                        class="mdi mdi-format-list-numbered mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countAllKodeSurat > 0 ? $countAllKodeSurat.' Kode Surat' : 'Kode Surat Kosong' }}
+                                </h2>
+                                <h6 class="card-text">
+                                    <a href="{{ url('admin/kode-surat') }}" class="text-white">Lihat data kode surat</a>
                                 </h6>
                             </div>
                         </div>
@@ -271,21 +305,19 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row mb-3">
-                                    <div class="col-12 col-md-4">
-                                        <h4>Data Mahasiswa</h4>
+                                    <div class="col-12 col-md-6">
+                                        <h4>Data Operator</h4>
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countAllMahasiswa > 0)
+                                @if ($countAllOperator > 0)
                                 <div class="table-responsive dashboard">
-                                    <table class="table display no-warp prodi" id='datatables4' width="100%">
+                                    <table class="table display no-warp" id='datatables9' width="100%">
                                         <thead>
                                             <tr>
-                                                 <th data-priority="1"> Nama</th>
-                                                <th> Jurusan</th>
-                                                <th> Angkatan</th>
-                                                <th> Di Buat</th>
-                                                <th> Di Ubah</th>
+                                                <th data-priority="1"> Nama</th>
+                                                <th> Bagian</th>
+                                                <th> Status Aktif</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -295,10 +327,10 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search')) ? Session::get('search') : 'Data Mahasiswa Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Operator Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : 'Silahkan mengisi data mahasiswa terlebih dahulu.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data operator terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -340,6 +372,47 @@
                                         </h4>
                                         <p class="text-muted">
                                             {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data user terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-4">
+                                        <h4>Data Mahasiswa</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countAllMahasiswa > 0)
+                                <div class="table-responsive dashboard">
+                                    <table class="table display no-warp prodi" id='datatables4' width="100%">
+                                        <thead>
+                                            <tr>
+                                                 <th data-priority="1"> Nama</th>
+                                                <th> Jurusan</th>
+                                                <th> Angkatan</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search')) ? Session::get('search') : 'Data Mahasiswa Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : 'Silahkan mengisi data mahasiswa terlebih dahulu.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -471,12 +544,49 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Kode Surat</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countAllKodeSurat > 0)
+                                <div class="table-responsive dashboard">
+                                    <table class="table display no-warp" id='datatables10' width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th data-priority="1"> Kode Surat</th>
+                                                <th> Status</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : 'Kode Surat Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data kode surat terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             @include('layout.footer')
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="jurusan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
@@ -525,6 +635,24 @@
                 </button>
             </div>
             <div class="modal-body" id='tahun-akademik-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="operator" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='operator-detail-content'></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
             </div>
@@ -622,123 +750,141 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="kodeSurat" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='kode-surat-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('datatables-javascript')
 <script>
     let linkJurusan = "{{ url('admin/jurusan/') }}";
 
-        $('#datatables').DataTable({
-            responsive: true,
-            columnDefs: [{
-                            "targets": 0,
-                            "data": "nama_jurusan",
-                            "render": function ( data, type, row, meta ) {
-                                return `<a href="${linkJurusan}/${row.id}" class="jurusan-detail text-dark" data-toggle="modal" data-target="#jurusan">
-                                            <div class="mb-1">${row.nama_jurusan}</div>
-                                        </a>`;
+    $('#datatables').DataTable({
+        responsive: true,
+        columnDefs: [{
+                        "targets": 0,
+                        "data": "nama_jurusan",
+                        "render": function ( data, type, row, meta ) {
+                            return `<a href="${linkJurusan}/${row.id}" class="jurusan-detail text-dark" data-toggle="modal" data-target="#jurusan">
+                                        <div class="mb-1">${row.nama_jurusan}</div>
+                                    </a>`;
+                        }
+        }],
+        autoWidth: false,
+        language: bahasa,
+        processing: true,
+        serverSide: true,
+        ajax: '{{ url('admin/jurusan/limit') }}',
+        columns: [{
+                data: 'nama_jurusan',
+            },
+            {
+                data: 'created_at',
+            },
+            {
+                data: 'updated_at',
+            },
+        ],
+        "pageLength": {{ $perPageDashboard }}
+    });
+
+    let linkProdi = "{{ url('admin/program-studi/') }}";
+
+    $('#datatables2').DataTable({
+        responsive: true,
+        columnDefs: [{
+                        "targets": 0,
+                        "data": "nama_prodi",
+                        "render": function ( data, type, row, meta ) {
+                            return `<a href="${linkProdi}/${row.id}" class="prodi-detail text-dark" data-toggle="modal" data-target="#prodi">
+                                        <div class="mb-1">${row.strata} - ${row.nama_prodi}</div>
+                                    </a>`;
+                        }
+        }],
+        autoWidth: false,
+        language: bahasa,
+        processing: true,
+        serverSide: true,
+        ajax: '{{ url('admin/program-studi/limit') }}',
+        columns: [{
+                data: 'nama_prodi',
+            },
+            {
+                data: 'jurusan.nama_jurusan',
+            },
+            {
+                data: 'created_at',
+            },
+            {
+                data: 'updated_at',
+            },
+        ],
+        "pageLength": {{ $perPageDashboard }}
+    });
+
+    let linkTahunAkademik = "{{ url('admin/tahun-akademik/') }}";
+
+    $('#datatables3').DataTable({
+        responsive: true,
+        columnDefs: [{
+                        "targets": 0,
+                        "data": "tahun_akademik",
+                        "render": function ( data, type, row, meta ) {
+                            return `<a href="${linkTahunAkademik}/${row.id}" class="tahun-akademik-detail text-dark" data-toggle="modal" data-target="#tahunAkademik">
+                                        <div class="mb-1">${row.tahun_akademik} - ${row.semester}</div>
+                                    </a>`;
+                        }
+                    },
+                    {
+                        "targets": 1,
+                        "data": "status_aktif",
+                        "render": function ( data, type, row, meta ) {
+                            if(data == 'Aktif'){
+                                return '<label class="badge badge-gradient-info">'+data+'</label>';
+                            }else{
+                                return '<label class="badge badge-gradient-dark">'+data+'</label>';
                             }
-            }],
-            autoWidth: false,
-            language: bahasa,
-            processing: true,
-            serverSide: true,
-            ajax: '{{ url('admin/jurusan/limit') }}',
-            columns: [{
-                    data: 'nama_jurusan',
-                },
-                {
-                    data: 'created_at',
-                },
-                {
-                    data: 'updated_at',
-                },
-            ],
-            "pageLength": {{ $perPageDashboard }}
-        });
+                        }
+        }],
+        autoWidth: false,
+        language: bahasa,
+        processing: true,
+        serverSide: true,
+        ajax: '{{ url('admin/tahun-akademik/limit') }}',
+        columns: [{
+                data: 'tahun_akademik',
+            },
+            {
+                data: 'status_aktif',
+            },
+            {
+                data: 'created_at',
+            },
+            {
+                data: 'updated_at',
+            },
+        ],
+        "pageLength": {{ $perPageDashboard }}
+    });
 
-        let linkProdi = "{{ url('admin/program-studi/') }}";
+    let linkMahasiswa = "{{ url('admin/mahasiswa/') }}";
 
-        $('#datatables2').DataTable({
-            responsive: true,
-            columnDefs: [{
-                            "targets": 0,
-                            "data": "nama_prodi",
-                            "render": function ( data, type, row, meta ) {
-                                return `<a href="${linkProdi}/${row.id}" class="prodi-detail text-dark" data-toggle="modal" data-target="#prodi">
-                                            <div class="mb-1">${row.strata} - ${row.nama_prodi}</div>
-                                        </a>`;
-                            }
-            }],
-            autoWidth: false,
-            language: bahasa,
-            processing: true,
-            serverSide: true,
-            ajax: '{{ url('admin/program-studi/limit') }}',
-            columns: [{
-                    data: 'nama_prodi',
-                },
-                {
-                    data: 'jurusan.nama_jurusan',
-                },
-                {
-                    data: 'created_at',
-                },
-                {
-                    data: 'updated_at',
-                },
-            ],
-            "pageLength": {{ $perPageDashboard }}
-        });
-
-        let linkTahunAkademik = "{{ url('admin/tahun-akademik/') }}";
-
-        $('#datatables3').DataTable({
-            responsive: true,
-            columnDefs: [{
-                            "targets": 0,
-                            "data": "tahun_akademik",
-                            "render": function ( data, type, row, meta ) {
-                                return `<a href="${linkTahunAkademik}/${row.id}" class="tahun-akademik-detail text-dark" data-toggle="modal" data-target="#tahunAkademik">
-                                            <div class="mb-1">${row.tahun_akademik} - ${row.semester}</div>
-                                        </a>`;
-                            }
-                        },
-                        {
-                            "targets": 1,
-                            "data": "status_aktif",
-                            "render": function ( data, type, row, meta ) {
-                                if(data == 'Aktif'){
-                                    return '<label class="badge badge-gradient-info">'+data+'</label>';
-                                }else{
-                                    return '<label class="badge badge-gradient-dark">'+data+'</label>';
-                                }
-                            }
-            }],
-            autoWidth: false,
-            language: bahasa,
-            processing: true,
-            serverSide: true,
-            ajax: '{{ url('admin/tahun-akademik/limit') }}',
-            columns: [{
-                    data: 'tahun_akademik',
-                },
-                {
-                    data: 'status_aktif',
-                },
-                {
-                    data: 'created_at',
-                },
-                {
-                    data: 'updated_at',
-                },
-            ],
-            "pageLength": {{ $perPageDashboard }}
-        });
-
-        let linkMahasiswa = "{{ url('admin/mahasiswa/') }}";
-
-        let datatables = $('#datatables4').DataTable({
+    let datatables = $('#datatables4').DataTable({
             responsive: true,
             columnDefs: [{
                         "targets": 0,
@@ -977,6 +1123,90 @@
             },
             {
                 data: 'updated_at',
+            },
+        ],
+        "pageLength": {{ $perPageDashboard }}
+    });
+
+    let linkOperator = "{{ url('admin/operator/') }}";
+
+    $('#datatables9').DataTable({
+        responsive: true,
+        columnDefs: [{
+                        "targets": 2,
+                        "data": "status_aktif",
+                        "render": function ( data, type, row, meta ) {
+                            if(data == 'Aktif'){
+                                return '<label class="badge badge-gradient-info">'+data+'</label>';
+                            }else{
+                                return '<label class="badge badge-gradient-dark">'+data+'</label>';
+                            }
+                        }
+                    },
+                    {
+                        "targets": 0,
+                        "data": "nama",
+                        "render": function ( data, type, row, meta ) {
+                            return `<a href="${linkOperator}/${row.id}" class="operator-detail text-dark" data-toggle="modal" data-target="#operator">
+                                        <div class="mb-1">${row.nama}</div>
+                                        <span class="text-muted small">Username : ${row.username}</span>
+                                    </a>`;
+                        }
+                    },
+        ],
+        autoWidth: false,
+        language: bahasa,
+        processing: true,
+        serverSide: true,
+        ajax: '{{ url('admin/operator/limit') }}',
+        columns: [{
+                data: 'nama',
+            },
+            {
+                data: 'bagian',
+            },
+            {
+                data: 'status_aktif',
+            }
+        ],
+        "pageLength": {{ $perPageDashboard }}
+    });
+
+    let linkKodeSurat = "{{ url('admin/kode-surat/') }}";
+
+    $('#datatables10').DataTable({
+        responsive: true,
+        columnDefs: [{
+                        "targets": 1,
+                        "data": "status_aktif",
+                        "render": function ( data, type, row, meta ) {
+                            if(data == 'Aktif'){
+                                return '<label class="badge badge-gradient-info">'+data+'</label>';
+                            }else{
+                                return '<label class="badge badge-gradient-dark">'+data+'</label>';
+                            }
+                        }
+                    },
+                    {
+                        "targets": 0,
+                        "data": "kode_surat",
+                        "render": function ( data, type, row, meta ) {
+                            return `<a href="${linkKodeSurat}/${row.id}" class="kode-surat-detail text-dark" data-toggle="modal" data-target="#kodeSurat">
+                                        <div class="mb-1">${row.kode_surat}</div>
+                                    </a>`;
+                        }
+                    },
+        ],
+        autoWidth: false,
+        language: bahasa,
+        processing: true,
+        serverSide: true,
+        ajax: '{{ url('admin/kode-surat/limit') }}',
+        columns: [{
+                data: 'kode_surat',
+            },
+            {
+                data: 'status_aktif',
             },
         ],
         "pageLength": {{ $perPageDashboard }}

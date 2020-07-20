@@ -182,9 +182,6 @@ Route::group(['prefix' => 'pegawai'],function(){
     Route::middleware(['auth:user','pegawai'])->group(function(){
         // Dashboard
         Route::get('/','UserController@pegawaiDashboard');
-        // Kode Surat
-        Route::get('kode-surat/search','KodeSuratController@search');
-        Route::resource('kode-surat','KodeSuratController')->except(['show']);
         // Tanda Tangan
         Route::get('tanda-tangan','UserController@indexTandaTangan');
         Route::post('tanda-tangan','UserController@updateTandaTangan');
@@ -361,6 +358,10 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('tahun-akademik/all','TahunAkademikController@getAllTahunAkademik');
         Route::get('tahun-akademik/limit','TahunAkademikController@getLimitTahunAkademik');
         Route::resource('tahun-akademik', 'TahunAkademikController');
+        // Operator
+        Route::get('operator/all','OperatorController@getAllOperator');
+        Route::get('operator/limit','OperatorController@getLimitOperator');
+        Route::resource('operator','OperatorController');
         // Mahasiswa
         Route::get('mahasiswa/all','MahasiswaController@getAllMahasiswa');
         Route::get('mahasiswa/limit','MahasiswaController@getLimitMahasiswa');
@@ -391,6 +392,10 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('pimpinan-ormawa/all','PimpinanOrmawaController@getAllPimpinanOrmawa');
         Route::get('pimpinan-ormawa/limit','PimpinanOrmawaController@getLimitPimpinanOrmawa');
         Route::resource('pimpinan-ormawa','PimpinanOrmawaController');
+        // Kode Surat
+        Route::get('kode-surat/all','KodeSuratController@getAllKodeSurat');
+        Route::get('kode-surat/limit','KodeSuratController@getLimitKodeSurat');
+        Route::resource('kode-surat','KodeSuratController');
         // Profil
         Route::get('profil','AdminController@profil');
         Route::get('profil/password','AdminController@profilPassword');

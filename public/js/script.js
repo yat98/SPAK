@@ -3438,7 +3438,6 @@ $('.table-responsive').on('click','.ormawa-detail', function (e) {
         });
 })
 
-
 $('.table-responsive').on('click','.pimpinan-ormawa-detail', function (e) {
     e.preventDefault();
     $('#pimpinan-ormawa-detail-content').empty();
@@ -3481,5 +3480,93 @@ $('.table-responsive').on('click','.pimpinan-ormawa-detail', function (e) {
                             </table>
                         </div>`;
             $('#pimpinan-ormawa-detail-content').html(html);
+        });
+})
+
+$('.table-responsive').on('click','.operator-detail', function (e) {
+    e.preventDefault();
+    $('#operator-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let operator = result;
+            let tableStatus = '';
+            
+            if (operator.status_aktif == 'Aktif'){
+                tableStatus+=`<label class="badge badge-gradient-info">${operator.status_aktif}</label>`;
+            }else{
+                tableStatus+=`<label class="badge badge-gradient-dark">${operator.status_aktif}</label>`;
+            }
+
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>Nama</th>
+                                    <td>${operator.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Username</th>
+                                    <td>${operator.username}</td>
+                                </tr>
+                                <tr>
+                                    <th>Bagian</th>
+                                    <td>${operator.bagian}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status Aktif</th>
+                                    <td>${tableStatus}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dibuat</th>
+                                    <td>${operator.created_at}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diubah</th>
+                                    <td>${operator.updated_at}</td>
+                                </tr>
+                            </table>
+                        </div>`;
+            $('#operator-detail-content').html(html);
+        });
+})
+
+$('.table-responsive').on('click','.kode-surat-detail', function (e) {
+    e.preventDefault();
+    $('#kode-surat-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let kodeSurat = result;
+            let tableStatus = '';
+            
+            if (kodeSurat.status_aktif == 'Aktif'){
+                tableStatus+=`<label class="badge badge-gradient-info">${kodeSurat.status_aktif}</label>`;
+            }else{
+                tableStatus+=`<label class="badge badge-gradient-dark">${kodeSurat.status_aktif}</label>`;
+            }
+
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>Kode Surat</th>
+                                    <td>${kodeSurat.kode_surat}</td>
+                                </tr>   
+                                <tr>
+                                    <th>Status Aktif</th>
+                                    <td>${tableStatus}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dibuat</th>
+                                    <td>${kodeSurat.created_at}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diubah</th>
+                                    <td>${kodeSurat.updated_at}</td>
+                                </tr>
+                            </table>
+                        </div>`;
+            $('#kode-surat-detail-content').html(html);
         });
 })

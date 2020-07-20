@@ -17,8 +17,9 @@ class CreateOperatorTable extends Migration
             $table->increments('id');
             $table->string('nama');
             $table->string('username');
-            $table->string('password');
+            $table->string('password',60);
             $table->enum('bagian',['subbagian kemahasiswaan','subbagian pengajaran dan pendidikan','subbagian umum & bmn','front office']);
+            $table->enum('status_aktif',['aktif','non aktif']);
             $table->timestamps();
         });
     }

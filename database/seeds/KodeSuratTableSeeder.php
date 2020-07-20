@@ -13,83 +13,10 @@ class KodeSuratTableSeeder extends Seeder
     public function run()
     {
         KodeSurat::create([
-            'kode_surat'=>'UN47.B5/KM.00.00',
+            'kode_surat'=>'UN47.B5',
             'status_aktif'=>'aktif',
-            'jenis_surat'=>'surat keterangan'
         ]);
 
-        KodeSurat::create([
-            'kode_surat'=>'UN47.B5/KM.00.01',
-            'status_aktif'=>'aktif',
-            'jenis_surat'=>'surat dispensasi'
-        ]);
-
-        KodeSurat::create([
-            'kode_surat'=>'UN47.B5/KM.05.02',
-            'status_aktif'=>'aktif',
-            'jenis_surat'=>'surat rekomendasi'
-        ]);
-
-        KodeSurat::create([
-            'kode_surat'=>'UN47.B5/KM.05.03',
-            'status_aktif'=>'aktif',
-            'jenis_surat'=>'surat tugas'
-        ]);
-
-        KodeSurat::create([
-            'kode_surat'=>'UN47.B5/KM.00.04',
-            'status_aktif'=>'aktif',
-            'jenis_surat'=>'surat persetujuan pindah'
-        ]);
-
-        KodeSurat::create([
-            'kode_surat'=>'UN47.B5/KM.00.01',
-            'status_aktif'=>'aktif',
-            'jenis_surat'=>'surat pengantar cuti'
-        ]);
-
-        KodeSurat::create([
-            'kode_surat'=>'UN47.B5/KM.01.00',
-            'status_aktif'=>'aktif',
-            'jenis_surat'=>'surat pengantar beasiswa'
-        ]);
-
-        KodeSurat::create([
-            'kode_surat'=>'UN47.B5/KM',
-            'status_aktif'=>'aktif',
-            'jenis_surat'=>'surat Kegiatan Mahasiswa'
-        ]);
-
-        KodeSurat::create([
-            'kode_surat'=>'UN47.B5/PK.05.06',
-            'status_aktif'=>'aktif',
-            'jenis_surat'=>'surat keterangan lulus'
-        ]);
-
-        KodeSurat::create([
-            'kode_surat'=>'UN47.B5/KM.07',
-            'status_aktif'=>'aktif',
-            'jenis_surat'=>'surat permohonan pengambilan material'
-        ]);
-
-        KodeSurat::create([
-            'kode_surat'=>'UN47.B5/KM.07',
-            'status_aktif'=>'aktif',
-            'jenis_surat'=>'surat permohonan survei'
-        ]);
-
-        KodeSurat::create([
-            'kode_surat'=>'UN47.B5/PT.01.05',
-            'status_aktif'=>'aktif',
-            'jenis_surat'=>'surat rekomendasi penelitian'
-        ]);
-
-        KodeSurat::create([
-            'kode_surat'=>'UN47.B5/PT.01.05',
-            'status_aktif'=>'aktif',
-            'jenis_surat'=>'surat permohonan pengambilan data awal'
-        ]);
-        
-        $this->command->info('Berhasil menambahkan 7 data kode surat');
+        $this->command->info('Berhasil menambahkan 1 data kode surat');
     }
 }

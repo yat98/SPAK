@@ -7,6 +7,8 @@ use App\User;
 use App\Admin;
 use App\Ormawa;
 use App\Jurusan;
+use App\Operator;
+use App\KodeSurat;
 use App\Mahasiswa;
 use App\ProgramStudi;
 use App\TahunAkademik;
@@ -29,7 +31,10 @@ class AdminController extends Controller
         $countAllOrmawa = Ormawa::count();
         $countAllPimpinanOrmawa = PimpinanOrmawa::count();
         $countAllStatusMahasiswa = StatusMahasiswa::count();
-        return view('user.'.$this->segmentUser.'.dashboard',compact('perPageDashboard','countAllJurusan','countAllProdi','countAllMahasiswa','countAllTahunAkademik','countAllUser','countAllStatusMahasiswa','countAllOrmawa','countAllPimpinanOrmawa','tahunAkademikAktif'));
+        $countAllOperator = Operator::count();
+        $countAllKodeSurat = KodeSurat::count();
+
+        return view('user.'.$this->segmentUser.'.dashboard',compact('perPageDashboard','countAllJurusan','countAllProdi','countAllMahasiswa','countAllTahunAkademik','countAllUser','countAllStatusMahasiswa','countAllOrmawa','countAllPimpinanOrmawa','tahunAkademikAktif','countAllOperator','countAllKodeSurat'));
     }
 
     public function profil(){

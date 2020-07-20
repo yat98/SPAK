@@ -88,6 +88,12 @@
                 <i class="mdi mdi mdi mdi-account-multiple menu-icon"></i>
             </a>
         </li>
+        <li class="nav-item {{ ($halaman == 'kode-surat') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/kode-surat') }}">
+                <span class="menu-title">Kode Surat</span>
+                <i class="mdi mdi mdi-format-list-numbered menu-icon"></i>
+            </a>
+        </li>
         <li class="nav-item {{ ($halaman == 'profil') ? 'active':'' }}">
             <a class="nav-link" href="{{ url(Request::segment(1).'/profil') }}">
                 <span class="menu-title">Ubah Profil</span>
@@ -99,12 +105,6 @@
             <a class="nav-link" href="{{ url(Request::segment(1).'/') }}">
                 <span class="menu-title">Dashboard</span>
                 <i class="mdi mdi-home menu-icon"></i>
-            </a>
-        </li>
-        <li class="nav-item {{ ($halaman == 'kode-surat') ? 'active':'' }}">
-            <a class="nav-link" href="{{ url(Request::segment(1).'/kode-surat') }}">
-                <span class="menu-title">Kode Surat</span>
-                <i class="mdi mdi mdi-format-list-numbered menu-icon"></i>
             </a>
         </li>
         <li class="nav-item {{ ($halaman == 'tanda-tangan') ? 'active':'' }}">

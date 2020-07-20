@@ -118,7 +118,7 @@
     <script>
         let link = "{{ url('admin/program-studi/') }}";
 
-        $('#datatables').DataTable({
+        let prodi = $('#datatables').DataTable({
             responsive: true,
             columnDefs: [{
                             "targets": 0,

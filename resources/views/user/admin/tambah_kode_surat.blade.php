@@ -18,8 +18,8 @@
                         <div class="card">
                             <div class="card-body">
                                 <h3 class="mb-5">Tambah Kode Surat</h3>
-                                {{ Form::open(['url'=>'pegawai/kode-surat']) }}
-                                @include('user.pegawai.form_kode_surat',['buttonLabel'=>'Tambah'])
+                                {{ Form::open(['url'=>'admin/kode-surat']) }}
+                                @include('user.admin.form_kode_surat',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>
                         </div>

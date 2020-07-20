@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Session;
+use DataTables;
 use App\KodeSurat;
 use Illuminate\Http\Request;
 use App\Http\Requests\KodeSuratRequest;
@@ -11,24 +12,48 @@ class KodeSuratController extends Controller
 {
     public function index()
     {
-        $jenisSurat = $this->getJenisSurat();
         $perPage=$this->perPage;
-        if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
-            $kodeSuratList = KodeSurat::whereIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->paginate($perPage);
-        }else if(Session::get('jabatan') == 'kasubag pendidikan dan pengajaran'){
-            $kodeSuratList = KodeSurat::whereNotIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->paginate($perPage);
-        }else{
-            $kodeSuratList = KodeSurat::whereIn('jenis_surat',['surat keterangan bebas perpustakaan','surat keterangan bebas perlengkapan'])->paginate($perPage);
-        }
-        $countKodeSurat = $kodeSuratList->count();
-        $countAllKodeSurat = $countKodeSurat;
-        return view('user.'.$this->segmentUser.'.kode_surat',compact('kodeSuratList','countKodeSurat','countAllKodeSurat','perPage','jenisSurat'));
+        $countAllKodeSurat = KodeSurat::count();
+        return view('user.'.$this->segmentUser.'.kode_surat',compact('countAllKodeSurat','perPage'));
+    }
+
+    public function getAllKodeSurat(){
+        return DataTables::of(KodeSurat::select(['*']))
+                ->editColumn("status_aktif", function ($data) {
+                    return ucwords($data->status_aktif);
+                })
+                ->addColumn('aksi', function ($data) {
+                    return $data->id;
+                })
+                ->make(true);
+    }
+
+    public function getLimitKodeSurat(){
+        return DataTables::collection(KodeSurat::all()->take(5)->sortByDesc('updated_at'))
+                    ->editColumn("status_aktif", function ($data) {
+                        return ucwords($data->status_aktif);
+                    })
+                    ->editColumn("created_at", function ($data) {
+                        return $data->created_at->diffForHumans();
+                    })
+                    ->editColumn("updated_at", function ($data) {
+                        return $data->updated_at->diffForHumans();
+                    })
+                    ->toJson();
+    }
+
+    public function show(KodeSurat $kodeSurat){
+        $data = collect($kodeSurat);
+        $data->put('created_at',$kodeSurat->created_at->isoFormat('D MMMM Y H:mm:ss'));
+        $data->put('updated_at',$kodeSurat->updated_at->isoFormat('D MMMM Y H:mm:ss'));
+        $data->put('status_aktif',ucwords($kodeSurat->status_aktif));
+
+        return $data->toJson();
     }
 
     public function create()
     {
-        $jenisSurat = $this->getJenisSurat();
-        return view('user.'.$this->segmentUser.'.tambah_kode_surat',compact('jenisSurat'));
+        return view('user.'.$this->segmentUser.'.tambah_kode_surat');
     }
 
     public function store(KodeSuratRequest $request)
@@ -55,31 +80,6 @@ class KodeSuratController extends Controller
         $this->setFlashData('success','Berhasil','Data kode surat '.strtolower($kodeSurat->jenis_surat.' dengan kode ').$kodeSurat->kode_surat.' berhasil dihapus');
         $kodeSurat->delete();
         return redirect($this->segmentUser.'/kode-surat');
-    }
-
-    public function search(Request $request){
-        $keywords = $request->all();
-        if(isset($keywords['keyword']) || isset($keywords['jenis_surat'])){
-            $jenisSurat = $this->getJenisSurat();
-            $countAllKodeSurat = KodeSurat::all()->count();
-            $perPage=$this->perPage;
-            $kodeSurat = isset($keywords['keyword']) ? $keywords['keyword']:'';
-            if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
-                $kodeSuratList = KodeSurat::whereIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->where('kode_surat','like',"%$kodeSurat%");
-            }else{
-                $kodeSuratList = KodeSurat::whereNotIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->where('kode_surat','like',"%$kodeSurat%");
-            }
-            (isset($keywords['jenis_surat'])) ? $kodeSuratList = $kodeSuratList->where('jenis_surat',$keywords['jenis_surat']) : '';
-            $kodeSuratList = $kodeSuratList->paginate($perPage)->appends($request->except('page'));
-            $countKodeSurat = count($kodeSuratList);
-            if($countKodeSurat < 1){
-                $this->setFlashData('search','Hasil Pencarian','Data kode surat tidak ditemukan!');
-            }
-            
-            return view('user.'.$this->segmentUser.'.kode_surat',compact('kodeSuratList','countKodeSurat','countAllKodeSurat','perPage','jenisSurat'));
-        }else{
-            return redirect($this->segmentUser.'/kode-surat');
-        }
     }
 
     private function getJenisSurat (){
