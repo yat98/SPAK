@@ -39,7 +39,7 @@
                                         <h4>Kode Surat</h4>
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
-                                        <a href="{{ url('admin/kode-surat/create')}}"
+                                        <a href="{{ url('pimpinan/kode-surat/create')}}"
                                             class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">+
                                             Tambah Kode Surat</a>
                                     </div>
@@ -101,7 +101,7 @@
 
 @section('datatables-javascript')
 <script>
-    let link = "{{ url('admin/kode-surat/') }}";
+    let link = "{{ url('pimpinan/kode-surat/') }}";
 
     $('#datatables').DataTable({
         responsive: true,
@@ -150,7 +150,7 @@
         language: bahasa,
         processing: true,
         serverSide: true,
-        ajax: '{{ url('admin/kode-surat/all') }}',
+        ajax: '{{ url('pimpinan/kode-surat/all') }}',
         columns: [{
                 data: 'kode_surat',
             },

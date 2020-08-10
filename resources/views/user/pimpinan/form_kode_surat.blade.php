@@ -7,13 +7,13 @@
             {{ Form::label('kode_surat','Kode Surat') }}
             @if ($errors->any())
             @if ($errors->has('kode_surat'))
-            {{ Form::text('kode_surat',null,['class'=>'form-control form-control-lg is-invalid','id'=>'kode_surat','placeholder'=>'UN47.B5/KM.00.00']) }}
+            {{ Form::text('kode_surat',null,['class'=>'form-control form-control-lg is-invalid','id'=>'kode_surat','placeholder'=>'UN47.B5']) }}
             <div class="invalid-feedback">{{ $errors->first('kode_surat') }}</div>
             @else
-            {{ Form::text('kode_surat',null,['class'=>'form-control form-control-lg is-valid','id'=>'kode_surat','placeholder'=>'UN47.B5/KM.00.00']) }}
+            {{ Form::text('kode_surat',null,['class'=>'form-control form-control-lg is-valid','id'=>'kode_surat','placeholder'=>'UN47.B5']) }}
             @endif
             @else
-            {{ Form::text('kode_surat',null,['class'=>'form-control form-control-lg','id'=>'kode_surat','placeholder'=>'UN47.B5/KM.00.00']) }}
+            {{ Form::text('kode_surat',null,['class'=>'form-control form-control-lg','id'=>'kode_surat','placeholder'=>'UN47.B5']) }}
             @endif
         </div>
         <div class="form-group">

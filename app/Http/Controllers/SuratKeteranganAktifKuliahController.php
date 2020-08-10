@@ -10,13 +10,14 @@ use App\Mahasiswa;
 use App\SuratTugas;
 use App\SuratDispensasi;
 use App\SuratKeterangan;
+use Milon\Barcode\DNS2D;
 use App\SuratRekomendasi;
 use App\NotifikasiMahasiswa;
 use Illuminate\Http\Request;
 use App\PengajuanSuratKeterangan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SuratKeteranganRequest;
-use Milon\Barcode\DNS2D;
 
 class SuratKeteranganAktifKuliahController extends Controller
 {
@@ -50,17 +51,17 @@ class SuratKeteranganAktifKuliahController extends Controller
     public function indexMahasiswa(){
         $perPage = $this->perPage;
         $pengajuanSuratKeteranganAktifList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
-                                                ->where('nim',Session::get('nim'))
+                                                ->where('nim',Auth::user()->nim)
                                                 ->orderByDesc('created_at')
                                                 ->orderBy('status')
                                                 ->paginate($perPage,['*'],'page_pengajuan');
 
         $countAllPengajuan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
-                                ->where('nim',Session::get('nim'))
+                                ->where('nim',Auth::user()->nim)
                                 ->count();
                                 
         $countPengajuanSuratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
-                                            ->where('nim',Session::get('nim'))
+                                            ->where('nim',Auth::user()->nim)
                                             ->count();
         return view($this->segmentUser.'.pengajuan_surat_keterangan_aktif_kuliah',compact('countAllPengajuan','countPengajuanSuratKeterangan','perPage','pengajuanSuratKeteranganAktifList'));
     }

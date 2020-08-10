@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Session;
 use DataTables;
 use App\Operator;
+use App\TahunAkademik;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\OperatorRequest;
 
 class OperatorController extends Controller
@@ -84,5 +88,51 @@ class OperatorController extends Controller
         $operator->delete();
         $this->setFlashData('success','Berhasil','Data operator '.$operator->nama.' berhasil dihapus');
         return redirect($this->segmentUser.'/operator');
+    }
+
+    public function operatorDashboard(){
+        $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
+        return view('operator.dashboard',compact('tahunAkademikAktif'));
+    }
+
+    public function profil(){
+        $id = Auth::user()->id;
+        $operator = Operator::findOrFail($id);
+        $status = $operator->status_aktif;
+        return view($this->segmentUser.'.profil',compact('operator','status'));
+    }
+
+    public function profilPassword(){
+        return view($this->segmentUser.'.profil_password');
+    }
+    
+    public function updateProfil(Request $request,Operator $operator){
+        $this->validate($request,[
+            'nama'=>'required|string',
+            'username'=>'required|string',
+        ]);
+        $operator->update($request->all());
+        $this->setFlashData('success','Berhasil','Profil berhasil diubah');
+        return redirect($this->segmentUser);
+    }
+
+    public function updatePassword(Request $request){
+        $id =  Auth::user()->id;
+        $operator = Operator::findOrFail($id);  
+        $this->validate($request,[
+            'password_lama'=>function($attr,$val,$fail) use($operator){
+                if (!Hash::check($val, $operator->password)) {
+                    $fail('password lama tidak sesuai.');
+                }
+            },
+            'password'=>'required|string|max:60|confirmed',
+            'password_confirmation'=>'required|string|max:60'
+       ]);
+       $operator->update([
+           'password'=>$request->password
+       ]);
+       Session::flush();
+       $this->setFlashData('success','Berhasil','Password  berhasil diubah');
+       return redirect($this->segmentUser);
     }
 }

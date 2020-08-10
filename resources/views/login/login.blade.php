@@ -15,19 +15,34 @@
                         @csrf
                         <div class="form-group">
                             {{ Form::label('jenis-user','Jenis User') }}
-                            {{ Form::select('jenis_user',['mahasiswa'=>'Mahasiswa','pegawai'=>'Pegawai','pimpinan'=>'Pimpinan'],Session::get('jenis_user'),['class'=>'form-control form-control-lg','id'=>'jenis-user']) }}
+                            {{ Form::select('jenis_user',['mahasiswa'=>'Mahasiswa','operator'=>'Operator','pegawai'=>'Pegawai','pimpinan'=>'Pimpinan'],Session::get('jenis_user_login'),['class'=>'form-control form-control-lg','id'=>'jenis-user']) }}
                         </div>
                         <div class="form-group">
                             {{ Form::label('username','Username') }}
+                             @php
+                                 $jenisUser = Session::get('jenis_user_login');
+                                 $placeholder = 'NIM';
+                                 switch($jenisUser){
+                                     case 'operator':
+                                        $placeholder = 'Username' ;
+                                        break;
+                                    case 'pegawai' :
+                                        $placeholder = 'NIP' ;
+                                        break;
+                                    case 'pimpinan' :
+                                        $placeholder = 'NIP' ;
+                                        break;
+                                }
+                             @endphp
                             @if ($errors->any())
                             @if ($errors->has('username'))
-                             {{ Form::text('username',(Session::has('username')) ? Session::get('username') : null,['class'=>'is-invalid form-control form-control-lg','placeholder'=>'NIM','id'=>'username']) }}
+                             {{ Form::text('username',(Session::has('username')) ? Session::get('username') : null,['class'=>'is-invalid form-control form-control-lg','placeholder'=>$placeholder,'id'=>'username']) }}
                             <div class="invalid-feedback">{{ $errors->first('username') }}</div>
                             @else
-                             {{ Form::text('username',(Session::has('username')) ? Session::get('username') : null,['class'=>'form-control form-control-lg','placeholder'=>'NIM','id'=>'username']) }}
+                             {{ Form::text('username',(Session::has('username')) ? Session::get('username') : null,['class'=>'form-control form-control-lg','placeholder'=>$placeholder,'id'=>'username']) }}
                             @endif
                             @else
-                             {{ Form::text('username',(Session::has('username')) ? Session::get('username') : null,['class'=>'form-control form-control-lg','placeholder'=>'NIM','id'=>'username']) }}
+                             {{ Form::text('username',(Session::has('username')) ? Session::get('username') : null,['class'=>'form-control form-control-lg','placeholder'=>$placeholder,'id'=>'username']) }}
                             @endif
                         </div>
                         <div class="form-group">

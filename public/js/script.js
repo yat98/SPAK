@@ -82,15 +82,21 @@ let jenisUser = document.getElementById('jenis_user');
 $('#jenis-user').on('click', function () {
     let username = $('#username');
     let value = '';
+    console.log($(this).val());
     switch ($(this).val()) {
         case 'pimpinan':
-            value = 'nip'
+            value = 'nip';
             break;
         case 'mahasiswa':
-            value = 'nim'
+            value = 'nim';
             break;
         case 'pegawai':
-            value = 'nip'
+            value = 'nip';
+            break;
+        case 'operator':
+            value = 'username';
+            username.attr('placeholder', value.ucwords());
+            return;
             break;
     }
     username.attr('placeholder', value.toUpperCase());

@@ -59,7 +59,7 @@ class KodeSuratController extends Controller
     public function store(KodeSuratRequest $request)
     {
         $input = $request->all();
-        $this->setFlashData('success','Berhasil','Data kode surat '.strtolower($input['jenis_surat'].' dengan kode ').$input['kode_surat'].' berhasil ditambahkan');
+        $this->setFlashData('success','Berhasil','Data kode surat dengan kode '.$input['kode_surat'].' berhasil ditambahkan');
         KodeSurat::create($input);
         return redirect($this->segmentUser.'/kode-surat');
     }

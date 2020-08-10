@@ -162,8 +162,9 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         Route::get('pendaftaran-cuti','PendaftaranCutiController@pendaftaranCutiMahasiswa');
         Route::resource('pendaftaran-cuti','PendaftaranCutiController')->except('index');
         // Notifikasi
-        Route::get('notifikasi/{notifikasi_mahasiswa}','NotifikasiMahasiswaController@show');
         Route::get('notifikasi','NotifikasiMahasiswaController@index');
+        Route::get('notifikasi/all','NotifikasiMahasiswaController@getAllNotifikasi');
+        Route::get('notifikasi/{notifikasi_mahasiswa}','NotifikasiMahasiswaController@show');
         Route::post('notifikasi/allread','NotifikasiMahasiswaController@allRead');
         Route::post('notifikasi/alldelete','NotifikasiMahasiswaController@allDelete');
         // Password
@@ -171,6 +172,28 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         Route::patch('profil/{mahasiswa}','MahasiswaController@updateProfil');
         Route::get('profil/password','MahasiswaController@password');
         Route::post('profil/password','MahasiswaController@updatePassword');
+    });
+});
+
+// Operator
+Route::group(['prefix' => 'operator'],function(){
+    // Logout
+    Route::get('logout','Auth\LoginController@postLogout');
+
+    Route::middleware(['auth:operator','operator'])->group(function(){
+        // Dashboard
+        Route::get('/','OperatorController@operatorDashboard');
+        // Profil
+        Route::get('profil','OperatorController@profil');
+        Route::get('profil/password','OperatorController@profilPassword');
+        Route::post('profil/password','OperatorController@updatePassword');
+        Route::patch('profil/{operator}','OperatorController@updateProfil');
+        // Notifikasi
+        Route::get('notifikasi','NotifikasiOperatorController@index');
+        Route::get('notifikasi/all','NotifikasiOperatorController@getAllNotifikasi');
+        Route::get('notifikasi/{notifikasi_operator}','NotifikasiOperatorController@show');
+        Route::post('notifikasi/allread','NotifikasiOperatorController@allRead');
+        Route::post('notifikasi/alldelete','NotifikasiOperatorController@allDelete');
     });
 });
 
@@ -324,8 +347,9 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::get('laporan','LaporanController@index');
         Route::post('laporan','LaporanController@show');
         // Notifikasi
-        Route::get('notifikasi/{notifikasi_user}','NotifikasiUserController@show');
         Route::get('notifikasi','NotifikasiUserController@index');
+        Route::get('notifikasi/all','NotifikasiUserController@getAllNotifikasi');
+        Route::get('notifikasi/{notifikasi_user}','NotifikasiUserController@show');
         Route::post('notifikasi/allread','NotifikasiUserController@allRead');
         Route::post('notifikasi/alldelete','NotifikasiUserController@allDelete');
         // Profil
@@ -392,10 +416,6 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('pimpinan-ormawa/all','PimpinanOrmawaController@getAllPimpinanOrmawa');
         Route::get('pimpinan-ormawa/limit','PimpinanOrmawaController@getLimitPimpinanOrmawa');
         Route::resource('pimpinan-ormawa','PimpinanOrmawaController');
-        // Kode Surat
-        Route::get('kode-surat/all','KodeSuratController@getAllKodeSurat');
-        Route::get('kode-surat/limit','KodeSuratController@getLimitKodeSurat');
-        Route::resource('kode-surat','KodeSuratController');
         // Profil
         Route::get('profil','AdminController@profil');
         Route::get('profil/password','AdminController@profilPassword');
@@ -413,6 +433,10 @@ Route::group(['prefix' => 'pimpinan'], function () {
         // Dashboard
         Route::get('/','UserController@pimpinanDashboard');
         Route::get('search','UserController@chartPimpinanDashboard');
+        // Kode Surat
+        Route::get('kode-surat/all','KodeSuratController@getAllKodeSurat');
+        Route::get('kode-surat/limit','KodeSuratController@getLimitKodeSurat');
+        Route::resource('kode-surat','KodeSuratController');
         // Surat Keterangan Aktif Kuliah
         Route::get('surat-keterangan-aktif-kuliah/search/','SuratKeteranganAktifKuliahController@search');
         Route::resource('surat-keterangan-aktif-kuliah','SuratKeteranganAktifKuliahController')->except(['show','destroy']);
@@ -489,8 +513,9 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::get('surat-permohonan-pengambilan-data-awal/{surat_data_awal}','SuratPermohonanPengambilanDataAwalController@show');
         Route::post('surat-permohonan-pengambilan-data-awal/pengajuan/tanda-tangan','SuratPermohonanPengambilanDataAwalController@tandaTanganDataAwal');
          // Notifikasi
-        Route::get('notifikasi/{notifikasi_user}','NotifikasiUserController@show');
         Route::get('notifikasi','NotifikasiUserController@index');
+        Route::get('notifikasi/all','NotifikasiUserController@getAllNotifikasi');
+        Route::get('notifikasi/{notifikasi_user}','NotifikasiUserController@show');
         Route::post('notifikasi/allread','NotifikasiUserController@allRead');
         Route::post('notifikasi/alldelete','NotifikasiUserController@allDelete');
         // Tanda Tangan

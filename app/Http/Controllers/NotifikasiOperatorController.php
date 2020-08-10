@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Session;
 use DataTables;
-use App\NotifikasiUser;
+use App\NotifikasiOperator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class NotifikasiUserController extends Controller
+class NotifikasiOperatorController extends Controller
 {
     public function index(){
         $perPage = $this->perPage;
-        $countAllNotifikasi = NotifikasiUser::where('nip',Auth::user()->nip)->count();
-        return view('user.notifikasi_user',compact('perPage','countAllNotifikasi'));
+        $countAllNotifikasi = NotifikasiOperator::where('id_operator',Auth::user()->id)->count();
+        return view('operator.notifikasi_operator',compact('perPage','countAllNotifikasi'));
     }
 
     public function getAllNotifikasi(){
-        return DataTables::of(NotifikasiUser::where('nip',Auth::user()->nip))
+        return DataTables::of(NotifikasiOperator::where('id_operator',Auth::user()->id))
                 ->editColumn("status", function ($data) {
                     return ucwords($data->status);
                 })
@@ -27,21 +26,21 @@ class NotifikasiUserController extends Controller
                 ->make(true);
     }
 
-    public function show(NotifikasiUser $notifikasiUser){
-        $notifikasiUser->update([
+    public function show(NotifikasiOperator $notifikasiOperator){
+        $notifikasiOperator->update([
             'status'=>'dilihat'
         ]);
-        return redirect($notifikasiUser->link_notifikasi);
+        return redirect($notifikasiOperator->link_notifikasi);
     }
 
     public function allRead(){
-        NotifikasiUser::where('nip',Auth::user()->nip)->update(['status'=>'dilihat']);
+        NotifikasiOperator::where('id_operator',Auth::user()->id)->update(['status'=>'dilihat']);
         $this->setFlashData('success','Berhasil','Semua notifikasi telah ditandai dilihat');
         return redirect($this->segmentUser.'/notifikasi');
     }
 
     public function allDelete(){
-        NotifikasiUser::where('nip',Auth::user()->nip)->delete();
+        NotifikasiOperator::where('id_operator',Auth::user()->id)->delete();
         $this->setFlashData('success','Berhasil','Semua notifikasi telah dihapus');
         return redirect($this->segmentUser.'/notifikasi');
     }

@@ -98,7 +98,7 @@ class UserTableSeeder extends Seeder
             'pangkat'=>'pembina',
             'golongan'=>'IV/a',
             'tanda_tangan'=>null,
-            'password'=>Hash::make('197511172003121002')
+            'password'=>Hash::make('19710401200012001')
         ]);
 
         $this->command->info('Berhasil menambahkan 4 data pada table admin');

@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use Session;
 use App\User;
+use App\Operator;
 use App\Mahasiswa;
 use App\TahunAkademik;
 use App\NotifikasiUser;
 use App\StatusMahasiswa;
+use App\NotifikasiOperator;
 use Illuminate\Http\Request;
 use App\PengajuanSuratKeterangan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PengajuanSuratKeteranganRequest;
 
 class PengajuanSuratKeteranganController extends Controller
@@ -23,7 +26,7 @@ class PengajuanSuratKeteranganController extends Controller
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
         $tahunAkademik[$tahunAkademikAktif->id] = $tahunAkademikAktif->tahun_akademik.' - '.ucwords($tahunAkademikAktif->semester);
         if($tahunAkademikAktif !=  null){
-            $status = StatusMahasiswa::where('status','aktif')->where('id_tahun_akademik',$tahunAkademikAktif->id)->where('nim',Session::get('nim'))->first();
+            $status = StatusMahasiswa::where('status','aktif')->where('id_tahun_akademik',$tahunAkademikAktif->id)->where('nim',Auth::user()->nim)->first();
             if($status == null){
                 $this->setFlashData('info','Pengajuan Gagal','Maaf anda tidak dapat membuat pengajuan surat keterangan aktif kuliah karena status anda tidak aktif');
                 return redirect($this->segmentUser.'/pengajuan/surat-keterangan-aktif-kuliah');
@@ -52,16 +55,16 @@ class PengajuanSuratKeteranganController extends Controller
     
     public function storePengajuanKelakuanBaik(PengajuanSuratKeteranganRequest $request){
         $input = $request->all();
-        $mahasiswa = Mahasiswa::where('nim',Session::get('nim'))->first();
+        $mahasiswa = Mahasiswa::where('nim',Auth::user()->nim)->first();
 
         DB::beginTransaction();
         try{
-            $user = User::where('jabatan','kasubag kemahasiswaan')->where('status_aktif','aktif')->first();
-            NotifikasiUser::create([
-                'nip'=>$user->nip,
+            $operator = Operator::where('bagian','subbagian kemahasiswaan')->where('status_aktif','aktif')->first();
+            NotifikasiOperator::create([
+                'id_operator'=>$operator->id,
                 'judul_notifikasi'=>'Surat Keterangan Kelakuan Baik',
                 'isi_notifikasi'=>'Mahasiswa dengan nama '.$mahasiswa->nama.' membuat pengajuan surat keterangan kelakuan baik.',
-                'link_notifikasi'=>url('pegawai/surat-keterangan-kelakuan-baik')
+                'link_notifikasi'=>url('operator/surat-keterangan-kelakuan-baik')
             ]);
         }catch(Exception $e){
             DB::rollback();
@@ -82,16 +85,16 @@ class PengajuanSuratKeteranganController extends Controller
 
     public function storePengajuanKeteranganAktif(PengajuanSuratKeteranganRequest $request){
         $input = $request->all();
-        $mahasiswa = Mahasiswa::where('nim',Session::get('nim'))->first();
+        $mahasiswa = Mahasiswa::where('nim',Auth::user()->nim)->first();
 
         DB::beginTransaction();
         try{
-            $user = User::where('jabatan','kasubag kemahasiswaan')->where('status_aktif','aktif')->first();
-            NotifikasiUser::create([
-                'nip'=>$user->nip,
+            $operator = Operator::where('bagian','subbagian kemahasiswaan')->where('status_aktif','aktif')->first();
+            NotifikasiOperator::create([
+                'id_operator'=>$operator->id,
                 'judul_notifikasi'=>'Surat Keterangan Aktif Kuliah',
                 'isi_notifikasi'=>'Mahasiswa dengan nama '.$mahasiswa->nama.' membuat pengajuan surat keterangan aktif kuliah.',
-                'link_notifikasi'=>url('pegawai/surat-keterangan-aktif-kuliah')
+                'link_notifikasi'=>url('operator/surat-keterangan-aktif-kuliah')
             ]);
         }catch(Exception $e){
             DB::rollback();
@@ -112,7 +115,7 @@ class PengajuanSuratKeteranganController extends Controller
 
     
     private function isSuratAktifDiajukanExists(){
-        $suratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')->where('nim',Session::get('nim'))->where('status','diajukan')->exists();
+        $suratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')->where('nim',Auth::user()->nim)->where('status','diajukan')->exists();
         if($suratKeterangan){
             $this->setFlashData('info','Pengajuan Surat','Pengajuan surat keterangan aktif kuliah sementara diproses!');
             return false;
@@ -121,7 +124,7 @@ class PengajuanSuratKeteranganController extends Controller
     }
 
     private function isSuratKelakuanDiajukanExists(){
-        $suratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')->where('nim',Session::get('nim'))->where('status','diajukan')->exists();
+        $suratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')->where('nim',Auth::user()->nim)->where('status','diajukan')->exists();
         if($suratKeterangan){
             $this->setFlashData('info','Pengajuan Surat','Pengajuan surat keterangan kelakuan baik sementara diproses!');
             return false;

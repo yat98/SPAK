@@ -22,34 +22,38 @@ class LoginController extends Controller
 
     public function getLogin()
     {
-        $jenisUser = Session::get('jenis_user');
-
-        if($jenisUser != null){
+        $isLogin = Session::get('login');
+        
+        if($isLogin == true){
+            $jenisUser = Session::get('jenis_user');
             return redirect($jenisUser);
         }
+
         return view('login.login');
     }
 
     public function postLogin(Request $request)
     {
+        $jenisUser = $request->jenis_user;
+        $guard = $jenisUser;
+        Session::flash('jenis_user_login',$jenisUser);
+
         $validator = $this->validate($request,[
             'username'=>'required|string|max:60',
             'password'=>'required|string|max:60',
         ]);
         
-        $jenisUser = $request->jenis_user;
-        $guard = $jenisUser;
 
         switch ($jenisUser) {
             case 'mahasiswa':
+                $user = Mahasiswa::where('nim',$request->username)->first();
                 $input = [
                     'nim'=>$request->username,
                     'password'=>$request->password
                 ];
-                $user = Mahasiswa::find($request->username);
                 break;
             case 'operator':
-                $user = Operator::find($request->username);
+                $user = Operator::where('username',$request->username)->first();
                 $input = [
                     'username'=>$request->username,
                     'password'=>$request->password
@@ -62,54 +66,42 @@ class LoginController extends Controller
                     'nip'=>$request->username,
                     'password'=>$request->password
                 ];
-                if($user->jabatan == 'dekan' || $user->jabatan == 'wd1' || $user->jabatan == 'wd2' || $user->jabatan == 'wd3' || $user->jabatan == 'kabag tata usaha'){
-                    $jenisUser = 'pimpinan';
-                }else{
-                    $jenisUser = 'pegawai';
-                }
                 break;
         }
-    
+
         if (auth()->guard($guard)->attempt($input)) {
             if($guard == 'mahasiswa'){
-                if($user != null){
-                    if($user->tahunAkademik->count() < 1){
-                        $this->incrementLoginAttempts($request);
-                        Session::flash('username',$request->username);
-                        $this->setFlashData('error','Login Gagal','Username atau password salah.');
+                if ($user != null) {
+                    if ($user->tahunAkademik->count() < 1) {
+                        $this->errorLogin($request);
                         return redirect('/');
-                    }else{
-                        $status = $user->load(['tahunAkademik'=>function($query){
-                            $query->orderByDesc('created_at');
-                        }])->tahunAkademik->first()->pivot->status;
-                        if($status == 'lulus' || $status == 'drop out' || $status == 'keluar'){
-                            $this->incrementLoginAttempts($request);
-                            Session::flash('username',$request->username);
-                            $this->setFlashData('error','Login Gagal','Username atau password salah.');
-                            return redirect('/');
-                        }
+                    }
+
+                    $status = $user->load(['tahunAkademik'=>function ($query) {
+                        $query->orderByDesc('created_at');
+                    }])->tahunAkademik->first()->pivot->status;
+
+                    if ($status == 'lulus' || $status == 'drop out' || $status == 'keluar') {
+                        $this->errorLogin($request);
+                        return redirect('/');
                     }
                 }
-            }else if($guard == 'user'){
+            }else if($guard == 'user' || $guard == 'operator'){
+                ($guard == 'operator') ? Session::put('jabatan',$user->bagian) : Session::put('jabatan',$user->jabatan);
                 if($user->status_aktif != 'aktif'){
-                    $this->incrementLoginAttempts($request);
-                    Session::flash('username',$request->username);
-                    $this->setFlashData('error','Login Gagal','Username atau password salah.');
+                    $this->errorLogin($request);
                     return redirect('/');
                 }
             }
-
             $request->session()->regenerate();
-            $this->clearLoginAttempts($request);
-            Session::put('jabatan',$user->jabatan);
-            Session::put('jenis_user',$jenisUser);
+            $this->clearLoginAttempts($request);            
             Session::put('guard',$guard);
+            Session::put('login',true);
+            Session::put('jenis_user',$jenisUser);
             $this->setFlashData('success-timer','Login Berhasil','Selamat Datang '.$user->nama);
             return redirect($jenisUser);
         } else {
-            $this->incrementLoginAttempts($request);
-            Session::flash('username',$request->username);
-            $this->setFlashData('error','Login Gagal','Username atau password salah.');
+            $this->errorLogin($request);
             return redirect('/');
         }
     }
@@ -121,5 +113,11 @@ class LoginController extends Controller
         session()->flush();
 
         return redirect('/');
+    }
+
+    private function errorLogin(Request $request){
+        $this->incrementLoginAttempts($request);
+        Session::flash('username', $request->username);
+        $this->setFlashData('error', 'Login Gagal', 'Username atau password salah.');
     }
 }

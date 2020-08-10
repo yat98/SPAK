@@ -51,6 +51,11 @@ return [
             'provider' => 'users',
         ],
 
+        'operator' => [
+            'driver' => 'session',
+            'provider' => 'operators',
+        ],
+
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
@@ -95,6 +100,12 @@ return [
             'driver' => 'eloquent',
             'model' => App\Mahasiswa::class,
         ],
+
+        'operators' => [
+            'driver' => 'eloquent',
+            'model' => App\Operator::class,
+        ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

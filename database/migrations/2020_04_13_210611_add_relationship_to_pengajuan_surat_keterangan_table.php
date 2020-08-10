@@ -26,6 +26,12 @@ class AddRelationshipToPengajuanSuratKeteranganTable extends Migration
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
 
+            $table->foreign('id_operator')
+                  ->references('id')
+                  ->on('operator')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
+
         });
     }
 
@@ -39,6 +45,7 @@ class AddRelationshipToPengajuanSuratKeteranganTable extends Migration
         Schema::table('pengajuan_surat_keterangan', function (Blueprint $table) {
             $table->dropForeign(['nim']);
             $table->dropForeign(['id_tahun_akademik']);
+            $table->dropForeign(['id_operator']);
         });
     }
 }

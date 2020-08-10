@@ -52,37 +52,16 @@
                                 <hr class="mb-4">
                                 @if ($countAllNotifikasi > 0)
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table class="table display warp" id='datatables' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
-                                                <th> Judul</th>
+                                                <th data-priority="1"> Judul</th>
                                                 <th> Isi</th>
-                                                <th> Status</th>
+                                                <th data-priority="2"> Status</th>
                                                 <th> Tanggal Notifikasi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($notifikasiList as $ntfksi)
-                                            <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($notifikasiList->currentPage() - 1) }}</td>
-                                                <td> <a href="{{ url($ntfksi->link_notifikasi) }}" class="text-dark">{{ $ntfksi->judul_notifikasi  }}</a></td>
-                                                <td> {{ $ntfksi->isi_notifikasi  }}</td>
-                                                <td>
-                                                    @if ($ntfksi->status == 'dilihat')
-                                                    <label class="badge badge-gradient-success">{{ ucwords($ntfksi->status) }}</label>
-                                                    @else
-                                                    <label class="badge badge-gradient-info">{{ ucwords($ntfksi->status) }}</label>
-                                                    @endif 
-                                                </td>
-                                                <td> {{ $ntfksi->created_at->isoFormat('D MMMM Y HH:mm:ss') }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
-                                    <div class="col">
-                                        {{ $notifikasiList->links() }}
-                                    </div>
                                 </div>
                                 @else
                                 <div class="row">
@@ -103,4 +82,60 @@
         </div>
     </div>
 </div>
+@endsection
+
+
+@section('datatables-javascript')
+    <script>
+        let link = <?= 
+                        (Session::get('jabatan') == 'kasubag kemahasiswaan' || Session::get('jabatan') == 'kasubag pendidikan dan pengajaran') ? '"'.url('pegawai/notifikasi/').'"' : '"'.url('pimpinan/notifikasi/').'"'
+                    ?>;
+        let linkAll = <?= 
+                        (Session::get('jabatan') == 'kasubag kemahasiswaan' || Session::get('jabatan') == 'kasubag pendidikan dan pengajaran') ? '"'.url('pegawai/notifikasi/all').'"' :  '"'.url('pimpinan/notifikasi/all').'"'
+                      ?>
+
+        $('#datatables').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 0,
+                            "data": "judul",
+                            "render": function ( data, type, row, meta ) {
+                                return `<a href="${link}/${row.id}" class="text-dark">
+                                            <div class="mb-1">${row.judul_notifikasi}</div>
+                                        </a>`;
+                            }
+                        },
+                        {
+                            "targets": 2,
+                            "data": "status",
+                            "render": function ( data, type, row, meta ) {
+                                if(row.status == 'Belum Dilihat'){
+                                    return `<label class="badge badge-gradient-info">${row.status}</label>`;
+                                }
+                                return `<label class="badge badge-gradient-success">${row.status}</label>`;
+                            }
+                        }
+            ],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: linkAll,
+            columns: [{
+                    data: 'judul_notifikasi',
+                },
+                {
+                    data: 'isi_notifikasi',
+                },
+                {
+                    data: 'status',
+                },
+                {
+                    data: 'tanggal_notifikasi',
+                }
+            ],
+            order: [[ 2, "desc" ]],
+            pageLength: {{ $perPage }}
+        });
+    </script>
 @endsection

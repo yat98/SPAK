@@ -29,6 +29,23 @@
                         </div>
                     </div>
                     <div class="col-md-6 stretch-card grid-margin">
+                        <div class="card bg-gradient-orange card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Kode Surat <i
+                                        class="mdi mdi-format-list-numbered mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countAllKodeSurat > 0 ? $countAllKodeSurat.' Kode Surat' : 'Kode Surat Kosong' }}
+                                </h2>
+                                <h6 class="card-text">
+                                    <a href="{{ url('admin/kode-surat') }}" class="text-white">Lihat data kode surat</a>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
@@ -346,6 +363,46 @@
                                     </div>
                                 </div>
                                 <canvas id="pengajaran_pendidikan" class="mt-4 chartjs-render-monitor  mb-3 mb-md-0" style="display: block; height: 298px; width: 596px;" width="745" height="372"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                  <div class="row">
+                    <div class="col-12 grid-margin">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <div class="col-12 col-md-6">
+                                        <h4>Kode Surat</h4>
+                                    </div>
+                                </div>
+                                <hr class="mb-4">
+                                @if ($countAllKodeSurat > 0)
+                                <div class="table-responsive dashboard">
+                                    <table class="table display no-warp" id='datatables10' width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th data-priority="1"> Kode Surat</th>
+                                                <th> Status</th>
+                                                <th> Di Buat</th>
+                                                <th> Di Ubah</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                @else
+                                <div class="row">
+                                    <div class="col text-center">
+                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                        <h4 class="display-4 mt-3">
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : 'Kode Surat Kosong!' }}
+                                        </h4>
+                                        <p class="text-muted">
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data kode surat terlebih dahulu.' }}
+                                        </p>
+                                    </div>
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -1225,12 +1282,30 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="kodeSurat" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='kode-surat-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('chart-javascript')
 <script>
-    var data = [<?php echo '"'.implode('","', $chartKemahasiswaan).'"' ?>];
-    var dataPendidikan = [<?php echo '"'.implode('","', $chartPendidikanPengajaran).'"' ?>]; 
+    var data = [ <?= '"'.implode('","', $chartKemahasiswaan).'"'; ?> ];
+    var dataPendidikan = [ <?= '"'.implode('","', $chartPendidikanPengajaran).'"'; ?> ]; 
     var ctx = document.getElementById('kemahasiswaan').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'bar',
@@ -1309,6 +1384,56 @@
                 }]
             }
         }
+    });
+</script>
+@endsection
+
+@section('datatables-javascript')
+<script>
+     let linkKodeSurat = "{{ url('pimpinan/kode-surat/') }}";
+
+    $('#datatables10').DataTable({
+        responsive: true,
+        columnDefs: [{
+                        "targets": 1,
+                        "data": "status_aktif",
+                        "render": function ( data, type, row, meta ) {
+                            if(data == 'Aktif'){
+                                return '<label class="badge badge-gradient-info">'+data+'</label>';
+                            }else{
+                                return '<label class="badge badge-gradient-dark">'+data+'</label>';
+                            }
+                        }
+                    },
+                    {
+                        "targets": 0,
+                        "data": "kode_surat",
+                        "render": function ( data, type, row, meta ) {
+                            return `<a href="${linkKodeSurat}/${row.id}" class="kode-surat-detail text-dark" data-toggle="modal" data-target="#kodeSurat">
+                                        <div class="mb-1">${row.kode_surat}</div>
+                                    </a>`;
+                        }
+                    },
+        ],
+        autoWidth: false,
+        language: bahasa,
+        processing: true,
+        serverSide: true,
+        ajax: '{{ url('pimpinan/kode-surat/limit') }}',
+        columns: [{
+                data: 'kode_surat',
+            },
+            {
+                data: 'status_aktif',
+            },
+            {
+                data: 'created_at',
+            },
+            {
+                data: 'updated_at',
+            },
+        ],
+        "pageLength": {{ $perPageDashboard }}
     });
 </script>
 @endsection

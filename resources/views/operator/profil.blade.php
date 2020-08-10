@@ -10,16 +10,16 @@
                 <div class="page-header">
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
-                            <i class="mdi mdi-format-list-numbered"></i>
-                        </span> Kode Surat </h3>
+                            <i class="mdi mdi-settings"></i>
+                        </span> Ubah Profil</h3>
                 </div>
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Tambah Kode Surat</h3>
-                                {{ Form::open(['url'=>'admin/kode-surat']) }}
-                                @include('user.admin.form_kode_surat',['buttonLabel'=>'Tambah'])
+                                <h3 class="mb-5">Ubah Profil</h3>
+                                {{ Form::model($operator,['method'=>'PATCH','action'=>['OperatorController@updateProfil',$operator->id]]) }}
+                                @include('operator.form_profil',['buttonLabel'=>'Simpan'])
                                 {{ Form::close() }}
                             </div>
                         </div>

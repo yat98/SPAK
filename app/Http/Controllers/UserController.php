@@ -165,14 +165,12 @@ class UserController extends Controller
 
     public function pegawaiDashboard(){
         $tgl = Carbon::now();
+        $kodeSuratList = KodeSurat::all();
         if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
-            $kodeSuratList = KodeSurat::whereIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->get();
             $suratMasukList = SuratMasuk::where('bagian','subbagian kemahasiswaan')->orderByDesc('created_at')->get();
         }else if(Session::get('jabatan') == 'kasubag pengajaran dan pendidikan'){
-            $kodeSuratList = KodeSurat::whereNotIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->get();
             $suratMasukList = SuratMasuk::where('bagian','subbagian pengajaran dan pendidikan')->orderByDesc('created_at')->get();
         }else{
-            $kodeSuratList = KodeSurat::whereIn('jenis_surat',['surat keterangan bebas perpustakaan','surat keterangan bebas perlengkapan'])->get();
             $suratMasukList = SuratMasuk::where('bagian','subbagian umum & bmn')->orderByDesc('created_at')->get();
         }
         
@@ -278,8 +276,12 @@ class UserController extends Controller
             '11'=>'November',
             '12'=>'Desember',
         ];
+        $perPageDashboard = $this->perPageDashboard;
         $tahun = $this->generateAngkatan();
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
+        
+        $countAllKodeSurat = KodeSurat::count();
+
         $suratKeteranganAktifList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
                                         ->orderByDesc('surat_keterangan.updated_at')
                                         ->where('jenis_surat','surat keterangan aktif kuliah')
@@ -431,7 +433,7 @@ class UserController extends Controller
                                                         ->count()
         ];
        
-        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','suratKeteranganAktifList','suratKeteranganKelakuanList','suratDispensasiList','suratRekomendasiList','suratTugasList','suratPersetujuanPindahList','suratCutiList','suratBeasiswaList','suratKegiatanList','countAllSuratKeteranganAktif','countAllSuratKeteranganKelakuan','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPersetujuanPindah','countAllSuratCuti','countAllSuratBeasiswa','countAllSuratKegiatan','suratLulusList','countAllsuratLulus','suratMaterialList','countAllSuratMaterial','suratSurveiList','suratPenelitianList','suratDataAwalList','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal','bulan','tahun','bln','thn','chartKemahasiswaan','chartPendidikanPengajaran'));
+        return view('user.'.$this->segmentUser.'.dashboard',compact('tahunAkademikAktif','suratKeteranganAktifList','suratKeteranganKelakuanList','suratDispensasiList','suratRekomendasiList','suratTugasList','suratPersetujuanPindahList','suratCutiList','suratBeasiswaList','suratKegiatanList','countAllSuratKeteranganAktif','countAllSuratKeteranganKelakuan','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPersetujuanPindah','countAllSuratCuti','countAllSuratBeasiswa','countAllSuratKegiatan','suratLulusList','countAllsuratLulus','suratMaterialList','countAllSuratMaterial','suratSurveiList','suratPenelitianList','suratDataAwalList','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal','bulan','tahun','bln','thn','chartKemahasiswaan','chartPendidikanPengajaran','countAllKodeSurat','perPageDashboard'));
     }
 
     public function chartPimpinanDashboard(Request $request){

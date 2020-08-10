@@ -19,7 +19,7 @@
                             <div class="card-body">
                                 <h3 class="mb-5">Edit Kode Surat</h3>
                                 {{ Form::model($kodeSurat,['method'=>'PATCH','action'=>['KodeSuratController@update',$kodeSurat->id]]) }}
-                                @include('user.admin.form_kode_surat',['buttonLabel'=>'Simpan'])
+                                @include('user.pimpinan.form_kode_surat',['buttonLabel'=>'Simpan'])
                                 {{ Form::close() }}
                             </div>
                         </div>

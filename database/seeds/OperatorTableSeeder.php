@@ -3,7 +3,6 @@
 use App\Operator;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class OperatorTableSeeder extends Seeder
 {
@@ -27,7 +26,7 @@ class OperatorTableSeeder extends Seeder
             Operator::create([
                 'nama'=>$faker->name,
                 'username'=>$faker->userName,
-                'password'=>Hash::make($faker->userName),
+                'password'=>'12345678',
                 'bagian'=>$bagian
             ]);
         }

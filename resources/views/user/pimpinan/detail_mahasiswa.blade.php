@@ -104,7 +104,7 @@
                                                         </table>            
                                                     </div>
                                                 @else
-                                                    <label class="badge badge-gradient-dark text-dark">Data mahasiswa belum ada</label>   
+                                                    <label class="badge badge-gradient-dark text-white">Data mahasiswa belum ada</label>   
                                                 @endif
                                             </td>
                                         </tr>
