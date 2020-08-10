@@ -400,7 +400,7 @@ tolakSurat.on('click', function(e){
     })
 });
 
-$('.btn-surat-progress').on('click', function (e) {
+$('.table-responsive').on('click','.btn-surat-progress', function (e) {
     e.preventDefault();
     $('#surat-progress-content').empty();
     let url = $(this).attr('href');

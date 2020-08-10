@@ -183,6 +183,18 @@ Route::group(['prefix' => 'operator'],function(){
     Route::middleware(['auth:operator','operator'])->group(function(){
         // Dashboard
         Route::get('/','OperatorController@operatorDashboard');
+        // Pengajuan Surat
+        Route::group(['prefix' => 'pengajuan'],function(){
+            // Surat Keterangan Aktif Kuliah
+            Route::get('surat-keterangan-aktif-kuliah','SuratKeteranganAktifKuliahController@indexOperator');
+            Route::get('surat-keterangan-aktif-kuliah/all','PengajuanSuratKeteranganController@getAllPengajuanAktif');
+            Route::get('surat-keterangan-aktif-kuliah/{pengajuan_surat_keterangan}/progress','SuratKeteranganController@progress');
+            Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}/cetak','SuratKeteranganAktifKuliahController@cetak');
+            Route::get('surat-keterangan-aktif-kuliah/create','PengajuanSuratKeteranganController@createPengajuanKeteranganAktifOperator');
+            Route::post('surat-keterangan-aktif-kuliah','PengajuanSuratKeteranganController@storePengajuanKeteranganAktif');
+        });
+        // Detail Mahasiswa
+        Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Profil
         Route::get('profil','OperatorController@profil');
         Route::get('profil/password','OperatorController@profilPassword');

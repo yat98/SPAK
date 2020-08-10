@@ -202,6 +202,9 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'dashboard-operator';
             } else if ($segment == 'profil') {
                 $halaman = 'profil';
+            } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-aktif-kuliah') {
+                $show = true;
+                $halaman = 'surat-keterangan-aktif-kuliah';
             }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi,'show'=>$show]);

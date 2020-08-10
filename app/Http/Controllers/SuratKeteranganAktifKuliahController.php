@@ -66,6 +66,16 @@ class SuratKeteranganAktifKuliahController extends Controller
         return view($this->segmentUser.'.pengajuan_surat_keterangan_aktif_kuliah',compact('countAllPengajuan','countPengajuanSuratKeterangan','perPage','pengajuanSuratKeteranganAktifList'));
     }
 
+    public function indexOperator(){
+        $perPage = $this->perPage;
+        $countAllPengajuan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
+                                ->where('id_operator',Auth::user()->id)
+                                ->whereNotIn('status',['selesai'])
+                                ->count();
+                                                                         
+        return view($this->segmentUser.'.surat_keterangan_aktif_kuliah',compact('countAllPengajuan','perPage'));
+    }
+
     public function search(Request $request){
         $keyword = $request->all();
         if(isset($keyword['tahun_akademik']) || isset($keyword['keywords']) || isset($keyword['nomor_surat'])){

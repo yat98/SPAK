@@ -14,6 +14,7 @@ class PengajuanSuratKeterangan extends Model
         'status',
         'jenis_surat',
         'keterangan',
+        'id_operator'
     ];
 
     public function mahasiswa(){
