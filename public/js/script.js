@@ -3576,3 +3576,61 @@ $('.table-responsive').on('click','.kode-surat-detail', function (e) {
             $('#kode-surat-detail-content').html(html);
         });
 })
+
+$('.table-responsive').on('click','.surat-keterangan-detail', function (e) {
+    e.preventDefault();
+    $('#surat-keterangan-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let suratKeterangan = result;
+            let tableStatus = '';
+            
+            if (suratKeterangan.status == 'Selesai'){
+                tableStatus+=`<label class="badge badge-gradient-info">${suratKeterangan.status}</label>`;
+            }else if (suratKeterangan.status == 'Ditolak'){
+                tableStatus+=`<label class="badge badge-gradient-danger">${suratKeterangan.status}</label>`;
+            }else{
+                tableStatus+=`<label class="badge badge-gradient-warning text-dark">${suratKeterangan.status}</label>`;
+            }
+
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>NIM</th>
+                                    <td>${suratKeterangan.mahasiswa.nim}</td>
+                                </tr>   
+                                <tr>
+                                    <th>Nama</th>
+                                    <td>${suratKeterangan.mahasiswa.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jenis Surat</th>
+                                    <td>${suratKeterangan.jenis_surat}</td>
+                                </tr>
+                                <tr>
+                                    <th>Tahun Akademik</th>
+                                    <td>${suratKeterangan.tahun_akademik.tahun_akademik} - ${suratKeterangan.tahun_akademik.semester.ucwords()}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>${tableStatus}</td>
+                                </tr>
+                                <tr>
+                                    <th>Keterangan</th>
+                                    <td>${suratKeterangan.keterangan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dibuat</th>
+                                    <td>${suratKeterangan.created_at}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diubah</th>
+                                    <td>${suratKeterangan.updated_at}</td>
+                                </tr>
+                            </table>
+                        </div>`;
+            $('#surat-keterangan-detail-content').html(html);
+        });
+});

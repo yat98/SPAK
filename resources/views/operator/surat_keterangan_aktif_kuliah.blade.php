@@ -52,11 +52,11 @@
                                         <thead>
                                             <tr>
                                                 <th data-priority="1"> Nama </th>
-                                                <th data-priority="2"> Jenis Surat</th>
                                                 <th> Tahun Akademik</th>
-                                                <th data-priority="3"> Status</th>
+                                                <th data-priority="2"> Status</th>
+                                                <th> Waktu Pengajuan</th>
                                                 <th> Keterangan</th>
-                                                <th data-priority="4"> Aksi</th>
+                                                <th data-priority="3"> Aksi</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -116,13 +116,30 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="suratKeterangan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='surat-keterangan-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('datatables-javascript')
     <script>
         let link = "{{ url('operator/pengajuan/surat-keterangan-aktif-kuliah') }}";
         let linkMhs = "{{ url('operator/detail/mahasiswa') }}";
-
         $('#datatables').DataTable({
             responsive: true,
             columnDefs: [{
@@ -136,7 +153,7 @@
                             }
                         },
                         {
-                            "targets": 3,
+                            "targets": 2,
                             "data": "status",
                             "render": function ( data, type, row, meta ) {
                                 if(row.status == 'Ditolak'){
@@ -155,6 +172,13 @@
                             }
                         },
                         {
+                            "targets": 3,
+                            "data": "created_at",
+                            "render": function ( data, type, row, meta ) {
+                                return row.waktu_pengajuan;
+                            }
+                        },
+                        {
                             "targets": 5,
                             "data": "aksi",
                             "render": function ( data, type, row, meta ) {
@@ -164,6 +188,7 @@
                                             </a>
                                             <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
                                                 <a href="${link+'/'+row.id}/progress" class="dropdown-item btn-surat-progress" data-toggle="modal" data-target="#exampleModal">Progres Surat</a>
+                                                <a href="${link+'/'+row.id}" class="dropdown-item surat-keterangan-detail" data-toggle="modal" data-target="#suratKeterangan">Detail</a>
                                                 <a href="${link+'/'+row.id}/edit" class="dropdown-item">Edit</a>
                                                 <form action="${link+'/'+row.id}" method="post">
                                                     <input name="_method" type="hidden" value="DELETE">
@@ -189,13 +214,13 @@
                     data: 'mahasiswa.nim',
                 },
                 {
-                    data: 'jenis_surat',
-                },
-                {
                     data: 'tahun',
                 },
                 {
                     data: 'status',
+                },
+                {
+                    data: 'created_at',
                 },
                 {
                     data: 'keterangan',
@@ -213,7 +238,8 @@
                     data: 'tahun_akademik.semester',
                 },
             ],
-            "pageLength": {{ $perPage }}
+            "pageLength": {{ $perPage }},
+            "order": [[ 3, 'desc' ]],
         });
     </script>
 @endsection

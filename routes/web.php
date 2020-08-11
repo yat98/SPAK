@@ -188,10 +188,14 @@ Route::group(['prefix' => 'operator'],function(){
             // Surat Keterangan Aktif Kuliah
             Route::get('surat-keterangan-aktif-kuliah','SuratKeteranganAktifKuliahController@indexOperator');
             Route::get('surat-keterangan-aktif-kuliah/all','PengajuanSuratKeteranganController@getAllPengajuanAktif');
+            Route::get('surat-keterangan-aktif-kuliah/create','PengajuanSuratKeteranganController@createPengajuanKeteranganAktifOperator');
+            Route::get('surat-keterangan-aktif-kuliah/{pengajuan_surat_keterangan}','PengajuanSuratKeteranganController@show');
             Route::get('surat-keterangan-aktif-kuliah/{pengajuan_surat_keterangan}/progress','SuratKeteranganController@progress');
             Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}/cetak','SuratKeteranganAktifKuliahController@cetak');
-            Route::get('surat-keterangan-aktif-kuliah/create','PengajuanSuratKeteranganController@createPengajuanKeteranganAktifOperator');
+            Route::get('surat-keterangan-aktif-kuliah/{pengajuan_surat_keterangan}/edit','PengajuanSuratKeteranganController@edit');
+            Route::patch('surat-keterangan-aktif-kuliah/{pengajuan_surat_keterangan}','PengajuanSuratKeteranganController@update');
             Route::post('surat-keterangan-aktif-kuliah','PengajuanSuratKeteranganController@storePengajuanKeteranganAktif');
+            Route::delete('surat-keterangan-aktif-kuliah/{pengajuan_surat_keterangan}','PengajuanSuratKeteranganController@destroy');
         });
         // Detail Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');

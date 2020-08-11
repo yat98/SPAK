@@ -7,6 +7,7 @@ use App\User;
 use DataTables;
 use App\Operator;
 use App\Mahasiswa;
+use Carbon\Carbon;
 use App\TahunAkademik;
 use App\NotifikasiUser;
 use App\StatusMahasiswa;
@@ -138,27 +139,67 @@ class PengajuanSuratKeteranganController extends Controller
 
         } else if(isset(Auth::user()->id)){
             return DataTables::of(PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
-                                    ->join('mahasiswa','pengajuan_surat_keterangan.nim','=','mahasiswa.nim')
-                                    ->join('tahun_akademik','pengajuan_surat_keterangan.id_tahun_akademik','=','tahun_akademik.id')
                                     ->where('id_operator',Auth::user()->id)
                                     ->whereNotIn('status',['selesai'])
+                                    ->select('mahasiswa.nama','tahun_akademik.tahun_akademik','tahun_akademik.semester','pengajuan_surat_keterangan.*')
+                                    ->join('mahasiswa','pengajuan_surat_keterangan.nim','=','mahasiswa.nim')
+                                    ->join('tahun_akademik','pengajuan_surat_keterangan.id_tahun_akademik','=','tahun_akademik.id')
                                     ->with(['mahasiswa','tahunAkademik']))
-                                    ->addColumn('aksi', function ($data) {
+                        ->addColumn('aksi', function ($data) {
                             return $data->id;
                         })
                         ->addColumn('tahun', function ($data) {
                             return $data->tahunAkademik->tahun_akademik.' - '.ucwords($data->tahunAkademik->semester);
                         })
-                        ->editColumn("jenis_surat", function ($data) {
-                            return ucwords($data->jenis_surat);
-                        })
                         ->editColumn("status", function ($data) {
                             return ucwords($data->status);
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY hh:mm:ss');
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();                            
                         })
                         ->make(true);
         }
     }
 
+    public function show(PengajuanSuratKeterangan $pengajuanSurat){
+        $data = collect($pengajuanSurat->load(['mahasiswa','tahunAkademik']));
+        $data->put('created_at',$pengajuanSurat->created_at->isoFormat('D MMMM Y H:m:ss'));
+        $data->put('updated_at',$pengajuanSurat->updated_at->isoFormat('D MMMM Y H:m:ss'));
+        $data->put('status',ucwords($pengajuanSurat->status));
+        $data->put('jenis_surat',ucwords($pengajuanSurat->jenis_surat));
+        
+        return $data->toJson();
+    }
+
+    public function edit(PengajuanSuratKeterangan $pengajuanSurat)
+    {   
+        $tahunAkademik = $this->generateAllTahunAkademik();
+        $mahasiswa = $this->generateMahasiswa();
+        return view($this->segmentUser.'.edit_pengajuan_surat_keterangan_aktif_kuliah',compact('tahunAkademik','mahasiswa','pengajuanSurat'));
+    }
+
+    public function update(PengajuanSuratKeteranganRequest $request, PengajuanSuratKeterangan $pengajuanSurat){
+        $input = $request->all();
+        $pengajuanSurat->update($input);
+        $this->setFlashData('success','Berhasil','Pengajuan surat keterangan  aktif kuliah berhasil diubah');
+        if($pengajuanSurat->jenis_surat == 'surat keterangan aktif kuliah'){
+            return redirect($this->segmentUser.'/pengajuan/surat-keterangan-aktif-kuliah');
+        }
+        return redirect($this->segmentUser.'/pengajuan/surat-keterangan-kelakuan-baik');
+    }
+
+    public function destroy(PengajuanSuratKeterangan $pengajuanSurat)
+    {
+        $pengajuanSurat->delete();
+        $this->setFlashData('success','Berhasil','Pengajuan surat keterangan  aktif kuliah berhasil dihapus');
+        if($pengajuanSurat->jenis_surat == 'surat keterangan aktif kuliah'){
+            return redirect($this->segmentUser.'/pengajuan/surat-keterangan-aktif-kuliah');
+        }
+        return redirect($this->segmentUser.'/pengajuan/surat-keterangan-kelakuan-baik');
+    }
     
     private function isSuratAktifDiajukanExists(){
         $suratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')->where('nim',Auth::user()->nim)->where('status','diajukan')->exists();
