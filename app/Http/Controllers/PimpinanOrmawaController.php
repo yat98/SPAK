@@ -54,8 +54,8 @@ class PimpinanOrmawaController extends Controller
     public function show(PimpinanOrmawa $pimpinanOrmawa){
         $data = collect($pimpinanOrmawa->load(['mahasiswa.prodi.jurusan','ormawa']));
 
-        $data->put('created_at',$pimpinanOrmawa->created_at->isoFormat('D MMMM Y H:m:ss'));
-        $data->put('updated_at',$pimpinanOrmawa->updated_at->isoFormat('D MMMM Y H:m:ss'));
+        $data->put('created_at',$pimpinanOrmawa->created_at->isoFormat('D MMMM Y H:mm:ss'));
+        $data->put('updated_at',$pimpinanOrmawa->updated_at->isoFormat('D MMMM Y H:mm:ss'));
         $data->put('jabatan',ucwords($pimpinanOrmawa->jabatan));
         
         return $data->toJson();

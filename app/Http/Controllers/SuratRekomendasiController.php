@@ -30,7 +30,7 @@ class SuratRekomendasiController extends Controller
         return view('user.'.$this->segmentUser.'.surat_rekomendasi',compact('perPage','mahasiswa','nomorSurat','suratRekomendasiList','countAllSuratRekomendasi','countSuratRekomendasi'));
     }
 
-    public function suratRekomendasiPimpinan(){
+    public function indexPimpinan(){
         $perPage = $this->perPage;
         $mahasiswa = $this->generateMahasiswa();
         $nomorSurat = $this->generateNomorSuratRekomendasi();
@@ -42,7 +42,7 @@ class SuratRekomendasiController extends Controller
         return view('user.'.$this->segmentUser.'.surat_rekomendasi',compact('perPage','mahasiswa','nomorSurat','countAllSuratRekomendasi','countSuratRekomendasi','suratRekomendasiList','pengajuanSuratRekomendasiList','countAllPengajuanSuratRekomendasi'));
     }
 
-    public function suratRekomendasiMahasiswa(){
+    public function indexMahasiswa(){
         $perPage = $this->perPage;
         $mahasiswa = $this->generateMahasiswa();
         $nomorSurat = $this->generateNomorSuratRekomendasi();

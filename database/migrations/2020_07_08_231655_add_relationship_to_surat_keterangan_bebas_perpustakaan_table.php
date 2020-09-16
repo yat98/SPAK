@@ -13,19 +13,19 @@ class AddRelationshipToSuratKeteranganBebasPerpustakaanTable extends Migration
      */
     public function up()
     {
-        Schema::table('surat_keterangan_bebas_perpustakaan', function (Blueprint $table) {
-            $table->foreign('id_pengajuan')
-                  ->references('id')
-                  ->on('pengajuan_surat_keterangan_bebas_perpustakaan')
-                  ->onUpdate('cascade')
-                  ->onDelete('cascade');
+        // Schema::table('surat_keterangan_bebas_perpustakaan', function (Blueprint $table) {
+        //     $table->foreign('id_pengajuan')
+        //           ->references('id')
+        //           ->on('pengajuan_surat_keterangan_bebas_perpustakaan')
+        //           ->onUpdate('cascade')
+        //           ->onDelete('cascade');
 
-            $table->foreign('id_kode_surat')
-                  ->references('id')
-                  ->on('kode_surat')
-                  ->onUpdate('cascade')
-                  ->onDelete('cascade');
-        });
+        //     $table->foreign('id_kode_surat')
+        //           ->references('id')
+        //           ->on('kode_surat')
+        //           ->onUpdate('cascade')
+        //           ->onDelete('cascade');
+        // });
     }
 
     /**
@@ -35,9 +35,9 @@ class AddRelationshipToSuratKeteranganBebasPerpustakaanTable extends Migration
      */
     public function down()
     {
-        Schema::table('surat_keterangan_bebas_perpustakaan', function (Blueprint $table) {
-            $table->dropForeign(['id_pengajuan']);
-            $table->dropForeign(['id_kode_surat']);
-        });
+        // Schema::table('surat_keterangan_bebas_perpustakaan', function (Blueprint $table) {
+        //     $table->dropForeign(['id_pengajuan']);
+        //     $table->dropForeign(['id_kode_surat']);
+        // });
     }
 }

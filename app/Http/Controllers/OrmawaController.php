@@ -37,8 +37,8 @@ class OrmawaController extends Controller
 
     public function show(Ormawa $ormawa){
         $data = collect($ormawa->load(['jurusan']));
-        $data->put('created_at',$ormawa->created_at->isoFormat('D MMMM Y H:m:ss'));
-        $data->put('updated_at',$ormawa->updated_at->isoFormat('D MMMM Y H:m:ss'));
+        $data->put('created_at',$ormawa->created_at->isoFormat('D MMMM Y H:mm:ss'));
+        $data->put('updated_at',$ormawa->updated_at->isoFormat('D MMMM Y H:mm:ss'));
         
         return $data->toJson();
     }

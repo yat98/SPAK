@@ -13,15 +13,17 @@ use App\NotifikasiMahasiswa;
 use Illuminate\Http\Request;
 use App\SuratKegiatanMahasiswa;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\DisposisiSuratKegiatanMahasiswa;
 use App\PengajuanSuratKegiatanMahasiswa;
 use App\Http\Requests\PengajuanSuratKegiatanMahasiswaRequest;
 
 class PengajuanSuratKegiatanMahasiswaController extends Controller
 {
-    public function suratKegiatanMahasiswa(){
+    public function indexMahasiswa(){
         $perPage = $this->perPage;
-        $mahasiswa = Mahasiswa::where('nim',Session::get('nim'))->first();
+        $mahasiswa = Mahasiswa::where('nim',Auth::user()->nim)->first();
+
         $pengajuanKegiatanList = PengajuanSuratKegiatanMahasiswa::join('mahasiswa','mahasiswa.nim','=','pengajuan_surat_kegiatan_mahasiswa.nim')
                                     ->join('pimpinan_ormawa','pimpinan_ormawa.nim','=','mahasiswa.nim')
                                     ->join('ormawa','pimpinan_ormawa.id_ormawa','=','ormawa.id')

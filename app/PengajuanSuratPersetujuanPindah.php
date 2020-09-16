@@ -29,6 +29,6 @@ class PengajuanSuratPersetujuanPindah extends Model
     }
 
     public function suratPersetujuanPindah(){
-        return $this->hasOne('App\SuratPersetujuanPindah','id_pengajuan_persetujuan_pindah');
+        return $this->hasOne('App\SuratPersetujuanPindah','id_pengajuan');
     }
 }

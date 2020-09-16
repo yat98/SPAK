@@ -14,7 +14,7 @@ use App\Http\Requests\PengajuanSuratRekomendasiPenelitianRequest;
 
 class PengajuanSuratRekomendasiPenelitianController extends Controller
 {
-    public function index(){
+    public function indexMahasiswa(){
         $perPage = $this->perPage;
         $pengajuanSuratPenelitianList = PengajuanSuratRekomendasiPenelitian::where('nim',Session::get('nim'))->paginate($perPage);
         $countAllPengajuan = $pengajuanSuratPenelitianList->count();

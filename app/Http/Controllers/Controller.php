@@ -20,6 +20,7 @@ use App\SuratKegiatanMahasiswa;
 use App\SuratPengantarBeasiswa;
 use App\SuratPersetujuanPindah;
 use App\SuratRekomendasiPenelitian;
+use Illuminate\Support\Facades\Auth;
 use App\SuratPermohonanPengambilanDataAwal;
 use App\SuratPermohonanPengambilanMaterial;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -93,78 +94,58 @@ class Controller extends BaseController
         return $mahasiswaList;
     }
 
-    protected function generateNomorSurat($jenisSurat){
-        $nomorSurat = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
-                        ->where('jenis_surat',$jenisSurat)
-                        ->get();
-        $nomorSuratList = [];
-        foreach ($nomorSurat as $nmr) {
-            $nomor = explode('/',$nmr->kodeSurat->kode_surat);
-            $nomorSuratList[$nmr->nomor_surat] = 'B/'.$nmr->nomor_surat.'/'.$nomor[0].'.4/'.$nomor[1].'/'.$nmr->created_at->year;
-        }
-        return $nomorSuratList;
-    }
-
     protected function setFlashData($flashType,$titleText,$text){
         Session::flash($flashType,$text);
         Session::flash($flashType.'-title',$titleText);
     }
 
     protected function isTandaTanganExists(){
-        $nip = Session::get('nip');
-        $tandaTangan = User::where('nip',$nip)->first();
-        if($tandaTangan->tanda_tangan == null){
+        $nip = Auth::user()->nip;
+        $user = User::where('nip',$nip)->first();
+        if($user->tanda_tangan == null){
             $this->setFlashData('info','Tanda Tangan Kosong','Tambahkan tanda tangan anda terlebih dahulu!');
             return false;
         }
         return true;
     }
-    
-    protected function generateNomorSuratDispensasi(){
-        $suratDispensasiList = SuratDispensasi::all();
-        $nomorSuratList = [];
-        foreach ($suratDispensasiList as $suratDispensasi) {
-            if($suratDispensasi->user->jabatan == 'dekan'){
-                $nomorSuratList[$suratDispensasi->nomor_surat] = $suratDispensasi->nomor_surat.'/'.$suratDispensasi->kodeSurat->kode_surat.'/'.$suratDispensasi->created_at->year;
-            }else{
-                $kodeSurat = explode('/',$suratDispensasi->kodeSurat->kode_surat);
-                $nomorSuratList[$suratDispensasi->nomor_surat] = $suratDispensasi->nomor_surat.'/'.$kodeSurat[0].'.3/'.$kodeSurat[1].'/'.$suratDispensasi->created_at->year;
-            }
-        }
-        return $nomorSuratList;
-    }
 
     protected function isKodeSuratExists(){
-        if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
-            $kodeSurat = KodeSurat::whereIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->count();
-        }else{
-            $kodeSurat = KodeSurat::whereNotIn('jenis_surat',['surat keterangan','surat dispensasi','surat pengantar cuti','surat rekomendasi','surat persetujuan pindah','surat tugas','surat pengantar beasiswa','surat kegiatan mahasiswa'])->count();
-        }
-        if($kodeSurat < 1){
-            $this->setFlashData('info','Kode Surat Kosong','Tambahkan kode surat terlebih dahulu!');
+        $kodeSurat = KodeSurat::where('status_aktif','aktif')->first();
+        if(empty($kodeSurat)){
+            $this->setFlashData('info','Kode Surat Aktif Tidak Ada','Aktifkan kode surat terlebih dahulu!');
             return false;
         }
         return true;
     }
 
     protected function generateNomorSuratBaru(){
-        if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
-            $nomorSurat[] = SuratKeterangan::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-            $nomorSurat[] = SuratDispensasi::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-            $nomorSurat[] = SuratRekomendasi::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-            $nomorSurat[] = SuratTugas::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-            $nomorSurat[] = SuratPersetujuanPindah::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-            $nomorSurat[] = SuratPengantarCuti::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-            $nomorSurat[] = SuratPengantarBeasiswa::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-            $nomorSurat[] = SuratKegiatanMahasiswa::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        }else{
-            $nomorSurat[] = SuratKeteranganLulus::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-            $nomorSurat[] = SuratPermohonanPengambilanMaterial::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-            $nomorSurat[] = SuratPermohonanSurvei::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-            $nomorSurat[] = SuratRekomendasiPenelitian::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-            $nomorSurat[] = SuratPermohonanPengambilanDataAwal::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
-        }
+        $nomorSurat[] = SuratKeterangan::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratDispensasi::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratRekomendasi::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratTugas::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratPersetujuanPindah::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratPengantarCuti::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratPengantarBeasiswa::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratKegiatanMahasiswa::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratKeteranganLulus::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratPermohonanPengambilanMaterial::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratPermohonanSurvei::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratRekomendasiPenelitian::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratPermohonanPengambilanDataAwal::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+
         $nomorSuratBaru = max($nomorSurat);
         return ++$nomorSuratBaru;
+    }
+
+    protected function generateTandaTanganKemahasiswaan(){
+        $user = [];
+        $pimpinan = User::whereIn('jabatan',['dekan','wd3','kabag tata usaha'])
+                        ->where('status_aktif','aktif')
+                        ->orderBy('jabatan')
+                        ->get();
+        foreach ($pimpinan as $p) {
+            $user[$p->nip] = strtoupper($p->jabatan).' - '.$p->nama;
+        }
+        return $user;
     }
 }

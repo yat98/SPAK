@@ -21,7 +21,7 @@ class SuratPersetujuanPindahController extends Controller
     public function index()
     {
         $perPage = $this->perPage;
-        $suratPersetujuanPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan_persetujuan_pindah')
+        $suratPersetujuanPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan')
                                         ->orderByDesc('surat_persetujuan_pindah.created_at')
                                         ->orderByDesc('nomor_surat')
                                         ->paginate($perPage,['*'],'page');
@@ -42,7 +42,7 @@ class SuratPersetujuanPindahController extends Controller
         return view('user.'.$this->segmentUser.'.surat_persetujuan_pindah',compact('perPage','nomorSurat','suratPersetujuanPindahList','pengajuanSuratPersetujuanList','countAllSuratPersetujuanPindah','countSuratPersetujuanPindah','countPengajuanSuratPersetujuanPindah','countAllPengajuanSuratPersetujuanPindah'));
     }
 
-    public function suratPindahPimpinan(){
+    public function indexPimpinan(){
         $perPage = $this->perPage;
         $mahasiswa = $this->generateMahasiswa();
         $nomorSurat = $this->generateNomorSuratPindah(['selesai']);
@@ -418,7 +418,7 @@ class SuratPersetujuanPindahController extends Controller
     }
 
     private function generateNomorSuratPindah($status){
-        $suratPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan_persetujuan_pindah')
+        $suratPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan')
                             ->whereIn('status',$status)
                             ->get();
         $nomorSuratList = [];

@@ -38,7 +38,7 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Buat Pengajuan Surat Keterangan Aktif Kuliah</h3>
+                                <h3 class="mb-5">Tambah Pengajuan Surat Keterangan Aktif Kuliah</h3>
                                 {{ Form::open(['url'=>'operator/pengajuan/surat-keterangan-aktif-kuliah']) }}
                                 @include('operator.form_pengajuan_surat_keterangan_aktif_kuliah',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}

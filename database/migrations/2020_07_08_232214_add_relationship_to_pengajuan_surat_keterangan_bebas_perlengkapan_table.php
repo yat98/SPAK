@@ -13,13 +13,13 @@ class AddRelationshipToPengajuanSuratKeteranganBebasPerlengkapanTable extends Mi
      */
     public function up()
     {
-        Schema::table('pengajuan_surat_keterangan_bebas_perlengkapan', function (Blueprint $table) {
-            $table->foreign('nim')
-                  ->references('nim')
-                  ->on('mahasiswa')
-                  ->onUpdate('cascade')
-                  ->onDelete('cascade');
-        });
+        // Schema::table('pengajuan_surat_keterangan_bebas_perlengkapan', function (Blueprint $table) {
+        //     $table->foreign('nim')
+        //           ->references('nim')
+        //           ->on('mahasiswa')
+        //           ->onUpdate('cascade')
+        //           ->onDelete('cascade');
+        // });
     }
 
     /**
@@ -29,8 +29,8 @@ class AddRelationshipToPengajuanSuratKeteranganBebasPerlengkapanTable extends Mi
      */
     public function down()
     {
-        Schema::table('pengajuan_surat_keterangan_bebas_perlengkapan', function (Blueprint $table) {
-            $table->dropForeign(['nim']);
-        });
+        // Schema::table('pengajuan_surat_keterangan_bebas_perlengkapan', function (Blueprint $table) {
+        //     $table->dropForeign(['nim']);
+        // });
     }
 }

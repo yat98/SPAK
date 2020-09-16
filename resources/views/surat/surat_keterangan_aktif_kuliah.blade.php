@@ -82,13 +82,10 @@
         <div class="border"></div>
         <div class="text-center mt-3">
             <p class="m-0"><b><span class="underline">SURAT KETERANGAN AKTIF KULIAH</span></b></p>
-            @php
-                $kode = explode('/',$suratKeterangan->kodeSurat->kode_surat);
-            @endphp
-            <p class="m-0"><b><i>Nomor :B/{{$suratKeterangan->nomor_surat}}/{{$kode[0].'.4/'.$kode[1]}}/{{$suratKeterangan->created_at->year}}</i></b></p>
+            <p class="m-0"><b><i>Nomor: <span style="display:inline-block;width:20px;height:auto"></span>/{{$suratKeterangan->nomor_surat}}/{{$suratKeterangan->kodeSurat->kode_surat}}<span style="display:inline-block;width:20px;height:auto"></span>/{{$suratKeterangan->created_at->year}}</i></b></p>
         </div>
         <div class="content">
-            <p class="m-0">Yang bertanda tangan dibawah ini Wakil Dekan III Fakultas Teknik Universitas Negeri Gorontalo dengan ini menerangkan kepada :</p>
+            <p class="m-0">Yang bertanda tangan dibawah ini Dekan Fakultas Teknik Universitas Negeri Gorontalo dengan ini menerangkan kepada :</p>
             <table class="m-0">
                 <tr>
                     <td class="data-table">Nama</td>
@@ -113,10 +110,24 @@
         <div class="signature">
             <div class="signature-content">
                 <p class="m-0"><b>{{$suratKeterangan->created_at->isoFormat('D MMMM Y')}}</b></p>
-                <p class="m-0"><b>a.n Wakil Dekan III,</b></p>
-                <p class="m-0"><b>Kasubag Kemahasiswaan</b></p>
+                @if($suratKeterangan->user->jabatan == 'dekan')
+                    <p class="m-0"><b>Dekan</b></p>
+                @else
+                    <p class="m-0"><b>a.n Dekan,</b></p>
+                    @if($suratKeterangan->user->jabatan == 'wd3')
+                        <p class="m-0"><b>Wakil Dekan III</b></p>
+                    @elseif($suratKeterangan->user->jabatan == 'kabag tata usaha')
+                        <p class="m-0"><b>Kabag TU</b></p>
+                    @endif
+                @endif
+
+              
                 <p class="m-0 tanda-tangan-margin">
-                    <img class="tanda-tangan" src="{{$suratKeterangan->user->tanda_tangan}}">
+                    @if($suratKeterangan->pengajuanSuratKeterangan->status == 'selesai')
+                        <img class="tanda-tangan" src="{{$suratKeterangan->user->tanda_tangan}}">
+                    @else
+                        <div class="tanda-tangan"></div>
+                    @endif
                 </p>
                 <p class="m-0"><b>{{$suratKeterangan->user->nama}}</b></p>
                 <p class="m-0"><b>NIP. {{substr($suratKeterangan->user->nip,0,8)}} {{substr($suratKeterangan->user->nip,8,6)}} {{substr($suratKeterangan->user->nip,14,1)}} {{substr($suratKeterangan->user->nip,15,3)}}</b></p>

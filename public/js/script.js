@@ -97,7 +97,6 @@ $('#jenis-user').on('click', function () {
             value = 'username';
             username.attr('placeholder', value.ucwords());
             return;
-            break;
     }
     username.attr('placeholder', value.toUpperCase());
 });
@@ -121,9 +120,28 @@ $('.table-responsive').on('click','.sweet-delete', function (e) {
     })
 })
 
-$(window).resize(() => {
-    removePositionPagination(mediaQuery);
-}).trigger('resize');
+$('.table-responsive').on('click','.btn-verification', function (e) {
+    e.preventDefault();
+    Swal.fire({
+        title: 'Yakin?',
+        text: "Surat akan diverifikasi!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya',
+        cancelButtonText: 'Tidak'
+    }).then((result) => {
+        if (result.value) {
+            let form = $(this).parents('form');
+            form.submit();
+        }
+    })
+})
+
+// $(window).resize(() => {
+//     removePositionPagination(mediaQuery);
+// }).trigger('resize');
 
 $('.btn-upload').on('click', showProgress);
 
@@ -273,7 +291,7 @@ if(wrapper){
     })
 }
 
-$('.btn-surat-detail').on('click', function (e) {
+$('.table-responsive').on('click','.btn-surat-detail', function (e) {
     e.preventDefault();
     $('#surat-keterangan-aktif-detail-content').empty();
     let url = $(this).attr('href');
@@ -281,7 +299,16 @@ $('.btn-surat-detail').on('click', function (e) {
         .then(response => response.json())
         .then(result => {
             let suratDetail = result;
-            let tahun = suratDetail.created.toString();
+            let label = '';
+
+            if (suratDetail.status == 'Selesai'){
+                label=`<label class="badge badge-gradient-info">${suratDetail.status}</label>`;
+            }else if (suratDetail.status == 'Ditolak'){
+                label=`<label class="badge badge-gradient-danger">${suratDetail.status}</label>`;
+            }else{
+                label=`<label class="badge badge-gradient-warning text-dark">${suratDetail.status}</label>`;
+            }
+
             let html = `<div class="table-responsive">
                             <table class="table">
                                 <tr>
@@ -305,16 +332,24 @@ $('.btn-surat-detail').on('click', function (e) {
                                     <td>${suratDetail.pengajuan_surat_keterangan.mahasiswa.prodi.strata+' - '+suratDetail.pengajuan_surat_keterangan.mahasiswa.prodi.nama_prodi}</td>
                                 </tr>
                                 <tr>
-                                <th>Nomor Surat</th>
-                                    <td>B/${suratDetail.nomor_surat}/${suratDetail.kode}/${suratDetail.created_at.toString().slice(0,4)}</td>
+                                    <th>Nomor Surat</th>
+                                    <td>${suratDetail.nomor_surat}</td>
+                                </tr>
+                                <tr>
+                                    <th>Kode Surat</th>
+                                    <td>${suratDetail.kode_surat.kode_surat}</td>
+                                </tr>
+                                <tr>
+                                    <th>Tahun</th>
+                                    <td>${suratDetail.tahun}</td>
                                 </tr>
                                 <tr>
                                     <th>Jenis Surat</th>
-                                    <td>${suratDetail.pengajuan_surat_keterangan.jenis_surat.ucwords()}</td>
+                                    <td>${suratDetail.jenis_surat}</td>
                                 </tr>
                                 <tr>
                                     <th>Status</th>
-                                    <td>${suratDetail.pengajuan_surat_keterangan.status.ucwords()}</td>
+                                    <td>${label}</td>
                                 </tr>
                                 <tr>
                                     <th>Di Tandatangani Oleh</th>
@@ -326,7 +361,7 @@ $('.btn-surat-detail').on('click', function (e) {
                                 </tr>
                                 <tr>
                                     <th>Di Buat</th>
-                                    <td>${tahun}</td>
+                                    <td>${suratDetail.created_at}</td>
                                 </tr>
                             </table>
                         </div>`;
@@ -334,8 +369,7 @@ $('.btn-surat-detail').on('click', function (e) {
         });
 })
 
-let tandaTangan = $('.simpan-tanda-tangan');
-tandaTangan.on('click',function(e){
+$('.table-responsive').on('click','.simpan-tanda-tangan',function(e){
     e.preventDefault();
     Swal.fire({
         title: 'Yakin?',
@@ -408,83 +442,55 @@ $('.table-responsive').on('click','.btn-surat-progress', function (e) {
         .then(response => response.json())
         .then(result => {
             let pengajuanSurat = result;
-            if(pengajuanSurat.status == 'selesai'){
-                html = `<div class="row">
-                        <div class="col-6 text-center">
-                            <p class="h6 m-0 mb-1 text-dark">
-                                <i class="mdi mdi-marker-check icon-sm text-success"></i>
-                                Diajukan
-                            </p> 
-                            <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
-                            <div class="bg-gradient-success mx-auto position-progress-round"></div>
-                            <div class="bg-gradient-success mx-auto position-progress-pole"></div>
-                        </div>
-                        <div class="col-6 text-center"></div>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 100%" aria-valuenow="100   " aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6 text-center"></div>
-                        <div class="col-6 text-center">
-                            <div class="bg-gradient-success mx-auto position-progress-pole"></div>
-                            <div class="bg-gradient-success mx-auto position-progress-round"></div>
-                            <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_selesai}</small></p>
-                            <p class="h6 mt-1 text-dark">
-                            <i class="mdi mdi-marker-check icon-sm text-success"></i>
-                            Selesai</p> 
-                        </div>
-                    </div>`;
-            }else if(pengajuanSurat.status == 'diajukan'){
-                html = `<div class="row">
-                            <div class="col-6 text-center">
-                                <p class="h6 m-0 mb-1 text-dark">
-                                    <i class="mdi mdi-marker-check icon-sm text-info"></i>
-                                    Diajukan
-                                </p> 
-                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
-                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
-                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
-                            </div>
-                            <div class="col-6 text-center"></div>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 50%" aria-valuenow="50   " aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6 text-center"></div>
-                            <div class="col-6 text-center"></div>
-                        </div>`;
-            }else if(pengajuanSurat.status == 'ditolak'){
-                html = `<div class="row">
-                        <div class="col-6 text-center">
-                            <p class="h6 m-0 mb-1 text-dark">
-                                <i class="mdi mdi-marker-check icon-sm text-info"></i>
-                                Diajukan
-                            </p> 
-                            <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
-                            <div class="bg-gradient-danger mx-auto position-progress-round"></div>
-                            <div class="bg-gradient-danger mx-auto position-progress-pole"></div>
-                        </div>
-                        <div class="col-6 text-center"></div>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar bg-gradient-danger" role="progressbar" style="width: 100%" aria-valuenow="100   " aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6 text-center"></div>
-                        <div class="col-6 text-center">
-                            <div class="bg-gradient-danger mx-auto position-progress-pole"></div>
-                            <div class="bg-gradient-danger mx-auto position-progress-round"></div>
-                            <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_ditolak}</small></p>
-                            <p class="h6 mt-1 text-dark">
-                                <i class="mdi mdi mdi-close-circle icon-sm text-danger"></i>
-                                Di Tolak
-                            </p> 
-                        </div>
-                    </div>`;
+            let progressPercent = '0';
+            let bgColor = 'bg-gradient-info';
+            let icon = `<i class="mdi mdi-marker-check icon-sm text-info"></i>`;
+
+
+            switch (pengajuanSurat.status) {
+                case 'Selesai':
+                    progressPercent = '100';
+                    bgColor = 'bg-gradient-success';
+                    icon = `<i class="mdi mdi-marker-check icon-sm text-success"></i>`;
+                    break;
+                case 'Diajukan':
+                    progressPercent = '20';
+                    break;
+                case 'Verifikasi Kasubag':
+                    progressPercent = '20';
+                    break;
+                case 'Verifikasi Kabag':
+                    progressPercent = '60';
+                    break;
+                case 'Menunggu Tanda Tangan':
+                    progressPercent = '80';
+                    break;
+                case 'Ditolak':
+                    progressPercent = '100';
+                    bgColor = 'bg-gradient-danger';
+                    icon = `<i class="mdi mdi-close-circle icon-sm text-danger"></i>`
+                    break;
             }
+
+            let html = `<div class="row">
+                            <div class="col-12 mt-2">
+                                <p class="text-center text-muted mb-0">${progressPercent}%</p>
+                                <div class="progress">
+                                    <div class="progress-bar mt-0 ${bgColor} " role="progressbar" style="width: ${progressPercent}%" aria-valuenow="${progressPercent}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <p class="h6 m-0 mb-1 text-dark text-center">
+                                    ${icon}
+                                    ${pengajuanSurat.status}
+                                </p> 
+                                <p class="text-muted text-center mt-2 mb-0"><small>${pengajuanSurat.tanggal}</small></p>
+                            </div>
+                        </div>`;
             $('#surat-progress-content').html(html);
+        })
+        .catch(() => {
+            errorMessage('Terjadi Kesalahan','Periksa koneksi anda kemudian refresh browser anda');
         });
 });
 
@@ -3577,7 +3583,7 @@ $('.table-responsive').on('click','.kode-surat-detail', function (e) {
         });
 })
 
-$('.table-responsive').on('click','.surat-keterangan-detail', function (e) {
+$('.table-responsive').on('click','.pengajuan-surat-keterangan-detail', function (e) {
     e.preventDefault();
     $('#surat-keterangan-detail-content').empty();
     let url = $(this).attr('href');
@@ -3586,6 +3592,7 @@ $('.table-responsive').on('click','.surat-keterangan-detail', function (e) {
         .then(result => {
             let suratKeterangan = result;
             let tableStatus = '';
+            let diajukan = '';
             
             if (suratKeterangan.status == 'Selesai'){
                 tableStatus+=`<label class="badge badge-gradient-info">${suratKeterangan.status}</label>`;
@@ -3593,6 +3600,12 @@ $('.table-responsive').on('click','.surat-keterangan-detail', function (e) {
                 tableStatus+=`<label class="badge badge-gradient-danger">${suratKeterangan.status}</label>`;
             }else{
                 tableStatus+=`<label class="badge badge-gradient-warning text-dark">${suratKeterangan.status}</label>`;
+            }
+
+            if(suratKeterangan.id_operator == null){
+                diajukan = suratKeterangan.mahasiswa.nama;
+            }else{
+                diajukan = suratKeterangan.operator.nama;
             }
 
             let html = `<div class="table-responsive">
@@ -3622,12 +3635,84 @@ $('.table-responsive').on('click','.surat-keterangan-detail', function (e) {
                                     <td>${suratKeterangan.keterangan}</td>
                                 </tr>
                                 <tr>
+                                    <th>Diajukan Oleh</th>
+                                    <td>${diajukan}</td>
+                                </tr>
+                                <tr>
                                     <th>Dibuat</th>
                                     <td>${suratKeterangan.created_at}</td>
                                 </tr>
+                            </table>
+                        </div>`;
+            $('#surat-keterangan-detail-content').html(html);
+        });
+});
+
+$('.table-responsive').on('click','.surat-keterangan-detail', function (e) {
+    e.preventDefault();
+    $('#surat-keterangan-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let suratKeterangan = result.pengajuan_surat_keterangan;
+            let tableStatus = '';
+            let diajukan = '';
+            if (`result.status` == 'Selesai'){
+                tableStatus+=`<label class="badge badge-gradient-info">${result.status}</label>`;
+            }else if (suratKeterangan.status == 'Ditolak'){
+                tableStatus+=`<label class="badge badge-gradient-danger">${result.status}</label>`;
+            }else{
+                tableStatus+=`<label class="badge badge-gradient-warning text-dark">${result.status}</label>`;
+            }
+
+            if(suratKeterangan.id_operator == null){
+                diajukan = suratKeterangan.mahasiswa.nama;
+            }else{
+                diajukan = suratKeterangan.operator.nama;
+            }
+
+            let html = `<div class="table-responsive">
+                            <table class="table">
                                 <tr>
-                                    <th>Diubah</th>
-                                    <td>${suratKeterangan.updated_at}</td>
+                                    <th>Nomor Surat</th>
+                                    <td>${result.nomor_surat}/${result.kode_surat.kode_surat}</td>
+                                </tr> 
+                                <tr>
+                                    <th>NIM</th>
+                                    <td>${suratKeterangan.mahasiswa.nim}</td>
+                                </tr>   
+                                <tr>
+                                    <th>Nama</th>
+                                    <td>${suratKeterangan.mahasiswa.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jenis Surat</th>
+                                    <td>${result.jenis_surat}</td>
+                                </tr>
+                                <tr>
+                                    <th>Tahun Akademik</th>
+                                    <td>${suratKeterangan.tahun_akademik.tahun_akademik} - ${suratKeterangan.tahun_akademik.semester.ucwords()}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>${tableStatus}</td>
+                                </tr>
+                                <tr>
+                                    <th>Keterangan</th>
+                                    <td>${suratKeterangan.keterangan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diajukan Oleh</th>
+                                    <td>${diajukan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Surat Dibuat Oleh</th>
+                                    <td>${result.operator.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Dibuat</th>
+                                    <td>${result.created_at}</td>
                                 </tr>
                             </table>
                         </div>`;

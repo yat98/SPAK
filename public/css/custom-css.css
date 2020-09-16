@@ -86,6 +86,10 @@
     display: none !important;
 }
 
+.dataTables_length{
+    padding :10px 0px !important;
+}
+
 .dataTables_info,.dataTables_length{
     font-size: 14px;
     color: #9c9fa6;

@@ -37,7 +37,7 @@ class SuratRekomendasiPenelitianController extends Controller
         return view('user.'.$this->segmentUser.'.surat_rekomendasi_penelitian',compact('perPage','mahasiswa','nomorSurat','pengajuanSuratPenelitianList','suratPenelitianList','countAllPengajuanSuratPenelitian','countAllSuratPenelitian','countPengajuanSuratPenelitian','countSuratPenelitian'));
     }
 
-    public function suratPenelitianPimpinan(){
+    public function indexPimpinan(){
         $perPage = $this->perPage;
         $mahasiswa = $this->generateMahasiswa();
         $nomorSurat = $this->generateNomorSuratPenelitian(['selesai']);

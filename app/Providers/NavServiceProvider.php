@@ -103,9 +103,6 @@ class NavServiceProvider extends ServiceProvider
             if ($segment == '') {
                 $show = false;
                 $halaman = 'dashboard-pegawai';
-            } else if ($segment == 'tanda-tangan') {
-                $show = false;
-                $halaman = 'tanda-tangan';
             } else if ($segment == 'surat-keterangan-aktif-kuliah') {
                 $halaman = 'surat-keterangan-aktif-kuliah';
             } else if ($segment == 'surat-keterangan-kelakuan-baik') {
@@ -202,7 +199,7 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'dashboard-operator';
             } else if ($segment == 'profil') {
                 $halaman = 'profil';
-            } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-aktif-kuliah') {
+            } else if (($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-aktif-kuliah') || $segment == 'surat-keterangan-aktif-kuliah') {
                 $show = true;
                 $halaman = 'surat-keterangan-aktif-kuliah';
             }

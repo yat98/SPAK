@@ -30,7 +30,7 @@ class SuratTugasController extends Controller
         return view('user.'.$this->segmentUser.'.surat_tugas',compact('perPage','mahasiswa','nomorSurat','suratTugasList','countAllSuratTugas','countSuratTugas'));
     }
 
-    public function suratTugasPimpinan(){
+    public function indexPimpinan(){
         $perPage = $this->perPage;
         $mahasiswa = $this->generateMahasiswa();
         $nomorSurat = $this->generateNomorSuratTugas();
@@ -42,7 +42,7 @@ class SuratTugasController extends Controller
         return view('user.'.$this->segmentUser.'.surat_tugas',compact('perPage','mahasiswa','nomorSurat','countAllSuratTugas','countSuratTugas','suratTugasList','pengajuanSuratTugasList','countAllPengajuanSuratTugas'));
     }
 
-    public function suratTugasMahasiswa(){
+    public function indexMahasiswa(){
         $perPage = $this->perPage;
         $mahasiswa = $this->generateMahasiswa();
         $nomorSurat = $this->generateNomorSuratTugas();

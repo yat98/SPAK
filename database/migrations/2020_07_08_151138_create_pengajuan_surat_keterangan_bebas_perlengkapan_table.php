@@ -13,13 +13,13 @@ class CreatePengajuanSuratKeteranganBebasPerlengkapanTable extends Migration
      */
     public function up()
     {
-        Schema::create('pengajuan_surat_keterangan_bebas_perlengkapan', function (Blueprint $table) {
-            $table->increments('id');
-            $table->char('nim',25)->index();
-            $table->enum('status',['diajukan','selesai','ditolak'])->default('diajukan');
-            $table->string('keterangan')->default('-');
-            $table->timestamps();
-        });
+        // Schema::create('pengajuan_surat_keterangan_bebas_perlengkapan', function (Blueprint $table) {
+        //     $table->increments('id');
+        //     $table->char('nim',25)->index();
+        //     $table->enum('status',['diajukan','selesai','ditolak'])->default('diajukan');
+        //     $table->string('keterangan')->default('-');
+        //     $table->timestamps();
+        // });
     }
 
     /**
@@ -29,6 +29,6 @@ class CreatePengajuanSuratKeteranganBebasPerlengkapanTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pengajuan_surat_keterangan_bebas_perlengkapan');
+        // Schema::dropIfExists('pengajuan_surat_keterangan_bebas_perlengkapan');
     }
 }

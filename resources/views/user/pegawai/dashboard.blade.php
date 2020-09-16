@@ -535,11 +535,8 @@
                                                     <th> Di Ubah</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            {{-- <tbody>
                                                 @foreach ($suratKeteranganAktifList as $suratKeteranganAktif)
-                                                @php
-                                                    $kode = explode('/',$suratKeteranganAktif->kodeSurat->kode_surat);
-                                                @endphp
                                                 <tr>
                                                     <td> {{ $loop->iteration }}</td>
                                                     <td> {{ 'B/'.$suratKeteranganAktif->nomor_surat.'/'.$kode[0].'.4/'.$kode[1].'/'.$suratKeteranganAktif->created_at->year }}</td>
@@ -554,7 +551,7 @@
                                                     <td> {{ $suratKeteranganAktif->updated_at->diffForHumans() }}</td>
                                                 </tr>
                                                 @endforeach
-                                            </tbody>
+                                            </tbody> --}}
                                         </table>
                                     </div>
                                     @else
@@ -598,7 +595,7 @@
                                                     <th> Di Ubah</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            {{-- <tbody>
                                                 @foreach ($suratKeteranganKelakuanList as $suratKeterangan)
                                                 <tr>
                                                     @php
@@ -617,7 +614,7 @@
                                                     <td> {{ $suratKeterangan->updated_at->diffForHumans() }}</td>
                                                 </tr>
                                                 @endforeach
-                                            </tbody>
+                                            </tbody> --}}
                                         </table>
                                     </div>
                                     @else

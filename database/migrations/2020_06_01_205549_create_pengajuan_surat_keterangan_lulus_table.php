@@ -19,7 +19,6 @@ class CreatePengajuanSuratKeteranganLulusTable extends Migration
             $table->string('file_rekomendasi_jurusan');
             $table->string('file_berita_acara_ujian');
             $table->date('tanggal_wisuda');
-            $table->double('ipk',3,2);
             $table->enum('status',['diajukan','menunggu tanda tangan','selesai','ditolak'])->default('diajukan');
             $table->string('keterangan')->default('-');
             $table->timestamps();

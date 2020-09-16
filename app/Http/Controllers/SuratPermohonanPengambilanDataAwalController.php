@@ -37,7 +37,7 @@ class SuratPermohonanPengambilanDataAwalController extends Controller
         return view('user.'.$this->segmentUser.'.surat_permohonan_pengambilan_data_awal',compact('perPage','mahasiswa','nomorSurat','pengajuanSuratDataAwalList','suratDataAwalList','countAllPengajuanDataAwal','countAllSuratDataAwal','countPengajuanDataAwal','countSuratDataAwal'));
     }
 
-    public function suratDataAwalPimpinan(){
+    public function indexPimpinan(){
         $perPage = $this->perPage;
         $mahasiswa = $this->generateMahasiswa();
         $nomorSurat = $this->generateNomorSuratDataAwal(['selesai']);

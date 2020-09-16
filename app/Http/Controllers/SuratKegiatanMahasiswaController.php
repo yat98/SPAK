@@ -39,7 +39,7 @@ class SuratKegiatanMahasiswaController extends Controller
         return view('user.'.$this->segmentUser.'.surat_kegiatan_mahasiswa',compact('countAllPengajuanKegiatan','perPage','countAllSuratKegiatan','countPengajuanKegiatan','nomorSurat','countSuratKegiatan','pengajuanKegiatanList','suratKegiatanList'));
     }
 
-    public function suratKegiatanPimpinan(){
+    public function indexPimpinan(){
         $perPage = $this->perPage;
         $suratKegiatanList =  SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan_kegiatan')
                                 ->where('status','selesai')

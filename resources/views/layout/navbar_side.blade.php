@@ -13,15 +13,15 @@
                         {{ ($posisi == 'mahasiswa') ? 'Mahasiswa':'' }}
                         {!! ($posisi == 'pegawai' || $posisi == 'operator') ? '<small>'.ucwords(Session::get('jabatan')).'</small>':'' !!}
                         @if(Session::get('jabatan') == 'dekan')
-                        <small>Dekan</small>
+                            <small>Dekan</small>
                         @elseif(Session::get('jabatan') == 'wd1')
-                        <small>Wakil Dekan I</small>
+                            <small>Wakil Dekan I</small>
                         @elseif(Session::get('jabatan') == 'wd2')
-                        <small>Wakil Dekan II</small>
+                            <small>Wakil Dekan II</small>
                         @elseif(Session::get('jabatan') == 'wd3')
-                        <small>Wakil Dekan III</small>
+                            <small>Wakil Dekan III</small>
                         @elseif(Session::get('jabatan') == 'kabag tata usaha')
-                        <small>Kabag Tata Usaha</small>
+                            <small>Kabag Tata Usaha</small>
                         @endif
                     </span>
                 </div>
@@ -101,12 +101,6 @@
             <a class="nav-link" href="{{ url(Request::segment(1).'/') }}">
                 <span class="menu-title">Dashboard</span>
                 <i class="mdi mdi-home menu-icon"></i>
-            </a>
-        </li>
-        <li class="nav-item {{ ($halaman == 'tanda-tangan') ? 'active':'' }}">
-            <a class="nav-link" href="{{ url(Request::segment(1).'/tanda-tangan') }}">
-                <span class="menu-title">Tanda Tangan</span>
-                <i class="mdi mdi mdi mdi-border-color menu-icon"></i>
             </a>
         </li>
 
@@ -299,12 +293,14 @@
                 <i class="mdi mdi-home menu-icon"></i>
             </a>
         </li>
+        @if(Auth::user()->jabatan == 'kabag tata usaha')
         <li class="nav-item {{ ($halaman == 'kode-surat') ? 'active':'' }}">
             <a class="nav-link" href="{{ url(Request::segment(1).'/kode-surat') }}">
                 <span class="menu-title">Kode Surat</span>
                 <i class="mdi mdi mdi-format-list-numbered menu-icon"></i>
             </a>
         </li>
+        @endif
         <li class="nav-item {{ ($halaman == 'tanda-tangan') ? 'active':'' }}">
             <a class="nav-link" href="{{ url(Request::segment(1).'/tanda-tangan') }}">
                 <span class="menu-title">Tanda Tangan</span>

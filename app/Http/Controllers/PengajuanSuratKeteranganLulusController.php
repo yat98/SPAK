@@ -14,7 +14,7 @@ use App\Http\Requests\PengajuanSuratKeteranganLulusRequest;
 
 class PengajuanSuratKeteranganLulusController extends Controller
 {
-    public function index()
+    public function indexMahasiswa()
     {
         $perPage = $this->perPage;
         $pengajuanSuratLulusList = PengajuanSuratKeteranganLulus::where('nim',Session::get('nim'))->paginate($perPage);

@@ -19,7 +19,7 @@ class SuratKeteranganKelakuanBaikController extends Controller
         $perPage = $this->perPage;
         $mahasiswa = $this->generateMahasiswa();
         $tahunAkademik = $this->generateAllTahunAkademik();
-        $suratKeteranganList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
+        $suratKeteranganList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
                                         ->orderByDesc('surat_keterangan.updated_at')
                                         ->where('jenis_surat','surat keterangan kelakuan baik')
                                         ->paginate($perPage,['*'],'page');
@@ -36,23 +36,7 @@ class SuratKeteranganKelakuanBaikController extends Controller
         $countPengajuanSuratKeterangan = $pengajuanSuratKeteranganList->count();
         $countAllPengajuanSuratKeterangan = $pengajuanSuratKeteranganList->count();
 
-        $nomorSurat = $this->generateNomorSurat('surat keterangan kelakuan baik');
-
-        return view('user.'.$this->segmentUser.'.surat_keterangan_kelakuan_baik',compact('tahunAkademik','suratKeteranganList','countAllSuratKeterangan','countSuratKeterangan','mahasiswa','perPage','nomorSurat','countPengajuanSuratKeterangan','pengajuanSuratKeteranganList','countAllPengajuanSuratKeterangan'));
-    }
-
-    public function indexMahasiswa(){
-        $perPage = $this->perPage;
-        $pengajuanSuratKeteranganList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
-                                            ->where('nim',Session::get('nim'))
-                                            ->orderByDesc('created_at')
-                                            ->orderBy('status')
-                                            ->paginate($perPage,['*'],'page_pengajuan');
-        $countAllPengajuan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')->where('nim',Session::get('nim'))->count();
-        $countPengajuanSuratKeterangan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
-                                            ->where('nim',Session::get('nim'))
-                                            ->count();
-        return view($this->segmentUser.'.pengajuan_surat_keterangan_kelakuan_baik',compact('countAllPengajuan','countPengajuanSuratKeterangan','perPage','pengajuanSuratKeteranganList'));
+        return view('user.'.$this->segmentUser.'.surat_keterangan_kelakuan_baik',compact('tahunAkademik','suratKeteranganList','countAllSuratKeterangan','countSuratKeterangan','mahasiswa','perPage','countPengajuanSuratKeterangan','pengajuanSuratKeteranganList','countAllPengajuanSuratKeterangan'));
     }
 
     public function search(Request $request){

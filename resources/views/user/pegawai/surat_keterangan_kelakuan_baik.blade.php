@@ -55,7 +55,7 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countPengajuanSuratKeterangan > 0)
+                                @if ($countAllSuratKeterangan > 0)
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
@@ -108,9 +108,6 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    <div class="col">
-                                        {{ $pengajuanSuratKeteranganList->appends(['page' => $pengajuanSuratKeteranganList->currentPage()])->links() }}
-                                    </div>
                                 </div>
                                 @else
                                 <div class="row">
@@ -142,29 +139,6 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                <div class="row mb-3">
-                                    <div class="col-sm-12">
-                                        {{ Form::open(['url'=>'pegawai/surat-keterangan-kelakuan-baik/search','method'=>'get']) }}
-                                        <div class="form-row">
-                                            <div class="col-sm-4 col-md-4 mt-1">
-                                                {{ Form::select('nomor_surat',$nomorSurat,(request()->get('nomor_surat') != null) ? request()->get('nomor_surat'):null,['class'=>'form-control search','placeholder'=> 'Cari kode surat...']) }}
-                                            </div>
-                                            <div class="col-sm-4 col-md-4 mt-1">
-                                                {{ Form::select('keywords',$mahasiswa,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> 'Cari mahasiswa...']) }}
-                                            </div>
-                                            <div class="col-sm-4 col-md-2 mt-1">
-                                                {{ Form::select('tahun_akademik',$tahunAkademik,(request()->get('tahun_akademik') != null) ? request()->get('tahun_akademik'):null,['class'=>'search btn-margin form-control','placeholder'=> '-- Pilih Tahun Akademik --']) }}
-                                            </div>
-                                            <div class="col-sm-12 col-md">
-                                                <button class="btn btn-success btn-sm btn-tambah" type="submit">
-                                                    <i class="mdi mdi-magnify btn-icon-prepend"></i>
-                                                    Cari
-                                                </button>
-                                            </div>
-                                        </div>
-                                        {{ Form::close() }}
-                                    </div>
-                                </div>
                                 @if ($countSuratKeterangan > 0)
                                 <div class="table-responsive">
                                     <table class="table">

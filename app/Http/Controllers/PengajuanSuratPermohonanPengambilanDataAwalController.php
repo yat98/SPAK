@@ -14,7 +14,7 @@ use App\Http\Requests\PengajuanSuratPermohonanPengambilanDataAwalRequest;
 
 class PengajuanSuratPermohonanPengambilanDataAwalController extends Controller
 {
-    public function index(){
+    public function indexMahasiswa(){
         $perPage = $this->perPage;
         $pengajuanSuratDataAwalList = PengajuanSuratPermohonanPengambilanDataAwal::where('nim',Session::get('nim'))->paginate($perPage);
         $countAllPengajuan = $pengajuanSuratDataAwalList->count();

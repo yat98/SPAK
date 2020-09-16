@@ -14,7 +14,7 @@ class AddRelationshipToSuratPersetujuanPindahTable extends Migration
     public function up()
     {
         Schema::table('surat_persetujuan_pindah', function (Blueprint $table) {
-            $table->foreign('id_pengajuan_persetujuan_pindah')
+            $table->foreign('id_pengajuan')
                   ->references('id')
                   ->on('pengajuan_surat_persetujuan_pindah')
                   ->onUpdate('cascade')
@@ -42,7 +42,7 @@ class AddRelationshipToSuratPersetujuanPindahTable extends Migration
     public function down()
     {
         Schema::table('surat_persetujuan_pindah', function (Blueprint $table) {
-            $table->dropForeign(['id_pengajuan_persetujuan_pindah']);
+            $table->dropForeign(['id_pengajuan']);
             $table->dropForeign(['nip']);
             $table->dropForeign(['id_kode_surat']);
         });

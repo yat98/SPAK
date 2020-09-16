@@ -37,7 +37,7 @@ class SuratPermohonanSurveiController extends Controller
         return view('user.'.$this->segmentUser.'.surat_permohonan_survei',compact('perPage','mahasiswa','nomorSurat','pengajuanSuratSurveiList','suratSurveiList','countAllPengajuanSuratSurvei','countAllSuratSurvei','countPengajuanSuratSurvei','countSuratSurvei'));
     }
 
-    public function suratSurveiPimpinan(){
+    public function indexPimpinan(){
         $perPage = $this->perPage;
         $mahasiswa = $this->generateMahasiswa();
         $nomorSurat = $this->generateNomorSuratSurvei(['selesai']);

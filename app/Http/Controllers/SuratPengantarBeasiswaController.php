@@ -25,7 +25,7 @@ class SuratPengantarBeasiswaController extends Controller
         return view('user.'.$this->segmentUser.'.surat_pengantar_beasiswa',compact('perPage','suratBeasiswaList','countAllSuratBeasiswa','countSuratBeasiswa','nomorSurat'));
     }
 
-    public function suratBeasiswaPimpinan(){
+    public function indexPimpinan(){
         $perPage = $this->perPage;
         $nomorSurat = $this->generateNomorSuratBeasiswa(['selesai']);
         $suratBeasiswaList = SuratPengantarBeasiswa::orderBy('status')->where('status','selesai')->paginate($perPage);

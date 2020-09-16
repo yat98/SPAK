@@ -81,7 +81,7 @@ class MahasiswaController extends Controller
                     ->toJson();
     }
 
-    public function mahasiswaPimpinan(){
+    public function indexPimpinan(){
         $perPage = $this->perPage;
         $angkatan = $this->generateAngkatan();
         $prodiList = $this->generateProdi();

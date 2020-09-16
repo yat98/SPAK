@@ -14,7 +14,7 @@ use App\Http\Requests\PengajuanSuratPermohonanSurveiRequest;
 
 class PengajuanSuratPermohonanSurveiController extends Controller
 {
-    public function index(){
+    public function indexMahasiswa(){
         $perPage = $this->perPage;
         $pengajuanSuratSurveiList = PengajuanSuratPermohonanSurvei::where('nim',Session::get('nim'))->paginate($perPage);
         $countAllPengajuan = $pengajuanSuratSurveiList->count();

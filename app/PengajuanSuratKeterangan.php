@@ -26,6 +26,10 @@ class PengajuanSuratKeterangan extends Model
     }
 
     public function suratKeterangan(){
-        return $this->hasOne('App\SuratKeterangan','id_pengajuan_surat_keterangan');
+        return $this->hasOne('App\SuratKeterangan','id_pengajuan');
+    }
+
+    public function operator(){
+        return $this->belongsTo('App\Operator','id_operator');
     }
 }

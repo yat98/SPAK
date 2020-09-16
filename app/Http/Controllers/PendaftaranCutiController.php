@@ -34,7 +34,7 @@ class PendaftaranCutiController extends Controller
         return view('user.'.$this->segmentUser.'.pendaftaran_cuti',compact('perPage','countAllPengajuanCuti','countAllPendaftaranCuti','pengajuanCutiList','pendaftaranCutiList','waktuCuti','mahasiswa','countPengajuanCuti','countPendaftaranCuti'));
     }
 
-    public function pendaftaranCutiMahasiswa()
+    public function indexMahasiswa()
     {
         $perPage = $this->perPage;
         $pendaftaranCutiList = PendaftaranCuti::where('nim',Session::get('nim'))->paginate($perPage);

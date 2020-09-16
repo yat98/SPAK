@@ -37,7 +37,7 @@ class SuratKeteranganLulusController extends Controller
         return view('user.'.$this->segmentUser.'.surat_keterangan_lulus',compact('perPage','mahasiswa','pengajuanSuratLulusList','suratLulusList','countAllpengajuanSuratLulus','countAllsuratLulus','countPengajuanSuratLulus','countSuratLulus','nomorSurat'));
     }
 
-    public function suratLulusPimpinan(){
+    public function indexPimpinan(){
         $perPage = $this->perPage;
         $mahasiswa = $this->generateMahasiswa();
         $nomorSurat = $this->generateNomorSuratLulus(['selesai']);

@@ -39,7 +39,7 @@ class SuratPermohonanPengambilanMaterialController extends Controller
         return view('user.'.$this->segmentUser.'.surat_permohonan_pengambilan_material',compact('perPage','mahasiswa','nomorSurat','pengajuanSuratMaterialList','suratMaterialList','countAllPengajuanSuratMaterial','countAllSuratMaterial','countPengajuanSuratMaterial','countSuratMaterial'));
     }
 
-    public function suratMaterialPimpinan(){
+    public function indexPimpinan(){
         $perPage = $this->perPage;
         $mahasiswa = $this->generateMahasiswa();
         $nomorSurat = $this->generateNomorSuratMaterial(['selesai']);

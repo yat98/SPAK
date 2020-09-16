@@ -67,8 +67,8 @@ class StatusMahasiswaController extends Controller
                                 ->with(['mahasiswa','tahunAkademik'])
                                 ->first();
         $data = collect($statusMahasiswa);
-        $data->put('created_at',$statusMahasiswa->created_at->isoFormat('D MMMM Y H:m:ss'));
-        $data->put('updated_at',$statusMahasiswa->updated_at->isoFormat('D MMMM Y H:m:ss'));
+        $data->put('created_at',$statusMahasiswa->created_at->isoFormat('D MMMM Y H:mm:ss'));
+        $data->put('updated_at',$statusMahasiswa->updated_at->isoFormat('D MMMM Y H:mm:ss'));
         $data->put('status',ucwords($statusMahasiswa->status));
         
         return $data->toJson();

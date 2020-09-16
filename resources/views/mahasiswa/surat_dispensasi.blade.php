@@ -40,7 +40,7 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countSuratDispensasi > 0)
+                                @if ($countAllSuratDispensasi > 0)
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
@@ -54,11 +54,7 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($suratDispensasiList as $suratDispensasi)
-                                             @php
-                                                $kode = explode('/',$suratDispensasi->kodeSurat->kode_surat);
-                                            @endphp
                                             <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($suratDispensasiList->currentPage() - 1)  }}</td>
                                                 @if($suratDispensasi->user->jabatan == 'dekan')
                                                     <td> {{ $suratDispensasi->nomor_surat.'/'.$suratDispensasi->kodeSurat->kode_surat.'/'.$suratDispensasi->created_at->format('Y') }}</td>
                                                 @else
@@ -89,9 +85,6 @@
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    <div class="col">
-                                        {{ $suratDispensasiList->links() }}
-                                    </div>
                                 </div>
                                 @else
                                 <div class="row">

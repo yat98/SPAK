@@ -8,10 +8,10 @@ class SuratPersetujuanPindah extends Model
 {
     protected $table = 'surat_persetujuan_pindah';
 
-    protected $primaryKey = 'id_pengajuan_persetujuan_pindah';
+    protected $primaryKey = 'id_pengajuan';
 
     protected $fillable = [
-        'id_pengajuan_persetujuan_pindah',
+        'id_pengajuan',
         'nomor_surat',
         'nip',
         'id_kode_surat',
@@ -23,7 +23,7 @@ class SuratPersetujuanPindah extends Model
     }
 
     public function pengajuanSuratPersetujuanPindah(){
-        return $this->belongsTo('App\PengajuanSuratPersetujuanPindah','id_pengajuan_persetujuan_pindah');
+        return $this->belongsTo('App\PengajuanSuratPersetujuanPindah','id_pengajuan');
     }
 
     public function kodeSurat(){

@@ -18,21 +18,18 @@ use Illuminate\Http\Request;
 use App\DaftarDispensasiMahasiswa;
 use App\TahapanKegiatanDispensasi;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SuratDispensasiRequest;
 
 class SuratDispensasiController extends Controller
 {
     public function index(){
         $perPage = $this->perPage;
-        $mahasiswa = $this->generateMahasiswa();
-        $nomorSurat = $this->generateNomorSuratDispensasi();
-        $countAllSuratDispensasi = SuratDispensasi::all()->count();
-        $suratDispensasiList = SuratDispensasi::orderBy('status')->paginate($perPage);
-        $countSuratDispensasi = $suratDispensasiList->count();
-        return view('user.'.$this->segmentUser.'.surat_dispensasi',compact('perPage','mahasiswa','nomorSurat','countAllSuratDispensasi','countSuratDispensasi','suratDispensasiList'));
+        $countAllSuratDispensasi = SuratDispensasi::count();
+        return view('user.'.$this->segmentUser.'.surat_dispensasi',compact('perPage','countAllSuratDispensasi'));
     }
 
-    public function suratDispensasiPimpinan(){
+    public function indexPimpinan(){
         $perPage = $this->perPage;
         $mahasiswa = $this->generateMahasiswa();
         $nomorSurat = $this->generateNomorSuratDispensasi();
@@ -44,19 +41,14 @@ class SuratDispensasiController extends Controller
         return view('user.'.$this->segmentUser.'.surat_dispensasi',compact('perPage','mahasiswa','nomorSurat','countAllSuratDispensasi','countSuratDispensasi','suratDispensasiList','pengajuanSuratDispensasiList','countAllPengajuanSuratDispensasi'));
     }
 
-    public function suratDispensasiMahasiswa(){
+    public function indexMahasiswa(){
         $perPage = $this->perPage;
-        $mahasiswa = $this->generateMahasiswa();
-        $nomorSurat = $this->generateNomorSuratDispensasi();
-        $suratDispensasiList = SuratDispensasi::
+        $countAllSuratDispensasi = SuratDispensasi::
         join('daftar_dispensasi_mahasiswa','daftar_dispensasi_mahasiswa.id_surat_dispensasi','=','surat_dispensasi.id_surat_masuk')
                                     ->select('*','surat_dispensasi.created_at')
-                                    ->where('nim',Session::get('nim'))
-                                    ->orderByDesc('surat_dispensasi.created_at')
-                                    ->paginate($perPage);
-        $countAllSuratDispensasi = $suratDispensasiList->count();
-        $countSuratDispensasi = $suratDispensasiList->count();
-        return view($this->segmentUser.'.surat_dispensasi',compact('perPage','mahasiswa','nomorSurat','countAllSuratDispensasi','countSuratDispensasi','suratDispensasiList'));
+                                    ->where('nim',Auth::user()->nim)
+                                    ->count();
+        return view($this->segmentUser.'.surat_dispensasi',compact('perPage','countAllSuratDispensasi'));
     }
 
     public function create(Request $request){

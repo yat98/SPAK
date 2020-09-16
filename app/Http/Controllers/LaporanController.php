@@ -31,7 +31,7 @@ class LaporanController extends Controller
         return view('user.pegawai.laporan',compact('tahun','jenisSurat'));
     }
 
-    public function show(Request $request){
+    public function post(Request $request){
         $this->validate($request,[
             'jenis_surat'=>'required',
             'tahun'=>'required'

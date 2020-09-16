@@ -33,4 +33,12 @@ class Operator extends Authenticable
     public function notifikasiOperator(){
         return $this->hasMany('App\NotifikasiOperator','id_operator');
     }
+
+    public function pengajuanSuratKeterangan(){
+        return $this->hasMany('App\PengajuanSuratKeterangan','id_operator');
+    }
+
+    public function suratKeterangan(){
+        return $this->hasMany('App\SuratKeterangan','id_operator');
+    }
 }

@@ -70,23 +70,7 @@ class LoginController extends Controller
         }
 
         if (auth()->guard($guard)->attempt($input)) {
-            if($guard == 'mahasiswa'){
-                if ($user != null) {
-                    if ($user->tahunAkademik->count() < 1) {
-                        $this->errorLogin($request);
-                        return redirect('/');
-                    }
-
-                    $status = $user->load(['tahunAkademik'=>function ($query) {
-                        $query->orderByDesc('created_at');
-                    }])->tahunAkademik->first()->pivot->status;
-
-                    if ($status == 'lulus' || $status == 'drop out' || $status == 'keluar') {
-                        $this->errorLogin($request);
-                        return redirect('/');
-                    }
-                }
-            }else if($guard == 'user' || $guard == 'operator'){
+            if($guard == 'user' || $guard == 'operator'){
                 ($guard == 'operator') ? Session::put('jabatan',$user->bagian) : Session::put('jabatan',$user->jabatan);
                 if($user->status_aktif != 'aktif'){
                     $this->errorLogin($request);

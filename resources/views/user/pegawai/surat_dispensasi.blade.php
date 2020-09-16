@@ -45,24 +45,7 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                <div class="row mb-3">
-                                    <div class="col-sm-12 col-md-12">
-                                        {{ Form::open(['url'=>'pegawai/surat-dispensasi/search','method'=>'GET']) }}
-                                        <div class="form-row">
-                                            <div class="col-sm-12 col-md-6 mt-1">
-                                                {{ Form::select('keywords',$nomorSurat,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> '-- Pilih Nomor Surat --']) }}
-                                            </div>
-                                            <div class="col-sm-12 col-md">
-                                                <button class="btn btn-success btn-sm btn-tambah" type="submit">
-                                                    <i class="mdi mdi-magnify btn-icon-prepend"></i>
-                                                    Cari
-                                                </button>
-                                            </div>
-                                        </div>
-                                        {{ Form::close() }}
-                                    </div>
-                                </div>
-                                @if ($countSuratDispensasi > 0)
+                                @if ($countAllSuratDispensasi > 0)
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>

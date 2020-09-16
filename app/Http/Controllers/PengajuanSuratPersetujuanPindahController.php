@@ -13,7 +13,7 @@ use App\Http\Requests\PengajuanSuratPersetujuanPindahRequest;
 
 class PengajuanSuratPersetujuanPindahController extends Controller
 {
-    public function persetujuanPindahMahasiswa(){
+    public function indexMahasiswa(){
         $perPage = $this->perPage;
         $pengajuanSuratPindahList = PengajuanSuratPersetujuanPindah::where('nim',Session::get('nim'))
                                             ->orderByDesc('created_at')

@@ -98,8 +98,8 @@ class UserController extends Controller
 
     public function show(User $user){
         $data = collect($user->makeHidden('tanda_tangan'));
-        $data->put('created_at',$user->created_at->isoFormat('D MMMM Y H:m:ss'));
-        $data->put('updated_at',$user->updated_at->isoFormat('D MMMM Y H:m:ss'));
+        $data->put('created_at',$user->created_at->isoFormat('D MMMM Y H:mm:ss'));
+        $data->put('updated_at',$user->updated_at->isoFormat('D MMMM Y H:mm:ss'));
         switch ($user->jabatan) {
             case 'wd1':
                 $data->put('jabatan','Wakil Dekan 1');
@@ -174,19 +174,19 @@ class UserController extends Controller
             $suratMasukList = SuratMasuk::where('bagian','subbagian umum & bmn')->orderByDesc('created_at')->get();
         }
         
-        $suratKeteranganAktifList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
+        $suratKeteranganAktifList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
                                         ->orderByDesc('surat_keterangan.updated_at')
                                         ->where('jenis_surat','surat keterangan aktif kuliah')
                                         ->get();
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
-        $suratKeteranganKelakuanList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
+        $suratKeteranganKelakuanList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
                                         ->orderByDesc('surat_keterangan.updated_at')
                                         ->where('jenis_surat','surat keterangan kelakuan baik')
                                         ->get();
         $suratDispensasiList = SuratDispensasi::orderBy('status')->get();
         $suratRekomendasiList = SuratRekomendasi::orderBy('status')->get();
         $suratTugasList = SuratTugas::orderBy('status')->get();
-        $suratPersetujuanPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan_persetujuan_pindah')
+        $suratPersetujuanPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan')
                                         ->orderByDesc('surat_persetujuan_pindah.created_at')
                                         ->orderByDesc('nomor_surat')
                                         ->get();
@@ -276,24 +276,25 @@ class UserController extends Controller
             '11'=>'November',
             '12'=>'Desember',
         ];
+
         $perPageDashboard = $this->perPageDashboard;
         $tahun = $this->generateAngkatan();
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
         
         $countAllKodeSurat = KodeSurat::count();
 
-        $suratKeteranganAktifList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
+        $suratKeteranganAktifList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
                                         ->orderByDesc('surat_keterangan.updated_at')
                                         ->where('jenis_surat','surat keterangan aktif kuliah')
                                         ->get();
-        $suratKeteranganKelakuanList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
+        $suratKeteranganKelakuanList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
                                         ->orderByDesc('surat_keterangan.updated_at')
                                         ->where('jenis_surat','surat keterangan kelakuan baik')
                                         ->get();
         $suratDispensasiList = SuratDispensasi::orderByDesc('created_at')->where('status','selesai')->get();
         $suratRekomendasiList = SuratRekomendasi::orderByDesc('created_at')->where('status','selesai')->get();
         $suratTugasList = SuratTugas::orderByDesc('created_at')->where('status','selesai')->get();
-        $suratPersetujuanPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan_persetujuan_pindah')
+        $suratPersetujuanPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan')
                                         ->orderByDesc('surat_persetujuan_pindah.created_at')
                                         ->orderByDesc('nomor_surat')
                                         ->get();
@@ -358,12 +359,12 @@ class UserController extends Controller
         $thn = date('Y');
 
         $chartKemahasiswaan = [
-            'Surat Keterangan Aktif Kuliah'=>SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
+            'Surat Keterangan Aktif Kuliah'=>SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
                                                 ->where('jenis_surat','surat keterangan aktif kuliah')
                                                 ->whereYear('surat_keterangan.created_at',$thn)
                                                 ->whereMonth('surat_keterangan.created_at',$bln)
                                                 ->count(),
-            'Surat Keterangan Kelakuan Baik'=>SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
+            'Surat Keterangan Kelakuan Baik'=>SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
                                                 ->where('jenis_surat','surat keterangan kelakuan baik')
                                                 ->whereYear('surat_keterangan.created_at',$thn)
                                                 ->whereMonth('surat_keterangan.created_at',$bln)
@@ -382,7 +383,7 @@ class UserController extends Controller
                                                 ->whereYear('created_at',$thn)
                                                 ->whereMonth('created_at',$bln)
                                                 ->count(),
-            'Surat Persetujuan Pindah'=>SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan_persetujuan_pindah')
+            'Surat Persetujuan Pindah'=>SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan')
                                                 ->orderByDesc('surat_persetujuan_pindah.created_at')
                                                 ->whereYear('surat_persetujuan_pindah.created_at',$thn)
                                                 ->whereMonth('surat_persetujuan_pindah.created_at',$bln)

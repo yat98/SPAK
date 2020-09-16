@@ -14,7 +14,7 @@ class CreateSuratPersetujuanPindahTable extends Migration
     public function up()
     {
         Schema::create('surat_persetujuan_pindah', function (Blueprint $table) {
-            $table->integer('id_pengajuan_persetujuan_pindah')->unsigned()->primary();
+            $table->integer('id_pengajuan')->unsigned()->primary();
             $table->char('nomor_surat',6);
             $table->char('nip',18)->nullable();
             $table->integer('id_kode_surat')->unsigned();

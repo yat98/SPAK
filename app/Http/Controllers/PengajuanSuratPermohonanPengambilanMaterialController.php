@@ -14,7 +14,7 @@ use App\Http\Requests\PengajuanSuratPermohonanPengambilanMaterialRequest;
 
 class PengajuanSuratPermohonanPengambilanMaterialController extends Controller
 {
-    public function index(){
+    public function indexMahasiswa(){
         $perPage = $this->perPage;
         $pengajuanSuratMaterialList = PengajuanSuratPermohonanPengambilanMaterial::join('daftar_kelompok_pengambilan_material','daftar_kelompok_pengambilan_material.id_pengajuan','=','pengajuan_surat_permohonan_pengambilan_material.id')
                                         ->where('daftar_kelompok_pengambilan_material.nim',Session::get('nim'))
