@@ -163,16 +163,10 @@ class UserController extends Controller
         return redirect($this->segmentUser.'/user');
     }
 
-    public function pegawaiDashboard(){
+    public function indexPegawai(){
         $tgl = Carbon::now();
         $kodeSuratList = KodeSurat::all();
-        if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
-            $suratMasukList = SuratMasuk::where('bagian','subbagian kemahasiswaan')->orderByDesc('created_at')->get();
-        }else if(Session::get('jabatan') == 'kasubag pengajaran dan pendidikan'){
-            $suratMasukList = SuratMasuk::where('bagian','subbagian pengajaran dan pendidikan')->orderByDesc('created_at')->get();
-        }else{
-            $suratMasukList = SuratMasuk::where('bagian','subbagian umum & bmn')->orderByDesc('created_at')->get();
-        }
+        $suratMasukList = SuratMasuk::orderByDesc('created_at')->get();
         
         $suratKeteranganAktifList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
                                         ->orderByDesc('surat_keterangan.updated_at')

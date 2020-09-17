@@ -159,6 +159,8 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'kode-surat';
             } else if ($segment == 'surat-keterangan-aktif-kuliah') {
                 $halaman = 'surat-keterangan-aktif-kuliah';
+            } else if ($segment == 'surat-masuk') {
+                $halaman = 'surat-masuk';
             } else if ($segment == 'mahasiswa') {
                 $show = false;
                 $halaman = 'mahasiswa';
@@ -202,6 +204,9 @@ class NavServiceProvider extends ServiceProvider
             } else if (($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-aktif-kuliah') || $segment == 'surat-keterangan-aktif-kuliah') {
                 $show = true;
                 $halaman = 'surat-keterangan-aktif-kuliah';
+            } else if ($segment == 'surat-masuk') {
+                $show = true;
+                $halaman = 'surat-masuk';
             }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi,'show'=>$show]);

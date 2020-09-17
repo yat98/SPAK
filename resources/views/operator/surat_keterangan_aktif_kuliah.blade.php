@@ -263,7 +263,15 @@
                                 let aksi = '';
                                 if(row.status == 'Diajukan'){
                                     aksi = `<a href="${link+'/'+row.id}" class="dropdown-item pengajuan-surat-keterangan-detail" data-toggle="modal" data-target="#suratKeterangan">Detail</a>
-                                            <a href="${linkPengajuan+'/create/'+row.id}" class="dropdown-item">Buat Surat</a>`;
+                                            <a href="${linkPengajuan+'/create/'+row.id}" class="dropdown-item">Buat Surat</a>
+                                             <form action="${link+'/tolak-pengajuan/'+row.id}" method="post">
+                                                <input name="_method" type="hidden" value="PATCH">
+                                                <input name="_token" type="hidden" value="{{ @csrf_token() }}">
+                                                <input name="keterangan" type="hidden" value="-" id="keterangan_surat">
+                                                <button type="submit" class="dropdown-item tolak-surat">
+                                                    Tolak Pengajuan
+                                                </button>
+                                            </form>`;
                                 }else{
                                     aksi = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item surat-keterangan-detail" data-toggle="modal" data-target="#suratKeterangan">Detail</a>`;
                                 }

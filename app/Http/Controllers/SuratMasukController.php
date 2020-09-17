@@ -3,30 +3,38 @@
 namespace App\Http\Controllers;
 
 use Session;
+use Storage;
+use DataTables;
 use Carbon\Carbon;
 use App\SuratMasuk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SuratMasukRequest;
-use Storage;
 
 class SuratMasukController extends Controller
 {
     public function index(){
         $perPage = $this->perPage;
-        $instansi = $this->generateinstansi();
-        if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
-            $nomorSurat = SuratMasuk::where('bagian','subbagian kemahasiswaan')->pluck('nomor_surat','nomor_surat');
-            $suratMasukList = SuratMasuk::where('bagian','subbagian kemahasiswaan')->orderByDesc('created_at')->paginate($perPage);
-        }elseif(Session::get('jabatan') == 'kasubag pengajaran dan pendidikan'){
-            $nomorSurat = SuratMasuk::whereNotIn('bagian',['subbagian kemahasiswaan'])->pluck('nomor_surat','nomor_surat');
-            $suratMasukList = SuratMasuk::whereNotIn('bagian',['subbagian kemahasiswaan'])->orderByDesc('created_at')->paginate($perPage);
-        }else{
-            $nomorSurat = SuratMasuk::where('bagian','subbagian umum & bkn')->pluck('nomor_surat','nomor_surat');
-            $suratMasukList = SuratMasuk::where('bagian','subbagian umum & bkn')->orderByDesc('created_at')->paginate($perPage);
-        }
-        $countAllSuratMasuk  = $suratMasukList->count();
-        $countSuratMasuk = $suratMasukList->count();
-        return view('user.'.$this->segmentUser.'.surat_masuk',compact('perPage','suratMasukList','countAllSuratMasuk','countSuratMasuk','perPage','nomorSurat','instansi'));
+        
+        $countAllSurat  = SuratMasuk::count();
+  
+        return view('user.'.$this->segmentUser.'.surat_masuk',compact('perPage','countAllSurat'));
+    }
+
+    public function indexOperator(){
+        $perPage = $this->perPage;
+        
+        $countAllSurat  = SuratMasuk::count();
+  
+        return view($this->segmentUser.'.surat_masuk',compact('perPage','countAllSurat'));
+    }
+
+    public function indexPimpinan(){
+        $perPage = $this->perPage;
+        
+        $countAllSurat  = SuratMasuk::count();
+  
+        return view('user.'.$this->segmentUser.'.surat_masuk',compact('perPage','countAllSurat'));
     }
 
     public function show(SuratMasuk $suratMasuk){
@@ -39,37 +47,13 @@ class SuratMasukController extends Controller
         return $surat->toJson();
     }
 
-    public function search(Request $request){
-        $keyword = $request->all();
-        if(isset($keyword['keywords']) || isset($keyword['instansi'])){
-            $nomorSurat = SuratMasuk::pluck('nomor_surat','nomor_surat');
-            $instansi = $this->generateinstansi();
-            $perPage = $this->perPage;
-            $countAllSuratMasuk  = SuratMasuk::all()->count();
-            $nomor = $keyword['keywords'] != null ? $keyword['keywords'] : '';
-            $suratMasukList = SuratMasuk::where('nomor_surat','like',"%$nomor%");
-            (isset($keyword['instansi'])) ? $suratMasukList = $suratMasukList->where('instansi',$keyword['instansi']):'';
-
-            if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
-                $nomorSurat = SuratMasuk::where('bagian','subbagian kemahasiswaan')->pluck('nomor_surat','nomor_surat');
-                $suratMasukList = $suratMasukList->where('bagian','subbagian kemahasiswaan')->paginate($perPage)->appends($request->except('page'));
-            }else{
-                $nomorSurat = SuratMasuk::whereNotIn('bagian',['subbagian kemahasiswaan'])->pluck('nomor_surat','nomor_surat');
-                $suratMasukList = $suratMasukList->whereNotIn('bagian',['subbagian kemahasiswaan'])->paginate($perPage)->appends($request->except('page'));
-            }
-            $countSuratMasuk = count($suratMasukList);
-            if($countSuratMasuk < 1){
-                $this->setFlashData('search','Hasil Pencarian','Surat Masuk tidak ditemukan!');
-            }
-            return view('user.'.$this->segmentUser.'.surat_masuk',compact('perPage','suratMasukList','countAllSuratMasuk','countSuratMasuk','perPage','nomorSurat','instansi'));
-        }else{
-            return redirect($this->segmentUser.'/surat-masuk');
-        }
-    }
-
     public function create(){
         $formFile = true;
-        return view('user.'.$this->segmentUser.'.tambah_surat_masuk',compact('formFile'));
+        if(isset(Auth::user()->id)){
+            return view($this->segmentUser.'.tambah_surat_masuk',compact('formFile'));
+        }else{
+            return view('user.'.$this->segmentUser.'.tambah_surat_masuk',compact('formFile'));
+        }
     }
 
     public function store(SuratMasukRequest $request, SuratMasuk $suratMasuk){
@@ -89,7 +73,11 @@ class SuratMasukController extends Controller
         if($request->upload){
             $formFile = true;
         }
-        return view('user.'.$this->segmentUser.'.edit_surat_masuk',compact('suratMasuk','formFile'));
+        if(isset(Auth::user()->id)){
+            return view($this->segmentUser.'.edit_surat_masuk',compact('suratMasuk','formFile'));
+        }else{
+            return view('user.'.$this->segmentUser.'.edit_surat_masuk',compact('suratMasuk','formFile'));
+        }
     }
 
     public function update(SuratMasukRequest $request, SuratMasuk $suratMasuk){
@@ -113,6 +101,17 @@ class SuratMasukController extends Controller
         return redirect($this->segmentUser.'/surat-masuk');
     }
 
+    public function getAllSuratMasuk(){
+        return DataTables::of(SuratMasuk::all())
+                    ->addColumn('aksi', function ($data) {
+                        return $data->id;
+                    })
+                    ->editColumn("tanggal_surat_masuk", function ($data) {
+                        return $data->tanggal_surat_masuk->isoFormat('D MMMM YYYY');
+                    })
+                    ->make(true);
+    }
+
     private function uploadImage($imageFieldName, $request, $uploadPath){
         $image = $request->file($imageFieldName);
         $ext = $image->getClientOriginalExtension();
@@ -131,18 +130,5 @@ class SuratMasukController extends Controller
             if($delete) return true;
             return false;
         }
-    }
-
-    private function generateinstansi(){
-        $instansi = [];
-        if(Session::get('jabatan') == 'kasubag kemahasiswaan'){
-            $suratMasukList = SuratMasuk::where('bagian','subbagian kemahasiswaan')->select('instansi')->groupBy('instansi')->get();
-        }else{
-            $suratMasukList = SuratMasuk::whereNotIn('bagian',['subbagian kemahasiswaan'])->select('instansi')->groupBy('instansi')->get();
-        }
-        foreach ($suratMasukList as $suratMasuk) {
-            $instansi[$suratMasuk->instansi] = $suratMasuk->instansi;
-        }
-        return $instansi;
     }
 }

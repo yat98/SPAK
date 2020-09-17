@@ -390,8 +390,7 @@ $('.table-responsive').on('click','.simpan-tanda-tangan',function(e){
     })
 });
 
-let tolakSurat = $('.tolak-surat');
-tolakSurat.on('click', function(e){
+$('.table-responsive').on('click', '.tolak-surat', function(e){
     e.preventDefault();
     Swal.fire({
         title: 'Yakin?',
@@ -514,7 +513,7 @@ $('.tanggal').datetimepicker({
     }).focus();
  });
 
-$('.btn-surat-masuk-detail').on('click',function(e){
+$('.table-responsive').on('click','.btn-surat-masuk-detail',function(e){
     e.preventDefault();
     $('#surat-masuk-detail-content').empty();
     let url = $(this).attr('href');
@@ -537,15 +536,11 @@ $('.btn-surat-masuk-detail').on('click',function(e){
                                             <td>${suratMasuk.instansi}</td>
                                         </tr>
                                         <tr>
-                                            <td><b>Bagian</b></td>
-                                            <td>${suratMasuk.bagian.ucwords()}</td>
-                                        </tr>
-                                        <tr>
                                             <td><b>Tanggal Surat Masuk</b></td>
                                             <td>${suratMasuk.tanggal_surat_masuk}</td>
                                         </tr>
                                         <tr>
-                                            <td><b>Di buat</b></td>
+                                            <td><b>Di Buat</b></td>
                                             <td>${suratMasuk.created}</td>
                                         </tr>
                                         <tr>

@@ -190,6 +190,7 @@ Route::group(['prefix' => 'operator'],function(){
             Route::get('surat-keterangan-aktif-kuliah','SuratKeteranganAktifKuliahController@indexOperator');
             Route::get('surat-keterangan-aktif-kuliah/all','PengajuanSuratKeteranganController@getAllPengajuanAktif');
             Route::get('surat-keterangan-aktif-kuliah/create','PengajuanSuratKeteranganController@createPengajuanKeteranganAktifOperator');
+            Route::patch('surat-keterangan-aktif-kuliah/tolak-pengajuan/{pengajuan_surat_keterangan}','SuratKeteranganAktifKuliahController@tolakPengajuan');
             Route::get('surat-keterangan-aktif-kuliah/{pengajuan_surat_keterangan}','PengajuanSuratKeteranganController@show');
             Route::get('surat-keterangan-aktif-kuliah/{pengajuan_surat_keterangan}/progress','SuratKeteranganController@progress');
             Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}/cetak','SuratKeteranganAktifKuliahController@cetak');
@@ -198,6 +199,10 @@ Route::group(['prefix' => 'operator'],function(){
             Route::post('surat-keterangan-aktif-kuliah','PengajuanSuratKeteranganController@storePengajuanKeteranganAktif');
             Route::delete('surat-keterangan-aktif-kuliah/{pengajuan_surat_keterangan}','PengajuanSuratKeteranganController@destroy');
         });
+        // Surat Masuk
+        Route::get('surat-masuk','SuratMasukController@indexOperator');
+        Route::get('surat-masuk/all','SuratMasukController@getAllSuratMasuk');
+        Route::resource('surat-masuk','SuratMasukController')->except('index');
         // Surat Keterangan Aktif Kuliah
         Route::get('surat-keterangan-aktif-kuliah','SuratKeteranganAktifKuliahController@indexOperator');
         Route::get('surat-keterangan-aktif-kuliah/all','SuratKeteranganController@getAllSuratKeteranganAktif');
@@ -230,7 +235,7 @@ Route::group(['prefix' => 'pegawai'],function(){
 
     Route::middleware(['auth:user','pegawai'])->group(function(){
         // Dashboard
-        Route::get('/','UserController@pegawaiDashboard');
+        Route::get('/','UserController@indexPegawai');
         // Tanda Tangan
         Route::get('tanda-tangan','UserController@indexTandaTangan');
         Route::post('tanda-tangan','UserController@updateTandaTangan');
@@ -249,10 +254,9 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::group(['prefix'=>'surat-keterangan-kelakuan-baik/pengajuan'],function(){
             Route::post('/','SuratKeteranganKelakuanBaikController@storeSurat');
             Route::get('create/{pengajuan_surat_keterangan}','SuratKeteranganKelakuanBaikController@createSurat');
-            Route::patch('tolak-pengajuan/{pengajuan_surat_keterangan}','SuratKeteranganKelakuanBaikController@tolakPengajuan');
         });
         // Surat Masuk
-        Route::get('surat-masuk/search', 'SuratMasukController@search');
+        Route::get('surat-masuk/all','SuratMasukController@getAllSuratMasuk');
         Route::resource('surat-masuk','SuratMasukController');
         // Surat Dispensasi
         Route::get('surat-dispensasi/search', 'SuratDispensasiController@search');
@@ -460,6 +464,10 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::get('kode-surat/all','KodeSuratController@getAllKodeSurat');
         Route::get('kode-surat/limit','KodeSuratController@getLimitKodeSurat');
         Route::resource('kode-surat','KodeSuratController');
+        // Surat Masuk
+        Route::get('surat-masuk','SuratMasukController@indexPimpinan');
+        Route::get('surat-masuk/all','SuratMasukController@getAllSuratMasuk');
+        Route::resource('surat-masuk','SuratMasukController')->except('index');
         // Surat Keterangan Aktif Kuliah
         Route::get('surat-keterangan-aktif-kuliah','SuratKeteranganAktifKuliahController@indexPimpinan');
         Route::get('surat-keterangan-aktif-kuliah/all','SuratKeteranganController@getAllSuratKeteranganAktif');

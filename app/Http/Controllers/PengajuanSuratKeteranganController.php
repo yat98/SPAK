@@ -176,11 +176,13 @@ class PengajuanSuratKeteranganController extends Controller
                         })
                         ->make(true);
         } else if(isset(Auth::user()->id)){
-            $pengajuanSurat = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
-                                    ->where('status','diajukan');
+            $pengajuanSurat = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah');
 
-            if (Auth::user()->bagian == 'front office') {
-                $pengajuanSurat = $pengajuanSurat->where('id_operator',Auth::user()->id);
+            if(Auth::user()->bagian == 'front office'){
+                $pengajuanSurat = $pengajuanSurat->where('status','diajukan')
+                                                 ->where('id_operator',Auth::user()->id);
+            }elseif(Auth::user()->bagian == 'subbagian kemahasiswaan'){
+                $pengajuanSurat = $pengajuanSurat->whereIn('status',['diajukan','ditolak']);
             }
 
             $pengajuanSurat = $pengajuanSurat->select('mahasiswa.nama','tahun_akademik.tahun_akademik','tahun_akademik.semester','pengajuan_surat_keterangan.*')

@@ -41,11 +41,13 @@ class SuratKeteranganAktifKuliahController extends Controller
     public function indexOperator(){
         $perPage = $this->perPage;
                                    
-        $countAllPengajuan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
-                                            ->where('status','diajukan');
+        $countAllPengajuan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah');
 
         if(Auth::user()->bagian == 'front office'){
-            $countAllPengajuan = $countAllPengajuan->where('id_operator',Auth::user()->id);
+            $countAllPengajuan = $countAllPengajuan->where('status','diajukan')
+                                                   ->where('id_operator',Auth::user()->id);
+        }elseif(Auth::user()->bagian == 'subbagian kemahasiswaan'){
+            $countAllPengajuan = $countAllPengajuan->whereIn('status',['diajukan','ditolak']);
         }
 
         $countAllPengajuan = $countAllPengajuan->count();
@@ -178,6 +180,7 @@ class SuratKeteranganAktifKuliahController extends Controller
                 'status'=>'ditolak',
                 'keterangan'=>$keterangan,
             ]);
+
             NotifikasiMahasiswa::create([
                 'nim'=>$pengajuanSuratKeterangan->nim,
                 'judul_notifikasi'=>'Surat Keterangan Aktif Kuliah',

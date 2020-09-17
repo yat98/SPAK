@@ -39,7 +39,7 @@
                                         <h4>Surat Masuk</h4>
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
-                                        <a href="{{ url('pegawai/surat-masuk/create')}}"
+                                        <a href="{{ url('pimpinan/surat-masuk/create')}}"
                                             class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">
                                             <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
                                             Tambah Surat</a>
@@ -103,7 +103,7 @@
 
 @section('datatables-javascript')
     <script>
-        let link = "{{ url('pegawai/surat-masuk') }}";
+        let link = "{{ url('pimpinan/surat-masuk') }}";
 
         $('#datatables').DataTable({
             responsive: true,
@@ -135,7 +135,7 @@
             language: bahasa,
             processing: true,
             serverSide: true,
-            ajax: '{{ url('pegawai/surat-masuk/all') }}',
+            ajax: '{{ url('pimpinan/surat-masuk/all') }}',
             columns: [{
                     data: 'nomor_surat',
                 },

@@ -24,9 +24,9 @@ class SuratMasukRequest extends FormRequest
     public function rules()
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
-            $fileSuratMasukRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
+            $fileSuratMasukRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:2048'; 
         }else{
-            $fileSuratMasukRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
+            $fileSuratMasukRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:2048'; 
         }
         return [
             'nomor_surat'=>'required|string|max:50',
@@ -34,7 +34,6 @@ class SuratMasukRequest extends FormRequest
             'instansi'=>'required|string|max:100',
             'tanggal_surat_masuk'=>'required|date_format:Y-m-d',
             'file_surat_masuk'=>$fileSuratMasukRules,
-            'bagian'=>'required|string|in:subbagian kemahasiswaan,subbagian pendidikan dan pengajaran,subbagian umum & bkn',
         ];
     }
 }
