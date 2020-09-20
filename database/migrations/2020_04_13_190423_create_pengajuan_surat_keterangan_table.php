@@ -16,7 +16,7 @@ class CreatePengajuanSuratKeteranganTable extends Migration
         Schema::create('pengajuan_surat_keterangan', function (Blueprint $table) {
             $table->increments('id');
             $table->char('nim',25)->index();
-            $table->integer('id_tahun_akademik')->unsigned();
+            $table->integer('id_tahun_akademik')->unsigned()->nullable();
             $table->integer('id_operator')->unsigned()->nullable();
             $table->enum('jenis_surat',['surat keterangan aktif kuliah','surat keterangan kelakuan baik']);
             $table->enum('status',['diajukan','selesai','ditolak','verifikasi kasubag','verifikasi kabag','menunggu tanda tangan'])->default('diajukan');

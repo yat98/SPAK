@@ -207,6 +207,9 @@ class NavServiceProvider extends ServiceProvider
             } else if ($segment == 'surat-masuk') {
                 $show = true;
                 $halaman = 'surat-masuk';
+            } else if (($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-kelakuan-baik') || $segment == 'surat-keterangan-kelakuan-baik') {
+                $show = true;
+                $halaman = 'surat-keterangan-kelakuan-baik';
             }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi,'show'=>$show]);

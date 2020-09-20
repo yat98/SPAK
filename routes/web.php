@@ -51,9 +51,11 @@ Route::group(['prefix' => 'mahasiswa'],function(){
             Route::post('surat-keterangan-aktif-kuliah','PengajuanSuratKeteranganController@storePengajuanKeteranganAktif');
             // Surat Keterangan Kelakuan Baik
             Route::get('surat-keterangan-kelakuan-baik','PengajuanSuratKeteranganController@indexKelakuanBaikMahasiswa');
+            Route::get('surat-keterangan-kelakuan-baik/all','PengajuanSuratKeteranganController@getAllPengajuanKelakuanBaik');
+            Route::get('surat-keterangan-kelakuan-baik/create','PengajuanSuratKeteranganController@createPengajuanKelakuanBaik');
+            Route::get('surat-keterangan-kelakuan-baik/{pengajuan_surat_keterangan}','PengajuanSuratKeteranganController@show');
             Route::get('surat-keterangan-kelakuan-baik/{pengajuan_surat_keterangan}/progress','SuratKeteranganController@progress');
             Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}/cetak','SuratKeteranganKelakuanBaikController@cetak');
-            Route::get('surat-keterangan-kelakuan-baik/create','PengajuanSuratKeteranganController@createPengajuanKelakuanBaik');
             Route::post('surat-keterangan-kelakuan-baik','PengajuanSuratKeteranganController@storePengajuanKelakuanBaik');
             // Surat Persetujuan Pindah
             Route::get('surat-persetujuan-pindah','PengajuanSuratPersetujuanPindahController@indexMahasiswa');
@@ -129,6 +131,8 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         });
         // Surat Keterangan Aktif Kuliah
         Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@show');
+         // Surat Keterangan Kelakuan Baik
+         Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}','SuratKeteranganController@show');
         //  Surat Dispensasi
         Route::get('surat-dispensasi/{surat_dispensasi}/cetak', 'SuratDispensasiController@cetakSuratDispensasi');
         Route::get('surat-dispensasi/{surat_dispensasi}/progress','SuratDispensasiController@progressPengajuanSuratDispensasi');
@@ -198,6 +202,18 @@ Route::group(['prefix' => 'operator'],function(){
             Route::patch('surat-keterangan-aktif-kuliah/{pengajuan_surat_keterangan}','PengajuanSuratKeteranganController@update');
             Route::post('surat-keterangan-aktif-kuliah','PengajuanSuratKeteranganController@storePengajuanKeteranganAktif');
             Route::delete('surat-keterangan-aktif-kuliah/{pengajuan_surat_keterangan}','PengajuanSuratKeteranganController@destroy');
+            // Surat Keterangan Kelakuan Baik
+            Route::get('surat-keterangan-kelakuan-baik','SuratKeteranganKelakuanBaikController@indexOperator');
+            Route::get('surat-keterangan-kelakuan-baik/create','PengajuanSuratKeteranganController@createPengajuanKelakuanBaikOperator');
+            Route::get('surat-keterangan-kelakuan-baik/all','PengajuanSuratKeteranganController@getAllPengajuanKelakuanBaik');
+            Route::patch('surat-keterangan-kelakuan-baik/tolak-pengajuan/{pengajuan_surat_keterangan}','SuratKeteranganKelakuanBaikController@tolakPengajuan');
+            Route::get('surat-keterangan-kelakuan-baik/{pengajuan_surat_keterangan}','PengajuanSuratKeteranganController@show');
+            Route::get('surat-keterangan-kelakuan-baik/{pengajuan_surat_keterangan}/progress','SuratKeteranganController@progress');
+            Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}/cetak','SuratKeteranganKelakuanBaikController@cetak');
+            Route::get('surat-keterangan-kelakuan-baik/{pengajuan_surat_keterangan}/edit','PengajuanSuratKeteranganController@edit');
+            Route::patch('surat-keterangan-kelakuan-baik/{pengajuan_surat_keterangan}','PengajuanSuratKeteranganController@update');
+            Route::post('surat-keterangan-kelakuan-baik','PengajuanSuratKeteranganController@storePengajuanKelakuanBaik');
+            Route::delete('surat-keterangan-kelakuan-baik/{pengajuan_surat_keterangan}','PengajuanSuratKeteranganController@destroy');
         });
         // Surat Masuk
         Route::get('surat-masuk','SuratMasukController@indexOperator');
@@ -211,6 +227,15 @@ Route::group(['prefix' => 'operator'],function(){
             Route::get('create/{pengajuan_surat_keterangan}','SuratKeteranganAktifKuliahController@createSurat');
             Route::post('/','SuratKeteranganAktifKuliahController@storeSurat');
             Route::patch('tolak-pengajuan/{pengajuan_surat_keterangan}','SuratKeteranganAktifKuliahController@tolakPengajuan');
+        });
+        // Surat Keterangan Kelakuan Baik
+        Route::get('surat-keterangan-kelakuan-baik','SuratKeteranganKelakuanBaikController@indexOperator');
+        Route::get('surat-keterangan-kelakuan-baik/all','SuratKeteranganController@getAllSuratKelakuanBaik');
+        Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}','SuratKeteranganController@show');
+        Route::group(['prefix'=>'surat-keterangan-kelakuan-baik/pengajuan'],function(){
+            Route::get('create/{pengajuan_surat_keterangan}','SuratKeteranganKelakuanBaikController@createSurat');
+            Route::post('/','SuratKeteranganKelakuanBaikController@storeSurat');
+            Route::patch('tolak-pengajuan/{pengajuan_surat_keterangan}','SuratKeteranganKelakuanBaikController@tolakPengajuan');
         });
         // Detail Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
@@ -242,19 +267,17 @@ Route::group(['prefix' => 'pegawai'],function(){
         // Surat Keterangan Aktif Kuliah
         Route::get('surat-keterangan-aktif-kuliah','SuratKeteranganAktifKuliahController@index');
         Route::get('surat-keterangan-aktif-kuliah/all','SuratKeteranganController@getAllSuratKeteranganAktif');
+        Route::patch('surat-keterangan-aktif-kuliah/verifikasi','PengajuanSuratKeteranganController@verification');
+        Route::get('surat-keterangan-aktif-kuliah/verifikasi/all','PengajuanSuratKeteranganController@getAllPengajuanAktif');
         Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@show');
         Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}/cetak','SuratKeteranganAktifKuliahController@cetak');
-        Route::get('surat-keterangan-aktif-kuliah/verifikasi/all','PengajuanSuratKeteranganController@getAllPengajuanAktif');
-        Route::patch('surat-keterangan-aktif-kuliah/verifikasi','PengajuanSuratKeteranganController@verification');
         // Surat Keterangan Kelakuan Baik
-        Route::get('surat-keterangan-kelakuan-baik/search/','SuratKeteranganKelakuanBaikController@search');
-        Route::resource('surat-keterangan-kelakuan-baik','SuratKeteranganKelakuanBaikController')->except('show');
+        Route::get('surat-keterangan-kelakuan-baik','SuratKeteranganKelakuanBaikController@index');
+        Route::get('surat-keterangan-kelakuan-baik/all','SuratKeteranganController@getAllSuratKelakuanBaik');
+        Route::patch('surat-keterangan-kelakuan-baik/verifikasi','PengajuanSuratKeteranganController@verification');
+        Route::get('surat-keterangan-kelakuan-baik/verifikasi/all','PengajuanSuratKeteranganController@getAllPengajuanKelakuanBaik');
         Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}','SuratKeteranganController@show');
-        Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}/cetak','SuratKeteranganKelakuanBaikController@cetak');
-        Route::group(['prefix'=>'surat-keterangan-kelakuan-baik/pengajuan'],function(){
-            Route::post('/','SuratKeteranganKelakuanBaikController@storeSurat');
-            Route::get('create/{pengajuan_surat_keterangan}','SuratKeteranganKelakuanBaikController@createSurat');
-        });
+        Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}/cetak','SuratKeteranganKelakuanBaikController@cetak');   
         // Surat Masuk
         Route::get('surat-masuk/all','SuratMasukController@getAllSuratMasuk');
         Route::resource('surat-masuk','SuratMasukController');
@@ -478,9 +501,14 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@show');
         Route::patch('surat-keterangan-aktif-kuliah/verifikasi','PengajuanSuratKeteranganController@verification'); 
         // Surat Keterangan Kelakuan Baik
-        Route::get('surat-keterangan-kelakuan-baik/search/','SuratKeteranganKelakuanBaikController@search');
-        Route::resource('surat-keterangan-kelakuan-baik','SuratKeteranganKelakuanBaikController')->except(['show','destroy']);
+        Route::get('surat-keterangan-kelakuan-baik','SuratKeteranganKelakuanBaikController@indexPimpinan');
+        Route::get('surat-keterangan-kelakuan-baik/all','SuratKeteranganController@getAllSuratKelakuanBaik');
+        Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}/cetak','SuratKeteranganKelakuanBaikController@cetak');
+        Route::get('surat-keterangan-kelakuan-baik/verifikasi/all','PengajuanSuratKeteranganController@getAllPengajuanKelakuanBaik');
+        Route::get('surat-keterangan-kelakuan-baik/tanda-tangan/all','SuratKeteranganController@getAllTandaTanganKelakuanBaik');
+        Route::post('surat-keterangan-kelakuan-baik/tanda-tangan','SuratKeteranganKelakuanBaikController@tandaTangan');
         Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}','SuratKeteranganController@show');
+        Route::patch('surat-keterangan-kelakuan-baik/verifikasi','PengajuanSuratKeteranganController@verification'); 
         // Surat Dispensasi
         Route::get('surat-dispensasi', 'SuratDispensasiController@indexPimpinan');
         Route::get('surat-dispensasi/search', 'SuratDispensasiController@search');

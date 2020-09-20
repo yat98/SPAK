@@ -11,7 +11,7 @@
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
                             <i class="mdi mdi-file-document-box"></i>
-                        </span>Surat Keterangan Aktif Kuliah</h3>
+                        </span>Surat Keterangan Kelakuan Baik</h3>
                 </div>
                 @if (Session::has('info-badge'))   
                 <div class="row">
@@ -38,9 +38,9 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Tambah Pengajuan Surat Keterangan Aktif Kuliah</h3>
-                                {{ Form::open(['url'=>'mahasiswa/pengajuan/surat-keterangan-aktif-kuliah']) }}
-                                @include('mahasiswa.form_pengajuan_surat_keterangan_aktif_kuliah',['buttonLabel'=>'Tambah'])
+                                <h3 class="mb-5">Edit Pengajuan Surat Keterangan Kelakuan Baik</h3>
+                                {{ Form::model($pengajuanSurat,['method'=>'PATCH','action'=>['PengajuanSuratKeteranganController@update',$pengajuanSurat->id]]) }}
+                                @include('operator.form_pengajuan_surat_keterangan_kelakuan_baik',['buttonLabel'=>'Simpan'])
                                 {{ Form::close() }}
                             </div>
                         </div>

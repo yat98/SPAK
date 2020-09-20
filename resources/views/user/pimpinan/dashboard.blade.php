@@ -500,9 +500,8 @@
                                                     $kode = explode('/',$suratKeterangan->kodeSurat->kode_surat);
                                                 @endphp
                                                 <td> {{ $loop->iteration }}</td>
-                                                <td> {{ 'B/'.$suratKeterangan->nomor_surat.'/'.$kode[0].'.4/'.$kode[1].'/'.$suratKeterangan->created_at->year }}</td>
+                                                <td> {{ 'B/'.$suratKeterangan->nomor_surat.'/'.$suratKeterangan->created_at->year }}</td>
                                                 <td> {{ $suratKeterangan->pengajuanSuratKeterangan->mahasiswa->nama }}</td>
-                                                <td> {{ $suratKeterangan->pengajuanSuratKeterangan->tahunAkademik->tahun_akademik.' - '.ucwords($suratKeterangan->pengajuanSuratKeterangan->tahunAkademik->semester) }}</td>
                                                 <td> 
                                                     <label class="badge badge-gradient-info">
                                                         {{ ucwords($suratKeterangan->status) }}

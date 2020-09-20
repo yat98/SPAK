@@ -72,6 +72,15 @@ class LoginController extends Controller
         if (auth()->guard($guard)->attempt($input)) {
             if($guard == 'user' || $guard == 'operator'){
                 ($guard == 'operator') ? Session::put('jabatan',$user->bagian) : Session::put('jabatan',$user->jabatan);
+
+                if(($user->jabatan == 'kasubag kemahasiswaan' || $user->jabatan == 'kasubag pendidikan dan pengajaran' || $user->jabatan == 'kasubag umum & bmn') && $jenisUser != 'pegawai'){
+                    $this->errorLogin($request);
+                    return redirect('/');
+                }else if(($user->jabatan == 'dekan' || $user->jabatan == 'wd1' || $user->jabatan == 'wd2' ||$user->jabatan == 'wd3' || $user->jabatan == 'kabag tata usaha') && $jenisUser != 'pimpinan'){
+                    $this->errorLogin($request);
+                    return redirect('/');
+                }
+
                 if($user->status_aktif != 'aktif'){
                     $this->errorLogin($request);
                     return redirect('/');

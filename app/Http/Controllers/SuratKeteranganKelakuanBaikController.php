@@ -6,75 +6,71 @@ use PDF;
 use Session;
 use App\User;
 use App\KodeSurat;
+use App\NotifikasiUser;
 use App\SuratKeterangan;
 use App\NotifikasiMahasiswa;
 use Illuminate\Http\Request;
 use App\PengajuanSuratKeterangan;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SuratKeteranganRequest;
 
 class SuratKeteranganKelakuanBaikController extends Controller
 {
     public function index(){
         $perPage = $this->perPage;
-        $mahasiswa = $this->generateMahasiswa();
-        $tahunAkademik = $this->generateAllTahunAkademik();
-        $suratKeteranganList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
-                                        ->orderByDesc('surat_keterangan.updated_at')
-                                        ->where('jenis_surat','surat keterangan kelakuan baik')
-                                        ->paginate($perPage,['*'],'page');
         
-        $pengajuanSuratKeteranganList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
-                                            ->whereNotIn('status',['selesai'])
-                                            ->orderByDesc('created_at')
-                                            ->orderBy('status')
-                                            ->paginate($perPage,['*'],'page_pengajuan');
+        $countAllSurat = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
+                                          ->where('jenis_surat','surat keterangan kelakuan baik')
+                                          ->whereIn('status',['selesai','verifikasi kabag','menunggu tanda tangan'])
+                                          ->count();
         
-        $countAllSuratKeterangan = $suratKeteranganList->count();
-        $countSuratKeterangan = $suratKeteranganList->count();
+        $countAllVerifikasi = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
+                                                        ->where('status','verifikasi kasubag')
+                                                        ->count();
 
-        $countPengajuanSuratKeterangan = $pengajuanSuratKeteranganList->count();
-        $countAllPengajuanSuratKeterangan = $pengajuanSuratKeteranganList->count();
-
-        return view('user.'.$this->segmentUser.'.surat_keterangan_kelakuan_baik',compact('tahunAkademik','suratKeteranganList','countAllSuratKeterangan','countSuratKeterangan','mahasiswa','perPage','countPengajuanSuratKeterangan','pengajuanSuratKeteranganList','countAllPengajuanSuratKeterangan'));
+        return view('user.'.$this->segmentUser.'.surat_keterangan_kelakuan_baik',compact('perPage','countAllSurat','countAllVerifikasi'));
     }
 
-    public function search(Request $request){
-        $keyword = $request->all();
-        if(isset($keyword['tahun_akademik']) || isset($keyword['keywords']) || isset($keyword['nomor_surat'])){
-            $perPage = $this->perPage;
-            $mahasiswa = $this->generateMahasiswa();
-            $tahunAkademik = $this->generateAllTahunAkademik();
-            $nomorSurat = $this->generateNomorSurat('surat keterangan kelakuan baik');
-            $countAllSuratKeterangan = SuratKeterangan::all()->count();
-            $countAllPengajuanSuratKeterangan = $pengajuanSuratKeteranganList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
-                                                    ->whereNotIn('status',['selesai'])
-                                                    ->orderByDesc('created_at')
-                                                    ->orderBy('status')
-                                                    ->count();
-            $suratKeteranganList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
-                                            ->where('jenis_surat','surat keterangan kelakuan baik');
-            (isset($keyword['nomor_surat'])) ? $suratKeteranganList = $suratKeteranganList->where('nomor_surat',$keyword['nomor_surat']):'';
-            (isset($keyword['keywords'])) ? $suratKeteranganList = $suratKeteranganList->where('nim',$keyword['keywords']):'';
-            (isset($keyword['tahun_akademik'])) ? $suratKeteranganList = $suratKeteranganList->where('id_tahun_akademik',$keyword['tahun_akademik']):'';
-            $suratKeteranganList = $suratKeteranganList->paginate($perPage)->appends($request->except('page'));
-            $countSuratKeterangan = $suratKeteranganList->count();
-            if($countSuratKeterangan < 1){
-                $this->setFlashData('search','Hasil Pencarian','Surat keterangan kelakuan baik tidak ditemukan!');
-            }
+    public function indexOperator(){
+        $perPage = $this->perPage;
+                                   
+        $countAllPengajuan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
+                                                       ->whereIn('status',['diajukan','ditolak']);
 
-            $pengajuanSuratKeteranganList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
-                                                    ->whereNotIn('status',['selesai'])
-                                                    ->orderByDesc('created_at')
-                                                    ->orderBy('status')
-                                                    ->paginate($perPage,['*'],'page_pengajuan');
-           
-            $countPengajuanSuratKeterangan = $pengajuanSuratKeteranganList->count();
-
-            return view('user.'.$this->segmentUser.'.surat_keterangan_kelakuan_baik',compact('tahunAkademik','suratKeteranganList','countAllSuratKeterangan','countSuratKeterangan','mahasiswa','perPage','nomorSurat','countPengajuanSuratKeterangan','pengajuanSuratKeteranganList','countAllPengajuanSuratKeterangan'));
-        }else{
-            return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
+        if(Auth::user()->bagian == 'front office'){
+            $countAllPengajuan = $countAllPengajuan->where('id_operator',Auth::user()->id);
         }
+
+        $countAllPengajuan = $countAllPengajuan->count();
+
+        $countAllSurat = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
+                                            ->where('jenis_surat','surat keterangan kelakuan baik')
+                                            ->whereNotIn('status',['diajukan'])
+                                            ->count();
+                                                                         
+        return view($this->segmentUser.'.surat_keterangan_kelakuan_baik',compact('countAllPengajuan','perPage','countAllSurat'));
+    }
+
+    public function indexPimpinan(){
+        $perPage = $this->perPage;
+
+        $countAllVerifikasi = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
+                                            ->where('status','verifikasi kabag')
+                                            ->count();
+                                            
+        $countAllSurat = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
+                                          ->where('jenis_surat','surat keterangan kelakuan baik')
+                                          ->where('status','selesai')
+                                          ->count();
+        
+        $countAllTandaTangan = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
+                                            ->where('jenis_surat','surat keterangan kelakuan baik')
+                                            ->where('status','menunggu tanda tangan')
+                                            ->where('nip',Auth::user()->nip)
+                                            ->count();
+
+        return view('user.pimpinan.surat_keterangan_kelakuan_baik',compact('countAllVerifikasi','perPage','countAllSurat','countAllTandaTangan'));
     }
 
     public function create(){
@@ -86,40 +82,6 @@ class SuratKeteranganKelakuanBaikController extends Controller
         $mahasiswa = $this->generateMahasiswa();
         $tahunAkademik = $this->generateAllTahunAkademik();
         return view('user.'.$this->segmentUser.'.tambah_surat_keterangan_kelakuan_baik',compact('mahasiswa','tahunAkademik','kodeSurat','nomorSuratBaru'));
-    }
-
-    public function store(SuratKeteranganRequest $request){
-        $input = $request->all();
-        $input['nip'] = Session::get('nip');
-
-        DB::beginTransaction();
-        try{
-            $pengajuanSuratKeterangan = PengajuanSuratKeterangan::create($input);
-        }catch(Exception $e){
-            DB::rollback();
-            $this->setFlashData('error','Gagal Menambahkan Data','Pengajuan surat keterangan gagal ditambahkan.');
-        }
-
-        try{
-             $input['id_pengajuan_surat_keterangan'] = $pengajuanSuratKeterangan->id;
-             SuratKeterangan::create($input);
-             $pengajuanSuratKeterangan->update([
-                 'status'=>'selesai'
-             ]);
-             NotifikasiMahasiswa::create([
-                'nim'=>$request->nim,
-                'judul_notifikasi'=>'Surat Keterangan Kelakuan Baik',
-                'isi_notifikasi'=>'Surat keterangan kelakuan baik telah selesai di buat.',
-                'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik')
-            ]);
-        }catch(Exception $e){
-            DB::rollback();
-            $this->setFlashData('error','Gagal Menambahkan Data','Surat keterangan gagal ditambahkan.');
-        }
-
-        DB::commit();
-        $this->setFlashData('success','Berhasil','Surat keterangan kelakuan baik mahasiswa dengan nim '.$input['nim'].' berhasil ditambahkan');
-        return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
     }
 
     public function edit(SuratKeterangan $suratKeterangan){
@@ -160,41 +122,61 @@ class SuratKeteranganKelakuanBaikController extends Controller
     }
 
     public function createSurat(PengajuanSuratKeterangan $pengajuanSuratKeterangan){
-        if(!$this->isKodeSuratAktifExists() || !$this->isKodeSuratExists() || !$this->isTandaTanganExists()){
+        if(!$this->isKodeSuratExists()){
             return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
         }
         $jenisSurat = ucwords($pengajuanSuratKeterangan->jenis_surat);
         $nomorSuratBaru = $this->generateNomorSuratBaru();
-        $userList =$this->generatePimpinan();
-        $kodeSurat = $this->generateKodeSurat();
-        return view('user.pegawai.buat_surat_keterangan',compact('pengajuanSuratKeterangan','jenisSurat','nomorSuratBaru','userList','kodeSurat'));
+        $userList =$this->generateTandaTanganKemahasiswaan();
+        $kodeSurat = KodeSurat::pluck('kode_surat','id');
+        return view('operator.tambah_pengajuan_surat_keterangan',compact('pengajuanSuratKeterangan','jenisSurat','nomorSuratBaru','userList','kodeSurat'));
     }
 
     public function storeSurat(Request $request){
         $this->validate($request,[
-            'id_pengajuan_surat_keterangan'=>'required',
+            'id_pengajuan'=>'required',
+            'id_operator'=>'required',
             'id_kode_surat'=>'required',
-            'nomor_surat'=>'required|numeric|min:1|unique:surat_kegiatan_mahasiswa,nomor_surat|unique:surat_pengantar_beasiswa,nomor_surat|unique:surat_pengantar_cuti,nomor_surat|unique:surat_persetujuan_pindah,nomor_surat|unique:surat_rekomendasi,nomor_surat|unique:surat_tugas,nomor_surat|unique:surat_dispensasi,nomor_surat|unique:surat_keterangan,nomor_surat',
+            'nomor_surat'=>'required|numeric|min:1|unique:surat_kegiatan_mahasiswa,nomor_surat|unique:surat_pengantar_beasiswa,nomor_surat|unique:surat_pengantar_cuti,nomor_surat|unique:surat_persetujuan_pindah,nomor_surat|unique:surat_rekomendasi,nomor_surat|unique:surat_tugas,nomor_surat|unique:surat_dispensasi,nomor_surat|unique:surat_keterangan,nomor_surat|unique:surat_keterangan_lulus,nomor_surat|unique:surat_permohonan_pengambilan_material,nomor_surat|unique:surat_permohonan_survei,nomor_surat|unique:surat_rekomendasi_penelitian,nomor_surat|unique:surat_permohonan_pengambilan_data_awal,nomor_surat',
             'nip'=>'required',
         ]);
 
-        $pengajuanSuratKeterangan = PengajuanSuratKeterangan::findOrFail($request->id_pengajuan_surat_keterangan);
-        $input = [
-            'id_pengajuan_surat_keterangan'=>$pengajuanSuratKeterangan->id,
-            'nomor_surat'=>$request->nomor_surat,
-            'id_kode_surat'=>$request->id_kode_surat,
-            'nip' => $request->nip,
-        ];
-        SuratKeterangan::create($input);
-        $pengajuanSuratKeterangan->update([
-            'status'=>'selesai'
-        ]);
-        NotifikasiMahasiswa::create([
-            'nim'=>$pengajuanSuratKeterangan->nim,
-            'judul_notifikasi'=>'Surat Keterangan Kelakuan Baik',
-            'isi_notifikasi'=>'Surat keterangan kelakuan baik telah selesai di buat.',
-            'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik')
-        ]);
+        $pengajuanSuratKeterangan = PengajuanSuratKeterangan::findOrFail($request->id_pengajuan);
+
+        $user = User::where('status_aktif','aktif')
+                      ->where('jabatan','kasubag kemahasiswaan')
+                      ->first();
+
+        $input = $request->all();
+        $input['id_pengajuan'] = $pengajuanSuratKeterangan->id;
+        
+        DB::beginTransaction();
+        try{
+            SuratKeterangan::create($input);
+
+            $pengajuanSuratKeterangan->update([
+                'status'=>'verifikasi kasubag'
+            ]);
+
+            NotifikasiMahasiswa::create([
+                'nim'=>$pengajuanSuratKeterangan->nim,
+                'judul_notifikasi'=>'Surat Keterangan Kelakuan Baik',
+                'isi_notifikasi'=>'Surat keterangan kelakuan baik telah selesai di buat.',
+                'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik')
+            ]);
+
+            NotifikasiUser::create([
+                'nip'=>$user->nip,
+                'judul_notifikasi'=>'Surat Keterangan Kelakuan Baik',
+                'isi_notifikasi'=>'Verifikasi surat keterangan kelakuan baik mahasiswa dengan nama '.$pengajuanSuratKeterangan->mahasiswa->nama,
+                'link_notifikasi'=>url('pegawai/surat-keterangan-kelakuan-baik')
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Gagal Mengubah Data','Surat keterangan kelakuan baik gagal ditambahkan.');
+        }
+
+        DB::commit();
         $this->setFlashData('success','Berhasil','Surat keterangan kelakuan baik mahasiswa dengan nama '.$pengajuanSuratKeterangan->mahasiswa->nama.' berhasil ditambahkan');
         return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
     }
@@ -223,20 +205,55 @@ class SuratKeteranganKelakuanBaikController extends Controller
     }
 
     public function cetak(SuratKeterangan $suratKeterangan){
-        $data = $suratKeterangan->pengajuanSuratKeterangan->nim.' - '.$suratKeterangan->pengajuanSuratKeterangan->mahasiswa->nama.' - '.$suratKeterangan->pengajuanSuratKeterangan->mahasiswa->prodi->nama_prodi;
-        $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",5,5);
-        if(Session::has('nim')){
+        if(isset(Auth::user()->nim)){
+            if(Auth::user()->nim != $suratKeterangan->pengajuanSuratKeterangan->nim){
+                abort(404);
+            }
+
             if($suratKeterangan->jumlah_cetak >= 3){
-                $this->setFlashData('info','Cetak Surat Keterangan','Anda telah mencetak surat keterangan kelakuan baik sebanyak 3 kali.');
-                return redirect('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik');
+                $this->setFlashData('info','Cetak Surat','Anda telah mencetak surat keterangan aktif kuliah sebanyak 3 kali.');
+                return redirect('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah');
             }
         }
+
+        $data = $suratKeterangan->pengajuanSuratKeterangan->nim.' - '.$suratKeterangan->pengajuanSuratKeterangan->mahasiswa->nama.' - '.$suratKeterangan->pengajuanSuratKeterangan->mahasiswa->prodi->nama_prodi;
+        $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",5,5);
+        
         $jumlahCetak = ++$suratKeterangan->jumlah_cetak;
-        $suratKeterangan->update([
-            'jumlah_cetak'=>$jumlahCetak
-        ]);
+
+        if(isset(Auth::user()->id) || isset(Auth::user()->nim)){
+            if(Auth::user()->bagian == 'front office' || isset(Auth::user()->nim)){
+                $suratKeterangan->update([
+                    'jumlah_cetak'=>$jumlahCetak
+                ]);
+            }
+               
+        }
+
         $pdf = PDF::loadview('surat.surat_keterangan_kelakuan_baik',compact('suratKeterangan','qrCode'))->setPaper('a4', 'potrait');
         return $pdf->stream($suratKeterangan->pengajuanSuratKeterangan->mahasiswa->nama.' - '.$suratKeterangan->created_at->format('dmY-Him').'.pdf');
+    }
+
+    public function tandaTangan(Request $request){
+        if(!$this->isTandaTanganExists()){
+            return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
+        }
+
+        $suratKeterangan = SuratKeterangan::findOrFail($request->id);
+        
+        $suratKeterangan->pengajuanSuratKeterangan->update([
+            'status'=>'selesai',
+        ]);
+
+        NotifikasiMahasiswa::create([
+            'nim'=>$suratKeterangan->pengajuanSuratKeterangan->nim,
+            'judul_notifikasi'=>'Surat Keterangan Kelakuan Baik',
+            'isi_notifikasi'=>'Surat keterangan kelakuan baik telah di tanda tangani.',
+            'link_notifikasi'=>url('mahasiswa/surat-keterangan-kelakuan-baik')
+        ]);
+
+        $this->setFlashData('success','Berhasil','Tanda tangan surat keterangan kelakuan baik berhasil');
+        return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
     }
 
     private function isKodeSuratAktifExists(){
@@ -246,21 +263,5 @@ class SuratKeteranganKelakuanBaikController extends Controller
             return false;
         }
         return true;
-    }
-
-    private function generateKodeSurat(){
-        $kode = [];
-        $kodeSuratList = KodeSurat::where('jenis_surat','surat keterangan')->where('status_aktif','aktif')->get();
-        foreach ($kodeSuratList as $kodeSurat) {
-            $kode[$kodeSurat->id] = $kodeSurat->kode_surat;
-        }
-        return $kode;
-    }
-
-    private function generatePimpinan(){
-        $user = [];
-        $pimpinan = User::where('jabatan','kasubag kemahasiswaan')->where('status_aktif','aktif')->first();
-        $user[$pimpinan->nip] = strtoupper($pimpinan->jabatan).' - '.$pimpinan->nama;
-        return $user;
     }
 }

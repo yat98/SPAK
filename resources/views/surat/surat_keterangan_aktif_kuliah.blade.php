@@ -82,7 +82,7 @@
         <div class="border"></div>
         <div class="text-center mt-3">
             <p class="m-0"><b><span class="underline">SURAT KETERANGAN AKTIF KULIAH</span></b></p>
-            <p class="m-0"><b><i>Nomor: <span style="display:inline-block;width:20px;height:auto"></span>/{{$suratKeterangan->nomor_surat}}/{{$suratKeterangan->kodeSurat->kode_surat}}<span style="display:inline-block;width:20px;height:auto"></span>/{{$suratKeterangan->created_at->year}}</i></b></p>
+            <p class="m-0"><b><i>Nomor: <span style="display:inline-block;width:20px;height:auto"></span>{{$suratKeterangan->nomor_surat}}/{{$suratKeterangan->kodeSurat->kode_surat}}<span style="display:inline-block;width:20px;height:auto"></span>/<span style="display:inline-block;width:50px;height:auto"></span>/{{$suratKeterangan->created_at->year}}</i></b></p>
         </div>
         <div class="content">
             <p class="m-0">Yang bertanda tangan dibawah ini Dekan Fakultas Teknik Universitas Negeri Gorontalo dengan ini menerangkan kepada :</p>
@@ -121,7 +121,6 @@
                     @endif
                 @endif
 
-              
                 <p class="m-0 tanda-tangan-margin">
                     @if($suratKeterangan->pengajuanSuratKeterangan->status == 'selesai')
                         <img class="tanda-tangan" src="{{$suratKeterangan->user->tanda_tangan}}">
@@ -130,7 +129,7 @@
                     @endif
                 </p>
                 <p class="m-0"><b>{{$suratKeterangan->user->nama}}</b></p>
-                <p class="m-0"><b>NIP. {{substr($suratKeterangan->user->nip,0,8)}} {{substr($suratKeterangan->user->nip,8,6)}} {{substr($suratKeterangan->user->nip,14,1)}} {{substr($suratKeterangan->user->nip,15,3)}}</b></p>
+                <p class="m-0"><b>NIP. {{$suratKeterangan->user->nip}}</b></p>
             </div>
         </div>
         <div class="content" style="padding-top:105px">

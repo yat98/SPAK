@@ -19,11 +19,11 @@
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Pengajuan Surat Keterangan Aktif Kuliah<i
+                                <h4 class="font-weight-normal mb-3">Surat Keterangan Aktif Kuliah<i
                                         class="mdi mdi-file-document-box mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllPengajuan > 0 ? $countAllPengajuan.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
+                                    {{ $countAllPengajuan > 0 ? $countAllPengajuan.' Surat' : 'Data Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -36,7 +36,7 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Pengajuan Surat Keterangan Aktif Kuliah</h4>
+                                        <h4>Surat Keterangan Aktif Kuliah</h4>
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
                                         <a href="{{ url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah/create')}}"
@@ -51,12 +51,12 @@
                                     <table class="table display no-warp" id='datatables' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> Nama </th>
-                                                <th> Jenis Surat</th>
+                                                <th data-priority="1"> Nama </th>
+                                                <th> Tahun Akademik</th>
                                                 <th> Status</th>
                                                 <th> Waktu Pengajuan</th>
                                                 <th> Keterangan</th>
-                                                <th> Aksi</th>
+                                                <th data-priority="2"> Aksi</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -66,10 +66,10 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Surat Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Pengajuan surat keterangan aktif kuliah belum ada.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Data surat keterangan aktif kuliah belum ada.' }}
                                         </p>
                                     </div>
                                 </div>

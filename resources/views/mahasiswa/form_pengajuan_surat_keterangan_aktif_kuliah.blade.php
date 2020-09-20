@@ -42,10 +42,6 @@
             @endif
         </div>
         <div class="form-group">
-            {{ Form::label('jenis_surat','Jenis Surat') }}
-            {{ Form::select('jenis_surat',['surat keterangan aktif kuliah'=>'Surat Keterangan Aktif Kuliah'],null,['class'=>'form-control form-control-lg','id'=>'semester','readonly'=>'readonly']) }}
-        </div>
-        <div class="form-group">
             {{ Form::submit($buttonLabel,['class'=>'btn btn-info btn-sm font-weight-medium auth-form-btn']) }}
             <input type="reset" value="Reset" class="btn btn-danger btn-sm">
         </div>

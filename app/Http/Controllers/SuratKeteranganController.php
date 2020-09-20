@@ -42,22 +42,19 @@ class SuratKeteranganController extends Controller
     }
 
     public function getAllSuratKeteranganAktif(){
-        $suratKeterangan = SuratKeterangan::join('pengajuan_surat_keterangan','pengajuan_surat_keterangan.id','=','surat_keterangan.id_pengajuan')
-                                    ->join('mahasiswa','pengajuan_surat_keterangan.nim','=','mahasiswa.nim')
+        $suratKeterangan = PengajuanSuratKeterangan::join('surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
                                     ->join('tahun_akademik','pengajuan_surat_keterangan.id_tahun_akademik','=','tahun_akademik.id')
-                                    ->join('kode_surat','surat_keterangan.id_kode_surat','=','kode_surat.id')
                                     ->where('pengajuan_surat_keterangan.jenis_surat','surat keterangan aktif kuliah')
-                                    ->select('surat_keterangan.*','mahasiswa.nim','mahasiswa.nama','pengajuan_surat_keterangan.status','tahun_akademik.*','kode_surat.*');
-
+                                    ->select('surat_keterangan.nomor_surat','pengajuan_surat_keterangan.*','tahun_akademik.semester')
+                                    ->with(['mahasiswa','suratKeterangan.kodeSurat','tahunAkademik']);
+                                    
         if(isset(Auth::user()->id)){
             $suratKeterangan = $suratKeterangan->whereNotIn('pengajuan_surat_keterangan.status',['diajukan']);
         }else if(isset(Auth::user()->nip)){
             if(Auth::user()->jabatan == 'kasubag kemahasiswaan'){
-                $suratKeterangan = $suratKeterangan->whereIn('pengajuan_surat_keterangan.status',['selesai','verifikasi kabag','menunggu tanda tangan']);
-            } elseif(Auth::user()->jabatan == 'kabag tata usaha'){
-                $suratKeterangan = $suratKeterangan->whereIn('pengajuan_surat_keterangan.status',['selesai','menunggu tanda tangan']);
+                $suratKeterangan = $suratKeterangan->whereIn('status',['selesai','verifikasi kabag','menunggu tanda tangan']);
             } else{
-                $suratKeterangan = $suratKeterangan->whereIn('pengajuan_surat_keterangan.status',['selesai']);
+                $suratKeterangan = $suratKeterangan->where('status','selesai');
             }
         }
         
@@ -65,34 +62,68 @@ class SuratKeteranganController extends Controller
                         ->addColumn('aksi', function ($data) {
                             return $data->id;
                         })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->editColumn("semester", function ($data) {
+                            return ucwords($data->semester);
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->make(true);
+    }
+
+    public function getAllSuratKelakuanBaik(){
+        $suratKeterangan = PengajuanSuratKeterangan::join('surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
+                                    ->where('pengajuan_surat_keterangan.jenis_surat','surat keterangan kelakuan baik')
+                                    ->select('surat_keterangan.nomor_surat','pengajuan_surat_keterangan.*')
+                                    ->with(['mahasiswa','suratKeterangan.kodeSurat']);
+
+        if(isset(Auth::user()->id)){
+            $suratKeterangan = $suratKeterangan->whereNotIn('pengajuan_surat_keterangan.status',['diajukan']);
+        }else if(isset(Auth::user()->nip)){
+            if(Auth::user()->jabatan == 'kasubag kemahasiswaan'){
+                $suratKeterangan = $suratKeterangan->whereIn('pengajuan_surat_keterangan.status',['selesai','verifikasi kabag','menunggu tanda tangan']);
+            } else{
+                $suratKeterangan = $suratKeterangan->where('pengajuan_surat_keterangan.status','selesai');
+            }
+        }
+        
+        return DataTables::of($suratKeterangan)
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();
+                        })
                         ->editColumn("status", function ($data) {
                             return ucwords($data->status);
                         })
                         ->editColumn("created_at", function ($data) {
                             return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
                         })
-                        ->editColumn("nama", function ($data) {
-                            return ucwords($data->nama);
-                        })
-                        ->editColumn("semester", function ($data) {
-                            return ucwords($data->semester);
-                        })
                         ->make(true);
     }
 
     public function getAllTandaTanganKeteranganAktif(){
-        $suratKeterangan = SuratKeterangan::join('pengajuan_surat_keterangan','pengajuan_surat_keterangan.id','=','surat_keterangan.id_pengajuan')
-                                    ->join('mahasiswa','pengajuan_surat_keterangan.nim','=','mahasiswa.nim')
+        $suratKeterangan =  PengajuanSuratKeterangan::join('surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
                                     ->join('tahun_akademik','pengajuan_surat_keterangan.id_tahun_akademik','=','tahun_akademik.id')
-                                    ->join('kode_surat','surat_keterangan.id_kode_surat','=','kode_surat.id')
-                                    ->where('pengajuan_surat_keterangan.jenis_surat','surat keterangan aktif kuliah')
-                                    ->select('surat_keterangan.*','mahasiswa.nim','mahasiswa.nama','pengajuan_surat_keterangan.status','tahun_akademik.*','kode_surat.*')
-                                    ->where('pengajuan_surat_keterangan.status','menunggu tanda tangan')
-                                    ->where('surat_keterangan.nip',Auth::user()->nip);
+                                    ->where('jenis_surat','surat keterangan aktif kuliah')
+                                    ->where('status','menunggu tanda tangan')
+                                    ->where('surat_keterangan.nip',Auth::user()->nip)
+                                    ->select('surat_keterangan.nomor_surat','pengajuan_surat_keterangan.*','tahun_akademik.semester')
+                                    ->with(['mahasiswa','suratKeterangan.kodeSurat','tahunAkademik']);
                                     
         return DataTables::of($suratKeterangan)
                                     ->addColumn('aksi', function ($data) {
                                         return $data->id;
+                                    })
+                                      ->addColumn('waktu_pengajuan', function ($data) {
+                                        return $data->created_at->diffForHumans();
                                     })
                                     ->editColumn("status", function ($data) {
                                         return ucwords($data->status);
@@ -100,11 +131,32 @@ class SuratKeteranganController extends Controller
                                     ->editColumn("created_at", function ($data) {
                                         return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
                                     })
-                                    ->editColumn("nama", function ($data) {
-                                        return ucwords($data->nama);
-                                    })
                                     ->editColumn("semester", function ($data) {
                                         return ucwords($data->semester);
+                                    })
+                                    ->make(true);                            
+    }
+
+    public function getAllTandaTanganKelakuanBaik(){
+        $suratKeterangan =  PengajuanSuratKeterangan::join('surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
+                                    ->where('pengajuan_surat_keterangan.jenis_surat','surat keterangan kelakuan baik')
+                                    ->where('status','menunggu tanda tangan')
+                                    ->where('surat_keterangan.nip',Auth::user()->nip)
+                                    ->select('surat_keterangan.nomor_surat','pengajuan_surat_keterangan.*')
+                                    ->with(['mahasiswa','suratKeterangan.kodeSurat']);
+                                    
+        return DataTables::of($suratKeterangan)
+                                    ->addColumn('aksi', function ($data) {
+                                        return $data->id;
+                                    })
+                                      ->addColumn('waktu_pengajuan', function ($data) {
+                                        return $data->created_at->diffForHumans();
+                                    })
+                                    ->editColumn("status", function ($data) {
+                                        return ucwords($data->status);
+                                    })
+                                    ->editColumn("created_at", function ($data) {
+                                        return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
                                     })
                                     ->make(true);                            
     }

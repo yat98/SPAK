@@ -115,8 +115,9 @@
                                             <tr>
                                                 <th data-priority="1"> Nama</th>
                                                 <th> Nomor Surat</th>
-                                                <th> Semester</th>
+                                                <th> Tahun Akademik</th>
                                                 <th data-priority="2"> Status</th>
+                                                <th> Waktu Pengajuan</th>
                                                 <th data-priority="3"> Aksi</th>
                                             </tr>
                                         </thead>
@@ -149,7 +150,7 @@
     </div>
 </div>
 
-@if(Auth::user()->bagian == 'front-office')
+@if(Auth::user()->bagian == 'front office')
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
@@ -374,26 +375,26 @@
             responsive: true,
             columnDefs: [{
                             "targets": 0,
-                            "data": "nama",
+                            "data": "mahasiswa.nama",
                             "render": function ( data, type, row, meta ) {
-                                return `<a href="${linkMhs}/${row.nim}" class="btn-detail text-dark" data-toggle="modal" data-target="#mahasiswa">
-                                            <div class="mb-1">${row.nama}</div>
-                                            <span class="text-muted small">NIM. ${row.nim}</span>
+                                return `<a href="${linkMhs}/${row.mahasiswa.nim}" class="btn-detail text-dark" data-toggle="modal" data-target="#mahasiswa">
+                                            <div class="mb-1">${row.mahasiswa.nama}</div>
+                                            <span class="text-muted small">NIM. ${row.mahasiswa.nim}</span>
                                         </a>`;
                             }
                         },
                         {
                             "targets": 1,
-                            "data": "nomor_surat",
+                            "data": "surat_keterangan.nomor_surat",
                             "render": function ( data, type, row, meta ) {
-                                return `${row.nomor_surat}/${row.kode_surat}`;
+                                return `${row.surat_keterangan.nomor_surat}/${row.surat_keterangan.kode_surat.kode_surat}`;
                             }
                         },
                         {
                             "targets": 2,
                             "data": "tahun_akademik",
                             "render": function ( data, type, row, meta ) {
-                                return `${row.tahun_akademik} - ${row.semester}`;
+                                return `${row.tahun_akademik.tahun_akademik} - ${row.semester}`;
                             }
                         },
                         {
@@ -417,6 +418,13 @@
                         },
                         {
                             "targets": 4,
+                            "data": "created_at",
+                            "render": function ( data, type, row, meta ) {
+                                return row.waktu_pengajuan;
+                            }
+                        },
+                        {
+                            "targets": 5,
                             "data": "aksi",
                             "render": function ( data, type, row, meta ) {
                                 <?php if(Auth::user()->bagian != 'front office'){ ?>
@@ -425,17 +433,17 @@
                                                     <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
                                                 </a>
                                                 <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
-                                                    <a href="${linkOperator+'/'+row.id_pengajuan}" class="dropdown-item btn-surat-detail" data-toggle="modal" data-target="#suratKeteranganDetail">
+                                                    <a href="${linkOperator+'/'+row.id}" class="dropdown-item btn-surat-detail" data-toggle="modal" data-target="#suratKeteranganDetail">
                                                             Detail</a>
-                                                    <a href="${link+'/'+row.id_pengajuan+'/cetak'}" class="dropdown-item">Cetak</a>
+                                                    <a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
                                                 </div>
                                             </div>`;
                                 <?php }else{ ?>
-                                    let action = `<a href="${linkOperator+'/'+row.id_pengajuan}" class="dropdown-item btn-surat-detail" data-toggle="modal" data-target="#suratKeteranganDetail">
+                                    let action = `<a href="${linkOperator+'/'+row.id}" class="dropdown-item btn-surat-detail" data-toggle="modal" data-target="#suratKeteranganDetail">
                                                     Detail</a>`;
 
                                     if(row.status == 'Selesai'){
-                                        action += `<a href="${link+'/'+row.id_pengajuan+'/cetak'}" class="dropdown-item">Cetak</a>`;
+                                        action += `<a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
                                     }
                                     
                                     return `<div class="d-inline-block">
@@ -450,7 +458,7 @@
                             },
                         },
                         {
-                            "targets": [5,6],
+                            "targets": [6,7],
                             "visible": false,
                         }
             ],
@@ -460,25 +468,28 @@
             serverSide: true,
             ajax: '{{ url('operator/surat-keterangan-aktif-kuliah/all') }}',
             columns: [{
-                    data: 'nama',
+                    data: 'mahasiswa.nama',
                 },
                 {
-                    data: 'nomor_surat',
+                    data: 'surat_keterangan.nomor_surat',
                 },
                 {
-                    data: 'tahun_akademik',
+                    data: 'tahun_akademik.tahun_akademik',
                 },
                 {
                     data: 'status',
+                },
+                 {
+                    data: 'created_at',
                 },
                 {
                     data: 'aksi', name: 'aksi', orderable: false, searchable: false
                 },
                 {
-                    data: 'nim',
+                    data: 'mahasiswa.nim',
                 }, 
                 {
-                    data: 'semester',
+                    data: 'tahun_akademik.semester',
                 },
             ],
             "pageLength": {{ $perPage }},

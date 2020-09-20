@@ -27,13 +27,13 @@ class SuratKeteranganAktifKuliahController extends Controller
         $perPage = $this->perPage;
 
         $countAllVerifikasi = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
-                                                ->where('status','verifikasi kasubag')
-                                                ->count();
+                                                        ->where('status','verifikasi kasubag')
+                                                        ->count();
 
         $countAllSurat = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
-                                                ->where('jenis_surat','surat keterangan aktif kuliah')
-                                                ->whereIn('status',['selesai','verifikasi kabag','menunggu tanda tangan'])
-                                                ->count();
+                                          ->where('jenis_surat','surat keterangan aktif kuliah')
+                                          ->whereIn('status',['selesai','verifikasi kabag','menunggu tanda tangan'])
+                                          ->count();
 
         return view('user.'.$this->segmentUser.'.surat_keterangan_aktif_kuliah',compact('countAllSurat','perPage','countAllVerifikasi'));
     }
@@ -41,13 +41,11 @@ class SuratKeteranganAktifKuliahController extends Controller
     public function indexOperator(){
         $perPage = $this->perPage;
                                    
-        $countAllPengajuan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah');
+        $countAllPengajuan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
+                                                       ->whereIn('status',['diajukan','ditolak']);
 
         if(Auth::user()->bagian == 'front office'){
-            $countAllPengajuan = $countAllPengajuan->where('status','diajukan')
-                                                   ->where('id_operator',Auth::user()->id);
-        }elseif(Auth::user()->bagian == 'subbagian kemahasiswaan'){
-            $countAllPengajuan = $countAllPengajuan->whereIn('status',['diajukan','ditolak']);
+            $countAllPengajuan = $countAllPengajuan->where('id_operator',Auth::user()->id);                             
         }
 
         $countAllPengajuan = $countAllPengajuan->count();
@@ -69,7 +67,7 @@ class SuratKeteranganAktifKuliahController extends Controller
 
         $countAllSurat = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
                                             ->where('jenis_surat','surat keterangan aktif kuliah')
-                                            ->whereIn('status',['selesai','menunggu tanda tangan'])
+                                            ->where('status','selesai')
                                             ->count();
         
         $countAllTandaTangan = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
