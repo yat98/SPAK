@@ -9,7 +9,7 @@ class TahapanKegiatanDispensasi extends Model
     protected $table = 'tahapan_kegiatan_dispensasi';
 
     protected $fillable = [
-        'id_surat_dispensasi',
+        'id_pengajuan',
         'tahapan_kegiatan',
         'tempat_kegiatan',
         'tanggal_awal_kegiatan',
@@ -21,7 +21,7 @@ class TahapanKegiatanDispensasi extends Model
         'tanggal_akhir_kegiatan',
     ];
 
-    public function suratDispensasi(){
-        return $this->belongsTo('App\SuratDispensasi','id_surat_dispensasi');
+    public function pengajuanSuratDispensasi(){
+        return $this->belongsTo('App\PengajuanSuratDispensasi','id_pengajuan');
     }
 }

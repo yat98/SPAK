@@ -68,8 +68,8 @@ class Mahasiswa extends Authenticable
         return $this->hasMany('App\StatusMahasiswa','nim');
     }
 
-    public function suratDispensasi(){
-        return $this->belongsToMany('App\SuratDispensasi','daftar_dispensasi_mahasiswa','id_surat_dispensasi','nim')->withTimeStamps();
+    public function pengajuanSuratDispensasi(){
+        return $this->belongsToMany('App\PengajuanSuratDispensasi','daftar_dispensasi_mahasiswa','id_pengajuan','nim')->withTimeStamps();
     }
 
     public function suratRekomendasi(){

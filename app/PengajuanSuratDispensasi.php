@@ -12,28 +12,29 @@ class PengajuanSuratDispensasi extends Model
 
     protected $fillable = [
         'id_surat_masuk',
-        'nip',
+        'id_operator',
+        'nama_kegiatan',
         'status',
         'keterangan',
     ];
 
     public function suratDispensasi(){
-        return $this->hasOne('App\SuratDispensasi','id_pengajuan_dispensasi');
+        return $this->hasOne('App\SuratDispensasi','id_pengajuan');
     }
 
     public function suratMasuk(){
-        return $this->belongsTo('App\SuratMasuk','id_surat_masuk');
+        return $this->belongsTo('App\SuratMasuk', 'id_surat_masuk');
     }
 
-    public function user(){
-        return $this->belongsTo('App\User','nip');
+    public function operator(){
+        return $this->belongsTo('App\Operator', 'id_operator');
     }
 
     public function mahasiswa(){
-        return $this->belongsToMany('App\Mahasiswa','daftar_dispensasi_mahasiswa','id_pengajuan_dispensasi','nim')->withTimeStamps();
+        return $this->belongsToMany('App\Mahasiswa','daftar_dispensasi_mahasiswa','id_pengajuan','nim')->withTimeStamps();
     }
 
-    public function tahapanKegiatanMahasiswa(){
-        return $this->hasOne('App\TahapanKegiatanDispensasi','id_pengajuan_dispensasi');
+    public function tahapanKegiatanDispensasi(){
+        return $this->hasMany('App\TahapanKegiatanDispensasi','id_pengajuan');
     }
 }

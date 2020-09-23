@@ -177,7 +177,7 @@ class UserController extends Controller
                                         ->orderByDesc('surat_keterangan.updated_at')
                                         ->where('jenis_surat','surat keterangan kelakuan baik')
                                         ->get();
-        $suratDispensasiList = SuratDispensasi::orderBy('status')->get();
+        $suratDispensasiList = SuratDispensasi::all();
         $suratRekomendasiList = SuratRekomendasi::orderBy('status')->get();
         $suratTugasList = SuratTugas::orderBy('status')->get();
         $suratPersetujuanPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan')
@@ -285,7 +285,7 @@ class UserController extends Controller
                                         ->orderByDesc('surat_keterangan.updated_at')
                                         ->where('jenis_surat','surat keterangan kelakuan baik')
                                         ->get();
-        $suratDispensasiList = SuratDispensasi::orderByDesc('created_at')->where('status','selesai')->get();
+        $suratDispensasiList = SuratDispensasi::all();
         $suratRekomendasiList = SuratRekomendasi::orderByDesc('created_at')->where('status','selesai')->get();
         $suratTugasList = SuratTugas::orderByDesc('created_at')->where('status','selesai')->get();
         $suratPersetujuanPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan')
@@ -363,11 +363,7 @@ class UserController extends Controller
                                                 ->whereYear('surat_keterangan.created_at',$thn)
                                                 ->whereMonth('surat_keterangan.created_at',$bln)
                                                 ->count(),
-            'Surat Dispensasi'=>SuratDispensasi::orderByDesc('created_at')
-                                                ->where('status','selesai')
-                                                ->whereYear('created_at',$thn)
-                                                ->whereMonth('created_at',$bln)
-                                                ->count(),
+            'Surat Dispensasi'=>SuratDispensasi::count(),
             'Surat Pengantar Cuti'=>SuratPengantarCuti::orderByDesc('nomor_surat')
                                         ->whereYear('created_at',$thn)
                                         ->whereMonth('created_at',$bln)

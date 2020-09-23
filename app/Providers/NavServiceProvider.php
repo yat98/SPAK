@@ -67,7 +67,7 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-keterangan-aktif-kuliah';
             } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-kelakuan-baik') {
                 $halaman = 'surat-keterangan-kelakuan-baik';
-            } else if ($segment == 'surat-dispensasi') {
+            } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-dispensasi') {
                 $halaman = 'surat-dispensasi';
             } else if ($segment == 'surat-rekomendasi') {
                 $halaman = 'surat-rekomendasi';
@@ -210,6 +210,9 @@ class NavServiceProvider extends ServiceProvider
             } else if (($segment == 'pengajuan' && request()->segment(3) == 'surat-keterangan-kelakuan-baik') || $segment == 'surat-keterangan-kelakuan-baik') {
                 $show = true;
                 $halaman = 'surat-keterangan-kelakuan-baik';
+            } else if (($segment == 'pengajuan' && request()->segment(3) == 'surat-dispensasi') || $segment == 'surat-dispensasi') {
+                $show = true;
+                $halaman = 'surat-dispensasi';
             }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi,'show'=>$show]);

@@ -325,11 +325,7 @@ class MahasiswaController extends Controller
                                                ->orderByDesc('created_at')
                                                ->orderBy('status')
                                                ->get();
-        $suratDispensasiList = SuratDispensasi::join('daftar_dispensasi_mahasiswa','daftar_dispensasi_mahasiswa.id_surat_dispensasi','=','surat_dispensasi.id_surat_masuk')
-                                               ->select('*','surat_dispensasi.created_at','surat_dispensasi.updated_at')                                                                       
-                                               ->where('nim',Auth::user()->nim)
-                                               ->orderByDesc('surat_dispensasi.created_at')
-                                               ->get();
+        $suratDispensasiList = [];
         $suratRekomendasiList = SuratRekomendasi::join('daftar_rekomendasi_mahasiswa','daftar_rekomendasi_mahasiswa.id_surat_rekomendasi','=','surat_rekomendasi.id')
                                                ->where('nim',Auth::user()->nim)
                                                ->orderByDesc('surat_rekomendasi.created_at')
@@ -362,7 +358,7 @@ class MahasiswaController extends Controller
         $countAllPengajuan =    $pengajuanSuratKeteranganAktifList->count();
         $countAllPengajuanBaik =    $pengajuanSuratKeteranganList->count();
         $countAllPengajuanPindah =    $pengajuanSuratPindahList->count();
-        $countAllDispensasi =    $suratDispensasiList->count();
+        $countAllDispensasi =    0;
         $countAllSuratRekomendasi =    $suratRekomendasiList->count();
         $countAllSuratTugas =    $suratTugasList->count();
         $countAllPengajuanKegiatan = ($pengajuanKegiatanList != null) ? $pengajuanKegiatanList->count() : 0;
@@ -376,7 +372,7 @@ class MahasiswaController extends Controller
         $pengajuanSuratKeteranganAktifList = $pengajuanSuratKeteranganAktifList->take(5);
         $pengajuanSuratKeteranganList = $pengajuanSuratKeteranganList->take(5);
         $pengajuanSuratPindahList = $pengajuanSuratPindahList->take(5);
-        $suratDispensasiList = $suratDispensasiList->take(5);
+        $suratDispensasiList = [];
         $suratRekomendasiList = $suratRekomendasiList->take(5);
         $suratTugasList = $suratTugasList->take(5);
         $pengajuanKegiatanList =  ($pengajuanKegiatanList != null) ? $pengajuanKegiatanList->take(5) : null;

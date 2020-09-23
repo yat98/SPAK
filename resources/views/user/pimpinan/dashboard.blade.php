@@ -554,32 +554,6 @@
                                                 <th> Di Ubah</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($suratDispensasiList as $suratDispensasi)
-                                             @php
-                                                $kode = explode('/',$suratDispensasi->kodeSurat->kode_surat);
-                                            @endphp
-                                            <tr>
-                                                <td> {{ $loop->iteration }}</td>
-                                                @if($suratDispensasi->user->jabatan == 'dekan')
-                                                    <td> {{ $suratDispensasi->nomor_surat.'/'.$suratDispensasi->kodeSurat->kode_surat.'/'.$suratDispensasi->created_at->format('Y') }}</td>
-                                                @else
-                                                    <td> {{ $suratDispensasi->nomor_surat.'/'.$kode[0].'.3/.'.$kode[1].'/'.$suratDispensasi->created_at->format('Y') }}</td>
-                                                @endif
-                                                <td> {{ $suratDispensasi->nama_kegiatan }}</td>
-                                                <td> 
-                                                @if($suratDispensasi->status == 'diajukan')
-                                                <label class="badge badge-gradient-warning text-dark">{{ ucwords($suratDispensasi->status) }}</td></label>
-                                                @elseif($suratDispensasi->status == 'ditolak')
-                                                <label class="badge badge-gradient-danger">{{ ucwords($suratDispensasi->status) }}</td></label>
-                                                @else
-                                                <label class="badge badge-gradient-info">{{ ucwords($suratDispensasi->status) }}</td></label>
-                                                @endif
-                                                <td> {{ $suratDispensasi->created_at->diffForHumans() }}</td>
-                                                <td> {{ $suratDispensasi->updated_at->diffForHumans() }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
                                 </div>
                                 @else

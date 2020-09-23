@@ -11,12 +11,12 @@ class DaftarDispensasiMahasiswa extends Model
     
     protected $table = 'daftar_dispensasi_mahasiswa';
 
-    protected $primaryKey = ['nim','id_surat_dispensasi'];
+    protected $primaryKey = ['nim','id_pengajuan'];
 
     public $incrementing = false;
 
     protected $fillable = [
-        'id_surat_dispensasi',
+        'id_pengajuan',
         'nim',
     ];
 }

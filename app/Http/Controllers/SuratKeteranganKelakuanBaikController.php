@@ -211,8 +211,8 @@ class SuratKeteranganKelakuanBaikController extends Controller
             }
 
             if($suratKeterangan->jumlah_cetak >= 3){
-                $this->setFlashData('info','Cetak Surat','Anda telah mencetak surat keterangan aktif kuliah sebanyak 3 kali.');
-                return redirect('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah');
+                $this->setFlashData('info','Cetak Surat','Anda telah mencetak surat keterangan kelakuan baik sebanyak 3 kali.');
+                return redirect('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik');
             }
         }
 
@@ -227,7 +227,6 @@ class SuratKeteranganKelakuanBaikController extends Controller
                     'jumlah_cetak'=>$jumlahCetak
                 ]);
             }
-               
         }
 
         $pdf = PDF::loadview('surat.surat_keterangan_kelakuan_baik',compact('suratKeterangan','qrCode'))->setPaper('a4', 'potrait');

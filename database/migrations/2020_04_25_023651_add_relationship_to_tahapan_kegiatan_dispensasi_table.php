@@ -14,9 +14,9 @@ class AddRelationshipToTahapanKegiatanDispensasiTable extends Migration
     public function up()
     {
         Schema::table('tahapan_kegiatan_dispensasi', function (Blueprint $table) {
-            $table->foreign('id_surat_dispensasi')
+            $table->foreign('id_pengajuan')
                   ->references('id_surat_masuk')
-                  ->on('surat_dispensasi')
+                  ->on('pengajuan_surat_dispensasi')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
         });
@@ -30,7 +30,7 @@ class AddRelationshipToTahapanKegiatanDispensasiTable extends Migration
     public function down()
     {
         Schema::table('tahapan_kegiatan_dispensasi', function (Blueprint $table) {
-            $table->dropForeign(['id_surat_dispensasi']);
+            $table->dropForeign(['id_pengajuan']);
         });
     }
 }

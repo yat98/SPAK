@@ -100,18 +100,11 @@
         <div class="border"></div>
         <div class="text-center mt-1">
             <p class="m-0"><b><span class="underline">SURAT DISPENSASI</span></b></p>
-            @php
-                $kode = explode('/',$suratDispensasi->kodeSurat->kode_surat);
-            @endphp
-             @if($suratDispensasi->user->jabatan == 'dekan')
-                <p class="m-0"><b><i>Nomor : {{$suratDispensasi->nomor_surat}}/{{ $suratDispensasi->kodeSurat->kode_surat }}/{{$suratDispensasi->created_at->year}}</i></b></p>
-            @else
-                <p class="m-0"><b><i>Nomor : {{$suratDispensasi->nomor_surat}}/{{$kode[0].'.3/'.$kode[1]}}/{{$suratDispensasi->created_at->year}}</i></b></p>
-            @endif
+            <p class="m-0"><b><i>Nomor: <span style="display:inline-block;width:20px;height:auto"></span>{{$suratDispensasi->nomor_surat}}/{{$suratDispensasi->kodeSurat->kode_surat}}<span style="display:inline-block;width:20px;height:auto"></span>/<span style="display:inline-block;width:50px;height:auto"></span>/{{$suratDispensasi->created_at->year}}</i></b></p>
         </div>
         <div class="content">
-            <p class="m-0">Memperhatikan surat dari {{ ucwords($suratDispensasi->suratMasuk->instansi) }} Nomor : {{ $suratDispensasi->suratMasuk->nomor_surat }}, {{ $suratDispensasi->suratMasuk->tanggal_surat_masuk->isoFormat('D MMMM Y') }} perihal <b>{{ $suratDispensasi->suratMasuk->perihal }}</b> maka dengan ini Dekan Fakultas Teknik Memberikan dispensasi kepada:</p>
-            @if($suratDispensasi->mahasiswa->count() > 0)
+            <p class="m-0">Memperhatikan surat dari {{ ucwords($suratDispensasi->pengajuanSuratDispensasi->suratMasuk->instansi) }} Nomor : {{ $suratDispensasi->pengajuanSuratDispensasi->suratMasuk->nomor_surat }}, {{ $suratDispensasi->pengajuanSuratDispensasi->suratMasuk->tanggal_surat_masuk->isoFormat('D MMMM Y') }} perihal <b>{{ $suratDispensasi->pengajuanSuratDispensasi->suratMasuk->perihal }}</b> maka dengan ini Dekan Fakultas Teknik Memberikan dispensasi kepada:</p>
+            @if($suratDispensasi->pengajuanSuratDispensasi->mahasiswa->count() > 0)
                     <table class="m-0 text-center table table-margin">
                     <tr class="table">
                         <th class="table">NO</th>
@@ -120,7 +113,7 @@
                         <th class="table">PRODI</th>
                         <th class="table">JURUSAN</th>
                     </tr>
-                    @foreach($suratDispensasi->mahasiswa as $mahasiswa)
+                    @foreach($suratDispensasi->pengajuanSuratDispensasi->mahasiswa as $mahasiswa)
                         <tr class="table">
                             <td class="table">{{ $loop->iteration }}</td>
                             <td class="table">{{ $mahasiswa->nama }}</td>
@@ -131,10 +124,10 @@
                     @endforeach
                     </table>
             @endif
-            <p class="m-0">Sebagai peserta pada kegiatan <b>{{ ucwords($suratDispensasi->nama_kegiatan) }}</b>, dengan tahapan pelaksanaan sebagai berikut:</p>
-            @if($suratDispensasi->tahapanKegiatanDispensasi->count() > 0)
+            <p class="m-0">Sebagai peserta pada kegiatan <b>{{ ucwords($suratDispensasi->pengajuanSuratDispensasi->nama_kegiatan) }}</b>, dengan tahapan pelaksanaan sebagai berikut:</p>
+            @if($suratDispensasi->pengajuanSuratDispensasi->tahapanKegiatanDispensasi->count() > 0)
             <table class="tahapan-table">
-            @foreach($suratDispensasi->tahapanKegiatanDispensasi as $tahapan)
+            @foreach($suratDispensasi->pengajuanSuratDispensasi->tahapanKegiatanDispensasi as $tahapan)
                     <tr valign="top">
                         <td style="width:6%;padding-left:15px">{{$loop->iteration}}. </td>
                         <td colspan="3">{{ $tahapan->tahapan_kegiatan }}</td>
@@ -166,16 +159,25 @@
             <div class="signature-content">
                 <p class="m-0"><b>Gorontalo, {{$suratDispensasi->created_at->isoFormat('D MMMM Y')}}</b></p>
                 @if($suratDispensasi->user->jabatan == 'dekan')
-                    <p class="m-0"><b>Dekan,</b></p>
+                    <p class="m-0"><b>Dekan</b></p>
                 @else
                     <p class="m-0"><b>a.n Dekan,</b></p>
-                    <p class="m-0"><b>Wakil Dekan Bidang Kemahasiswaan dan Alumni,</b></p>
+                    @if($suratDispensasi->user->jabatan == 'wd3')
+                        <p class="m-0"><b>Wakil Dekan III</b></p>
+                    @elseif($suratDispensasi->user->jabatan == 'kabag tata usaha')
+                        <p class="m-0"><b>Kabag TU</b></p>
+                    @endif
                 @endif
+
                 <p class="m-0 tanda-tangan-margin">
-                    <img class="tanda-tangan" src="{{$suratDispensasi->user->tanda_tangan}}">
+                    @if($suratDispensasi->pengajuanSuratDispensasi->status == 'selesai')
+                        <img class="tanda-tangan" src="{{$suratDispensasi->user->tanda_tangan}}">
+                    @else
+                        <div class="tanda-tangan"></div>
+                    @endif
                 </p>
                 <p class="m-0"><b>{{$suratDispensasi->user->nama}}</b></p>
-                <p class="m-0"><b>NIP. {{substr($suratDispensasi->user->nip,0,8)}} {{substr($suratDispensasi->user->nip,8,6)}} {{substr($suratDispensasi->user->nip,14,1)}} {{substr($suratDispensasi->user->nip,15,3)}}</b></p>
+                <p class="m-0"><b>NIP. {{$suratDispensasi->user->nip}}</b></p>
             </div>
         </div>
         <div class="content" style="padding-top:105px">

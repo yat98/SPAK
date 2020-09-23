@@ -14,13 +14,11 @@ class CreateSuratDispensasiTable extends Migration
     public function up()
     {
         Schema::create('surat_dispensasi', function (Blueprint $table) {
-            $table->integer('id_surat_masuk')->unsigned()->primary();
+            $table->integer('id_pengajuan')->unsigned()->primary();
             $table->char('nip',18)->index();
-            $table->char('nip_kasubag',18)->index();
             $table->integer('id_kode_surat')->unsigned();
-            $table->string('nama_kegiatan',100);
+            $table->integer('id_operator')->unsigned();
             $table->char('nomor_surat',6);
-            $table->enum('status',['menunggu tanda tangan','selesai'])->default('menunggu tanda tangan');
             $table->integer('jumlah_cetak')->default(0);
             $table->timestamps();
         });

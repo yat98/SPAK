@@ -140,7 +140,7 @@
     <script>
         let link = "{{ url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah') }}";
         let linkSurat = "{{ url('mahasiswa/surat-keterangan-aktif-kuliah') }}";
-        let linkMhs = "{{ url('mahasiswa/detail/mahasiswa') }}";
+        
         $('#datatables').DataTable({
             responsive: true,
             columnDefs: [{

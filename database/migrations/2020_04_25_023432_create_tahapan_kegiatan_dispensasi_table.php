@@ -15,7 +15,7 @@ class CreateTahapanKegiatanDispensasiTable extends Migration
     {
         Schema::create('tahapan_kegiatan_dispensasi', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_surat_dispensasi')->unsigned();
+            $table->integer('id_pengajuan')->unsigned();
             $table->string('tahapan_kegiatan',100);
             $table->string('tempat_kegiatan',100);
             $table->date('tanggal_awal_kegiatan');

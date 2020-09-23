@@ -456,7 +456,7 @@ $('.table-responsive').on('click','.btn-surat-progress', function (e) {
                     progressPercent = '20';
                     break;
                 case 'Verifikasi Kasubag':
-                    progressPercent = '20';
+                    progressPercent = '40';
                     break;
                 case 'Verifikasi Kabag':
                     progressPercent = '60';
@@ -604,21 +604,22 @@ $('.btn-tambah-tahapan').on('click',function(e){
     $('#jumlah_tahapan_field').val(++jumlahValue);
     $('.tahapan').append(`<div class="form-row copy-tahapan-field mb-3">
                             <div class="col-md-12 mb-1">
-                                <input class="form-control" id="tahapan_kegiatan" placeholder="Tahapan kegiatan" name="tahapan_kegiatan[]" type="text">
+                                <input class="form-control" id="tahapan_kegiatan" placeholder="Tahapan Kegiatan" name="tahapan_kegiatan[]" type="text">
                             </div>
                             <div class="col-md-6 mb-1">
-                                <input class="form-control" id="tempat_kegiatan" placeholder="Tempat kegiatan" name="tempat_kegiatan[]" type="text">
+                                <input class="form-control" id="tempat_kegiatan" placeholder="Tempat Kegiatan" name="tempat_kegiatan[]" type="text">
                             </div>
                             <div class="col-md-3">
-                                <input class="tanggal form-control" id="tanggal_awal_kegiatan" placeholder="Tanggal Awal Kegiatan" name="tanggal_awal_kegiatan[]" type="text">
+                                <input class="tanggal form-control" id="tanggal_awal_kegiatan" placeholder="Tanggal Awal Kegiatan" name="tanggal_awal_kegiatan[]" type="text" autocomplete="off">
                             </div>
                             <div class="col-md-3">
-                                <input class="tanggal form-control" id="tanggal_akhir_kegiatan" placeholder="Tanggal Akhir Kegiatan" name="tanggal_akhir_kegiatan[]" type="text">
+                                <input class="tanggal form-control" id="tanggal_akhir_kegiatan" placeholder="Tanggal Akhir Kegiatan" name="tanggal_akhir_kegiatan[]" type="text" autocomplete="off">
                             </div>
                         </div>`);
 });
 
-$('.btn-surat-dispensasi-detail').on('click',function(e){
+
+$('.table-responsive').on('click','.btn-pengajuan-surat-dispensasi-detail',function(e){
     e.preventDefault();
     $('#surat-dispensasi-detail-content').empty();
     let url = $(this).attr('href');
@@ -629,11 +630,15 @@ $('.btn-surat-dispensasi-detail').on('click',function(e){
                     let tableMahasiswa = '';
                     let tableKegiatan = '';
                     let label;
-                    if(suratDispensasi.status == 'menunggu tanda tangan'){
-                        label = `<label class="badge badge-gradient-warning text-dark">${suratDispensasi.status.ucwords()}</label>`;
+
+                    if (suratDispensasi.status == 'Selesai'){
+                        label=`<label class="badge badge-gradient-info">${suratDispensasi.status}</label>`;
+                    }else if (suratDispensasi.status == 'Ditolak'){
+                        label=`<label class="badge badge-gradient-danger">${suratDispensasi.status}</label>`;
                     }else{
-                        label = `<label class="badge badge-gradient-info">${suratDispensasi.status.ucwords()}</label>`;
+                        label=`<label class="badge badge-gradient-warning text-dark">${suratDispensasi.status}</label>`;
                     }
+
                     suratDispensasi.mahasiswa.forEach((mahasiswa) => {
                         tableMahasiswa+=`<tr>
                                             <td>${mahasiswa.nim}</td>
@@ -642,6 +647,7 @@ $('.btn-surat-dispensasi-detail').on('click',function(e){
                                             <td>${mahasiswa.prodi.jurusan.nama_jurusan}</td>
                                         </tr>`;
                     });
+
                     suratDispensasi.tahapan_kegiatan_dispensasi.forEach((tahapan,key)=>{
                         let nmr = key;
                         tableKegiatan += `<tr>
@@ -665,16 +671,12 @@ $('.btn-surat-dispensasi-detail').on('click',function(e){
                                         <div class="table-responsive">
                                             <table class="table">
                                                 <tr>
-                                                    <th>Nomor Surat</th>
-                                                    <td>${suratDispensasi.nomor_surat_dispensasi}</td>
+                                                    <th>Nama Kegiatan</th>
+                                                    <td>${suratDispensasi.nama_kegiatan}</td>
                                                 </tr>
                                                 <tr>
-                                                    <th>Jenis Surat</th>
-                                                    <td>Surat Dispensasi</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Di Ajukan Oleh</th>
-                                                    <td>${suratDispensasi.kasubag.nama}</td>
+                                                    <th>Diajukan Oleh</th>
+                                                    <td>${suratDispensasi.operator.nama}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Status</th>
@@ -683,8 +685,8 @@ $('.btn-surat-dispensasi-detail').on('click',function(e){
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <th>Nama Kegiatan</th>
-                                                    <td>${suratDispensasi.nama_kegiatan}</td>
+                                                    <th>Dibuat</th>
+                                                    <td>${suratDispensasi.dibuat}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Lihat File Surat Masuk</th>
@@ -716,6 +718,90 @@ $('.btn-surat-dispensasi-detail').on('click',function(e){
                                                         </table>
                                                     </td>
                                                 </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>`;
+                    $('#surat-dispensasi-detail-content').html(html);
+                });
+});
+
+$('.table-responsive').on('click','.btn-surat-dispensasi-detail',function(e){
+    e.preventDefault();
+    $('#surat-dispensasi-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+                .then(response => response.json())
+                .then(result => {
+                    let suratDispensasi = result;                    
+                    let tableMahasiswa = '';
+                    let tableKegiatan = '';
+                    let label;
+                    
+                    if (suratDispensasi.status == 'Selesai'){
+                        label=`<label class="badge badge-gradient-info">${suratDispensasi.status}</label>`;
+                    }else if (suratDispensasi.status == 'Ditolak'){
+                        label=`<label class="badge badge-gradient-danger">${suratDispensasi.status}</label>`;
+                    }else{
+                        label=`<label class="badge badge-gradient-warning text-dark">${suratDispensasi.status}</label>`;
+                    }
+
+                    suratDispensasi.pengajuan_surat_dispensasi.mahasiswa.forEach((mahasiswa) => {
+                        tableMahasiswa+=`<tr>
+                                            <td>${mahasiswa.nim}</td>
+                                            <td>${mahasiswa.nama}</td>
+                                            <td>${mahasiswa.prodi.strata} - ${mahasiswa.prodi.nama_prodi}</td>
+                                            <td>${mahasiswa.prodi.jurusan.nama_jurusan}</td>
+                                        </tr>`;
+                    });
+                    suratDispensasi.pengajuan_surat_dispensasi.tahapan_kegiatan_dispensasi.forEach((tahapan,key)=>{
+                        let nmr = key;
+                        tableKegiatan += `<tr>
+                                            <td rowspan="3">${++nmr}.</td>
+                                            <td colspan="3">${tahapan.tahapan_kegiatan}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tanggal</td>
+                                            <td>:</td>
+                                            <td>${suratDispensasi.tanggal_kegiatan[key]}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tempat</td>
+                                            <td>:</td>
+                                            <td>${tahapan.tempat_kegiatan}</td>
+                                        </tr>`;
+                    });
+                    
+                    let html = `<div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tr>
+                                                    <th>Nama Kegiatan</th>
+                                                    <td>${suratDispensasi.pengajuan_surat_dispensasi.nama_kegiatan}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Nomor Surat</th>
+                                                    <td>${suratDispensasi.nomor_surat}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Kode Surat</th>
+                                                    <td>${suratDispensasi.kode_surat.kode_surat}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Tahun</th>
+                                                    <td>${suratDispensasi.tahun}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Diajukan Oleh</th>
+                                                    <td>${suratDispensasi.pengajuan_surat_dispensasi.operator.nama}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Status</th>
+                                                    <td>
+                                                        ${label}
+                                                    </td>
+                                                </tr>
                                                 <tr>
                                                     <th>Tanda Tangan</th>
                                                     <td>${suratDispensasi.user.nama}</td>
@@ -727,6 +813,36 @@ $('.btn-surat-dispensasi-detail').on('click',function(e){
                                                 <tr>
                                                     <th>Dibuat</th>
                                                     <td>${suratDispensasi.dibuat}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Lihat File Surat Masuk</th>
+                                                    <td>
+                                                    <a href="${suratDispensasi.link_file}" class="btn btn-info btn-sm" data-lightbox="${suratDispensasi.nama_file}">
+                                                        <i class="mdi mdi mdi-eye"></i>
+                                                        Lihat File Surat Masuk</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Daftar Mahasiswa</th>
+                                                    <td>
+                                                        <table class="table">
+                                                            <tr>
+                                                                <th>NIM</th>
+                                                                <th>Nama</th>
+                                                                <th>Program Studi</th>
+                                                                <th>Jurusan</th>
+                                                            </tr>
+                                                            ${tableMahasiswa}
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Tahapan Kegiatan</th>
+                                                    <td>
+                                                        <table class="table">
+                                                            ${tableKegiatan}
+                                                        </table>
+                                                    </td>
                                                 </tr>
                                             </table>
                                         </div>
@@ -826,66 +942,6 @@ $('.btn-surat-rekomendasi-detail').on('click',function(e){
                                 </div>`;
                     $('#surat-rekomendasi-detail-content').html(html);
                 });
-});
-
-$('.btn-surat-dispensasi-progress').on('click', function (e) {
-    e.preventDefault();
-    $('#surat-progress-content').empty();
-    let url = $(this).attr('href');
-    let a = fetch(url)
-        .then(response => response.json())
-        .then(result => {
-            let pengajuanSurat = result;
-            if(pengajuanSurat.status == 'selesai'){
-                html = `<div class="row">
-                            <div class="col-6 text-center">
-                                <p class="h6 m-0 mb-1 text-dark">
-                                    <i class="mdi mdi-border-color icon-sm text-success"></i>
-                                    Menunggu Tanda Tangan
-                                </p> 
-                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
-                                <div class="bg-gradient-success mx-auto position-progress-round"></div>
-                                <div class="bg-gradient-success mx-auto position-progress-pole"></div>
-                            </div>
-                            <div class="col-6 text-center"></div>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 100%" aria-valuenow="100   " aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6 text-center"></div>
-                            <div class="col-6 text-center">
-                                <div class="bg-gradient-success mx-auto position-progress-pole"></div>
-                                <div class="bg-gradient-success mx-auto position-progress-round"></div>
-                                <p class="text-muted mt-2 mb-0"><small>${pengajuanSurat.tanggal_selesai}</small></p>
-                                <p class="h6 mt-1 text-dark">
-                                <i class="mdi mdi-marker-check icon-sm text-success"></i>
-                                Selesai</p> 
-                            </div>
-                        </div>`;
-            }else if(pengajuanSurat.status == 'menunggu tanda tangan'){
-                html = `<div class="row">
-                            <div class="col-6 text-center">
-                                <p class="h6 m-0 mb-1 text-dark">
-                                    <i class="mdi mdi-border-color icon-sm text-info"></i>
-                                    Menunggu Tanda Tangan
-                                </p> 
-                                <p class="text-muted mb-2"><small>${pengajuanSurat.tanggal_diajukan}</small></p>
-                                <div class="bg-gradient-info mx-auto position-progress-round"></div>
-                                <div class="bg-gradient-info mx-auto position-progress-pole"></div>
-                            </div>
-                            <div class="col-6 text-center"></div>
-                        </div>
-                        <div class="progress">
-                            <div class="progress-bar bg-gradient-info" role="progressbar" style="width: 50%" aria-valuenow="50   " aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6 text-center"></div>
-                            <div class="col-6 text-center"></div>
-                        </div>`;
-            }
-            $('#surat-progress-content').html(html);
-        });
 });
 
 $('.btn-surat-tugas-detail').on('click',function(e){

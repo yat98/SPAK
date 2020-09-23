@@ -14,11 +14,11 @@ class AddRelationshipToDaftarDispensasiMahasiswaTable extends Migration
     public function up()
     {
         Schema::table('daftar_dispensasi_mahasiswa', function (Blueprint $table) {
-            $table->primary(['id_surat_dispensasi','nim']);
+            $table->primary(['id_pengajuan','nim']);
 
-            $table->foreign('id_surat_dispensasi')
+            $table->foreign('id_pengajuan')
                   ->references('id_surat_masuk')
-                  ->on('surat_dispensasi')
+                  ->on('pengajuan_surat_dispensasi')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
 
@@ -39,7 +39,7 @@ class AddRelationshipToDaftarDispensasiMahasiswaTable extends Migration
     public function down()
     {
         Schema::table('daftar_dispensasi_mahasiswa', function (Blueprint $table) {
-            $table->dropForeign(['id_surat_dispensasi']);
+            $table->dropForeign(['id_pengajuan']);
             $table->dropForeign(['nim']);
         });
     }

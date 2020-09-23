@@ -234,7 +234,7 @@
                         <a class="nav-link {{ ($halaman == 'surat-keterangan-kelakuan-baik') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/pengajuan/surat-keterangan-kelakuan-baik') }}">Surat Keterangan <br> Kelakuan Baik</a>
                     </li>
                     <li class="nav-item"> 
-                        <a class="nav-link {{ ($halaman == 'surat-dispensasi') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-dispensasi') }}">Surat Dispensasi</a>
+                        <a class="nav-link {{ ($halaman == 'surat-dispensasi') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/pengajuan/surat-dispensasi') }}">Surat Dispensasi</a>
                     </li>
                      <li class="nav-item"> 
                         <a class="nav-link {{ ($halaman == 'surat-rekomendasi') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-rekomendasi') }}">Surat Rekomendasi</a>

@@ -57,6 +57,12 @@ Route::group(['prefix' => 'mahasiswa'],function(){
             Route::get('surat-keterangan-kelakuan-baik/{pengajuan_surat_keterangan}/progress','SuratKeteranganController@progress');
             Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}/cetak','SuratKeteranganKelakuanBaikController@cetak');
             Route::post('surat-keterangan-kelakuan-baik','PengajuanSuratKeteranganController@storePengajuanKelakuanBaik');
+            //  Surat Dispensasi
+            Route::get('surat-dispensasi','SuratDispensasiController@indexMahasiswa');
+            Route::get('surat-dispensasi/all','PengajuanSuratDispensasiController@getAllPengajuan');
+            Route::get('surat-dispensasi/{pengajuan_surat_dispensasi}','PengajuanSuratDispensasiController@show');
+            Route::get('surat-dispensasi/{pengajuan_surat_dispensasi}/progress','SuratDispensasiController@progress');
+            Route::get('surat-dispensasi/{surat_dispensasi}/cetak','SuratDispensasiController@cetak');
             // Surat Persetujuan Pindah
             Route::get('surat-persetujuan-pindah','PengajuanSuratPersetujuanPindahController@indexMahasiswa');
             Route::get('surat-persetujuan-pindah/{pengajuan_persetujuan_pindah}/progress','PengajuanSuratPersetujuanPindahController@progress');
@@ -131,13 +137,10 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         });
         // Surat Keterangan Aktif Kuliah
         Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}','SuratKeteranganController@show');
-         // Surat Keterangan Kelakuan Baik
-         Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}','SuratKeteranganController@show');
-        //  Surat Dispensasi
-        Route::get('surat-dispensasi/{surat_dispensasi}/cetak', 'SuratDispensasiController@cetakSuratDispensasi');
-        Route::get('surat-dispensasi/{surat_dispensasi}/progress','SuratDispensasiController@progressPengajuanSuratDispensasi');
-        Route::resource('surat-dispensasi','SuratDispensasiController')->only(['show']);
-        Route::get('surat-dispensasi','SuratDispensasiController@indexMahasiswa');
+        // Surat Keterangan Kelakuan Baik
+        Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}','SuratKeteranganController@show');
+        // Surat Dispensasi
+        Route::get('surat-dispensasi/{surat_dispensasi}','SuratDispensasiController@show');
         // Surat Rekomendasi
         Route::get('surat-rekomendasi/{surat_rekomendasi}/cetak', 'SuratRekomendasiController@cetakSuratRekomendasi');
         Route::get('surat-rekomendasi/{surat_rekomendasi}/progress','SuratRekomendasiController@progressPengajuanSuratRekomendasi');
@@ -214,6 +217,18 @@ Route::group(['prefix' => 'operator'],function(){
             Route::patch('surat-keterangan-kelakuan-baik/{pengajuan_surat_keterangan}','PengajuanSuratKeteranganController@update');
             Route::post('surat-keterangan-kelakuan-baik','PengajuanSuratKeteranganController@storePengajuanKelakuanBaik');
             Route::delete('surat-keterangan-kelakuan-baik/{pengajuan_surat_keterangan}','PengajuanSuratKeteranganController@destroy');
+            // Surat Dispensasi
+            Route::get('surat-dispensasi','SuratDispensasiController@indexOperator');
+            Route::get('surat-dispensasi/create','PengajuanSuratDispensasiController@create');
+            Route::get('surat-dispensasi/all','PengajuanSuratDispensasiController@getAllPengajuan');
+            Route::patch('surat-dispensasi/{pengajuan_surat_dispensasi}','PengajuanSuratDispensasiController@update');
+            Route::get('surat-dispensasi/{pengajuan_surat_dispensasi}/edit','PengajuanSuratDispensasiController@edit');
+            Route::get('surat-dispensasi/{pengajuan_surat_dispensasi}/progress','SuratDispensasiController@progress');
+            Route::get('surat-dispensasi/{surat_dispensasi}/cetak','SuratDispensasiController@cetak');
+            Route::post('surat-dispensasi','PengajuanSuratDispensasiController@store');
+            Route::get('surat-dispensasi/{pengajuan_surat_dispensasi}','PengajuanSuratDispensasiController@show');
+            Route::delete('surat-dispensasi/{pengajuan_surat_dispensasi}','PengajuanSuratDispensasiController@destroy');
+
         });
         // Surat Masuk
         Route::get('surat-masuk','SuratMasukController@indexOperator');
@@ -236,6 +251,14 @@ Route::group(['prefix' => 'operator'],function(){
             Route::get('create/{pengajuan_surat_keterangan}','SuratKeteranganKelakuanBaikController@createSurat');
             Route::post('/','SuratKeteranganKelakuanBaikController@storeSurat');
             Route::patch('tolak-pengajuan/{pengajuan_surat_keterangan}','SuratKeteranganKelakuanBaikController@tolakPengajuan');
+        });
+        // Surat Dispensasi
+        Route::get('surat-dispensasi','SuratDispensasiController@indexOperator');
+        Route::get('surat-dispensasi/all','SuratDispensasiController@getAllSuratDispensasi');
+        Route::get('surat-dispensasi/{surat_dispensasi}','SuratDispensasiController@show');
+        Route::group(['prefix'=>'surat-dispensasi/pengajuan'],function(){
+            Route::get('create/{pengajuan_surat_dispensasi}','SuratDispensasiController@createSurat');
+            Route::post('/','SuratDispensasiController@storeSurat');
         });
         // Detail Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
@@ -264,6 +287,9 @@ Route::group(['prefix' => 'pegawai'],function(){
         // Tanda Tangan
         Route::get('tanda-tangan','UserController@indexTandaTangan');
         Route::post('tanda-tangan','UserController@updateTandaTangan');
+        // Surat Masuk
+        Route::get('surat-masuk/all','SuratMasukController@getAllSuratMasuk');
+        Route::resource('surat-masuk','SuratMasukController');
         // Surat Keterangan Aktif Kuliah
         Route::get('surat-keterangan-aktif-kuliah','SuratKeteranganAktifKuliahController@index');
         Route::get('surat-keterangan-aktif-kuliah/all','SuratKeteranganController@getAllSuratKeteranganAktif');
@@ -278,13 +304,13 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::get('surat-keterangan-kelakuan-baik/verifikasi/all','PengajuanSuratKeteranganController@getAllPengajuanKelakuanBaik');
         Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}','SuratKeteranganController@show');
         Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}/cetak','SuratKeteranganKelakuanBaikController@cetak');   
-        // Surat Masuk
-        Route::get('surat-masuk/all','SuratMasukController@getAllSuratMasuk');
-        Route::resource('surat-masuk','SuratMasukController');
         // Surat Dispensasi
-        Route::get('surat-dispensasi/search', 'SuratDispensasiController@search');
-        Route::get('surat-dispensasi/{surat_dispensasi}/cetak', 'SuratDispensasiController@cetakSuratDispensasi');
-        Route::resource('surat-dispensasi','SuratDispensasiController');
+        Route::get('surat-dispensasi','SuratDispensasiController@index');
+        Route::get('surat-dispensasi/all','SuratDispensasiController@getAllSuratDispensasi');
+        Route::patch('surat-dispensasi/verifikasi','PengajuanSuratDispensasiController@verification');
+        Route::get('surat-dispensasi/verifikasi/all','PengajuanSuratDispensasiController@getAllPengajuan');
+        Route::get('surat-dispensasi/{surat_dispensasi}','SuratDispensasiController@show');
+        Route::get('surat-dispensasi/{surat_dispensasi}/cetak','SuratDispensasiController@cetak');
         // Surat Rekomendasi
         Route::get('surat-rekomendasi/search', 'SuratRekomendasiController@search');
         Route::get('surat-rekomendasi/{surat_rekomendasi}/cetak', 'SuratRekomendasiController@cetakSuratRekomendasi');
@@ -511,9 +537,13 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::patch('surat-keterangan-kelakuan-baik/verifikasi','PengajuanSuratKeteranganController@verification'); 
         // Surat Dispensasi
         Route::get('surat-dispensasi', 'SuratDispensasiController@indexPimpinan');
-        Route::get('surat-dispensasi/search', 'SuratDispensasiController@search');
-        Route::resource('surat-dispensasi','SuratDispensasiController')->only(['show']);
-        Route::post('surat-dispensasi/pengajuan/tanda-tangan','SuratDispensasiController@tandaTanganDispensasi');
+        Route::get('surat-dispensasi/all','SuratDispensasiController@getAllSuratDispensasi');
+        Route::get('surat-dispensasi/{surat_dispensasi}/cetak','SuratDispensasiController@cetak');
+        Route::get('surat-dispensasi/verifikasi/all','PengajuanSuratDispensasiController@getAllPengajuan');
+        Route::get('surat-dispensasi/tanda-tangan/all','SuratDispensasiController@getAllTandaTangan');
+        Route::post('surat-dispensasi/tanda-tangan','SuratDispensasiController@tandaTangan');
+        Route::get('surat-dispensasi/{surat_dispensasi}','SuratDispensasiController@show');
+        Route::patch('surat-dispensasi/verifikasi','PengajuanSuratDispensasiController@verification'); 
         // Surat Rekomendasi
         Route::get('surat-rekomendasi', 'SuratRekomendasiController@indexPimpinan');
         Route::get('surat-rekomendasi/search', 'SuratRekomendasiController@search');
