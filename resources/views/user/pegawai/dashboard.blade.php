@@ -699,30 +699,6 @@
                                                     <th> Di Ubah</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                @foreach ($suratRekomendasiList as $suratRekomendasi)
-                                                @php
-                                                    $kode = explode('/',$suratRekomendasi->kodeSurat->kode_surat);
-                                                @endphp
-                                                <tr>
-                                                    <td> {{ $loop->iteration  }}</td>
-                                                    @if($suratRekomendasi->user->jabatan == 'wd3')
-                                                        <td> {{ $suratRekomendasi->nomor_surat.'/'.$kode[0].'.3/'.$kode[1].'/'.$suratRekomendasi->created_at->format('Y') }}</td>
-                                                    @else
-                                                        <td> {{ $suratRekomendasi->nomor_surat.'/'.$kode[0].'.4/'.$kode[1].'/'.$suratRekomendasi->created_at->format('Y') }}</td>
-                                                    @endif
-                                                    <td> {{ $suratRekomendasi->nama_kegiatan }}</td>
-                                                    <td> 
-                                                    @if($suratRekomendasi->status == 'menunggu tanda tangan')
-                                                    <label class="badge badge-gradient-warning text-dark">{{ ucwords($suratRekomendasi->status) }}</td></label>
-                                                    @else
-                                                    <label class="badge badge-gradient-info">{{ ucwords($suratRekomendasi->status) }}</td></label>
-                                                    @endif
-                                                    <td> {{ $suratRekomendasi->created_at->diffForHumans() }}</td>
-                                                    <td> {{ $suratRekomendasi->updated_at->diffForHumans() }}</td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
                                         </table>
                                     </div>
                                     @else

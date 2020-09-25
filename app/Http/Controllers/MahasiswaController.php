@@ -326,10 +326,7 @@ class MahasiswaController extends Controller
                                                ->orderBy('status')
                                                ->get();
         $suratDispensasiList = [];
-        $suratRekomendasiList = SuratRekomendasi::join('daftar_rekomendasi_mahasiswa','daftar_rekomendasi_mahasiswa.id_surat_rekomendasi','=','surat_rekomendasi.id')
-                                               ->where('nim',Auth::user()->nim)
-                                               ->orderByDesc('surat_rekomendasi.created_at')
-                                               ->get();
+        $suratRekomendasiList = [];
         $suratTugasList = SuratTugas::select('*','surat_tugas.created_at','surat_tugas.updated_at')
                                                ->join('daftar_tugas_mahasiswa','daftar_tugas_mahasiswa.id_surat_tugas','=','surat_tugas.id')
                                                ->where('nim',Auth::user()->nim)
@@ -359,7 +356,7 @@ class MahasiswaController extends Controller
         $countAllPengajuanBaik =    $pengajuanSuratKeteranganList->count();
         $countAllPengajuanPindah =    $pengajuanSuratPindahList->count();
         $countAllDispensasi =    0;
-        $countAllSuratRekomendasi =    $suratRekomendasiList->count();
+        $countAllSuratRekomendasi =    0;
         $countAllSuratTugas =    $suratTugasList->count();
         $countAllPengajuanKegiatan = ($pengajuanKegiatanList != null) ? $pengajuanKegiatanList->count() : 0;
         $countPendaftaranCuti = $pendaftaranCutiList->count();
@@ -373,7 +370,7 @@ class MahasiswaController extends Controller
         $pengajuanSuratKeteranganList = $pengajuanSuratKeteranganList->take(5);
         $pengajuanSuratPindahList = $pengajuanSuratPindahList->take(5);
         $suratDispensasiList = [];
-        $suratRekomendasiList = $suratRekomendasiList->take(5);
+        $suratRekomendasiList = [];
         $suratTugasList = $suratTugasList->take(5);
         $pengajuanKegiatanList =  ($pengajuanKegiatanList != null) ? $pengajuanKegiatanList->take(5) : null;
         $pendaftaranCutiList = $pendaftaranCutiList->take(5);

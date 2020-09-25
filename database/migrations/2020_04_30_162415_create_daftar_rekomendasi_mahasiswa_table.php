@@ -15,7 +15,7 @@ class CreateDaftarRekomendasiMahasiswaTable extends Migration
     {
         Schema::create('daftar_rekomendasi_mahasiswa', function (Blueprint $table) {
             $table->char('nim',25)->index();
-            $table->integer('id_surat_rekomendasi')->unsigned()->index();
+            $table->integer('id_pengajuan')->unsigned()->index();
             $table->timestamps();
         });
     }

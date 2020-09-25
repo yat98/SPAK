@@ -100,18 +100,11 @@
         <div class="border"></div>
         <div class="text-center mt-1">
             <p class="m-0"><b><span class="underline">SURAT REKOMENDASI</span></b></p>
-            @php
-                $kode = explode('/',$suratRekomendasi->kodeSurat->kode_surat);
-            @endphp
-             @if($suratRekomendasi->user->jabatan == 'wd3')
-                <p class="m-0"><b><i>Nomor : {{$suratRekomendasi->nomor_surat}}/{{$kode[0].'.3/'.$kode[1]}}/{{$suratRekomendasi->created_at->year}}</i></b></p>
-            @else
-                <p class="m-0"><b><i>Nomor : {{$suratRekomendasi->nomor_surat}}/{{$kode[0].'.4/'.$kode[1]}}/{{$suratRekomendasi->created_at->year}}</i></b></p>
-            @endif
+            <p class="m-0"><b><i>Nomor: <span style="display:inline-block;width:20px;height:auto"></span>{{$suratRekomendasi->nomor_surat}}/{{$suratRekomendasi->kodeSurat->kode_surat}}<span style="display:inline-block;width:20px;height:auto"></span>/<span style="display:inline-block;width:50px;height:auto"></span>/{{$suratRekomendasi->created_at->year}}</i></b></p>
         </div>
         <div class="content">
             <p class="m-0">Dekan Fakultas Teknik Universitas Negeri Gorontalo memberikan Rekomendasi kepada nama-nama di bawah ini yaitu:</p>
-            @if($suratRekomendasi->mahasiswa->count() > 0)
+            @if($suratRekomendasi->pengajuanSuratRekomendasi->mahasiswa->count() > 0)
                     <table class="m-0 text-center table table-margin">
                     <tr class="table">
                         <th class="table">NO</th>
@@ -119,7 +112,7 @@
                         <th class="table">NIM</th>
                         <th class="table">PROGRAM STUDI</th>
                     </tr>
-                    @foreach($suratRekomendasi->mahasiswa as $mahasiswa)
+                    @foreach($suratRekomendasi->pengajuanSuratRekomendasi->mahasiswa as $mahasiswa)
                         <tr class="table">
                             <td class="table">{{ $loop->iteration }}</td>
                             <td class="table">{{ $mahasiswa->nama }}</td>
@@ -130,33 +123,40 @@
                     </table>
             @endif
             <p class="m-0">
-                Untuk mengikuti pelaksaaan <b>{{ ucwords($suratRekomendasi->nama_kegiatan) }}</b>, pada tanggal
-                @if($suratRekomendasi->tanggal_awal_kegiatan->equalTo($suratRekomendasi->tanggal_akhir_kegiatan))
-                    {{$suratRekomendasi->tanggal_awal_kegiatan->isoFormat('D MMMM Y')}}
-                @elseif($suratRekomendasi->tanggal_awal_kegiatan->isSameMonth($suratRekomendasi->tanggal_akhir_kegiatan))
-                    {{$suratRekomendasi->tanggal_awal_kegiatan->isoFormat('D').'-'.$suratRekomendasi->tanggal_akhir_kegiatan->isoFormat('D').' '.$suratRekomendasi->tanggal_awal_kegiatan->isoFormat('MMMM Y')}}
+                Untuk mengikuti pelaksaaan <b>{{ ucwords($suratRekomendasi->pengajuanSuratRekomendasi->nama_kegiatan) }}</b>, pada tanggal
+                @if($suratRekomendasi->pengajuanSuratRekomendasi->tanggal_awal_kegiatan->equalTo($suratRekomendasi->pengajuanSuratRekomendasi->tanggal_akhir_kegiatan))
+                    {{$suratRekomendasi->pengajuanSuratRekomendasi->tanggal_awal_kegiatan->isoFormat('D MMMM Y')}}
+                @elseif($suratRekomendasi->pengajuanSuratRekomendasi->tanggal_awal_kegiatan->isSameMonth($suratRekomendasi->pengajuanSuratRekomendasi->tanggal_akhir_kegiatan))
+                    {{$suratRekomendasi->pengajuanSuratRekomendasi->tanggal_awal_kegiatan->isoFormat('D').'-'.$suratRekomendasi->pengajuanSuratRekomendasi->tanggal_akhir_kegiatan->isoFormat('D').' '.$suratRekomendasi->pengajuanSuratRekomendasi->tanggal_awal_kegiatan->isoFormat('MMMM Y')}}
                 @else
-                    {{$suratRekomendasi->tanggal_awal_kegiatan->isoFormat('D MMMM Y').' - '.$suratRekomendasi->tanggal_akhir_kegiatan->isoFormat('D MMMM Y')}}
+                    {{$suratRekomendasi->pengajuanSuratRekomendasi->tanggal_awal_kegiatan->isoFormat('D MMMM Y').' - '.$suratRekomendasi->pengajuanSuratRekomendasi->tanggal_akhir_kegiatan->isoFormat('D MMMM Y')}}
                 @endif
-                di {{ $suratRekomendasi->tempat_kegiatan}}.
+                di {{ $suratRekomendasi->pengajuanSuratRekomendasi->tempat_kegiatan}}.
             </p>
            <p class="m-0">Demikian surat rekomendasi ini di buat untuk digunakan seperlunya.</p>
         </div>
         <div class="signature">
             <div class="signature-content">
                 <p class="m-0"><b>Gorontalo, {{$suratRekomendasi->created_at->isoFormat('D MMMM Y')}}</b></p>
-                @if($suratRekomendasi->user->jabatan == 'wd3')
-                    <p class="m-0"><b>a.n Dekan,</b></p>
-                    <p class="m-0"><b>Wakil Dekan Bidang Kemahasiswaan dan Alumni,</b></p>
+                @if($suratRekomendasi->user->jabatan == 'dekan')
+                    <p class="m-0"><b>Dekan</b></p>
                 @else
-                    <p class="m-0"><b>a.n Wakil Dekan III,</b></p>
-                    <p class="m-0"><b>Kasubag Kemahasiswaan</b></p>
+                    @if($suratRekomendasi->user->jabatan == 'wd3')
+                        <p class="m-0"><b>Wakil Dekan Bidang Kemahasiswaan dan Alumni,</b></p>
+                    @elseif($suratRekomendasi->user->jabatan == 'kabag tata usaha')
+                        <p class="m-0"><b>Kabag TU</b></p>
+                    @endif
+                    <p class="m-0"><b>a.n Dekan,</b></p>                    
                 @endif
                 <p class="m-0 tanda-tangan-margin">
-                    <img class="tanda-tangan" src="{{$suratRekomendasi->user->tanda_tangan}}">
+                    @if($suratRekomendasi->pengajuanSuratRekomendasi->status == 'selesai')
+                        <img class="tanda-tangan" src="{{$suratRekomendasi->user->tanda_tangan}}">
+                    @else
+                        <div class="tanda-tangan"></div>
+                    @endif
                 </p>
                 <p class="m-0"><b>{{$suratRekomendasi->user->nama}}</b></p>
-                <p class="m-0"><b>NIP. {{substr($suratRekomendasi->user->nip,0,8)}} {{substr($suratRekomendasi->user->nip,8,6)}} {{substr($suratRekomendasi->user->nip,14,1)}} {{substr($suratRekomendasi->user->nip,15,3)}}</b></p>
+                <p class="m-0"><b>NIP. {{$suratRekomendasi->user->nip}}</b></p>
             </div>
         </div>
         <div class="content" style="padding-top:105px">

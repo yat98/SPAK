@@ -178,8 +178,8 @@ class UserController extends Controller
                                         ->where('jenis_surat','surat keterangan kelakuan baik')
                                         ->get();
         $suratDispensasiList = SuratDispensasi::all();
-        $suratRekomendasiList = SuratRekomendasi::orderBy('status')->get();
-        $suratTugasList = SuratTugas::orderBy('status')->get();
+        $suratRekomendasiList = SuratRekomendasi::all();
+        $suratTugasList = SuratTugas::all();
         $suratPersetujuanPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan')
                                         ->orderByDesc('surat_persetujuan_pindah.created_at')
                                         ->orderByDesc('nomor_surat')
@@ -286,7 +286,7 @@ class UserController extends Controller
                                         ->where('jenis_surat','surat keterangan kelakuan baik')
                                         ->get();
         $suratDispensasiList = SuratDispensasi::all();
-        $suratRekomendasiList = SuratRekomendasi::orderByDesc('created_at')->where('status','selesai')->get();
+        $suratRekomendasiList = SuratRekomendasi::all();
         $suratTugasList = SuratTugas::orderByDesc('created_at')->where('status','selesai')->get();
         $suratPersetujuanPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan')
                                         ->orderByDesc('surat_persetujuan_pindah.created_at')
@@ -368,9 +368,7 @@ class UserController extends Controller
                                         ->whereYear('created_at',$thn)
                                         ->whereMonth('created_at',$bln)
                                         ->count(),
-            'Surat Rekomendasi'=>SuratRekomendasi::orderByDesc('created_at')
-                                                ->where('status','selesai')
-                                                ->whereYear('created_at',$thn)
+            'Surat Rekomendasi'=>SuratRekomendasi::whereYear('created_at',$thn)
                                                 ->whereMonth('created_at',$bln)
                                                 ->count(),
             'Surat Persetujuan Pindah'=>SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan')

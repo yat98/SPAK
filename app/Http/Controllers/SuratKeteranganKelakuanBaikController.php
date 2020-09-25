@@ -219,10 +219,9 @@ class SuratKeteranganKelakuanBaikController extends Controller
         $data = $suratKeterangan->pengajuanSuratKeterangan->nim.' - '.$suratKeterangan->pengajuanSuratKeterangan->mahasiswa->nama.' - '.$suratKeterangan->pengajuanSuratKeterangan->mahasiswa->prodi->nama_prodi;
         $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",5,5);
         
-        $jumlahCetak = ++$suratKeterangan->jumlah_cetak;
-
         if(isset(Auth::user()->id) || isset(Auth::user()->nim)){
             if(Auth::user()->bagian == 'front office' || isset(Auth::user()->nim)){
+                $jumlahCetak = ++$suratKeterangan->jumlah_cetak;
                 $suratKeterangan->update([
                     'jumlah_cetak'=>$jumlahCetak
                 ]);

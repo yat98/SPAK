@@ -14,11 +14,11 @@ class AddRelationshipToDaftarRekomendasiMahasiswaTable extends Migration
     public function up()
     {
         Schema::table('daftar_rekomendasi_mahasiswa', function (Blueprint $table) {
-            $table->primary(['nim','id_surat_rekomendasi']);
+            $table->primary(['nim','id_pengajuan']);
             
-            $table->foreign('id_surat_rekomendasi')
+            $table->foreign('id_pengajuan')
                   ->references('id')
-                  ->on('surat_rekomendasi')
+                  ->on('pengajuan_surat_rekomendasi')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
 
@@ -38,7 +38,7 @@ class AddRelationshipToDaftarRekomendasiMahasiswaTable extends Migration
     public function down()
     {
         Schema::table('daftar_rekomendasi_mahasiswa', function (Blueprint $table) {
-            $table->dropForeign(['id_surat_rekomendasi']);
+            $table->dropForeign(['id_pengajuan']);
             $table->dropForeign(['nim']);
         });
     }

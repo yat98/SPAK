@@ -259,12 +259,12 @@ class SuratDispensasiController extends Controller
 
     public function cetak(SuratDispensasi $suratDispensasi){
         if(isset(Auth::user()->nim)){
-            foreach($suratDispensasi->pengajuanSuratDispensasi->mahasiswa as $mahasiswa){
-                if(Auth::user()->nim == $mahasiswa->nim){ 
-                    break; 
-                } else {
-                    abort(404);
-                }
+            $nim = $suratDispensasi->pengajuanSuratRekomendasi->mahasiswa->map(function ($mahasiswa) {
+                return strtoupper($mahasiswa->nim);
+            })->toArray();
+
+            if(!in_array(Auth::user()->nim,$nim)){ 
+                abort(404);
             }
 
             if($suratDispensasi->jumlah_cetak >= 3){
@@ -277,12 +277,17 @@ class SuratDispensasiController extends Controller
         foreach ($suratDispensasi->pengajuanSuratDispensasi->mahasiswa as $value) {
             $data .= $value->nim.' - '.$value->nama.' - '.$value->prodi->nama_prodi.' ';
         }
-
         $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",3,3);
-        $jumlahCetak = ++$suratDispensasi->jumlah_cetak;
-        $suratDispensasi->update([
-            'jumlah_cetak'=>$jumlahCetak
-        ]);
+
+        if(isset(Auth::user()->id) || isset(Auth::user()->nim)){
+            if(Auth::user()->bagian == 'front office' || isset(Auth::user()->nim)){
+                $jumlahCetak = ++$suratDispensasi->jumlah_cetak;
+                $suratDispensasi->update([
+                    'jumlah_cetak'=>$jumlahCetak
+                ]);
+            }
+        }
+
         $pdf = PDF::loadview('surat.surat_dispensasi',compact('suratDispensasi','qrCode'))->setPaper('a4', 'potrait');
         return $pdf->stream('surat-dispensasi'.' - '.$suratDispensasi->created_at->format('dmY-Him').'.pdf');
     }

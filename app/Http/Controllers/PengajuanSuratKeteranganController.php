@@ -115,7 +115,7 @@ class PengajuanSuratKeteranganController extends Controller
 
         DB::commit();
         $this->setFlashData('success','Berhasil','Pengajuan surat keterangan kelakuan baik berhasil ditambahkan.');
-        return redirect($this->segmentUser.'/pengajuan/surat-keterangan-kelakuan-baik');
+        return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
     }
 
     public function storePengajuanKeteranganAktif(PengajuanSuratKeteranganRequest $request){
@@ -148,7 +148,7 @@ class PengajuanSuratKeteranganController extends Controller
 
         DB::commit();
         $this->setFlashData('success','Berhasil','Pengajuan surat keterangan aktif kuliah berhasil ditambahkan.');
-        return redirect($this->segmentUser.'/pengajuan/surat-keterangan-aktif-kuliah');
+        return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
     }
 
     public function getAllPengajuanAktif(){
@@ -397,7 +397,7 @@ class PengajuanSuratKeteranganController extends Controller
             return redirect($this->segmentUser.'/pengajuan/surat-keterangan-aktif-kuliah');
         }
         $this->setFlashData('success','Berhasil','Pengajuan surat keterangan kelakuan baik berhasil diubah');
-        return redirect($this->segmentUser.'/pengajuan/surat-keterangan-kelakuan-baik');
+        return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
     }
 
     public function destroy(PengajuanSuratKeterangan $pengajuanSurat)
@@ -408,7 +408,7 @@ class PengajuanSuratKeteranganController extends Controller
             return redirect($this->segmentUser.'/pengajuan/surat-keterangan-aktif-kuliah');
         }
         $this->setFlashData('success','Berhasil','Pengajuan surat keterangan kelakuan baik berhasil dihapus');
-        return redirect($this->segmentUser.'/pengajuan/surat-keterangan-kelakuan-baik');
+        return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
     }
     
     private function isSuratDiajukanExists($jenisSurat){

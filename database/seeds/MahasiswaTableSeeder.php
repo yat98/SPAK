@@ -57,7 +57,7 @@ class MahasiswaTableSeeder extends Seeder
             'sex'=>'L',
             'angkatan'=>'2016',
             'ipk'=>'2.96',
-            'password'=>Hash::make('531416038'),
+            'password'=>Hash::make('531416037'),
             'id_prodi'=>$prodi->id,
             'tanggal_lahir'=>'1998-08-23',
             'tempat_lahir'=>'Gorontalo',

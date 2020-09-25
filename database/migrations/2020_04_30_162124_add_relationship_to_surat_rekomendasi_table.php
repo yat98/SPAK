@@ -14,13 +14,14 @@ class AddRelationshipToSuratRekomendasiTable extends Migration
     public function up()
     {
         Schema::table('surat_rekomendasi', function (Blueprint $table) {
-            $table->foreign('nip')
-                  ->references('nip')
-                  ->on('user')
+            $table->foreign('id_pengajuan')
+                  ->references('id')
+                  ->on('pengajuan_surat_rekomendasi')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
 
-            $table->foreign('nip_kasubag')
+
+            $table->foreign('nip')
                   ->references('nip')
                   ->on('user')
                   ->onUpdate('cascade')
@@ -42,8 +43,8 @@ class AddRelationshipToSuratRekomendasiTable extends Migration
     public function down()
     {
         Schema::table('surat_rekomendasi', function (Blueprint $table) {
+            $table->dropForeign(['id_pengajuan']);
             $table->dropForeign(['nip']);
-            $table->dropForeign(['nip_kasubag']);
             $table->dropForeign(['id_kode_surat']);
         });
     }

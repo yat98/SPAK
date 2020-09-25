@@ -237,7 +237,7 @@
                         <a class="nav-link {{ ($halaman == 'surat-dispensasi') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/pengajuan/surat-dispensasi') }}">Surat Dispensasi</a>
                     </li>
                      <li class="nav-item"> 
-                        <a class="nav-link {{ ($halaman == 'surat-rekomendasi') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-rekomendasi') }}">Surat Rekomendasi</a>
+                        <a class="nav-link {{ ($halaman == 'surat-rekomendasi') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/pengajuan/surat-rekomendasi') }}">Surat Rekomendasi</a>
                     </li>
                     <li class="nav-item"> 
                         <a class="nav-link {{ ($halaman == 'surat-tugas') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-tugas') }}">Surat Tugas</a>
@@ -407,12 +407,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/pengajuan/surat-keterangan-aktif-kuliah') }}">
+                            <a class="nav-link {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-aktif-kuliah') }}">
                                 Surat Keterangan <br> Aktif Kuliah
                             </a>
                         </li>
                         <li class="nav-item"> 
-                            <a class="nav-link {{ ($halaman == 'surat-keterangan-kelakuan-baik') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/pengajuan/surat-keterangan-kelakuan-baik') }}">
+                            <a class="nav-link {{ ($halaman == 'surat-keterangan-kelakuan-baik') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-kelakuan-baik') }}">
                                 Surat Keterangan <br> Kelakuan Baik
                             </a>
                         </li>

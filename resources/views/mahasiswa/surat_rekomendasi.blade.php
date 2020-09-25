@@ -23,7 +23,7 @@
                                         class="mdi mdi-file-document-box mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllSuratRekomendasi > 0 ? $countAllSuratRekomendasi.' Surat Rekomendasi' : 'Surat Rekomendasi Kosong' }}
+                                    {{ $countAllSurat > 0 ? $countAllSurat.' Surat' : 'Data Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -40,58 +40,19 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countSuratRekomendasi > 0)
+                                @if ($countAllSurat > 0)
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table class="table display no-warp" id='datatables' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
-                                                <th> Nomor Surat</th>
-                                                <th> Nama kegiatan</th>
+                                                <th data-priority="1"> Nama Kegiatan</th>
                                                 <th> Status</th>
-                                                <th> Aksi</th>
+                                                <th> Waktu Pengajuan</th>
+                                                <th> Keterangan</th>
+                                                <th data-priority="2"> Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($suratRekomendasiList as $suratRekomendasi)
-                                             @php
-                                                $kode = explode('/',$suratRekomendasi->kodeSurat->kode_surat);
-                                            @endphp
-                                            <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($suratRekomendasiList->currentPage() - 1)  }}</td>
-                                                @if($suratRekomendasi->user->jabatan == 'wd3')
-                                                    <td> {{ $suratRekomendasi->nomor_surat.'/'.$kode[0].'.3/.'.$kode[1].'/'.$suratRekomendasi->created_at->format('Y') }}</td>
-                                                @else
-                                                    <td> {{ $suratRekomendasi->nomor_surat.'/'.$kode[0].'.4/.'.$kode[1].'/'.$suratRekomendasi->created_at->format('Y') }}</td>
-                                                @endif
-                                                <td> {{ $suratRekomendasi->nama_kegiatan }}</td>
-                                                <td> 
-                                                @if($suratRekomendasi->status == 'menunggu tanda tangan')
-                                                <label class="badge badge-gradient-warning text-dark">{{ ucwords($suratRekomendasi->status) }}</td></label>
-                                                @else
-                                                <label class="badge badge-gradient-info">{{ ucwords($suratRekomendasi->status) }}</td></label>
-                                                @endif
-                                                <td>
-                                                    <a href="{{ url('mahasiswa/surat-rekomendasi/'.$suratRekomendasi->id.'/progress') }}" class="btn-surat-dispensasi-progress btn btn-outline-info btn-sm" data-toggle="modal" data-target="#rekomendasiMahasiswa">
-                                                        <i class="mdi mdi mdi-information btn-icon-prepend"></i>
-                                                        Lihat Progress Surat</a>
-                                                    <a href="{{ url('mahasiswa/surat-rekomendasi/'.$suratRekomendasi->id) }}" class="btn btn-outline-info btn-sm btn-surat-rekomendasi-detail" data-toggle="modal" data-target="#exampleModal">
-                                                        <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
-                                                        Detail
-                                                    </a>
-                                                    @if($suratRekomendasi->status == 'selesai' && $suratRekomendasi->jumlah_cetak <= 2)
-                                                    <a href="{{ url('mahasiswa/surat-rekomendasi/'.$suratRekomendasi->id.'/cetak') }}" class="btn btn-info btn-sm">
-                                                        <i class="mdi mdi mdi-printer btn-icon-prepend"></i>
-                                                        Cetak</a>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
-                                    <div class="col">
-                                        {{ $suratRekomendasiList->links() }}
-                                    </div>
                                 </div>
                                 @else
                                 <div class="row">
@@ -115,7 +76,8 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="rekomendasiMahasiswa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
         <div class="modal-content bg-white">
@@ -129,7 +91,8 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+
+<div class="modal fade" id="suratRekomendasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content bg-white">
@@ -139,12 +102,97 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id='surat-rekomendasi-detail-content'>
-                
-            </div>
+            <div class="modal-body" id='surat-rekomendasi-detail-content'></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+</div>
+@endsection
+
+@section('datatables-javascript')
+    <script>
+        let link = "{{ url('mahasiswa/pengajuan/surat-rekomendasi') }}";
+        let linkSurat = "{{ url('mahasiswa/surat-rekomendasi') }}";
+
+        $('#datatables').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 1,
+                            "data": "status",
+                            "render": function ( data, type, row, meta ) {
+                                if(row.status == 'Ditolak'){
+                                    return ` <label class="badge badge-gradient-danger">
+                                                ${row.status}
+                                            </label>`;
+                                }else if(row.status == 'Selesai'){
+                                    return ` <label class="badge badge-gradient-info">
+                                            ${row.status}
+                                        </label>`;
+                                }else{
+                                    return ` <label class="badge badge-gradient-warning text-dark">
+                                                ${row.status}
+                                            </label>`;
+                                }
+                            }
+                        },
+                        {
+                            "targets": 2,
+                            "data": "created_at",
+                            "render": function ( data, type, row, meta ) {
+                                return row.waktu_pengajuan;
+                            }
+                        },
+                        {
+                            "targets": 4,
+                            "data": "aksi",
+                            "render": function ( data, type, row, meta ) {
+                                let action = ` <a href="${link+'/'+row.id}/progress" class="dropdown-item btn-surat-progress" data-toggle="modal" data-target="#exampleModal">Progres Surat</a>`;
+
+                                if(row.status == 'Diajukan'){
+                                    action += `<a href="${link+'/'+row.id}" class="dropdown-item btn-pengajuan-surat-rekomendasi-detail" data-toggle="modal" data-target="#suratRekomendasi">Detail</a>`;
+                                }else{
+                                    action += `<a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-rekomendasi-detail" data-toggle="modal" data-target="#suratRekomendasi">Detail</a>`;
+                                }
+
+                                if(row.status == 'Selesai'){
+                                    action += `<a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
+                                }
+
+                                return `<div class="d-inline-block">
+                                            <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                            </a>
+                                            <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                ${action}
+                                            </div>
+                                        </div>`;
+                        }
+                    },],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('mahasiswa/pengajuan/surat-rekomendasi/all') }}',
+            columns: [{
+                    data: 'nama_kegiatan',
+                },
+                {
+                    data: 'status',
+                },
+                {
+                    data: 'created_at',
+                },
+                {
+                    data: 'keterangan',
+                },
+                {
+                    data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                },
+            ],
+            "pageLength": {{ $perPage }},
+            "order": [[ 2, 'desc' ]],
+        });
+    </script>
 @endsection

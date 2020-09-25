@@ -178,7 +178,7 @@ class PengajuanSuratDispensasiController extends Controller
 
         DB::commit();
         $this->setFlashData('success','Berhasil','Pengajuan surat dispensasi berhasil ditambahkan.');
-        return redirect($this->segmentUser.'/pengajuan/surat-dispensasi');
+        return redirect($this->segmentUser.'/surat-dispensasi');
     }
 
     public function edit(PengajuanSuratDispensasi $pengajuanSurat)
@@ -229,21 +229,21 @@ class PengajuanSuratDispensasiController extends Controller
                     'tanggal_akhir_kegiatan'=>$request->tanggal_akhir_kegiatan[count($request->id_tahapan)-1],
                 ]);
             }
-       }catch(Exception $e){
-           DB::rollback();
-           $this->setFlashData('error','Gagal Mengubah Data','Surat dispensasi gagal diubah.');
-       }
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Gagal Mengubah Data','Surat dispensasi gagal diubah.');
+        }
 
-       DB::commit();
+        DB::commit();
         $this->setFlashData('success','Berhasil','Pengajuan surat dispensasi berhasil diubah');
-        return redirect($this->segmentUser.'/pengajuan/surat-dispensasi');
+        return redirect($this->segmentUser.'/surat-dispensasi');
     }
 
     public function destroy(PengajuanSuratDispensasi $pengajuanSurat)
     {
         $pengajuanSurat->delete();
         $this->setFlashData('success','Berhasil','Pengajuan surat dispensasi berhasil dihapus');
-        return redirect($this->segmentUser.'/pengajuan/surat-dispensasi');
+        return redirect($this->segmentUser.'/surat-dispensasi');
     }
 
     public function verification(Request $request){

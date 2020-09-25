@@ -45,4 +45,8 @@ class Operator extends Authenticable
     public function pengajuanSuratDispensasi(){
         return $this->hasMany('App\PengajuanSuratDispensasi','id_operator');
     }
+
+    public function pengajuanSuratRekomendasi(){
+        return $this->hasMany('App\PengajuanSuratRekomendasi','id_operator');
+    }
 }

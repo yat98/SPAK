@@ -8,33 +8,30 @@ class SuratRekomendasi extends Model
 {
     protected $table = 'surat_rekomendasi';
 
+    protected $primaryKey = 'id_pengajuan';
+
     protected $fillable = [
+        'id_pengajuan',
         'nip',
-        'nip_kasubag',
         'id_kode_surat',
+        'id_operator',
         'nomor_surat',
-        'nama_kegiatan',
-        'tanggal_awal_kegiatan',
-        'tanggal_akhir_kegiatan',
-        'tempat_kegiatan',
-        'status',
+        'jumlah_cetak',
     ];
-
-    protected $dates = ['tanggal_awal_kegiatan','tanggal_akhir_kegiatan'];
-
-    public function mahasiswa(){
-        return $this->belongsToMany('App\Mahasiswa','daftar_rekomendasi_mahasiswa','id_surat_rekomendasi','nim')->withTimestamps();
-    }
 
     public function user(){
         return $this->belongsTo('App\User','nip');
     }
 
-    public function kasubag(){
-        return $this->belongsTo('App\User','nip_kasubag');
+    public function operator(){
+        return $this->belongsTo('App\Operator','id_operator');
     }
 
     public function kodeSurat(){
         return $this->belongsTo('App\KodeSurat','id_kode_surat');
+    }
+
+    public function pengajuanSuratRekomendasi(){
+        return $this->belongsTo('App\PengajuanSuratRekomendasi','id_pengajuan');
     }
 }
