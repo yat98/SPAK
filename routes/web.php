@@ -69,6 +69,12 @@ Route::group(['prefix' => 'mahasiswa'],function(){
             Route::get('surat-rekomendasi/{pengajuan_surat_rekomendasi}','PengajuanSuratRekomendasiController@show');
             Route::get('surat-rekomendasi/{pengajuan_surat_rekomendasi}/progress','SuratRekomendasiController@progress');
             Route::get('surat-rekomendasi/{surat_rekomendasi}/cetak','SuratRekomendasiController@cetak');
+            // Surat Tugas
+            Route::get('surat-tugas','SuratTugasController@indexMahasiswa');
+            Route::get('surat-tugas/all','PengajuanSuratTugasController@getAllPengajuan');
+            Route::get('surat-tugas/{pengajuan_surat_tugas}','PengajuanSuratTugasController@show');
+            Route::get('surat-tugas/{pengajuan_surat_tugas}/progress','SuratTugasController@progress');
+            Route::get('surat-tugas/{surat_tugas}/cetak','SuratTugasController@cetak');
             // Surat Persetujuan Pindah
             Route::get('surat-persetujuan-pindah','PengajuanSuratPersetujuanPindahController@indexMahasiswa');
             Route::get('surat-persetujuan-pindah/{pengajuan_persetujuan_pindah}/progress','PengajuanSuratPersetujuanPindahController@progress');
@@ -150,10 +156,7 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         // Surat Rekomendasi
         Route::get('surat-rekomendasi/{surat_rekomendasi}','SuratRekomendasiController@show');
         // Surat Tugas
-        Route::get('surat-tugas/{surat_tugas}/cetak', 'SuratTugasController@cetakSuratTugas');
-        Route::get('surat-tugas/{surat_tugas}/progress','SuratTugasController@progressPengajuanSuratTugas');
-        Route::resource('surat-tugas','SuratTugasController')->only(['show']);
-        Route::get('surat-tugas','SuratTugasController@indexMahasiswa');
+        Route::get('surat-tugas/{surat_tugas}','SuratTugasController@show');
         // Surat Persetujuan Pindah
         Route::resource('surat-persetujuan-pindah','SuratPersetujuanPindahController')->only('show');
         // Surat Kegiatan Mahasiswa
@@ -238,6 +241,16 @@ Route::group(['prefix' => 'operator'],function(){
             Route::post('surat-rekomendasi','PengajuanSuratRekomendasiController@store');
             Route::get('surat-rekomendasi/{pengajuan_surat_rekomendasi}','PengajuanSuratRekomendasiController@show');
             Route::delete('surat-rekomendasi/{pengajuan_surat_rekomendasi}','PengajuanSuratRekomendasiController@destroy');
+            // Surat Tugas
+            Route::get('surat-tugas/create','PengajuanSuratTugasController@create');
+            Route::get('surat-tugas/all','PengajuanSuratTugasController@getAllPengajuan');
+            Route::patch('surat-tugas/{pengajuan_surat_tugas}','PengajuanSuratTugasController@update');
+            Route::get('surat-tugas/{pengajuan_surat_tugas}/edit','PengajuanSuratTugasController@edit');
+            Route::get('surat-tugas/{pengajuan_surat_tugas}/progress','SuratTugasController@progress');
+            Route::get('surat-tugas/{surat_tugas}/cetak','SuratTugasController@cetak');
+            Route::post('surat-tugas','PengajuanSuratTugasController@store');
+            Route::get('surat-tugas/{pengajuan_surat_tugas}','PengajuanSuratTugasController@show');
+            Route::delete('surat-tugas/{pengajuan_surat_tugas}','PengajuanSuratTugasController@destroy');
         });
         // Surat Masuk
         Route::get('surat-masuk','SuratMasukController@indexOperator');
@@ -277,6 +290,15 @@ Route::group(['prefix' => 'operator'],function(){
             Route::get('create/{pengajuan_surat_rekomendasi}','SuratRekomendasiController@createSurat');
             Route::post('/','SuratRekomendasiController@storeSurat');
         });
+        // Surat Tugas
+        Route::get('surat-tugas','SuratTugasController@indexOperator');
+        Route::get('surat-tugas/all','SuratTugasController@getAllSuratTugas');
+        Route::get('surat-tugas/{surat_tugas}','SuratTugasController@show');
+        Route::group(['prefix'=>'surat-tugas/pengajuan'],function(){
+            Route::get('create/{pengajuan_surat_tugas}','SuratTugasController@createSurat');
+            Route::post('/','SuratTugasController@storeSurat');
+        });
+
         // Detail Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Profil
@@ -336,9 +358,12 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::get('surat-rekomendasi/{surat_rekomendasi}','SuratRekomendasiController@show');
         Route::get('surat-rekomendasi/{surat_rekomendasi}/cetak', 'SuratRekomendasiController@cetak');
         // Surat Tugas
-        Route::get('surat-tugas/search', 'SuratTugasController@search');
-        Route::get('surat-tugas/{surat_tugas}/cetak', 'SuratTugasController@cetakSuratTugas');
-        Route::resource('surat-tugas','SuratTugasController');
+        Route::get('surat-tugas','SuratTugasController@index');
+        Route::get('surat-tugas/all','SuratTugasController@getAllSuratTugas');
+        Route::patch('surat-tugas/verifikasi','PengajuanSuratTugasController@verification');
+        Route::get('surat-tugas/verifikasi/all','PengajuanSuratTugasController@getAllPengajuan');
+        Route::get('surat-tugas/{surat_tugas}','SuratTugasController@show');
+        Route::get('surat-tugas/{surat_tugas}/cetak', 'SuratTugasController@cetak');
         // Surat Persetujuan Pindah
         Route::patch('surat-persetujuan-pindah/pengajuan/tolak-pengajuan/{pengajuan_persetujuan_pindah}','SuratPersetujuanPindahController@tolakPengajuan');
         Route::post('surat-persetujuan-pindah/pengajuan','SuratPersetujuanPindahController@storeSurat');
@@ -575,9 +600,13 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::post('surat-rekomendasi/tanda-tangan','SuratRekomendasiController@tandaTangan');
         // Surat Tugas
         Route::get('surat-tugas', 'SuratTugasController@indexPimpinan');
-        Route::get('surat-tugas/search', 'SuratTugasController@search');
-        Route::resource('surat-tugas','SuratTugasController')->only(['show']);
-        Route::post('surat-tugas/pengajuan/tanda-tangan','SuratTugasController@tandaTanganTugas');
+        Route::get('surat-tugas/all','SuratTugasController@getAllSuratTugas');
+        Route::get('surat-tugas/{surat_tugas}/cetak','SuratTugasController@cetak');
+        Route::get('surat-tugas/verifikasi/all','PengajuanSuratTugasController@getAllPengajuan');
+        Route::get('surat-tugas/tanda-tangan/all','SuratTugasController@getAllTandaTangan');
+        Route::patch('surat-tugas/verifikasi','PengajuanSuratTugasController@verification'); 
+        Route::get('surat-tugas/{surat_tugas}','SuratTugasController@show');
+        Route::post('surat-tugas/tanda-tangan','SuratTugasController@tandaTangan');
         // Surat Persetujuan Pindah
         Route::get('surat-persetujuan-pindah', 'SuratPersetujuanPindahController@indexPimpinan');
         Route::get('surat-persetujuan-pindah/search', 'SuratPersetujuanPindahController@searchPimpinan');

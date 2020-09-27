@@ -14,6 +14,12 @@ class AddRelationshipToSuratTugasTable extends Migration
     public function up()
     {
         Schema::table('surat_tugas', function (Blueprint $table) {
+            $table->foreign('id_pengajuan')
+                  ->references('id')
+                  ->on('pengajuan_surat_tugas')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
+
             $table->foreign('id_kode_surat')
                   ->references('id')
                   ->on('kode_surat')
@@ -21,12 +27,6 @@ class AddRelationshipToSuratTugasTable extends Migration
                   ->onDelete('cascade');
 
             $table->foreign('nip')
-                  ->references('nip')
-                  ->on('user')
-                  ->onUpdate('cascade')
-                  ->onDelete('cascade');
-
-            $table->foreign('nip_kasubag')
                   ->references('nip')
                   ->on('user')
                   ->onUpdate('cascade')
@@ -42,9 +42,9 @@ class AddRelationshipToSuratTugasTable extends Migration
     public function down()
     {
         Schema::table('surat_tugas', function (Blueprint $table) {
+            $table->dropForeign(['id_pengajuan']);
             $table->dropForeign(['id_kode_surat']);
             $table->dropForeign(['nip']);
-            $table->dropForeign(['nip_kasubag']);
         });
     }
 }

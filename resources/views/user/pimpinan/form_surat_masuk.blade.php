@@ -2,7 +2,7 @@
 {{ Form::hidden('id',$suratMasuk->id) }}
 @endif
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12">
         <div class="form-group">
             {{ Form::label('nomor_surat','Nomor Surat') }}
             @if ($errors->any())

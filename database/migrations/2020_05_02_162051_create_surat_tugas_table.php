@@ -14,16 +14,10 @@ class CreateSuratTugasTable extends Migration
     public function up()
     {
         Schema::create('surat_tugas', function (Blueprint $table) {
-            $table->increments('id');
+            $table->integer('id_pengajuan')->unsigned()->primary();
             $table->integer('id_kode_surat')->unsigned();
             $table->char('nip',18)->index();
-            $table->char('nip_kasubag',18)->index();
             $table->char('nomor_surat',6);
-            $table->string('nama_kegiatan',100);
-            $table->string('jenis_kegiatan',100);
-            $table->string('tempat_kegiatan',100);
-            $table->date('tanggal_awal_kegiatan');
-            $table->date('tanggal_akhir_kegiatan');
             $table->enum('status',['menunggu tanda tangan','selesai'])->default('menunggu tanda tangan');
             $table->integer('jumlah_cetak')->default(0);
             $table->timestamps();

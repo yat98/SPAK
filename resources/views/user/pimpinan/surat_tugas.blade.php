@@ -10,35 +10,52 @@
                 <div class="page-header">
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
-                            <i class="mdi mdi-file-document-box "></i>
-                        </span> Surat Tugas</h3>
+                            <i class="mdi mdi-file-document-box"></i>
+                        </span> Surat Tugas </h3>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 stretch-card grid-margin">
-                        <div class="card bg-gradient-warning card-img-holder text-white">
+                    @if(Auth::user()->jabatan == 'kabag tata usaha')   
+                        <div class="col-md-4 stretch-card grid-margin">
+                            <div class="card bg-gradient-warning card-img-holder text-white">
+                                <div class="card-body">
+                                    <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                        alt="circle-image" />
+                                    <h4 class="font-weight-normal mb-3">Verifikasi Surat<i
+                                            class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
+                                    </h4>
+                                    <h2 class="mb-5">
+                                        {{ $countAllVerifikasi > 0 ? $countAllVerifikasi.' Verifikasi Surat' : 'Verifikasi Surat Kosong' }}
+                                    </h2>
+                                    <h6 class="card-text"></h6>
+                                </div>
+                            </div>
+                        </div>                                         
+                    @endif
+                    <div class="@if(Auth::user()->jabatan == 'kabag tata usaha') col-md-4 @else col-md-6 @endif stretch-card grid-margin">
+                        <div class="card bg-gradient-orange card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Tanda Tangan Surat Tugas <i
-                                        class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                <h4 class="font-weight-normal mb-3">Tanda Tangan Surat <i
+                                        class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllPengajuanSuratTugas > 0 ? $countAllPengajuanSuratTugas.' Tanda Tangan Surat' : 'Tanda Tangan Surat Kosong' }}
+                                    {{ $countAllTandaTangan > 0 ? $countAllTandaTangan.' Surat' : 'Data Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 stretch-card grid-margin">
+                    <div class="@if(Auth::user()->jabatan == 'kabag tata usaha') col-md-4 @else col-md-6 @endif stretch-card grid-margin">
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
                                 <h4 class="font-weight-normal mb-3">Surat Tugas <i
-                                        class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                        class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllSuratTugas > 0 ? $countAllSuratTugas.' Surat Tugas' : 'Surat Tugas Kosong' }}
+                                    {{ $countAllSurat > 0 ? $countAllSurat.' Surat' : 'Data Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -46,6 +63,47 @@
                     </div>
                 </div>
                 <div class="row">
+                    @if(Auth::user()->jabatan == 'kabag tata usaha')
+                        <div class="col-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="col-12 col-md-6">
+                                            <h4>Verifikasi Surat Tugas</h4>
+                                        </div>
+                                    </div>
+                                    <hr class="mb-4">
+                                    @if ($countAllVerifikasi > 0)
+                                    <div class="table-responsive">
+                                        <table class="table display no-warp" id='datatables' width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th data-priority="1"> Nama Kegiatan</th>
+                                                    <th> Nomor Surat</th>
+                                                    <th data-priority="2"> Status</th>
+                                                    <th> Waktu Pengajuan</th>
+                                                    <th data-priority="3"> Aksi</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    @else
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                            <h4 class="display-4 mt-3">
+                                                {{ (Session::has('search-title')) ? Session::get('search-title') : ' Verifikasi Surat Kosong!' }}
+                                            </h4>
+                                            <p class="text-muted">
+                                                {{ (Session::has('search')) ? Session::get('search') : ' Verifikasi surat tugas belum ada.' }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
@@ -55,52 +113,19 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countAllPengajuanSuratTugas > 0)
+                                @if ($countAllTandaTangan > 0)
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table class="table display no-warp" id='datatables1' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
+                                                <th data-priority="1"> Nama Kegiatan</th>
                                                 <th> Nomor Surat</th>
-                                                <th> Nama kegiatan</th>
-                                                <th> Status</th>
-                                                <th> Aksi</th>
+                                                <th data-priority="2"> Status</th>
+                                                <th> Waktu Pengajuan</th>
+                                                <th data-priority="3"> Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($pengajuanSuratTugasList as $suratTugas)
-                                            <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($pengajuanSuratTugasList->currentPage() - 1)  }}</td>
-                                                <td> {{ 'B/'.$suratTugas->nomor_surat.'/'.$suratTugas->kodeSurat->kode_surat.'/'.$suratTugas->created_at->format('Y') }}</td>
-                                                <td> {{ $suratTugas->nama_kegiatan }}</td>
-                                                <td> 
-                                                @if($suratTugas->status == 'menunggu tanda tangan')
-                                                <label class="badge badge-gradient-warning text-dark">{{ ucwords($suratTugas->status) }}</td></label>
-                                                @else
-                                                <label class="badge badge-gradient-info">{{ ucwords($suratTugas->status) }}</td></label>
-                                                @endif
-                                                <td>
-                                                    <a href="{{ url('pimpinan/surat-tugas/'.$suratTugas->id) }}" class="btn btn-outline-info btn-sm btn-surat-tugas-detail" data-toggle="modal" data-target="#exampleModal">
-                                                        <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
-                                                        Detail
-                                                    </a>
-                                                     @if ($suratTugas->status == 'menunggu tanda tangan' && $suratTugas->nip == Session::get('nip'))
-                                                    {{ Form::open(['url'=>'pimpinan/surat-tugas/pengajuan/tanda-tangan','class'=>'d-inline-block']) }}
-                                                    {{ Form::hidden('id',$suratTugas->id)}}
-                                                    <button type="submit" class="btn btn-info btn-sm simpan-tanda-tangan">
-                                                        <i class="mdi mdi mdi-border-color btn-icon-prepend"></i>
-                                                        Tanda Tangan
-                                                    </button>
-                                                    {{ Form::close() }}
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
-                                    <div class="col">
-                                        {{ $pengajuanSuratTugasList->links() }}
-                                    </div>
                                 </div>
                                 @else
                                 <div class="row">
@@ -118,8 +143,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
@@ -129,56 +152,19 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                <div class="row mb-3">
-                                    <div class="col-sm-12 col-md-12">
-                                        {{ Form::open(['url'=>'pimpinan/surat-tugas/search','method'=>'GET']) }}
-                                        <div class="form-row">
-                                            <div class="col-sm-12 col-md-6 mt-1">
-                                                {{ Form::select('keywords',$nomorSurat,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> '-- Pilih Nomor Surat --']) }}
-                                            </div>
-                                            <div class="col-sm-12 col-md">
-                                                <button class="btn btn-success btn-sm btn-tambah" type="submit">
-                                                    <i class="mdi mdi-magnify btn-icon-prepend"></i>
-                                                    Cari
-                                                </button>
-                                            </div>
-                                        </div>
-                                        {{ Form::close() }}
-                                    </div>
-                                </div>
-                                @if ($countSuratTugas > 0)
+                                @if ($countAllSurat > 0)
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table class="table display no-warp" id='datatables2' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
+                                                <th data-priority="1"> Nama Kegiatan</th>
                                                 <th> Nomor Surat</th>
-                                                <th> Nama kegiatan</th>
-                                                <th> Status</th>
-                                                <th> Aksi</th>
+                                                <th data-priority="2"> Status</th>
+                                                <th> Waktu Pengajuan</th>
+                                                <th data-priority="3"> Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($suratTugasList as $suratTugas)
-                                            <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($suratTugasList->currentPage() - 1)  }}</td>
-                                                <td> {{ 'B/'.$suratTugas->nomor_surat.'/'.$suratTugas->kodeSurat->kode_surat.'/'.$suratTugas->created_at->format('Y') }}</td>
-                                                <td> {{ $suratTugas->nama_kegiatan }}</td>
-                                                <td>                                                
-                                                <label class="badge badge-gradient-info">{{ ucwords($suratTugas->status) }}</td></label>
-                                                <td>
-                                                    <a href="{{ url('pimpinan/surat-tugas/'.$suratTugas->id) }}" class="btn btn-outline-info btn-sm btn-surat-tugas-detail" data-toggle="modal" data-target="#exampleModal">
-                                                        <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
-                                                        Detail
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
-                                    <div class="col">
-                                        {{ $suratTugasList->links() }}
-                                    </div>
                                 </div>
                                 @else
                                 <div class="row">
@@ -188,7 +174,7 @@
                                             {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat tugas terlebih dahulu.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Data surat tugas belum ada.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -202,7 +188,9 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+
+
+<div class="modal fade" id="suratTugas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content bg-white">
@@ -212,12 +200,263 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id='surat-tugas-detail-content'>
-                
-            </div>
+            <div class="modal-body" id='surat-tugas-detail-content'></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
+</div>
+@endsection
+
+@section('datatables-javascript')
+    <script>
+        let link = "{{ url('pimpinan/surat-tugas') }}";
+        let linkMhs = "{{ url('pimpinan/detail/mahasiswa') }}";
+
+        $('#datatables').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 1,
+                            "data": "surat_tugas.nomor_surat",
+                            "render": function ( data, type, row, meta ) {
+                                return `${row.surat_tugas.nomor_surat}/${row.surat_tugas.kode_surat.kode_surat}`;
+                            }
+                        },
+                        {
+                            "targets": 2,
+                            "data": "status",
+                            "render": function ( data, type, row, meta ) {
+                                if(row.status == 'Ditolak'){
+                                    return ` <label class="badge badge-gradient-danger">
+                                                ${row.status}
+                                            </label>`;
+                                }else if(row.status == 'Selesai'){
+                                    return ` <label class="badge badge-gradient-info">
+                                            ${row.status}
+                                        </label>`;
+                                }else{
+                                    return ` <label class="badge badge-gradient-warning text-dark">
+                                                ${row.status}
+                                            </label>`;
+                                }
+                            }
+                        },
+                        {
+                            "targets": 3,
+                            "data": "created_at",
+                            "render": function ( data, type, row, meta ) {
+                                return row.waktu_pengajuan;
+                            }
+                        },
+                        {
+                            "targets": 4,
+                            "data": "aksi",
+                            "render": function ( data, type, row, meta ) {
+                                return `<div class="d-inline-block">
+                                            <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                            </a>
+                                            <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                <a href="${link+'/'+row.id}" class="dropdown-item btn-surat-tugas-detail" data-toggle="modal" data-target="#suratTugas">Detail</a>
+                                                <a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
+                                                <form action="${link+'/verifikasi'}" method="post">
+                                                    <input name="_method" type="hidden" value="PATCH">
+                                                    <input name="_token" type="hidden" value="{{ @csrf_token() }}">
+                                                    <input name="id" type="hidden" value="${row.id}">
+                                                    <button type="submit" class="dropdown-item btn-verification">
+                                                        Verifikasi
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>`;
+                            },
+                        },
+            ],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('pimpinan/surat-tugas/verifikasi/all') }}',
+            columns: [{
+                    data: 'nama_kegiatan',
+                },
+                {
+                    data: 'surat_tugas.nomor_surat',
+                },
+                {
+                    data: 'created_at',
+                },
+                {
+                    data: 'status',
+                },
+                {
+                    data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                },
+            ],
+            pageLength: {{ $perPage }},
+            order: [[ 1, 'desc' ]],
+        });
+
+        $('#datatables1').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 1,
+                            "data": "surat_tugas.nomor_surat",
+                            "render": function ( data, type, row, meta ) {
+                                return `${row.surat_tugas.nomor_surat}/${row.surat_tugas.kode_surat.kode_surat}`;
+                            }
+                        },
+                        {
+                            "targets": 2,
+                            "data": "status",
+                            "render": function ( data, type, row, meta ) {
+                                if(row.status == 'Ditolak'){
+                                    return ` <label class="badge badge-gradient-danger">
+                                                ${row.status}
+                                            </label>`;
+                                }else if(row.status == 'Selesai'){
+                                    return ` <label class="badge badge-gradient-info">
+                                            ${row.status}
+                                        </label>`;
+                                }else{
+                                    return ` <label class="badge badge-gradient-warning text-dark">
+                                                ${row.status}
+                                            </label>`;
+                                }
+                            }
+                        },
+                        {
+                            "targets": 3,
+                            "data": "created_at",
+                            "render": function ( data, type, row, meta ) {
+                                return row.waktu_pengajuan;
+                            }
+                        },
+                        {
+                            "targets": 4,
+                            "data": "aksi",
+                            "render": function ( data, type, row, meta ) {
+                                return `<div class="d-inline-block">
+                                            <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                            </a>
+                                            <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                <a href="${link+'/'+row.id}" class="dropdown-item btn-surat-tugas-detail" data-toggle="modal" data-target="#suratTugas">Detail</a>
+                                                <a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
+                                                <form action="${link+'/tanda-tangan'}" method="post">
+                                                    <input name="_token" type="hidden" value="{{ @csrf_token() }}">
+                                                    <input name="id" type="hidden" value="${row.id}">
+                                                    <button type="submit" class="dropdown-item simpan-tanda-tangan">
+                                                        Tanda Tangan
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>`;
+                            },
+                        },
+            ],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('pimpinan/surat-tugas/tanda-tangan/all') }}',
+            columns: [{
+                    data: 'nama_kegiatan',
+                },
+                {
+                    data: 'surat_tugas.nomor_surat',
+                },
+                {
+                    data: 'status',
+                },
+                {
+                    data: 'created_at',
+                },
+                {
+                    data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                },
+            ],
+            pageLength: {{ $perPage }},
+            order: [[ 1, 'desc' ]],
+        });
+
+        $('#datatables2').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 1,
+                            "data": "surat_tugas.nomor_surat",
+                            "render": function ( data, type, row, meta ) {
+                                return `${row.surat_tugas.nomor_surat}/${row.surat_tugas.kode_surat.kode_surat}`;
+                            }
+                        },
+                        {
+                            "targets": 2,
+                            "data": "status",
+                            "render": function ( data, type, row, meta ) {
+                                if(row.status == 'Ditolak'){
+                                    return ` <label class="badge badge-gradient-danger">
+                                                ${row.status}
+                                            </label>`;
+                                }else if(row.status == 'Selesai'){
+                                    return ` <label class="badge badge-gradient-info">
+                                            ${row.status}
+                                        </label>`;
+                                }else{
+                                    return ` <label class="badge badge-gradient-warning text-dark">
+                                                ${row.status}
+                                            </label>`;
+                                }
+                            }
+                        },
+                        {
+                            "targets": 3,
+                            "data": "created_at",
+                            "render": function ( data, type, row, meta ) {
+                                return row.waktu_pengajuan;
+                            }
+                        },
+                        {
+                            "targets": 4,
+                            "data": "aksi",
+                            "render": function ( data, type, row, meta ) {
+                                let action = `<a href="${link+'/'+row.id}" class="dropdown-item btn-surat-tugas-detail" data-toggle="modal" data-target="#suratTugas">Detail</a>
+                                              <a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
+                                
+                                return `<div class="d-inline-block">
+                                            <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                            </a>
+                                            <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                ${action}
+                                            </div>
+                                        </div>`;
+                            },
+                        }
+            ],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('pimpinan/surat-tugas/all') }}',
+            columns: [{
+                    data: 'nama_kegiatan',
+                },
+                {
+                    data: 'surat_tugas.nomor_surat',
+                },
+                {
+                    data: 'status',
+                },
+                {
+                    data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                },
+                {
+                    data: 'created_at',
+                },
+            ],
+            "pageLength": {{ $perPage }},
+            "order": [[1,'desc']],
+        });
+    </script>
 @endsection

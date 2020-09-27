@@ -151,7 +151,6 @@
 </div>
 @endsection
 
-
 @section('datatables-javascript')
     <script>
         let link = "{{ url('pegawai/surat-dispensasi') }}";

@@ -1032,7 +1032,7 @@ $('.table-responsive').on('click','.btn-surat-rekomendasi-detail',function(e){
                 });
 });
 
-$('.btn-surat-tugas-detail').on('click',function(e){
+$('.table-responsive').on('click','.btn-pengajuan-surat-tugas-detail',function(e){
     e.preventDefault();
     $('#surat-tugas-detail-content').empty();
     let url = $(this).attr('href');
@@ -1042,11 +1042,15 @@ $('.btn-surat-tugas-detail').on('click',function(e){
                     let suratTugas = result;                    
                     let tableMahasiswa = '';
                     let label;
-                    if(suratTugas.status == 'menunggu tanda tangan'){
-                        label = `<label class="badge badge-gradient-warning text-dark">${suratTugas.status.ucwords()}</label>`;
+
+                    if (suratTugas.status == 'Selesai'){
+                        label=`<label class="badge badge-gradient-info">${suratTugas.status}</label>`;
+                    }else if (suratTugas.status == 'Ditolak'){
+                        label=`<label class="badge badge-gradient-danger">${suratTugas.status}</label>`;
                     }else{
-                        label = `<label class="badge badge-gradient-info">${suratTugas.status.ucwords()}</label>`;
+                        label=`<label class="badge badge-gradient-warning text-dark">${suratTugas.status}</label>`;
                     }
+
                     suratTugas.mahasiswa.forEach((mahasiswa) => {
                         tableMahasiswa+=`<tr>
                                             <td>${mahasiswa.nim}</td>
@@ -1060,24 +1064,6 @@ $('.btn-surat-tugas-detail').on('click',function(e){
                                     <div class="col-12">
                                         <div class="table-responsive">
                                             <table class="table">
-                                                <tr>
-                                                    <th>Nomor Surat</th>
-                                                    <td>${suratTugas.nomor_surat_tugas}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Jenis Surat</th>
-                                                    <td>Surat Tugas</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Di Ajukan Oleh</th>
-                                                    <td>${suratTugas.kasubag.nama}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Status</th>
-                                                    <td>
-                                                        ${label}
-                                                    </td>
-                                                </tr>
                                                 <tr>
                                                     <th>Nama Kegiatan</th>
                                                     <td>${suratTugas.nama_kegiatan}</td>
@@ -1095,6 +1081,16 @@ $('.btn-surat-tugas-detail').on('click',function(e){
                                                     <td>${suratTugas.tempat_kegiatan}</td>
                                                 </tr>
                                                 <tr>
+                                                    <th>Diajukan Oleh</th>
+                                                    <td>${suratTugas.operator.nama}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Status</th>
+                                                    <td>
+                                                        ${label}
+                                                    </td>
+                                                </tr>
+                                                <tr>
                                                     <th>Daftar Mahasiswa</th>
                                                     <td>
                                                         <table class="table">
@@ -1109,12 +1105,109 @@ $('.btn-surat-tugas-detail').on('click',function(e){
                                                     </td>
                                                 </tr>
                                                 <tr>
+                                                    <th>Dibuat</th>
+                                                    <td>${suratTugas.dibuat}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>`;
+                    $('#surat-tugas-detail-content').html(html);
+                });
+});
+
+
+$('.table-responsive').on('click','.btn-surat-tugas-detail',function(e){
+    e.preventDefault();
+    $('#surat-tugas-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+                .then(response => response.json())
+                .then(result => {
+                    let suratTugas = result;                    
+                    let tableMahasiswa = '';
+                    let label;
+
+                    if (suratTugas.status == 'Selesai'){
+                        label=`<label class="badge badge-gradient-info">${suratTugas.status}</label>`;
+                    }else if (suratTugas.status == 'Ditolak'){
+                        label=`<label class="badge badge-gradient-danger">${suratTugas.status}</label>`;
+                    }else{
+                        label=`<label class="badge badge-gradient-warning text-dark">${suratTugas.status}</label>`;
+                    }
+
+                    suratTugas.pengajuan_surat_tugas.mahasiswa.forEach((mahasiswa) => {
+                        tableMahasiswa+=`<tr>
+                                            <td>${mahasiswa.nim}</td>
+                                            <td>${mahasiswa.nama}</td>
+                                            <td>${mahasiswa.prodi.strata} - ${mahasiswa.prodi.nama_prodi}</td>
+                                            <td>${mahasiswa.prodi.jurusan.nama_jurusan}</td>
+                                        </tr>`;
+                    });
+                    
+                    let html = `<div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table">
+                                                <tr>
+                                                    <th>Nama Kegiatan</th>
+                                                    <td>${suratTugas.pengajuan_surat_tugas.nama_kegiatan}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Nomor Surat</th>
+                                                    <td>${suratTugas.nomor_surat}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Kode Surat</th>
+                                                    <td>${suratTugas.kode_surat.kode_surat}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Tahun</th>
+                                                    <td>${suratTugas.tahun}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Jenis Kegiatan</th>
+                                                    <td>${suratTugas.pengajuan_surat_tugas.jenis_kegiatan}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Tanggal Kegiatan</th>
+                                                    <td>${suratTugas.tanggal}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Tempat Kegiatan</th>
+                                                    <td>${suratTugas.pengajuan_surat_tugas.tempat_kegiatan}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Diajukan Oleh</th>
+                                                    <td>${suratTugas.pengajuan_surat_tugas.operator.nama}</td>
+                                                </tr>
+                                                <tr>
                                                     <th>Tanda Tangan</th>
                                                     <td>${suratTugas.user.nama}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Jumlah Cetak</th>
                                                     <td>${suratTugas.jumlah_cetak}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Status</th>
+                                                    <td>
+                                                        ${label}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Daftar Mahasiswa</th>
+                                                    <td>
+                                                        <table class="table">
+                                                            <tr>
+                                                                <th>NIM</th>
+                                                                <th>Nama</th>
+                                                                <th>Program Studi</th>
+                                                                <th>Jurusan</th>
+                                                            </tr>
+                                                            ${tableMahasiswa}
+                                                        </table>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <th>Dibuat</th>
@@ -1127,6 +1220,7 @@ $('.btn-surat-tugas-detail').on('click',function(e){
                     $('#surat-tugas-detail-content').html(html);
                 });
 });
+
 
 $('.btn-pengajuan-pindah').on('click',function(e){
     e.preventDefault();

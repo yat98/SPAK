@@ -71,7 +71,7 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-dispensasi';
             } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-rekomendasi') {
                 $halaman = 'surat-rekomendasi';
-            } else if ($segment == 'surat-tugas') {
+            } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-tugas') {
                 $halaman = 'surat-tugas';
             } else if ($segment == 'pengajuan' && request()->segment(3) == 'surat-persetujuan-pindah') {
                 $halaman = 'surat-persetujuan-pindah';
@@ -216,6 +216,9 @@ class NavServiceProvider extends ServiceProvider
             } else if (($segment == 'pengajuan' && request()->segment(3) == 'surat-rekomendasi') || $segment == 'surat-rekomendasi') {
                 $show = true;
                 $halaman = 'surat-rekomendasi';
+            } else if (($segment == 'pengajuan' && request()->segment(3) == 'surat-tugas') || $segment == 'surat-tugas') {
+                $show = true;
+                $halaman = 'surat-tugas';
             }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi,'show'=>$show]);

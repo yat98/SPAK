@@ -9,20 +9,20 @@ use Carbon\Carbon;
 use App\NotifikasiUser;
 use App\NotifikasiOperator;
 use App\NotifikasiMahasiswa;
+use App\PengajuanSuratTugas;
 use Illuminate\Http\Request;
-use App\PengajuanSuratRekomendasi;
+use App\DaftarTugasMahasiswa;
 use Illuminate\Support\Facades\DB;
-use App\DaftarRekomendasiMahasiswa;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\PengajuanSuratRekomendasiRequest;
+use App\Http\Requests\PengajuanSuratTugasRequest;
 
-class PengajuanSuratRekomendasiController extends Controller
+class PengajuanSuratTugasController extends Controller
 {
     public function getAllPengajuan(){
         if(isset(Auth::user()->nim)){
-            return DataTables::of(PengajuanSuratRekomendasi::join('daftar_rekomendasi_mahasiswa','daftar_rekomendasi_mahasiswa.id_pengajuan','=','pengajuan_surat_rekomendasi.id')
-                                    ->where('daftar_rekomendasi_mahasiswa.nim',Auth::user()->nim)
-                                    ->select('pengajuan_surat_rekomendasi.*'))
+            return DataTables::of(PengajuanSuratTugas::join('daftar_tugas_mahasiswa','daftar_tugas_mahasiswa.id_pengajuan','=','pengajuan_surat_tugas.id')
+                                    ->where('daftar_tugas_mahasiswa.nim',Auth::user()->nim)
+                                    ->select('pengajuan_surat_tugas.*'))
                         ->addColumn('aksi', function ($data) {
                             return $data->id;
                         })
@@ -40,11 +40,11 @@ class PengajuanSuratRekomendasiController extends Controller
             $pengajuanSurat;
 
             if(Auth::user()->bagian == 'front office'){
-                $pengajuanSurat = PengajuanSuratRekomendasi::whereIn('status',['diajukan','ditolak'])
+                $pengajuanSurat = PengajuanSuratTugas::whereIn('pengajuan_surat_tugas.status',['diajukan','ditolak'])
                                                             ->where('id_operator',Auth::user()->id);
 
             }elseif(Auth::user()->bagian == 'subbagian kemahasiswaan'){
-                $pengajuanSurat = PengajuanSuratRekomendasi::whereIn('status',['diajukan','ditolak']);
+                $pengajuanSurat = PengajuanSuratTugas::whereIn('pengajuan_surat_tugas.status',['diajukan','ditolak']);
             }
 
             $pengajuanSurat = $pengajuanSurat->with(['mahasiswa','operator']);
@@ -64,14 +64,14 @@ class PengajuanSuratRekomendasiController extends Controller
                         })
                         ->make(true);
         } else if(isset(Auth::user()->nip)){
-            $pengajuanSurat = PengajuanSuratRekomendasi::join('surat_rekomendasi','surat_rekomendasi.id_pengajuan','=','pengajuan_surat_rekomendasi.id')
-                                        ->select('pengajuan_surat_rekomendasi.*')
-                                        ->with(['suratRekomendasi.kodeSurat']);
+            $pengajuanSurat = PengajuanSuratTugas::join('surat_tugas','surat_tugas.id_pengajuan','=','pengajuan_surat_tugas.id')
+                                        ->select('pengajuan_surat_tugas.*')
+                                        ->with(['suratTugas.kodeSurat']);
             
             if (Auth::user()->jabatan == 'kasubag kemahasiswaan') {
-                $pengajuanSurat = $pengajuanSurat->where('status','verifikasi kasubag');
+                $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_tugas.status','verifikasi kasubag');
             }else if(Auth::user()->jabatan == 'kabag tata usaha'){
-                $pengajuanSurat = $pengajuanSurat->where('status','verifikasi kabag');
+                $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_tugas.status','verifikasi kabag');
             }
 
             return DataTables::of($pengajuanSurat)
@@ -91,7 +91,34 @@ class PengajuanSuratRekomendasiController extends Controller
         }
     }
 
-    public function show(PengajuanSuratRekomendasi $pengajuanSurat){
+    public function create(){
+        $mahasiswa = $this->generateMahasiswa();
+        return view($this->segmentUser.'.tambah_pengajuan_surat_tugas',compact('mahasiswa'));
+    }
+
+    public function update(PengajuanSuratTugasRequest $request, PengajuanSuratTugas $pengajuanSurat){
+        $input = $request->all();
+        DB::beginTransaction();
+        try{
+            $pengajuanSurat->update($input);
+            $pengajuanSurat->mahasiswa()->sync($request->nim);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Gagal Mengubah Data','Surat tugas gagal diubah.');
+        }
+
+        DB::commit();
+        $this->setFlashData('success','Berhasil','Pengajuan surat tugas berhasil diubah');
+        return redirect($this->segmentUser.'/surat-tugas');
+    }
+
+    public function edit(PengajuanSuratTugas $pengajuanSurat)
+    {   
+        $mahasiswa = $this->generateMahasiswa();
+        return view($this->segmentUser.'.edit_pengajuan_surat_tugas',compact('mahasiswa','pengajuanSurat'));
+    }
+
+    public function show(PengajuanSuratTugas $pengajuanSurat){
         $surat = collect($pengajuanSurat->load(['mahasiswa.prodi.jurusan','operator']));
         if($pengajuanSurat->tanggal_awal_kegiatan->equalTo($pengajuanSurat->tanggal_akhir_kegiatan)){
             $tanggal = $pengajuanSurat->tanggal_awal_kegiatan->isoFormat('D MMMM Y');
@@ -106,96 +133,69 @@ class PengajuanSuratRekomendasiController extends Controller
         return $surat->toJson();
     }
 
-    public function create(){
-        $mahasiswa = $this->generateMahasiswa();
-        return view($this->segmentUser.'.tambah_pengajuan_surat_rekomendasi',compact('mahasiswa'));
-    }
-
-    public function edit(PengajuanSuratRekomendasi $pengajuanSurat)
-    {   
-        $mahasiswa = $this->generateMahasiswa();
-        return view($this->segmentUser.'.edit_pengajuan_surat_rekomendasi',compact('mahasiswa','pengajuanSurat'));
-    }
-
-    public function update(PengajuanSuratRekomendasiRequest $request, PengajuanSuratRekomendasi $pengajuanSurat){
-        $input = $request->all();
-        DB::beginTransaction();
-        try{
-            $pengajuanSurat->update($input);
-            $pengajuanSurat->mahasiswa()->sync($request->nim);
-        }catch(Exception $e){
-            DB::rollback();
-            $this->setFlashData('error','Gagal Mengubah Data','Surat rekomendasi gagal diubah.');
-        }
-
-        DB::commit();
-        $this->setFlashData('success','Berhasil','Pengajuan surat rekomendasi berhasil diubah');
-        return redirect($this->segmentUser.'/surat-rekomendasi');
-    }
-
-    public function destroy(PengajuanSuratRekomendasi $pengajuanSurat)
-    {
-        $pengajuanSurat->delete();
-        $this->setFlashData('success','Berhasil','Pengajuan surat rekomendasi berhasil dihapus');
-        return redirect($this->segmentUser.'/surat-rekomendasi');
-    }
-
-    public function store(PengajuanSuratRekomendasiRequest $request){
+    public function store(PengajuanSuratTugasRequest $request){
         $input = $request->all();
         $input['id_operator'] = Auth::user()->id;
         $operator = Operator::where('bagian','subbagian kemahasiswaan')->where('status_aktif','aktif')->first();
 
         DB::beginTransaction();
         try{
-            $pengajuanSuratRekomendasi = PengajuanSuratRekomendasi::create($input);
+            $pengajuanSuratTugas = PengajuanSuratTugas::create($input);
 
             NotifikasiOperator::create([
                 'id_operator'=>$operator->id,
-                'judul_notifikasi'=>'Surat Rekomendasi',
-                'isi_notifikasi'=>'Front office membuat pengajuan surat rekomendasi.',
-                'link_notifikasi'=>url('operator/surat-rekomendasi')
+                'judul_notifikasi'=>'Surat Tugas',
+                'isi_notifikasi'=>'Front office membuat pengajuan surat tugas.',
+                'link_notifikasi'=>url('operator/surat-tugas')
             ]);
 
             $daftarMahasiswa= [];
             $notifMahasiswa= [];
             foreach ($request->nim as $nim) {
                 $daftarMahasiswa[] = [
-                    'id_pengajuan'=>$pengajuanSuratRekomendasi->id,
+                    'id_pengajuan'=>$pengajuanSuratTugas->id,
                     'nim'=>$nim,
                     'created_at'=>Carbon::now(),
                     'updated_at'=>Carbon::now(),
                 ];
                 $notifMahasiswa[] = [
                     'nim'=>$nim,
-                    'judul_notifikasi'=>'Surat Rekomendasi',
-                    'isi_notifikasi'=>'Pengajuan surat rekomendasi telah selesai dibuat.',
-                    'link_notifikasi'=>url('mahasiswa/surat-rekomendasi'), 
+                    'judul_notifikasi'=>'Surat Tugas',
+                    'isi_notifikasi'=>'Pengajuan surat tugas telah selesai dibuat.',
+                    'link_notifikasi'=>url('mahasiswa/surat-tugas'), 
                     'created_at'=>Carbon::now(),
                     'updated_at'=>Carbon::now(),
                 ];
             }
-            DaftarRekomendasiMahasiswa::insert($daftarMahasiswa);
+            DaftarTugasMahasiswa::insert($daftarMahasiswa);
             NotifikasiMahasiswa::insert($notifMahasiswa);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Pengajuan Gagal','Pengajuan surat rekomendasi gagal ditambahkan.');
+            $this->setFlashData('error','Pengajuan Gagal','Pengajuan surat tugas gagal ditambahkan.');
         }
 
         DB::commit();
-        $this->setFlashData('success','Berhasil','Pengajuan surat rekomendasi berhasil ditambahkan.');
-        return redirect($this->segmentUser.'/surat-rekomendasi');
+        $this->setFlashData('success','Berhasil','Pengajuan surat tugas berhasil ditambahkan.');
+        return redirect($this->segmentUser.'/surat-tugas');
+    }
+
+    public function destroy(PengajuanSuratTugas $pengajuanSurat)
+    {
+        $pengajuanSurat->delete();
+        $this->setFlashData('success','Berhasil','Pengajuan surat tugas berhasil dihapus');
+        return redirect($this->segmentUser.'/surat-tugas');
     }
 
     public function verification(Request $request){
         $status='verifikasi kabag';
-        $pengajuan = PengajuanSuratRekomendasi::findOrFail($request->id);
-        $user = $pengajuan->suratRekomendasi->user;
+        $pengajuan = PengajuanSuratTugas::findOrFail($request->id);
+        $user = $pengajuan->suratTugas->user;
 
-        $isiNotifikasi = 'Verifikasi surat rekomendasi';
+        $isiNotifikasi = 'Verifikasi surat tugas';
 
-        if(Auth::user()->jabatan == 'kabag tata usaha' || $pengajuan->suratRekomendasi->user->jabatan == 'kabag tata usaha'){
+        if(Auth::user()->jabatan == 'kabag tata usaha' || $pengajuan->suratTugas->user->jabatan == 'kabag tata usaha'){
             $status='menunggu tanda tangan';
-            $isiNotifikasi = 'Tanda tangan surat rekomendasi';
+            $isiNotifikasi = 'Tanda tangan surat tugas';
         }
 
         DB::beginTransaction();
@@ -210,17 +210,17 @@ class PengajuanSuratRekomendasiController extends Controller
 
             NotifikasiUser::create([
                 'nip'=>$user->nip,
-                'judul_notifikasi'=>'Surat Rekomendasi',
+                'judul_notifikasi'=>'Surat Tugas',
                 'isi_notifikasi'=>$isiNotifikasi,
-                'link_notifikasi'=>url('pimpinan/surat-rekomendasi'),
+                'link_notifikasi'=>url('pimpinan/surat-tugas'),
             ]);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Pengajuan Gagal','Pengajuan surat rekomendasi gagal ditambahkan.');
+            $this->setFlashData('error','Pengajuan Gagal','Pengajuan surat tugas gagal ditambahkan.');
         }
 
         DB::commit();
-        $this->setFlashData('success','Berhasil','Surat rekomendasi berhasil diverifikasi');
-        return redirect($this->segmentUser.'/surat-rekomendasi');
+        $this->setFlashData('success','Berhasil','Surat tugas berhasil diverifikasi');
+        return redirect($this->segmentUser.'/surat-tugas');
     }
 }

@@ -14,11 +14,11 @@ class AddRelationshipTopDaftarTugasMahasiswa extends Migration
     public function up()
     {
         Schema::table('daftar_tugas_mahasiswa', function (Blueprint $table) {
-            $table->primary(['id_surat_tugas','nim']);
+            $table->primary(['id_pengajuan','nim']);
     
-            $table->foreign('id_surat_tugas')
+            $table->foreign('id_pengajuan')
                   ->references('id')
-                  ->on('surat_tugas')
+                  ->on('pengajuan_surat_tugas')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
     
@@ -38,7 +38,7 @@ class AddRelationshipTopDaftarTugasMahasiswa extends Migration
     public function down()
     {
         Schema::table('daftar_tugas_mahasiswa', function (Blueprint $table) {
-            $table->dropForeign(['id_surat_tugas']);
+            $table->dropForeign(['id_pengajuan']);
             $table->dropForeign(['nim']);
         });
     }

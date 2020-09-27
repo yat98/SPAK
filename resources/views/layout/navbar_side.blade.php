@@ -240,7 +240,7 @@
                         <a class="nav-link {{ ($halaman == 'surat-rekomendasi') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/pengajuan/surat-rekomendasi') }}">Surat Rekomendasi</a>
                     </li>
                     <li class="nav-item"> 
-                        <a class="nav-link {{ ($halaman == 'surat-tugas') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-tugas') }}">Surat Tugas</a>
+                        <a class="nav-link {{ ($halaman == 'surat-tugas') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/pengajuan/surat-tugas') }}">Surat Tugas</a>
                     </li>
                     <li class="nav-item"> 
                         <a class="nav-link {{ ($halaman == 'surat-persetujuan-pindah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/pengajuan/surat-persetujuan-pindah') }}">Surat Persetujuan Pindah</a>

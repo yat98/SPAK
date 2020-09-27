@@ -14,7 +14,7 @@ class CreateDaftarTugasMahasiswaTable extends Migration
     public function up()
     {
         Schema::create('daftar_tugas_mahasiswa', function (Blueprint $table) {
-            $table->integer('id_surat_tugas')->unsigned()->index();
+            $table->integer('id_pengajuan')->unsigned()->index();
             $table->char('nim',25)->index();
             $table->timestamps();
         });

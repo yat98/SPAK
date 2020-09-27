@@ -327,11 +327,7 @@ class MahasiswaController extends Controller
                                                ->get();
         $suratDispensasiList = [];
         $suratRekomendasiList = [];
-        $suratTugasList = SuratTugas::select('*','surat_tugas.created_at','surat_tugas.updated_at')
-                                               ->join('daftar_tugas_mahasiswa','daftar_tugas_mahasiswa.id_surat_tugas','=','surat_tugas.id')
-                                               ->where('nim',Auth::user()->nim)
-                                               ->orderByDesc('surat_tugas.created_at')
-                                               ->get();
+        $suratTugasList = [];
 
         $pengajuanSuratLulusList = PengajuanSuratKeteranganLulus::where('nim',Auth::user()->nim)->get();
         $pengajuanSuratMaterialList = PengajuanSuratPermohonanPengambilanMaterial::join('daftar_kelompok_pengambilan_material','daftar_kelompok_pengambilan_material.id_pengajuan','=','pengajuan_surat_permohonan_pengambilan_material.id')
@@ -357,7 +353,7 @@ class MahasiswaController extends Controller
         $countAllPengajuanPindah =    $pengajuanSuratPindahList->count();
         $countAllDispensasi =    0;
         $countAllSuratRekomendasi =    0;
-        $countAllSuratTugas =    $suratTugasList->count();
+        $countAllSuratTugas =    0;
         $countAllPengajuanKegiatan = ($pengajuanKegiatanList != null) ? $pengajuanKegiatanList->count() : 0;
         $countPendaftaranCuti = $pendaftaranCutiList->count();
         $countAllPengajuanLulus = $pengajuanSuratLulusList->count();
@@ -371,7 +367,7 @@ class MahasiswaController extends Controller
         $pengajuanSuratPindahList = $pengajuanSuratPindahList->take(5);
         $suratDispensasiList = [];
         $suratRekomendasiList = [];
-        $suratTugasList = $suratTugasList->take(5);
+        $suratTugasList = [];
         $pengajuanKegiatanList =  ($pengajuanKegiatanList != null) ? $pengajuanKegiatanList->take(5) : null;
         $pendaftaranCutiList = $pendaftaranCutiList->take(5);
         $pengajuanSuratLulusList = $pengajuanSuratLulusList->take(5);

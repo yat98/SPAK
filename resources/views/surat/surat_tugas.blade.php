@@ -100,11 +100,11 @@
         <div class="border"></div>
         <div class="text-center mt-1">
             <p class="m-0"><b><span class="underline">SURAT TUGAS</span></b></p>
-            <p class="m-0"><b><i>Nomor : B/{{$suratTugas->nomor_surat}}/{{$suratTugas->kodeSurat->kode_surat}}/{{$suratTugas->created_at->year}}</i></b></p>
+            <p class="m-0"><b><i>Nomor: <span style="display:inline-block;width:20px;height:auto"></span>{{$suratTugas->nomor_surat}}/{{$suratTugas->kodeSurat->kode_surat}}<span style="display:inline-block;width:20px;height:auto"></span>/<span style="display:inline-block;width:50px;height:auto"></span>/{{$suratTugas->created_at->year}}</i></b></p>
         </div>
         <div class="content">
             <p class="m-0">Dekan Fakultas Teknik Universitas Negeri Gorontalo menugaskan kepada :</p>
-            @if($suratTugas->mahasiswa->count() > 0)
+            @if($suratTugas->pengajuanSuratTugas->mahasiswa->count() > 0)
                     <table class="m-0 text-center table table-margin">
                     <tr class="table">
                         <th class="table">NO</th>
@@ -113,7 +113,7 @@
                         <th class="table">PROGRAM STUDI</th>
                         <th class="table">JURUSAN</th>
                     </tr>
-                    @foreach($suratTugas->mahasiswa as $mahasiswa)
+                    @foreach($suratTugas->pengajuanSuratTugas->mahasiswa as $mahasiswa)
                         <tr class="table">
                             <td class="table">{{ $loop->iteration }}</td>
                             <td class="table">{{ $mahasiswa->nama }}</td>
@@ -125,27 +125,39 @@
                     </table>
             @endif
             <p class="m-0">
-                Untuk mengikuti pelaksaaan {{ strtolower($suratTugas->jenis_kegiatan) }} <b>"{{ ucwords($suratTugas->nama_kegiatan) }}"</b>, yang akan dilaksanakan pada tanggal
-                @if($suratTugas->tanggal_awal_kegiatan->equalTo($suratTugas->tanggal_akhir_kegiatan))
-                    {{$suratTugas->tanggal_awal_kegiatan->isoFormat('D MMMM Y')}}
-                @elseif($suratTugas->tanggal_awal_kegiatan->isSameMonth($suratTugas->tanggal_akhir_kegiatan))
-                    {{$suratTugas->tanggal_awal_kegiatan->isoFormat('D').' - '.$suratTugas->tanggal_akhir_kegiatan->isoFormat('D').' '.$suratTugas->tanggal_awal_kegiatan->isoFormat('MMMM Y')}}
+                Untuk mengikuti pelaksaaan {{ strtolower($suratTugas->pengajuanSuratTugas->jenis_kegiatan) }} <b>"{{ ucwords($suratTugas->pengajuanSuratTugas->nama_kegiatan) }}"</b>, yang akan dilaksanakan pada tanggal
+                @if($suratTugas->pengajuanSuratTugas->tanggal_awal_kegiatan->equalTo($suratTugas->pengajuanSuratTugas->tanggal_akhir_kegiatan))
+                    {{$suratTugas->pengajuanSuratTugas->tanggal_awal_kegiatan->isoFormat('D MMMM Y')}}
+                @elseif($suratTugas->pengajuanSuratTugas->tanggal_awal_kegiatan->isSameMonth($suratTugas->pengajuanSuratTugas->tanggal_akhir_kegiatan))
+                    {{$suratTugas->pengajuanSuratTugas->tanggal_awal_kegiatan->isoFormat('D').' - '.$suratTugas->pengajuanSuratTugas->tanggal_akhir_kegiatan->isoFormat('D').' '.$suratTugas->pengajuanSuratTugas->tanggal_awal_kegiatan->isoFormat('MMMM Y')}}
                 @else
-                    {{$suratTugas->tanggal_awal_kegiatan->isoFormat('D MMMM Y').' - '.$suratTugas->tanggal_akhir_kegiatan->isoFormat('D MMMM Y')}}
+                    {{$suratTugas->pengajuanSuratTugas->tanggal_awal_kegiatan->isoFormat('D MMMM Y').' - '.$suratTugas->pengajuanSuratTugas->tanggal_akhir_kegiatan->isoFormat('D MMMM Y')}}
                 @endif
-                di {{ $suratTugas->tempat_kegiatan}}.
+                di {{ $suratTugas->pengajuanSuratTugas->tempat_kegiatan}}.
             </p>
            <p class="m-0">Demikian surat tugas ini di berikan kepada yang bersangkutan untuk dilaksanakan sebagaimana mestinya.</p>
         </div>
         <div class="signature">
             <div class="signature-content">
                 <p class="m-0"><b>Gorontalo, {{$suratTugas->created_at->isoFormat('D MMMM Y')}}</b></p>
-                <p class="m-0"><b>Dekan,</b></p>
+                @if($suratTugas->user->jabatan == 'dekan')
+                    <p class="m-0"><b>Dekan</b></p>
+                @else
+                    @if($suratTugas->user->jabatan == 'wd3')
+                        <p class="m-0"><b>Wakil Dekan Bidang Kemahasiswaan dan Alumni,</b></p>
+                    @elseif($suratTugas->user->jabatan == 'kabag tata usaha')
+                        <p class="m-0"><b>Kabag TU</b></p>
+                    @endif                 
+                @endif
                 <p class="m-0 tanda-tangan-margin">
-                    <img class="tanda-tangan" src="{{$suratTugas->user->tanda_tangan}}">
+                    @if($suratTugas->pengajuanSuratTugas->status == 'selesai')
+                        <img class="tanda-tangan" src="{{$suratTugas->user->tanda_tangan}}">
+                    @else
+                        <div class="tanda-tangan"></div>
+                    @endif
                 </p>
                 <p class="m-0"><b>{{$suratTugas->user->nama}}</b></p>
-                <p class="m-0"><b>NIP. {{substr($suratTugas->user->nip,0,8)}} {{substr($suratTugas->user->nip,8,6)}} {{substr($suratTugas->user->nip,14,1)}} {{substr($suratTugas->user->nip,15,3)}}</b></p>
+                <p class="m-0"><b>NIP. {{$suratTugas->user->nip}}</b></p>
             </div>
         </div>
         <div class="content" style="padding-top:60px">
