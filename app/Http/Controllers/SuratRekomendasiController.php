@@ -278,7 +278,7 @@ class SuratRekomendasiController extends Controller
 
             if($suratRekomendasi->jumlah_cetak >= 3){
                 $this->setFlashData('info','Cetak Surat','Anda telah mencetak surat rekomendasi sebanyak 3 kali.');
-                return redirect('mahasiswa/pengajuan/surat-rekomendasi');
+                return redirect('mahasiswa/surat-rekomendasi');
             }
         }
 

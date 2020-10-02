@@ -18,7 +18,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h3 class="mb-5">Tambah Surat Tugas</h3>
-                                {{ Form::open(['url'=>'operator/surat-tugas/pengajuan','files'=>true]) }}
+                                {{ Form::open(['url'=>'operator/surat-tugas','files'=>true]) }}
                                 @include('operator.form_surat_tugas',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>

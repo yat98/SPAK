@@ -1,17 +1,17 @@
 <div class="row">
-    <div class="col-md-10">
+    <div class="col-md-12">
         <div class="form-group">
             {{ Form::label('nim','NIM') }}
             <br>
             @if ($errors->any())
             @if ($errors->has('nim'))
-            {{ Form::text('nim',Session::get('nim'),['class'=>'form-control form-control-lg is-invalid','id'=>'nim','readonly'=>'readonly']) }}
+            {{ Form::text('nim',Auth::user()->nim,['class'=>'form-control form-control-lg is-invalid','id'=>'nim','readonly'=>'readonly']) }}
             <div class="text-danger-red mt-1"><small>{{ $errors->first('nim') }}</small></div>
             @else
-            {{ Form::text('nim',Session::get('nim'),['class'=>'form-control form-control-lg','id'=>'nim','readonly'=>'readonly']) }}
+            {{ Form::text('nim',Auth::user()->nim,['class'=>'form-control form-control-lg','id'=>'nim','readonly'=>'readonly']) }}
             @endif
             @else
-            {{ Form::text('nim',Session::get('nim'),['class'=>'form-control form-control-lg','id'=>'nim','readonly'=>'readonly']) }}
+            {{ Form::text('nim',Auth::user()->nim,['class'=>'form-control form-control-lg','id'=>'nim','readonly'=>'readonly']) }}
             @endif
         </div>  
         <div class="form-group">
@@ -19,13 +19,13 @@
             <br>
             @if ($errors->any())
             @if ($errors->has('nama'))
-            {{ Form::text('nama',Session::get('username'),['class'=>'form-control form-control-lg is-invalid','id'=>'nama','disabled'=>'disabled']) }}
+            {{ Form::text('nama',Auth::user()->nama,['class'=>'form-control form-control-lg is-invalid','id'=>'nama','disabled'=>'disabled']) }}
             <div class="text-danger-red mt-1"><small>{{ $errors->first('nim') }}</small></div>
             @else
-            {{ Form::text('nama',Session::get('username'),['class'=>'form-control form-control-lg','id'=>'nama','disabled'=>'disabled']) }}
+            {{ Form::text('nama',Auth::user()->nama,['class'=>'form-control form-control-lg','id'=>'nama','disabled'=>'disabled']) }}
             @endif
             @else
-            {{ Form::text('nama',Session::get('username'),['class'=>'form-control form-control-lg','id'=>'nama','disabled'=>'disabled']) }}
+            {{ Form::text('nama',Auth::user()->nama,['class'=>'form-control form-control-lg','id'=>'nama','disabled'=>'disabled']) }}
             @endif
         </div>
         <div class="form-group">
@@ -68,13 +68,13 @@
             @endif
         </div>
         <div class="form-group">
-            @if(isset($pengajuanSuratPersetujuanPindah))
+            @if(isset($pengajuanSurat))
                 <div class="form-row">
                     <div class="col-md-8 col-12">
-                        {{ Form::label('file_surat_keterangan_lulus_butuh','File Surat Keterangan Lulus Butuh *(Ukuran File < 1MB)',['class'=>'mt-2']) }}
+                        {{ Form::label('file_surat_keterangan_lulus_butuh','File Surat Keterangan Lulus Butuh *(Ukuran File < 2MB)',['class'=>'mt-2']) }}
                     </div>
                     <div class="col-md-4 col-12 text-right">
-                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSuratPersetujuanPindah->file_surat_keterangan_lulus_butuh) }}"  data-lightbox="{{ explode('.',$pengajuanSuratPersetujuanPindah->file_surat_keterangan_lulus_butuh)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
+                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSurat->file_surat_keterangan_lulus_butuh) }}"  data-lightbox="{{ explode('.',$pengajuanSurat->file_surat_keterangan_lulus_butuh)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
                         <a href="" class="btn btn-sm btn-warning btn-ubah-file-pindah">Ubah File</a>    
                     </div>
                 </div>
@@ -87,7 +87,7 @@
                     </span>
                 </div>
             @else
-                {{ Form::label('file_surat_keterangan_lulus_butuh','File Surat Keterangan Lulus Butuh *(Ukuran File < 1MB)') }}
+                {{ Form::label('file_surat_keterangan_lulus_butuh','File Surat Keterangan Lulus Butuh *(Ukuran File < 2MB)') }}
                 {{ Form::file('file_surat_keterangan_lulus_butuh',['class'=>'file-upload-default','id'=>'file_surat_keterangan_lulus_butuh']) }}
                 <div class="input-group col-xs-12">
                     {{ Form::text('',null,['class'=>'form-control file-upload-info','placeholder'=>'Upload File Surat Keterangan Lulus Butuh','disabled'=>'disabled']) }}
@@ -102,13 +102,13 @@
             @endif
         </div>  
         <div class="form-group">
-            @if(isset($pengajuanSuratPersetujuanPindah))
+            @if(isset($pengajuanSurat))
                 <div class="form-row">
                     <div class="col-md-8 col-12">
-                       {{ Form::label('file_ijazah_terakhir','File Ijazah Terakhir *(Ukuran File < 1MB)',['class'=>'mt-2']) }}
+                       {{ Form::label('file_ijazah_terakhir','File Ijazah Terakhir *(Ukuran File < 2MB)',['class'=>'mt-2']) }}
                     </div>
                     <div class="col-md-4 col-12 text-right">
-                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSuratPersetujuanPindah->file_ijazah_terakhir) }}"  data-lightbox="{{ explode('.',$pengajuanSuratPersetujuanPindah->file_ijazah_terakhir)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
+                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSurat->file_ijazah_terakhir) }}"  data-lightbox="{{ explode('.',$pengajuanSurat->file_ijazah_terakhir)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
                         <a href="" class="btn btn-sm btn-warning btn-ubah-file-pindah">Ubah File</a>    
                     </div>
                 </div>
@@ -121,7 +121,7 @@
                     </span>
                 </div>
             @else
-                {{ Form::label('file_ijazah_terakhir','File Ijazah Terakhir *(Ukuran File < 1MB)') }}
+                {{ Form::label('file_ijazah_terakhir','File Ijazah Terakhir *(Ukuran File < 2MB)') }}
                 {{ Form::file('file_ijazah_terakhir',['class'=>'file-upload-default','id'=>'file_ijazah_terakhir']) }}
                 <div class="input-group col-xs-12">
                     {{ Form::text('',null,['class'=>'form-control file-upload-info','placeholder'=>'Upload File Ijazah Terakhir','disabled'=>'disabled']) }}
@@ -136,13 +136,13 @@
             @endif
         </div>  
         <div class="form-group">
-            @if(isset($pengajuanSuratPersetujuanPindah))
+            @if(isset($pengajuanSurat))
                 <div class="form-row">
                     <div class="col-md-8 col-12">
-                       {{ Form::label('file_surat_rekomendasi_jurusan','File Surat Rekomendasi Jurusan *(Ukuran File < 1MB)',['class'=>'mt-2']) }}
+                       {{ Form::label('file_surat_rekomendasi_jurusan','File Surat Rekomendasi Jurusan *(Ukuran File < 2MB)',['class'=>'mt-2']) }}
                     </div>
                     <div class="col-md-4 col-12 text-right">
-                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSuratPersetujuanPindah->file_surat_rekomendasi_jurusan) }}"  data-lightbox="{{ explode('.',$pengajuanSuratPersetujuanPindah->file_surat_rekomendasi_jurusan)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
+                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSurat->file_surat_rekomendasi_jurusan) }}"  data-lightbox="{{ explode('.',$pengajuanSurat->file_surat_rekomendasi_jurusan)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
                         <a href="" class="btn btn-sm btn-warning btn-ubah-file-pindah">Ubah File</a>    
                     </div>
                 </div>
@@ -155,7 +155,7 @@
                     </span>
                 </div>
             @else
-                {{ Form::label('file_surat_rekomendasi_jurusan','File Surat Rekomendasi Jurusan *(Ukuran File < 1MB)') }}
+                {{ Form::label('file_surat_rekomendasi_jurusan','File Surat Rekomendasi Jurusan *(Ukuran File < 2MB)') }}
                 {{ Form::file('file_surat_rekomendasi_jurusan',['class'=>'file-upload-default','id'=>'file_surat_rekomendasi_jurusan']) }}
                 <div class="input-group col-xs-12">
                     {{ Form::text('',null,['class'=>'form-control file-upload-info','placeholder'=>'Upload File Surat Rekomendasi Jurusan','disabled'=>'disabled']) }}
@@ -170,13 +170,13 @@
             @endif
         </div>
         <div class="form-group">
-            @if(isset($pengajuanSuratPersetujuanPindah))
+            @if(isset($pengajuanSurat))
                 <div class="form-row">
                     <div class="col-md-8 col-12">
-                        {{ Form::label('file_surat_keterangan_bebas_perlengkapan_universitas','File Surat Keterangan Bebas Perlengkapan Universitas *(Ukuran File < 1MB)',['class'=>'mt-2']) }}
+                        {{ Form::label('file_surat_keterangan_bebas_perlengkapan_universitas','File Surat Keterangan Bebas Perlengkapan Universitas *(Ukuran File < 2MB)',['class'=>'mt-2']) }}
                     </div>
                     <div class="col-md-4 col-12 text-right">
-                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perlengkapan_universitas) }}"  data-lightbox="{{ explode('.',$pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perlengkapan_universitas)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
+                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSurat->file_surat_keterangan_bebas_perlengkapan_universitas) }}"  data-lightbox="{{ explode('.',$pengajuanSurat->file_surat_keterangan_bebas_perlengkapan_universitas)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
                         <a href="" class="btn btn-sm btn-warning btn-ubah-file-pindah">Ubah File</a>    
                     </div>
                 </div>
@@ -189,7 +189,7 @@
                     </span>
                 </div>
             @else
-                {{ Form::label('file_surat_keterangan_bebas_perlengkapan_universitas','File Surat Keterangan Bebas Perlengkapan Universitas *(Ukuran File < 1MB)') }}
+                {{ Form::label('file_surat_keterangan_bebas_perlengkapan_universitas','File Surat Keterangan Bebas Perlengkapan Universitas *(Ukuran File < 2MB)') }}
                 {{ Form::file('file_surat_keterangan_bebas_perlengkapan_universitas',['class'=>'file-upload-default','id'=>'file_surat_keterangan_bebas_perlengkapan_universitas']) }}
                 <div class="input-group col-xs-12">
                     {{ Form::text('',null,['class'=>'form-control file-upload-info','placeholder'=>'Upload File Surat Keterangan Bebas Perlengkapan Universitas','disabled'=>'disabled']) }}
@@ -204,13 +204,13 @@
             @endif
         </div>
         <div class="form-group">
-            @if(isset($pengajuanSuratPersetujuanPindah))
+            @if(isset($pengajuanSurat))
                 <div class="form-row">
                     <div class="col-md-8 col-12">
-                        {{ Form::label('file_surat_keterangan_bebas_perlengkapan_fakultas','File Surat Keterangan Bebas Perlengkapan Fakultas *(Ukuran File < 1MB)',['class'=>'mt-2']) }}
+                        {{ Form::label('file_surat_keterangan_bebas_perlengkapan_fakultas','File Surat Keterangan Bebas Perlengkapan Fakultas *(Ukuran File < 2MB)',['class'=>'mt-2']) }}
                     </div>
                     <div class="col-md-4 col-12 text-right">
-                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perlengkapan_fakultas) }}"  data-lightbox="{{ explode('.',$pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perlengkapan_fakultas)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
+                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSurat->file_surat_keterangan_bebas_perlengkapan_fakultas) }}"  data-lightbox="{{ explode('.',$pengajuanSurat->file_surat_keterangan_bebas_perlengkapan_fakultas)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
                         <a href="" class="btn btn-sm btn-warning btn-ubah-file-pindah">Ubah File</a>    
                     </div>
                 </div>
@@ -223,7 +223,7 @@
                     </span>
                 </div>
             @else
-                {{ Form::label('file_surat_keterangan_bebas_perlengkapan_fakultas','File Surat Keterangan Bebas Perlengkapan Fakultas *(Ukuran File < 1MB)') }}
+                {{ Form::label('file_surat_keterangan_bebas_perlengkapan_fakultas','File Surat Keterangan Bebas Perlengkapan Fakultas *(Ukuran File < 2MB)') }}
                 {{ Form::file('file_surat_keterangan_bebas_perlengkapan_fakultas',['class'=>'file-upload-default','id'=>'file_surat_keterangan_bebas_perlengkapan_fakultas']) }}           
                 <div class="input-group col-xs-12">
                     {{ Form::text('',null,['class'=>'form-control file-upload-info','placeholder'=>'Upload File Surat Keterangan Bebas Perlengkapan Fakultas','disabled'=>'disabled']) }}
@@ -238,13 +238,13 @@
             @endif
         </div>
         <div class="form-group">
-            @if(isset($pengajuanSuratPersetujuanPindah))
+            @if(isset($pengajuanSurat))
                 <div class="form-row">
                     <div class="col-md-8 col-12">
-                        {{ Form::label('file_surat_keterangan_bebas_perpustakaan_universitas','File Surat Keterangan Bebas Perpustakaan Universitas *(Ukuran File < 1MB)',['class'=>'mt-2']) }}
+                        {{ Form::label('file_surat_keterangan_bebas_perpustakaan_universitas','File Surat Keterangan Bebas Perpustakaan Universitas *(Ukuran File < 2MB)',['class'=>'mt-2']) }}
                     </div>
                     <div class="col-md-4 col-12 text-right">
-                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perpustakaan_universitas) }}"  data-lightbox="{{ explode('.',$pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perpustakaan_universitas)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
+                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSurat->file_surat_keterangan_bebas_perpustakaan_universitas) }}"  data-lightbox="{{ explode('.',$pengajuanSurat->file_surat_keterangan_bebas_perpustakaan_universitas)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
                         <a href="" class="btn btn-sm btn-warning btn-ubah-file-pindah">Ubah File</a>    
                     </div>
                 </div>
@@ -257,7 +257,7 @@
                     </span>
                 </div>
             @else
-                {{ Form::label('file_surat_keterangan_bebas_perpustakaan_universitas','File Surat Keterangan Bebas Perpustakaan Universitas *(Ukuran File < 1MB)') }}
+                {{ Form::label('file_surat_keterangan_bebas_perpustakaan_universitas','File Surat Keterangan Bebas Perpustakaan Universitas *(Ukuran File < 2MB)') }}
                 {{ Form::file('file_surat_keterangan_bebas_perpustakaan_universitas',['class'=>'file-upload-default','id'=>'file_surat_keterangan_bebas_perpustakaan_universitas']) }}
                 <div class="input-group col-xs-12">
                     {{ Form::text('',null,['class'=>'form-control file-upload-info','placeholder'=>'Upload File Surat Keterangan Bebas Perpustakaan Universitas','disabled'=>'disabled']) }}
@@ -272,13 +272,13 @@
             @endif
         </div>
         <div class="form-group">
-            @if(isset($pengajuanSuratPersetujuanPindah))
+            @if(isset($pengajuanSurat))
                 <div class="form-row">
                     <div class="col-md-8 col-12">
-                        {{ Form::label('file_surat_keterangan_bebas_perpustakaan_fakultas','File Surat Keterangan Bebas Perpustakaan Fakultas *(Ukuran File < 1MB)') }}
+                        {{ Form::label('file_surat_keterangan_bebas_perpustakaan_fakultas','File Surat Keterangan Bebas Perpustakaan Fakultas *(Ukuran File < 2MB)') }}
                     </div>
                     <div class="col-md-4 col-12 text-right">
-                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perpustakaan_fakultas) }}"  data-lightbox="{{ explode('.',$pengajuanSuratPersetujuanPindah->file_surat_keterangan_bebas_perpustakaan_fakultas)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
+                        <a href="{{ asset('upload_persetujuan_pindah/'.$pengajuanSurat->file_surat_keterangan_bebas_perpustakaan_fakultas) }}"  data-lightbox="{{ explode('.',$pengajuanSurat->file_surat_keterangan_bebas_perpustakaan_fakultas)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
                         <a href="" class="btn btn-sm btn-warning btn-ubah-file-pindah">Ubah File</a>    
                     </div>
                 </div>
@@ -291,7 +291,7 @@
                     </span>
                 </div>
             @else
-                {{ Form::label('file_surat_keterangan_bebas_perpustakaan_fakultas','File Surat Keterangan Bebas Perpustakaan Fakultas *(Ukuran File < 1MB)') }}
+                {{ Form::label('file_surat_keterangan_bebas_perpustakaan_fakultas','File Surat Keterangan Bebas Perpustakaan Fakultas *(Ukuran File < 2MB)') }}
                 {{ Form::file('file_surat_keterangan_bebas_perpustakaan_fakultas',['class'=>'file-upload-default','id'=>'file_surat_keterangan_bebas_perpustakaan_fakultas']) }}
                 <div class="input-group col-xs-12">
                     {{ Form::text('',null,['class'=>'form-control file-upload-info','placeholder'=>'Upload File Surat Keterangan Bebas Perpustakaan Fakultas','disabled'=>'disabled']) }}

@@ -283,7 +283,7 @@ class SuratTugasController extends Controller
 
             if($suratTugas->jumlah_cetak >= 3){
                 $this->setFlashData('info','Cetak Surat','Anda telah mencetak surat tugas sebanyak 3 kali.');
-                return redirect('mahasiswa/pengajuan/surat-tugas');
+                return redirect('mahasiswa/surat-tugas');
             }
         }
 

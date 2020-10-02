@@ -18,7 +18,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h3 class="mb-5">Tambah Pengajuan Surat Keterangan Kelakuan Baik</h3>
-                                {{ Form::open(['url'=>'operator/pengajuan/surat-keterangan-kelakuan-baik']) }}
+                                {{ Form::open(['url'=>'operator/surat-keterangan-kelakuan-baik/pengajuan']) }}
                                 @include('operator.form_pengajuan_surat_keterangan_kelakuan_baik',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>

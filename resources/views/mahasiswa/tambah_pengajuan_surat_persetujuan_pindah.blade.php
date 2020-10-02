@@ -17,8 +17,8 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Buat Pengajuan Surat Persetujuan Pindah</h3>
-                                {{ Form::open(['url'=>'mahasiswa/pengajuan/surat-persetujuan-pindah','files'=>true]) }}
+                                <h3 class="mb-5">Tambah Pengajuan Surat Persetujuan Pindah</h3>
+                                {{ Form::open(['url'=>'mahasiswa/surat-persetujuan-pindah/pengajuan','files'=>true]) }}
                                 @include('mahasiswa.form_pengajuan_surat_persetujuan_pindah',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>

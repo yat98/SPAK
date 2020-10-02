@@ -10,6 +10,7 @@ class PengajuanSuratPersetujuanPindah extends Model
 
     protected $fillable = [
         'nim',
+        'id_operator',
         'nama_prodi',
         'strata',
         'nama_kampus',
@@ -26,6 +27,10 @@ class PengajuanSuratPersetujuanPindah extends Model
 
     public function mahasiswa(){
         return $this->belongsTo('App\Mahasiswa','nim');
+    }
+
+    public function operator(){
+        return $this->belongsTo('App\Operator','id_operator');
     }
 
     public function suratPersetujuanPindah(){

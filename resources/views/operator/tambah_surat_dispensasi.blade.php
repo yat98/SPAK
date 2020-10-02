@@ -18,7 +18,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h3 class="mb-5">Tambah Surat Dispensasi</h3>
-                                {{ Form::open(['url'=>'operator/surat-dispensasi/pengajuan','files'=>true]) }}
+                                {{ Form::open(['url'=>'operator/surat-dispensasi','files'=>true]) }}
                                 @include('operator.form_surat_dispensasi',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>

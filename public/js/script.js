@@ -618,7 +618,6 @@ $('.btn-tambah-tahapan').on('click',function(e){
                         </div>`);
 });
 
-
 $('.table-responsive').on('click','.btn-pengajuan-surat-dispensasi-detail',function(e){
     e.preventDefault();
     $('#surat-dispensasi-detail-content').empty();
@@ -1116,7 +1115,6 @@ $('.table-responsive').on('click','.btn-pengajuan-surat-tugas-detail',function(e
                 });
 });
 
-
 $('.table-responsive').on('click','.btn-surat-tugas-detail',function(e){
     e.preventDefault();
     $('#surat-tugas-detail-content').empty();
@@ -1221,24 +1219,31 @@ $('.table-responsive').on('click','.btn-surat-tugas-detail',function(e){
                 });
 });
 
-
-$('.btn-pengajuan-pindah').on('click',function(e){
+$('.table-responsive').on('click','.pengajuan-surat-pindah-detail',function(e){
     e.preventDefault();
-    $('#persetujuan-pindah-detail-content').empty();
+    $('#surat-pindah-detail-content').empty();
     let url = $(this).attr('href');
     let a = fetch(url)
                 .then(response => response.json())
                 .then(result => {
                     let pengajuan =result;
-                    
+                    let diajukan;
                     let label;
-                    if(pengajuan.status == 'menunggu tanda tangan' || pengajuan.status == 'diajukan'){
-                        label = `<label class="badge badge-gradient-warning text-dark">${pengajuan.status.ucwords()}</label>`;
-                    }else if(pengajuan.status == 'ditolak'){
-                        label = `<label class="badge badge-gradient-danger">${pengajuan.status.ucwords()}</label>`;
+
+                    if (pengajuan.status == 'Selesai'){
+                        label=`<label class="badge badge-gradient-info">${pengajuan.status}</label>`;
+                    }else if (pengajuan.status == 'Ditolak'){
+                        label=`<label class="badge badge-gradient-danger">${pengajuan.status}</label>`;
                     }else{
-                        label = `<label class="badge badge-gradient-info">${pengajuan.status.ucwords()}</label>`;
+                        label=`<label class="badge badge-gradient-warning text-dark">${pengajuan.status}</label>`;
                     }
+
+                    if(pengajuan.id_operator == null){
+                        diajukan = pengajuan.mahasiswa.nama;
+                    }else{
+                        diajukan = pengajuan.operator.nama;
+                    }
+
                     let html = `<div class="table-responsive">
                                     <table class="table">
                                         <tr>
@@ -1256,6 +1261,10 @@ $('.btn-pengajuan-pindah').on('click',function(e){
                                         <tr>
                                             <th>Program Studi</th>
                                             <td>${pengajuan.strata} - ${pengajuan.nama_prodi}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Diajukan Oleh</th>
+                                            <td>${diajukan}</td>
                                         </tr>
                                         <tr>
                                             <th>Status</th>
@@ -1323,15 +1332,15 @@ $('.btn-pengajuan-pindah').on('click',function(e){
                                         </tr>
                                         <tr>
                                             <th>Di Buat</th>
-                                            <td>${pengajuan.created_at}</td>
+                                            <td>${pengajuan.dibuat}</td>
                                         </tr>
                                     </table>
                                 </div>`;
-                    $('#persetujuan-pindah-detail-content').html(html);
+                    $('#surat-pindah-detail-content').html(html);
                 });
 });
 
-$('.btn-surat-pindah-detail').on('click',function(e){
+$('.table-responsive').on('click','.btn-surat-pindah-detail',function(e){
     e.preventDefault();
     $('#surat-pindah-detail-content').empty();
     let url = $(this).attr('href');
@@ -1339,20 +1348,24 @@ $('.btn-surat-pindah-detail').on('click',function(e){
                 .then(response => response.json())
                 .then(result => {
                     let pengajuan =result;
-                    let label;
-                    if(pengajuan.pengajuan_surat_persetujuan_pindah.status == 'menunggu tanda tangan' || pengajuan.pengajuan_surat_persetujuan_pindah.status == 'diajukan'){
-                        label = `<label class="badge badge-gradient-warning text-dark">${pengajuan.pengajuan_surat_persetujuan_pindah.status.ucwords()}</label>`;
-                    }else if(pengajuan.pengajuan_surat_persetujuan_pindah.status == 'ditolak'){
-                        label = `<label class="badge badge-gradient-danger">${pengajuan.pengajuan_surat_persetujuan_pindah.status.ucwords()}</label>`;
+                    let label,diajukan;
+                    
+                    if (pengajuan.status == 'Selesai'){
+                        label=`<label class="badge badge-gradient-info">${pengajuan.status}</label>`;
+                    }else if (pengajuan.status == 'Ditolak'){
+                        label=`<label class="badge badge-gradient-danger">${pengajuan.status}</label>`;
                     }else{
-                        label = `<label class="badge badge-gradient-info">${pengajuan.pengajuan_surat_persetujuan_pindah.status.ucwords()}</label>`;
+                        label=`<label class="badge badge-gradient-warning text-dark">${pengajuan.status}</label>`;
                     }
+
+                    if(pengajuan.id_operator == null){
+                        diajukan = pengajuan.pengajuan_surat_persetujuan_pindah.mahasiswa.nama;
+                    }else{
+                        diajukan = pengajuan.pengajuan_surat_persetujuan_pindah.operator.nama;
+                    }
+
                     let html = `<div class="table-responsive">
                                     <table class="table">
-                                        <tr>
-                                            <th>Nomor Surat</th>
-                                            <td>B/${pengajuan.nomor_surat}/${pengajuan.kode_surat.kode_surat}/${pengajuan.created_at.toString().slice(6,10)}</td>
-                                        </tr>
                                         <tr>
                                             <th>NIM</th>
                                             <td>${pengajuan.pengajuan_surat_persetujuan_pindah.mahasiswa.nim}</td>
@@ -1370,12 +1383,32 @@ $('.btn-surat-pindah-detail').on('click',function(e){
                                             <td>${pengajuan.pengajuan_surat_persetujuan_pindah.strata} - ${pengajuan.pengajuan_surat_persetujuan_pindah.nama_prodi}</td>
                                         </tr>
                                         <tr>
+                                            <th>Nomor Surat</th>
+                                            <td>${pengajuan.nomor_surat}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Kode Surat</th>
+                                            <td>${pengajuan.kode_surat.kode_surat}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Tahun</th>
+                                            <td>${pengajuan.tahun}</td>
+                                        </tr>
+                                        <tr>
                                             <th>Status</th>
                                             <td>${label}</td>
                                         </tr>
                                         <tr>
-                                            <th>Keterangan</th>
-                                            <td>${pengajuan.pengajuan_surat_persetujuan_pindah.keterangan}</td>
+                                            <th>Jumlah Cetak</th>
+                                            <td>${pengajuan.jumlah_cetak}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Diajukan Oleh</th>
+                                            <td>${diajukan}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Di Tandatangani Oleh</th>
+                                            <td>${pengajuan.user.nama}</td>
                                         </tr>
                                         <tr>
                                             <th>File Surat Keterangan Lulus Butuh</th>
@@ -1434,16 +1467,8 @@ $('.btn-surat-pindah-detail').on('click',function(e){
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>Jumlah Cetak</th>
-                                            <td>${pengajuan.jumlah_cetak}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Di Tandatangani Oleh</th>
-                                            <td>${pengajuan.user.nama}</td>
-                                        </tr>
-                                        <tr>
                                             <th>Di Buat</th>
-                                            <td>${pengajuan.created_at}</td>
+                                            <td>${pengajuan.dibuat}</td>
                                         </tr>
                                     </table>
                                 </div>`;                    
@@ -1764,8 +1789,7 @@ $('.btn-surat-pengantar-beasiswa-detail').on('click',function(e){
                 });
 });
 
-let terimaKegiatan = $('.btn-terima-kegiatan');
-terimaKegiatan.on('click',function(e){
+$('.btn-terima-kegiatan').on('click',function(e){
     e.preventDefault();
     Swal.fire({
         title: 'Yakin?',
@@ -1786,8 +1810,7 @@ terimaKegiatan.on('click',function(e){
     })
 });
 
-let disposisi = $('.disposisi');
-disposisi.on('click',function(e){
+$('.disposisi').on('click',function(e){
     e.preventDefault();
     Swal.fire({
         title: 'Yakin?',
@@ -1829,7 +1852,6 @@ disposisi.on('click',function(e){
         }
     })
 });
-
 
 $('.btn-disposisi-detail').on('click',function(e){
     e.preventDefault();
@@ -2848,7 +2870,6 @@ $('.table-responsive').on('click','.tahun-akademik-detail', function (e) {
             $('#tahun-akademik-detail-content').html(html);
         });
 })
-
 
 $('.table-responsive').on('click','.status-mahasiswa-detail', function (e) {
     e.preventDefault();

@@ -162,7 +162,7 @@ class SuratKeteranganKelakuanBaikController extends Controller
                 'nim'=>$pengajuanSuratKeterangan->nim,
                 'judul_notifikasi'=>'Surat Keterangan Kelakuan Baik',
                 'isi_notifikasi'=>'Surat keterangan kelakuan baik telah selesai di buat.',
-                'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik')
+                'link_notifikasi'=>url('mahasiswa/surat-keterangan-kelakuan-baik')
             ]);
 
             NotifikasiUser::create([
@@ -193,7 +193,7 @@ class SuratKeteranganKelakuanBaikController extends Controller
                 'nim'=>$pengajuanSuratKeterangan->nim,
                 'judul_notifikasi'=>'Surat Keterangan Kelakuan Baik',
                 'isi_notifikasi'=>'Pengajuan surat keterangan kelakuan baik di tolak.',
-                'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik')
+                'link_notifikasi'=>url('mahasiswa/surat-keterangan-kelakuan-baik')
             ]);
         }catch(Exception $e){
             DB::rollback();
@@ -212,7 +212,7 @@ class SuratKeteranganKelakuanBaikController extends Controller
 
             if($suratKeterangan->jumlah_cetak >= 3){
                 $this->setFlashData('info','Cetak Surat','Anda telah mencetak surat keterangan kelakuan baik sebanyak 3 kali.');
-                return redirect('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik');
+                return redirect('mahasiswa/surat-keterangan-kelakuan-baik');
             }
         }
 

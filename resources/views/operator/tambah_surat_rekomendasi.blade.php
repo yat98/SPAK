@@ -18,7 +18,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h3 class="mb-5">Tambah Surat Rekomendasi</h3>
-                                {{ Form::open(['url'=>'operator/surat-rekomendasi/pengajuan','files'=>true]) }}
+                                {{ Form::open(['url'=>'operator/surat-rekomendasi','files'=>true]) }}
                                 @include('operator.form_surat_rekomendasi',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>

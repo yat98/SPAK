@@ -269,7 +269,7 @@ class SuratDispensasiController extends Controller
 
             if($suratDispensasi->jumlah_cetak >= 3){
                 $this->setFlashData('info','Cetak Surat','Anda telah mencetak surat dispensasi sebanyak 3 kali.');
-                return redirect('mahasiswa/pengajuan/surat-dispensasi');
+                return redirect('mahasiswa/surat-dispensasi');
             }
         }
 

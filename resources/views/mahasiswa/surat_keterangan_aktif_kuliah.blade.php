@@ -39,7 +39,7 @@
                                         <h4>Surat Keterangan Aktif Kuliah</h4>
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
-                                        <a href="{{ url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah/create')}}"
+                                        <a href="{{ url('mahasiswa/surat-keterangan-aktif-kuliah/pengajuan/create')}}"
                                             class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">
                                             <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
                                             Tambah Pengajuan</a>
@@ -138,7 +138,7 @@
 
 @section('datatables-javascript')
     <script>
-        let link = "{{ url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah') }}";
+        let link = "{{ url('mahasiswa/surat-keterangan-aktif-kuliah/pengajuan') }}";
         let linkSurat = "{{ url('mahasiswa/surat-keterangan-aktif-kuliah') }}";
         
         $('#datatables').DataTable({
@@ -191,7 +191,7 @@
                                 }
 
                                 if(row.status == 'Selesai'){
-                                    action += `<a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
+                                    action += `<a href="${linkSurat+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
                                 }
 
                                 return `<div class="d-inline-block">
@@ -212,7 +212,7 @@
             language: bahasa,
             processing: true,
             serverSide: true,
-            ajax: '{{ url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah/all') }}',
+            ajax: '{{ url('mahasiswa/surat-keterangan-aktif-kuliah/pengajuan/all') }}',
             columns: [{
                     data: 'mahasiswa.nim',
                 },

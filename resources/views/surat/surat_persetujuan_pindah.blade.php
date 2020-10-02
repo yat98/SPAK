@@ -100,7 +100,7 @@
         <div class="border"></div>
         <div class="text-center mt-1">
             <p class="m-0"><b><span class="underline">SURAT PERSETUJUAN PINDAH</span></b></p>
-            <p class="m-0"><b><i>Nomor : B/{{$suratPersetujuanPindah->nomor_surat}}/{{ $suratPersetujuanPindah->kodeSurat->kode_surat }}/{{$suratPersetujuanPindah->created_at->year}}</i></b></p>
+            <p class="m-0"><b><i>Nomor: <span style="display:inline-block;width:20px;height:auto"></span>{{$suratPersetujuanPindah->nomor_surat}}/{{$suratPersetujuanPindah->kodeSurat->kode_surat}}<span style="display:inline-block;width:20px;height:auto"></span>/<span style="display:inline-block;width:50px;height:auto"></span>/{{$suratPersetujuanPindah->created_at->year}}</i></b></p>
         </div>
         <div class="content">
             <p class="m-0">Yang bertanda tangan dibawah ini : </p>
@@ -157,12 +157,26 @@
         <div class="signature">
             <div class="signature-content">
                 <p class="m-0"><b>Gorontalo, {{$suratPersetujuanPindah->created_at->isoFormat('D MMMM Y')}}</b></p>
-                <p class="m-0"><b>Dekan,</b></p>
+                @if($suratPersetujuanPindah->user->jabatan == 'dekan')
+                    <p class="m-0"><b>Dekan</b></p>
+                @else
+                    <p class="m-0"><b>a.n Dekan,</b></p>
+                    @if($suratPersetujuanPindah->user->jabatan == 'wd3')
+                        <p class="m-0"><b>Wakil Dekan III</b></p>
+                    @elseif($suratPersetujuanPindah->user->jabatan == 'kabag tata usaha')
+                        <p class="m-0"><b>Kabag TU</b></p>
+                    @endif
+                @endif
+
                 <p class="m-0 tanda-tangan-margin">
-                    <img class="tanda-tangan" src="{{$suratPersetujuanPindah->user->tanda_tangan}}">
+                    @if($suratPersetujuanPindah->pengajuanSuratPersetujuanPindah->status == 'selesai')
+                        <img class="tanda-tangan" src="{{$suratPersetujuanPindah->user->tanda_tangan}}">
+                    @else
+                        <div class="tanda-tangan"></div>
+                    @endif
                 </p>
                 <p class="m-0"><b>{{$suratPersetujuanPindah->user->nama}}</b></p>
-                <p class="m-0"><b>NIP. {{substr($suratPersetujuanPindah->user->nip,0,8)}} {{substr($suratPersetujuanPindah->user->nip,8,6)}} {{substr($suratPersetujuanPindah->user->nip,14,1)}} {{substr($suratPersetujuanPindah->user->nip,15,3)}}</b></p>
+                <p class="m-0"><b>NIP. {{$suratPersetujuanPindah->user->nip}}</b></p>
             </div>
         </div>
         <div class="content" style="padding-top:60px">

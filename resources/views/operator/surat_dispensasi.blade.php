@@ -57,7 +57,7 @@
                                     </div>
                                     @if(Auth::user()->bagian == 'front office')
                                     <div class="col-12 col-md-6 text-right">
-                                        <a href="{{ url('operator/pengajuan/surat-dispensasi/create')}}"
+                                        <a href="{{ url('operator/surat-dispensasi/pengajuan/create')}}"
                                             class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">
                                             <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
                                             Tambah Pengajuan</a>
@@ -204,11 +204,9 @@
 
 @section('datatables-javascript')
     <script>
-        let link = "{{ url('operator/pengajuan/surat-dispensasi') }}";
-        let linkPengajuan = "{{ url('operator/surat-dispensasi/pengajuan') }}";
+        let link = "{{ url('operator/surat-dispensasi/pengajuan') }}";
         let linkSurat = "{{ url('operator/surat-dispensasi') }}";
         let linkMhs = "{{ url('operator/detail/mahasiswa') }}";
-        let linkOperator = "{{ url('operator/surat-dispensasi') }}";
 
         <?php if(Auth::user()->bagian == 'front office') { ?>
             const order = [[ 2, 'desc' ]];
@@ -246,7 +244,7 @@
                                 let aksi = '';
                                 if(row.status == 'Diajukan'){
                                     aksi = `<a href="${link+'/'+row.id_surat_masuk}" class="dropdown-item btn-pengajuan-surat-dispensasi-detail" data-toggle="modal" data-target="#suratDispensasi">Detail</a>
-                                            <a href="${linkPengajuan+'/create/'+row.id_surat_masuk}" class="dropdown-item">Buat Surat</a>`;
+                                            <a href="${linkSurat+'/create/'+row.id_surat_masuk}" class="dropdown-item">Buat Surat</a>`;
                                 }else{
                                     aksi = `<a href="${link+'/'+row.id_surat_masuk}" class="dropdown-item btn-pengajuan-surat-dispensasi-detail" data-toggle="modal" data-target="#suratDispensasi">Detail</a>`;
                                 }
@@ -297,7 +295,7 @@
             language: bahasa,
             processing: true,
             serverSide: true,
-            ajax: '{{ url('operator/pengajuan/surat-dispensasi/all') }}',
+            ajax: '{{ url('operator/surat-dispensasi/pengajuan/all') }}',
             columns: [{
                     data: 'nama_kegiatan',
                 },
@@ -363,15 +361,15 @@
                                                     <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
                                                 </a>
                                                 <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
-                                                    <a href="${linkOperator+'/'+row.id_surat_masuk}" class="dropdown-item btn-surat-dispensasi-detail" data-toggle="modal" data-target="#suratDispensasi">Detail</a>
-                                                    <a href="${link+'/'+row.id_surat_masuk+'/cetak'}" class="dropdown-item">Cetak</a>
+                                                    <a href="${linkSurat+'/'+row.id_surat_masuk}" class="dropdown-item btn-surat-dispensasi-detail" data-toggle="modal" data-target="#suratDispensasi">Detail</a>
+                                                    <a href="${linkSurat+'/'+row.id_surat_masuk+'/cetak'}" class="dropdown-item">Cetak</a>
                                                 </div>
                                             </div>`;
                                 <?php }else{ ?>
-                                    let action = `<a href="${linkOperator+'/'+row.id_surat_masuk}" class="dropdown-item btn-surat-dispensasi-detail" data-toggle="modal" data-target="#suratDispensasi">Detail</a>`;
+                                    let action = `<a href="${linkSurat+'/'+row.id_surat_masuk}" class="dropdown-item btn-surat-dispensasi-detail" data-toggle="modal" data-target="#suratDispensasi">Detail</a>`;
 
                                     if(row.status == 'Selesai'){
-                                        action += `<a href="${link+'/'+row.id_surat_masuk+'/cetak'}" class="dropdown-item">Cetak</a>`;
+                                        action += `<a href="${linkSurat+'/'+row.id_surat_masuk+'/cetak'}" class="dropdown-item">Cetak</a>`;
                                     }
                                     
                                     return `<div class="d-inline-block">

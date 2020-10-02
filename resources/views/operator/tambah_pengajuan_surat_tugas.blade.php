@@ -18,7 +18,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h3 class="mb-5">Tambah Pengajuan Surat Tugas</h3>
-                                {{ Form::open(['url'=>'operator/pengajuan/surat-tugas']) }}
+                                {{ Form::open(['url'=>'operator/surat-tugas/pengajuan']) }}
                                 @include('operator.form_pengajuan_surat_tugas',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>

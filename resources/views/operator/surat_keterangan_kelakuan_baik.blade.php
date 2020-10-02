@@ -57,7 +57,7 @@
                                     </div>
                                     @if(Auth::user()->bagian == 'front office')
                                     <div class="col-12 col-md-6 text-right">
-                                        <a href="{{ url('operator/pengajuan/surat-keterangan-kelakuan-baik/create')}}"
+                                        <a href="{{ url('operator/surat-keterangan-kelakuan-baik/pengajuan/create')}}"
                                             class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">
                                             <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
                                             Tambah Pengajuan</a>
@@ -222,11 +222,9 @@
 
 @section('datatables-javascript')
     <script>
-        let link = "{{ url('operator/pengajuan/surat-keterangan-kelakuan-baik') }}";
-        let linkPengajuan = "{{ url('operator/surat-keterangan-kelakuan-baik/pengajuan') }}";
+        let link = "{{ url('operator/surat-keterangan-kelakuan-baik/pengajuan') }}";
         let linkSurat = "{{ url('operator/surat-keterangan-kelakuan-baik') }}";
         let linkMhs = "{{ url('operator/detail/mahasiswa') }}";
-        let linkOperator = "{{ url('operator/surat-keterangan-kelakuan-baik') }}";
 
         <?php if(Auth::user()->bagian == 'front office') { ?>
             const order = [[ 2, 'desc' ]];
@@ -262,7 +260,7 @@
                                 let aksi = '';
                                 if(row.status == 'Diajukan'){
                                     aksi = `<a href="${link+'/'+row.id}" class="dropdown-item pengajuan-surat-keterangan-detail" data-toggle="modal" data-target="#suratKeterangan">Detail</a>
-                                            <a href="${linkPengajuan+'/create/'+row.id}" class="dropdown-item">Buat Surat</a>
+                                            <a href="${linkSurat+'/create/'+row.id}" class="dropdown-item">Buat Surat</a>
                                              <form action="${link+'/tolak-pengajuan/'+row.id}" method="post">
                                                 <input name="_method" type="hidden" value="PATCH">
                                                 <input name="_token" type="hidden" value="{{ @csrf_token() }}">
@@ -335,7 +333,7 @@
             language: bahasa,
             processing: true,
             serverSide: true,
-            ajax: '{{ url('operator/pengajuan/surat-keterangan-kelakuan-baik/all') }}',
+            ajax: '{{ url('operator/surat-keterangan-kelakuan-baik/pengajuan/all') }}',
             columns: [{
                     data: 'mahasiswa.nim',
                 },
@@ -414,17 +412,17 @@
                                                     <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
                                                 </a>
                                                 <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
-                                                    <a href="${linkOperator+'/'+row.id}" class="dropdown-item btn-surat-detail" data-toggle="modal" data-target="#suratKeteranganDetail">
+                                                    <a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-detail" data-toggle="modal" data-target="#suratKeteranganDetail">
                                                             Detail</a>
-                                                    <a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
+                                                    <a href="${linkSurat+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
                                                 </div>
                                             </div>`;
                                 <?php }else{ ?>
-                                    let action = `<a href="${linkOperator+'/'+row.id}" class="dropdown-item btn-surat-detail" data-toggle="modal" data-target="#suratKeteranganDetail">
+                                    let action = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-detail" data-toggle="modal" data-target="#suratKeteranganDetail">
                                                     Detail</a>`;
 
                                     if(row.status == 'Selesai'){
-                                        action += `<a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
+                                        action += `<a href="${linkSurat+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
                                     }
                                     
                                     return `<div class="d-inline-block">

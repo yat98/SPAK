@@ -87,7 +87,7 @@ class SuratKeteranganAktifKuliahController extends Controller
 
             if($suratKeterangan->jumlah_cetak >= 3){
                 $this->setFlashData('info','Cetak Surat','Anda telah mencetak surat keterangan aktif kuliah sebanyak 3 kali.');
-                return redirect('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah');
+                return redirect('mahasiswa/surat-keterangan-aktif-kuliah');
             }
         }
 
@@ -138,7 +138,7 @@ class SuratKeteranganAktifKuliahController extends Controller
                 'nim'=>$pengajuanSuratKeterangan->nim,
                 'judul_notifikasi'=>'Surat Keterangan Aktif Kuliah',
                 'isi_notifikasi'=>'Surat keterangan aktif kuliah telah selesai di buat.',
-                'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah')
+                'link_notifikasi'=>url('mahasiswa/surat-keterangan-aktif-kuliah')
             ]);
 
             NotifikasiUser::create([
@@ -182,7 +182,7 @@ class SuratKeteranganAktifKuliahController extends Controller
                 'nim'=>$pengajuanSuratKeterangan->nim,
                 'judul_notifikasi'=>'Surat Keterangan Aktif Kuliah',
                 'isi_notifikasi'=>'Pengajuan surat keterangan aktif kuliah di tolak.',
-                'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah')
+                'link_notifikasi'=>url('mahasiswa/surat-keterangan-aktif-kuliah')
             ]);
         }catch(Exception $e){
             DB::rollback();

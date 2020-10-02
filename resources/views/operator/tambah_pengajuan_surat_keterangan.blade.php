@@ -19,9 +19,9 @@
                             <div class="card-body">
                                 <h3 class="mb-5">Tambah {{ $jenisSurat }}</h3>
                                 @if($jenisSurat == 'Surat Keterangan Aktif Kuliah')
-                                {{ Form::open(['url'=>'operator/surat-keterangan-aktif-kuliah/pengajuan']) }}
+                                {{ Form::open(['url'=>'operator/surat-keterangan-aktif-kuliah']) }}
                                 @else
-                                {{ Form::open(['url'=>'operator/surat-keterangan-kelakuan-baik/pengajuan']) }}
+                                {{ Form::open(['url'=>'operator/surat-keterangan-kelakuan-baik']) }}
                                 @endif
                                 @include('operator.form_pengajuan_surat_keterangan')
                                 {{ Form::close() }}

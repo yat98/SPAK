@@ -26,7 +26,7 @@ class PengajuanSuratKeteranganController extends Controller
         $countAllPengajuan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
                                 ->where('nim',Auth::user()->nim)
                                 ->count();
-        return view($this->segmentUser.'.pengajuan_surat_keterangan_aktif_kuliah',compact('countAllPengajuan','perPage'));
+        return view($this->segmentUser.'.surat_keterangan_aktif_kuliah',compact('countAllPengajuan','perPage'));
     }
 
     public function indexKelakuanBaikMahasiswa(){
@@ -36,48 +36,48 @@ class PengajuanSuratKeteranganController extends Controller
                                 ->where('nim',Auth::user()->nim)
                                 ->count();
         
-        return view($this->segmentUser.'.pengajuan_surat_keterangan_kelakuan_baik',compact('countAllPengajuan','perPage'));
+        return view($this->segmentUser.'.surat_keterangan_kelakuan_baik',compact('countAllPengajuan','perPage'));
     }
 
     public function createPengajuanKeteranganAktif(){
-        if(!$this->isSuratDiajukanExists('surat keterangan aktif kuliah')){
-            return redirect($this->segmentUser.'/pengajuan/surat-keterangan-aktif-kuliah');
-        }
-
-        $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
-        $tahunAkademik[$tahunAkademikAktif->id] = $tahunAkademikAktif->tahun_akademik.' - '.ucwords($tahunAkademikAktif->semester);
-
-        if($tahunAkademikAktif !=  null){
-            $status = StatusMahasiswa::where('status','aktif')->where('id_tahun_akademik',$tahunAkademikAktif->id)->where('nim',Auth::user()->nim)->first();
-            if($status == null){
-                $this->setFlashData('info','Pengajuan Gagal','Maaf anda tidak dapat membuat pengajuan surat keterangan aktif kuliah karena status anda tidak aktif');
-                return redirect($this->segmentUser.'/pengajuan/surat-keterangan-aktif-kuliah');
+        if(isset(Auth::user()->nim)){
+            if(!$this->isSuratDiajukanExists('surat keterangan aktif kuliah')){
+                return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
             }
+
+            $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
+            $tahunAkademik[$tahunAkademikAktif->id] = $tahunAkademikAktif->tahun_akademik.' - '.ucwords($tahunAkademikAktif->semester);
+
+            if($tahunAkademikAktif !=  null){
+                $status = StatusMahasiswa::where('status','aktif')->where('id_tahun_akademik',$tahunAkademikAktif->id)->where('nim',Auth::user()->nim)->first();
+                if($status == null){
+                    $this->setFlashData('info','Pengajuan Gagal','Maaf anda tidak dapat membuat pengajuan surat keterangan aktif kuliah karena status anda tidak aktif');
+                    return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
+                }
+            }else{
+                $this->setFlashData('info','Pengajuan Gagal','Tahun akademik belum aktif');
+                return redirect('mahasiswa/surat-keterangan-aktif-kuliah');   
+            }
+
+            return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_aktif_kuliah',compact('tahunAkademik'));
         }else{
-            $this->setFlashData('info','Pengajuan Gagal','Tahun akademik belum aktif');
-            return redirect('mahasiswa/pengajuan/surat-keterangan-aktif-kuliah');   
+            $tahunAkademik = $this->generateAllTahunAkademik();
+            $mahasiswa = $this->generateMahasiswa();
+            return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_aktif_kuliah',compact('tahunAkademik','mahasiswa'));
         }
-
-        return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_aktif_kuliah',compact('tahunAkademik'));
-    }
-
-    public function createPengajuanKeteranganAktifOperator(){
-        $tahunAkademik = $this->generateAllTahunAkademik();
-        $mahasiswa = $this->generateMahasiswa();
-        return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_aktif_kuliah',compact('tahunAkademik','mahasiswa'));
-    }
-    
-    public function createPengajuanKelakuanBaikOperator(){
-        $tahunAkademik = $this->generateAllTahunAkademik();
-        $mahasiswa = $this->generateMahasiswa();
-        return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_kelakuan_baik',compact('tahunAkademik','mahasiswa'));
     }
 
     public function createPengajuanKelakuanBaik(){
-        if(!$this->isSuratDiajukanExists('surat keterangan kelakuan baik')){
-            return redirect($this->segmentUser.'/pengajuan/surat-keterangan-kelakuan-baik');
+        if(isset(Auth::user()->nim)){
+            if(!$this->isSuratDiajukanExists('surat keterangan kelakuan baik')){
+                return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
+            }
+            return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_kelakuan_baik');
+        }else{
+            $tahunAkademik = $this->generateAllTahunAkademik();
+            $mahasiswa = $this->generateMahasiswa();
+            return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_aktif_kuliah',compact('tahunAkademik','mahasiswa'));
         }
-        return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_kelakuan_baik');
     }
     
     public function storePengajuanKelakuanBaik(Request $request){
@@ -394,7 +394,7 @@ class PengajuanSuratKeteranganController extends Controller
         $pengajuanSurat->update($input);
         if($pengajuanSurat->jenis_surat == 'surat keterangan aktif kuliah'){
             $this->setFlashData('success','Berhasil','Pengajuan surat keterangan aktif kuliah berhasil diubah');
-            return redirect($this->segmentUser.'/pengajuan/surat-keterangan-aktif-kuliah');
+            return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
         }
         $this->setFlashData('success','Berhasil','Pengajuan surat keterangan kelakuan baik berhasil diubah');
         return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');
@@ -405,7 +405,7 @@ class PengajuanSuratKeteranganController extends Controller
         $pengajuanSurat->delete();
         if($pengajuanSurat->jenis_surat == 'surat keterangan aktif kuliah'){
             $this->setFlashData('success','Berhasil','Pengajuan surat keterangan aktif kuliah berhasil dihapus');
-            return redirect($this->segmentUser.'/pengajuan/surat-keterangan-aktif-kuliah');
+            return redirect($this->segmentUser.'/surat-keterangan-aktif-kuliah');
         }
         $this->setFlashData('success','Berhasil','Pengajuan surat keterangan kelakuan baik berhasil dihapus');
         return redirect($this->segmentUser.'/surat-keterangan-kelakuan-baik');

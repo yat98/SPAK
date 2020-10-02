@@ -113,7 +113,7 @@
 
 @section('datatables-javascript')
     <script>
-        let link = "{{ url('mahasiswa/pengajuan/surat-tugas') }}";
+        let link = "{{ url('mahasiswa/surat-tugas/pengajuan') }}";
         let linkSurat = "{{ url('mahasiswa/surat-tugas') }}";
 
         $('#datatables').DataTable({
@@ -157,7 +157,7 @@
                                 }
 
                                 if(row.status == 'Selesai'){
-                                    action += `<a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
+                                    action += `<a href="${linkSurat+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
                                 }
 
                                 return `<div class="d-inline-block">
@@ -174,7 +174,7 @@
             language: bahasa,
             processing: true,
             serverSide: true,
-            ajax: '{{ url('mahasiswa/pengajuan/surat-tugas/all') }}',
+            ajax: '{{ url('mahasiswa/surat-tugas/pengajuan/all') }}',
             columns: [{
                     data: 'nama_kegiatan',
                 },

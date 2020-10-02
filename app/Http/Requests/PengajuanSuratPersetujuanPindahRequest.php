@@ -25,21 +25,21 @@ class PengajuanSuratPersetujuanPindahRequest extends FormRequest
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
             $fileSuratKeteranganLulusButuhRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:2048';
-            $fileIjazahTerakhirRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024';
-            $fileSuratRekomendasiJurusanRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024';
-            $fileSuratKeteranganBebasPerlengkapanUniversitasRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024';
-            $fileSuratKeteranganBebasPerlengkapanFakultasRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024';
-            $fileSuratKeteranganBebasPerpustakaanUniversitasRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024';
-            $fileSuratKeteranganBebasPerpustakaanFakultasRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024';
+            $fileIjazahTerakhirRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:2048';
+            $fileSuratRekomendasiJurusanRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:2048';
+            $fileSuratKeteranganBebasPerlengkapanUniversitasRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:2048';
+            $fileSuratKeteranganBebasPerlengkapanFakultasRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:2048';
+            $fileSuratKeteranganBebasPerpustakaanUniversitasRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:2048';
+            $fileSuratKeteranganBebasPerpustakaanFakultasRules='sometimes|image|mimes:jpg,jpeg,bmp,png|max:2048';
            
         }else{
             $fileSuratKeteranganLulusButuhRules='required|image|mimes:jpg,jpeg,bmp,png|max:2048';
-            $fileIjazahTerakhirRules='required|image|mimes:jpg,jpeg,bmp,png|max:1024';
-            $fileSuratRekomendasiJurusanRules='required|image|mimes:jpg,jpeg,bmp,png|max:1024';
-            $fileSuratKeteranganBebasPerlengkapanUniversitasRules='required|image|mimes:jpg,jpeg,bmp,png|max:1024';
-            $fileSuratKeteranganBebasPerlengkapanFakultasRules='required|image|mimes:jpg,jpeg,bmp,png|max:1024';
-            $fileSuratKeteranganBebasPerpustakaanUniversitasRules='required|image|mimes:jpg,jpeg,bmp,png|max:1024';
-            $fileSuratKeteranganBebasPerpustakaanFakultasRules='required|image|mimes:jpg,jpeg,bmp,png|max:1024';
+            $fileIjazahTerakhirRules='required|image|mimes:jpg,jpeg,bmp,png|max:2048';
+            $fileSuratRekomendasiJurusanRules='required|image|mimes:jpg,jpeg,bmp,png|max:2048';
+            $fileSuratKeteranganBebasPerlengkapanUniversitasRules='required|image|mimes:jpg,jpeg,bmp,png|max:2048';
+            $fileSuratKeteranganBebasPerlengkapanFakultasRules='required|image|mimes:jpg,jpeg,bmp,png|max:2048';
+            $fileSuratKeteranganBebasPerpustakaanUniversitasRules='required|image|mimes:jpg,jpeg,bmp,png|max:2048';
+            $fileSuratKeteranganBebasPerpustakaanFakultasRules='required|image|mimes:jpg,jpeg,bmp,png|max:2048';
         }
         return [
             'nim'=>'required',

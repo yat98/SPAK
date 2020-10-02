@@ -11,7 +11,7 @@
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
                             <i class="mdi mdi-file-document-box"></i>
-                        </span> Surat Keterangan Kelakuan Baik</h3>
+                        </span> Surat Persetujuan Pindah</h3>
                 </div>
                 <div class="row">
                     <div class="col-md-6 stretch-card grid-margin">
@@ -19,7 +19,7 @@
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Surat Keterangan Kelakuan Baik<i
+                                <h4 class="font-weight-normal mb-3">Surat Persetujuan Pindah<i
                                         class="mdi mdi-file-document-box mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
@@ -36,10 +36,10 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Surat Keterangan Kelakuan Baik</h4>
+                                        <h4>Surat Persetujuan Pindah</h4>
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
-                                        <a href="{{ url('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik/create')}}"
+                                        <a href="{{ url('mahasiswa/surat-persetujuan-pindah/pengajuan/create')}}"
                                             class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">
                                             <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
                                             Tambah Pengajuan</a>
@@ -47,7 +47,7 @@
                                 </div>
                                 <hr class="mb-4">
                                 @if ($countAllPengajuan > 0)
-                                <div class="table-responsive">
+                                 <div class="table-responsive">
                                     <table class="table display no-warp" id='datatables' width="100%">
                                         <thead>
                                             <tr>
@@ -68,7 +68,7 @@
                                             {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Data surat keterangan kelakuan baik belum ada.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Data surat persetujuan pindah kuliah belum ada.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -82,7 +82,6 @@
         </div>
     </div>
 </div>
-
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
@@ -99,9 +98,9 @@
     </div>
 </div>
 
-<div class="modal fade" id="suratKeterangan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="suratPindah" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content bg-white">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
@@ -109,25 +108,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id='surat-keterangan-detail-content'></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="suratKeteranganDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-        <div class="modal-content bg-white">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id='surat-keterangan-aktif-detail-content'></div>
+            <div class="modal-body" id='surat-pindah-detail-content'></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
             </div>
@@ -138,8 +119,8 @@
 
 @section('datatables-javascript')
     <script>
-        let link = "{{ url('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik') }}";
-        let linkSurat = "{{ url('mahasiswa/surat-keterangan-kelakuan-baik') }}";
+        let link = "{{ url('mahasiswa/surat-persetujuan-pindah/pengajuan') }}";
+        let linkSurat = "{{ url('mahasiswa/surat-persetujuan-pindah') }}";
         
         $('#datatables').DataTable({
             responsive: true,
@@ -184,14 +165,14 @@
                                 let action = `<a href="${link+'/'+row.id}/progress" class="dropdown-item btn-surat-progress" data-toggle="modal" data-target="#exampleModal">Progres Surat</a>`;
 
                                 if(row.status == 'Diajukan'){
-                                    action += `<a href="${link+'/'+row.id}" class="dropdown-item pengajuan-surat-keterangan-detail" data-toggle="modal" data-target="#suratKeterangan">Detail</a>`;
+                                    action += `<a href="${link+'/'+row.id}" class="dropdown-item pengajuan-surat-pindah-detail" data-toggle="modal" data-target="#suratPindah">Detail</a>`;
                                 }else{
-                                    action += `<a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-detail" data-toggle="modal" data-target="#suratKeteranganDetail">
+                                    action += `<a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-pindah-detail" data-toggle="modal" data-target="#suratPindah">
                                                 Detail</a>`;
                                 }
 
                                 if(row.status == 'Selesai'){
-                                    action += `<a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
+                                    action += `<a href="${linkSurat+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
                                 }
 
                                 return `<div class="d-inline-block">
@@ -212,7 +193,7 @@
             language: bahasa,
             processing: true,
             serverSide: true,
-            ajax: '{{ url('mahasiswa/pengajuan/surat-keterangan-kelakuan-baik/all') }}',
+            ajax: '{{ url('mahasiswa/surat-persetujuan-pindah/pengajuan/all') }}',
             columns: [{
                     data: 'mahasiswa.nim',
                 },
@@ -233,7 +214,7 @@
                 },
             ],
             "pageLength": {{ $perPage }},
-            "order": [[ 3, 'desc' ]],
+            "order": [[ 2, 'desc' ]],
         });
     </script>
 @endsection

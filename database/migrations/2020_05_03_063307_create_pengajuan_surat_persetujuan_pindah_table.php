@@ -16,6 +16,7 @@ class CreatePengajuanSuratpersetujuanPindahTable extends Migration
         Schema::create('pengajuan_surat_persetujuan_pindah', function (Blueprint $table) {
             $table->increments('id');
             $table->char('nim',25)->index();
+            $table->integer('id_operator')->unsigned()->nullable();
             $table->string('nama_prodi',100);
             $table->enum('strata',['D3','S1','S2','S3']);
             $table->string('nama_kampus');
@@ -26,7 +27,7 @@ class CreatePengajuanSuratpersetujuanPindahTable extends Migration
             $table->string('file_surat_keterangan_bebas_perlengkapan_fakultas');
             $table->string('file_surat_keterangan_bebas_perpustakaan_universitas');
             $table->string('file_surat_keterangan_bebas_perpustakaan_fakultas');
-            $table->enum('status',['diajukan','menunggu tanda tangan','selesai','ditolak'])->default('diajukan');
+            $table->enum('status',['diajukan','selesai','ditolak','verifikasi kasubag','verifikasi kabag','menunggu tanda tangan'])->default('diajukan');
             $table->string('keterangan')->default('-');
             $table->timestamps();
         });
