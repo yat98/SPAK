@@ -18,8 +18,8 @@
                         <div class="card">
                             <div class="card-body">
                                 <h3 class="mb-5">Tambah Pendaftaran Cuti</h3>
-                                {{ Form::open(['url'=>'mahasiswa/pendaftaran-cuti','files'=>true]) }}
-                                @include('mahasiswa.form_pendaftaran_cuti',['buttonLabel'=>'Tambah'])
+                                {{ Form::open(['url'=>'operator/pendaftaran-cuti','files'=>true]) }}
+                                @include('operator.form_pendaftaran_cuti',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>
                         </div>

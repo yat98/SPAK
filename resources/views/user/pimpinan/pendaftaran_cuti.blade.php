@@ -38,13 +38,6 @@
                                     <div class="col-12 col-md-6">
                                         <h4>Pendaftaran Cuti</h4>
                                     </div>
-                                    <div class="col-12 col-md-6 text-right">
-                                        <a href="{{ url('mahasiswa/pendaftaran-cuti/create')}}"
-                                            class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">
-                                            <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
-                                            Tambah Pendaftaran</a>    
-                                        </a>
-                                    </div>
                                 </div>
                                 <hr class="mb-4">
                                 @if ($countAllPendaftaran > 0)
@@ -68,7 +61,7 @@
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Pendaftaran Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pendaftaran Cuti Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
                                             {{ (Session::has('search')) ? Session::get('search') : 'Data pendaftaran cuti belum ada.' }}
@@ -105,21 +98,41 @@
         </div>
     </div>
 </div>
-@endsection
 
+<div class="modal fade" id="mahasiswa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='mahasiswa-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
 
 @section('datatables-javascript')
     <script>
-        let link = "{{ url('mahasiswa/pendaftaran-cuti') }}";
-        
+        let link = "{{ url('pimpinan/pendaftaran-cuti') }}";
+        let linkMhs = "{{ url('pimpinan/detail/mahasiswa') }}";
+
         $('#datatables').DataTable({
             responsive: true,
             columnDefs: [{
                             "targets": 0,
                             "data": "nim",
                             "render": function ( data, type, row, meta ) {
-                                return `<div class="mb-1">${row.mahasiswa.nama}</div>
-                                        <span class="text-muted small">NIM. ${row.mahasiswa.nim}</span>`;
+                                return `<a href="${linkMhs}/${row.mahasiswa.nim}" class="btn-detail text-dark" data-toggle="modal" data-target="#mahasiswa">
+                                            <div class="mb-1">${row.mahasiswa.nama}</div>
+                                            <span class="text-muted small">NIM. ${row.mahasiswa.nim}</span>
+                                        </a>`;
                             }
                         },
                         {
@@ -170,7 +183,7 @@
             language: bahasa,
             processing: true,
             serverSide: true,
-            ajax: '{{ url('mahasiswa/pendaftaran-cuti/all') }}',
+            ajax: '{{ url('pimpinan/pendaftaran-cuti/all') }}',
             columns: [{
                     data: 'mahasiswa.nim',
                 },
@@ -203,7 +216,7 @@
                 },
             ],
             "pageLength": {{ $perPage }},
-            "order": [[ 3, 'desc' ]],
+            "order": [[ 4, 'desc' ]],
         });
     </script>
 @endsection

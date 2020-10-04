@@ -24,13 +24,13 @@ class PendaftaranCutiRequest extends FormRequest
     public function rules()
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
-            $fileSuratPermohonanRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
-            $fileKrsSebelumnyaRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
-            $fileSlipUktRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
+            $fileSuratPermohonanRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:2048'; 
+            $fileKrsSebelumnyaRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:2048'; 
+            $fileSlipUktRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:2048'; 
         }else{
-            $fileSuratPermohonanRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
-            $fileKrsSebelumnyaRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
-            $fileSlipUktRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
+            $fileSuratPermohonanRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:2048'; 
+            $fileKrsSebelumnyaRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:2048'; 
+            $fileSlipUktRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:2048'; 
         }
         return [
             'id_waktu_cuti'=>'required|numeric',

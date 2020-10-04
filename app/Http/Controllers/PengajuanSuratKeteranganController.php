@@ -76,7 +76,7 @@ class PengajuanSuratKeteranganController extends Controller
         }else{
             $tahunAkademik = $this->generateAllTahunAkademik();
             $mahasiswa = $this->generateMahasiswa();
-            return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_aktif_kuliah',compact('tahunAkademik','mahasiswa'));
+            return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_kelakuan_baik',compact('mahasiswa'));
         }
     }
     

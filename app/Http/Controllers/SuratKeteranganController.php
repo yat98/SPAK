@@ -45,7 +45,7 @@ class SuratKeteranganController extends Controller
         $suratKeterangan = PengajuanSuratKeterangan::join('surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
                                     ->join('tahun_akademik','pengajuan_surat_keterangan.id_tahun_akademik','=','tahun_akademik.id')
                                     ->where('pengajuan_surat_keterangan.jenis_surat','surat keterangan aktif kuliah')
-                                    ->select('surat_keterangan.nomor_surat','pengajuan_surat_keterangan.*','tahun_akademik.semester')
+                                    ->select('surat_keterangan.nomor_surat','pengajuan_surat_keterangan.*','tahun_akademik.semester','tahun_akademik.tahun_akademik')
                                     ->with(['mahasiswa','suratKeterangan.kodeSurat','tahunAkademik']);
                                     
         if(isset(Auth::user()->id)){

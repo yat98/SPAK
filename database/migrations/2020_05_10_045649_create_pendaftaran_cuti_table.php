@@ -16,8 +16,9 @@ class CreatePendaftaranCutiTable extends Migration
         Schema::create('pendaftaran_cuti', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('id_waktu_cuti')->unsigned();
+            $table->integer('id_operator')->unsigned()->nullable();
             $table->char('nim',25)->index();
-            $table->enum('status',['diajukan','diterima','ditolak'])->default('diajukan');
+            $table->enum('status',['diajukan','selesai','ditolak'])->default('diajukan');
             $table->string('file_surat_permohonan_cuti');
             $table->string('file_krs_sebelumnya');
             $table->string('file_slip_ukt');

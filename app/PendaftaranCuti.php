@@ -10,6 +10,7 @@ class PendaftaranCuti extends Model
 
     protected $fillable = [
         'id_waktu_cuti',
+        'id_operator',
         'nim',
         'status',
         'file_surat_permohonan_cuti',
@@ -25,5 +26,9 @@ class PendaftaranCuti extends Model
 
     public function waktuCuti(){
         return $this->belongsTo('App\WaktuCuti','id_waktu_cuti');
+    }
+
+    public function operator(){
+        return $this->belongsTo('App\Operator','id_operator');
     }
 }

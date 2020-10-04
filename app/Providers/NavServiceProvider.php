@@ -121,8 +121,10 @@ class NavServiceProvider extends ServiceProvider
             } else if ($segment == 'surat-persetujuan-pindah') {
                 $halaman = 'surat-persetujuan-pindah';
             } else if ($segment == 'waktu-cuti') {
+                $show = false;
                 $halaman = 'waktu-cuti';
             } else if ($segment == 'pendaftaran-cuti') {
+                $show = false;
                 $halaman = 'pendaftaran-cuti';
             } else if($segment == 'surat-pengantar-cuti'){
                 $halaman = 'surat-pengantar-cuti';
@@ -183,6 +185,9 @@ class NavServiceProvider extends ServiceProvider
             } else if ($segment == 'profil') {
                 $show = false;
                 $halaman = 'profil';
+            } else if ($segment == 'pendaftaran-cuti') {
+                $show = false;
+                $halaman = 'pendaftaran-cuti';
             } else if($segment == 'surat-keterangan-lulus'){
                 $halaman = 'surat-keterangan-lulus';
             } else if($segment == 'surat-permohonan-pengambilan-material'){
@@ -222,6 +227,8 @@ class NavServiceProvider extends ServiceProvider
             } else if ($segment == 'surat-persetujuan-pindah') {
                 $show = true;
                 $halaman = 'surat-persetujuan-pindah';
+            } else if ($segment == 'pendaftaran-cuti') {
+                $halaman = 'pendaftaran-cuti';
             }
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi,'show'=>$show]);

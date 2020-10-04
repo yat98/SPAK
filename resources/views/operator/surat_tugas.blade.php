@@ -208,59 +208,6 @@
         let linkSurat = "{{ url('operator/surat-tugas') }}";
         let linkMhs = "{{ url('operator/detail/mahasiswa') }}";
 
-        <?php if(Auth::user()->bagian == 'front office') { ?>
-            const order = [[ 2, 'desc' ]];
-            const aksi = {
-                            "targets": 4,
-                            "data": "aksi",
-                            "render": function ( data, type, row, meta ) {
-                                return `<div class="d-inline-block">
-                                            <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
-                                                <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
-                                            </a>
-                                            <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
-                                                <a href="${link+'/'+row.id}/progress" class="dropdown-item btn-surat-progress" data-toggle="modal" data-target="#exampleModal">Progres Surat</a>
-
-                                                <a href="${link+'/'+row.id}" class="dropdown-item btn-pengajuan-surat-tugas-detail" data-toggle="modal" data-target="#suratTugas">Detail</a>
-
-                                                <a href="${link+'/'+row.id}/edit" class="dropdown-item">Edit</a>
-                                                <form action="${link+'/'+row.id}" method="post">
-                                                    <input name="_method" type="hidden" value="DELETE">
-                                                    <input name="_token" type="hidden" value="{{ @csrf_token() }}">
-                                                    <button type="submit" class="dropdown-item sweet-delete">
-                                                        Hapus
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>`;
-                            },
-                        };
-        <?php } else { ?>
-            const order = [[2 , 'asc']];
-            const aksi = {
-                            "targets": 4,
-                            "data": "aksi",
-                            "render": function ( data, type, row, meta ) {
-                                let aksi = '';
-                                if(row.status == 'Diajukan'){
-                                    aksi = `<a href="${link+'/'+row.id}" class="dropdown-item btn-pengajuan-surat-tugas-detail" data-toggle="modal" data-target="#suratTugas">Detail</a>
-                                            <a href="${linkSurat+'/create/'+row.id}" class="dropdown-item">Buat Surat</a>`;
-                                }else{
-                                    aksi = `<a href="${link+'/'+row.id}" class="dropdown-item btn-pengajuan-surat-tugas-detail" data-toggle="modal" data-target="#suratTugas">Detail</a>`;
-                                }
-
-                                return `<div class="d-inline-block">
-                                                <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
-                                                    <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
-                                                </a>
-                                                <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
-                                                    ${aksi}
-                                                </div>
-                                            </div>`;
-                            }
-                        };
-        <?php } ?>
-
         $('#datatables').DataTable({
             responsive: true,
             columnDefs: [{
@@ -289,7 +236,50 @@
                                 return row.waktu_pengajuan;
                             }
                         },
-                        aksi,
+                        {
+                            "targets": 4,
+                            "data": "aksi",
+                            "render": function ( data, type, row, meta ) {
+                                @if(Auth::user()->bagian == 'front office')
+                                    return `<div class="d-inline-block">
+                                                <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                    <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                                </a>
+                                                <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                    <a href="${link+'/'+row.id}/progress" class="dropdown-item btn-surat-progress" data-toggle="modal" data-target="#exampleModal">Progres Surat</a>
+
+                                                    <a href="${link+'/'+row.id}" class="dropdown-item btn-pengajuan-surat-tugas-detail" data-toggle="modal" data-target="#suratTugas">Detail</a>
+
+                                                    <a href="${link+'/'+row.id}/edit" class="dropdown-item">Edit</a>
+                                                    <form action="${link+'/'+row.id}" method="post">
+                                                        <input name="_method" type="hidden" value="DELETE">
+                                                        <input name="_token" type="hidden" value="{{ @csrf_token() }}">
+                                                        <button type="submit" class="dropdown-item sweet-delete">
+                                                            Hapus
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>`;
+                                @else
+                                    let aksi = '';
+                                    if(row.status == 'Diajukan'){
+                                        aksi = `<a href="${link+'/'+row.id}" class="dropdown-item btn-pengajuan-surat-tugas-detail" data-toggle="modal" data-target="#suratTugas">Detail</a>
+                                                <a href="${linkSurat+'/create/'+row.id}" class="dropdown-item">Buat Surat</a>`;
+                                    }else{
+                                        aksi = `<a href="${link+'/'+row.id}" class="dropdown-item btn-pengajuan-surat-tugas-detail" data-toggle="modal" data-target="#suratTugas">Detail</a>`;
+                                    }
+
+                                    return `<div class="d-inline-block">
+                                                    <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                        <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                        ${aksi}
+                                                    </div>
+                                                </div>`;
+                                @endif
+                            }
+                        },
             ],
             autoWidth: false,
             language: bahasa,
@@ -313,7 +303,7 @@
                 },
             ],
             "pageLength": {{ $perPage }},
-            "order": order,
+            "order": [[ 2, 'desc' ]],
         });
 
         $('#datatables1').DataTable({
@@ -355,7 +345,7 @@
                             "targets": 4,
                             "data": "aksi",
                             "render": function ( data, type, row, meta ) {
-                                <?php if(Auth::user()->bagian != 'front office'){ ?>
+                                @if(Auth::user()->bagian != 'front office')
                                     return `<div class="d-inline-block">
                                                 <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
                                                     <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
@@ -365,7 +355,7 @@
                                                     <a href="${linkSurat+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
                                                 </div>
                                             </div>`;
-                                <?php }else{ ?>
+                                @else
                                     let action = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-tugas-detail" data-toggle="modal" data-target="#suratTugas">Detail</a>`;
 
                                     if(row.status == 'Selesai'){
@@ -380,7 +370,7 @@
                                                     ${action}
                                                 </div>
                                             </div>`;
-                                <?php } ?>
+                                @endif
                             },
                         },
             ],

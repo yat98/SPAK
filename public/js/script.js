@@ -1490,7 +1490,7 @@ $('.btn-ubah-file-pindah').on('click',function(e){
     form.toggleClass('d-none').addClass('mt-3 mb-5');
 });
 
-$('.btn-pendaftaran-cuti-detail').on('click',function(e){
+$('.table-responsive').on('click','.btn-pendaftaran-cuti-detail',function(e){
     e.preventDefault();
     $('#pendaftaran-detail-content').empty();
     let url = $(this).attr('href');
@@ -1498,14 +1498,22 @@ $('.btn-pendaftaran-cuti-detail').on('click',function(e){
                 .then(response => response.json())
                 .then(result => {
                     let pendaftaran = result;
-                    let label;
-                    if(pendaftaran.status == 'diajukan'){
-                        label = `<label class="badge badge-gradient-warning text-dark">${pendaftaran.status.ucwords()}</label>`;
-                    }else if(pendaftaran.status == 'ditolak'){
-                        label = `<label class="badge badge-gradient-danger">${pendaftaran.status.ucwords()}</label>`;
+                    let label,diajukan;
+
+                    if (pendaftaran.status == 'Selesai'){
+                        label=`<label class="badge badge-gradient-info">${pendaftaran.status}</label>`;
+                    }else if (pendaftaran.status == 'Ditolak'){
+                        label=`<label class="badge badge-gradient-danger">${pendaftaran.status}</label>`;
                     }else{
-                        label = `<label class="badge badge-gradient-info">${pendaftaran.status.ucwords()}</label>`;
+                        label=`<label class="badge badge-gradient-warning text-dark">${pendaftaran.status}</label>`;
                     }
+
+                    if(pendaftaran.id_operator == null){
+                        diajukan = pendaftaran.mahasiswa.nama;
+                    }else{
+                        diajukan = pendaftaran.operator.nama;
+                    }
+
                     let html = `<div class="table-responsive">
                                     <table class="table">
                                         <tr>
@@ -1518,7 +1526,7 @@ $('.btn-pendaftaran-cuti-detail').on('click',function(e){
                                         </tr>
                                         <tr>
                                             <th>Tahun Akademik</th>
-                                            <td>${pendaftaran.waktu_cuti.tahun_akademik.tahun_akademik} - ${pendaftaran.waktu_cuti.tahun_akademik.semester.ucwords()}</td>
+                                            <td>${pendaftaran.waktu_cuti.tahun_akademik.tahun_akademik} - ${pendaftaran.semester}</td>
                                         </tr>
                                         <tr>
                                             <th>Status</th>
@@ -1529,8 +1537,12 @@ $('.btn-pendaftaran-cuti-detail').on('click',function(e){
                                             <td>${pendaftaran.alasan_cuti}</td>
                                         </tr>
                                         <tr>
+                                            <th>Diajukan Oleh</th>
+                                            <td>${diajukan}</td>
+                                        </tr>
+                                        <tr>
                                             <th>Di Buat</th>
-                                            <td>${pendaftaran.created_at}</td>
+                                            <td>${pendaftaran.dibuat}</td>
                                         </tr>
                                         <tr>
                                             <th>File Surat Permohonan Cuti</th>
@@ -1584,8 +1596,7 @@ terima.on('click',function(e){
     })
 });
 
-let tolak = $('.btn-tolak');
-tolak.on('click', function(e){
+$('.table-responsive').on('click','.btn-tolak', function(e){
     e.preventDefault();
     Swal.fire({
         title: 'Yakin?',

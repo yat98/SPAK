@@ -25,6 +25,12 @@ class AddRelationshipToPendaftaranCutiTable extends Migration
                   ->on('mahasiswa')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
+
+            $table->foreign('id_operator')
+                  ->references('id')
+                  ->on('operator')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
         });
     }
 
@@ -37,6 +43,7 @@ class AddRelationshipToPendaftaranCutiTable extends Migration
     {
         Schema::table('pendaftaran_cuti', function (Blueprint $table) {
             $table->dropForeign(['nim']);
+            $table->dropForeign(['id_operator']);
             $table->dropForeign(['id_waktu_cuti']);
         });
     }

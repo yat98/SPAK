@@ -100,7 +100,7 @@ class PengajuanSuratPersetujuanPindahController extends Controller
         }
     }
 
-    public function create(){
+    public function createPengajuan(){
         if(isset(Auth::user()->nim)){
             if(!$this->isSuratDiajukanExists()){
                 return redirect($this->segmentUser.'/surat-persetujuan-pindah');

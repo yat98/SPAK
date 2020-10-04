@@ -11,7 +11,7 @@
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
                             <i class="mdi mdi-playlist-check"></i>
-                        </span> Pendaftaran Cuti </h3>
+                        </span> Pendaftaran Cuti</h3>
                 </div>
                 <div class="row">
                     <div class="col-md-6 stretch-card grid-margin">
@@ -19,11 +19,12 @@
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Pengajuan Pendaftaran Cuti<i
-                                        class="mdi mdi-playlist-check menu-icon mdi-24px float-right"></i>
+                                <h4 class="font-weight-normal mb-3">                                        
+                                        Verfikasi Pendaftaran Cuti
+                                        <i class="mdi mdi-playlist-check mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllPengajuanCuti > 0 ? $countAllPengajuanCuti.' Pengajuan Pendaftaran Cuti' : 'Pengajuan Pendaftaran Cuti Kosong' }}
+                                    {{ $countAllVerifikasi > 0 ? $countAllVerifikasi.' Verifikasi Pengajuan Cuti' : 'Verifikasi Pengajuan Cuti Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -35,10 +36,10 @@
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
                                 <h4 class="font-weight-normal mb-3">Pendaftaran Cuti <i
-                                        class="mdi mdi-playlist-check menu-icon mdi-24px float-right"></i>
+                                        class="mdi mdi-playlist-check mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllPendaftaranCuti > 0 ? $countAllPendaftaranCuti.' Pendaftaran Cuti' : 'Pendaftaran Cuti Kosong' }}
+                                    {{ $countAllPendaftaran > 0 ? $countAllPendaftaran.' Pendaftaran Cuti' : 'Data Pendaftaran Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -51,83 +52,37 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Pengajuan Pendaftaran Cuti</h4>
+                                        <h4>
+                                            Verfikasi Pendaftaran Cuti
+                                        </h4>
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countPengajuanCuti > 0)
-                                <div class="table-responsive">
-                                    <table class="table">
+                                @if ($countAllVerifikasi > 0)
+                                 <div class="table-responsive">
+                                    <table class="table display no-warp" id='datatables' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
-                                                <th> Nama Mahasiswa</th>
+                                                <th data-priority="1"> Nama </th>
                                                 <th> Tahun Akademik</th>
                                                 <th> Alasan Cuti</th>
-                                                <th> Status</th>
+                                                <th data-priority="2"> Status</th>
+                                                <th> Waktu Pendaftaran</th>
                                                 <th> Keterangan</th>
-                                                <th> Aksi</th>
+                                                <th data-priority="3"> Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($pengajuanCutiList as $pengajuanCuti)
-                                            <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($pengajuanCutiList->currentPage() - 1) }}</td>
-                                                <td> {{ $pengajuanCuti->mahasiswa->nama }}</td>
-                                                <td> {{ $pengajuanCuti->waktuCuti->tahunAkademik->tahun_akademik }} - {{ ucwords($pengajuanCuti->waktuCuti->tahunAkademik->semester) }}</td>
-                                                <td> {{ $pengajuanCuti->alasan_cuti }}</td>
-                                                <td> 
-                                                    @if ($pengajuanCuti->status == 'diajukan')
-                                                    <label class="badge badge-gradient-warning text-dark">
-                                                        {{ ucwords($pengajuanCuti->status) }}
-                                                    </label>
-                                                    @elseif($pengajuanCuti->status == 'ditolak')
-                                                    <label class="badge badge-gradient-danger">
-                                                        {{ ucwords($pengajuanCuti->status) }}
-                                                    </label>
-                                                    @endif
-                                                </td>
-                                                <td> {{ $pengajuanCuti->keterangan }}</td>
-                                                <td>
-                                                    <a href="{{ url('pegawai/pendaftaran-cuti/'.$pengajuanCuti->id) }}" class="btn btn-outline-info btn-sm btn-pendaftaran-cuti-detail" data-toggle="modal" data-target="#exampleModal">
-                                                        <i class="mdi mdi-playlist-check btn-icon-prepend"></i>
-                                                        Detail
-                                                    </a>
-
-                                                    @if ($pengajuanCuti->status == 'diajukan')
-                                                    {{ Form::open(['method'=>'PATCH','action'=>['PendaftaranCutiController@terima',$pengajuanCuti->id],'class'=>'d-inline-block']) }}
-                                                    <button type="submit" class="btn btn-info btn-sm btn-terima">
-                                                        <i class="mdi mdi mdi-check btn-icon-prepend"></i>
-                                                        Terima
-                                                    </button>
-                                                    {{ Form::close() }}
-
-                                                    {{ Form::open(['method'=>'PATCH','action'=>['PendaftaranCutiController@tolak',$pengajuanCuti->id],'class'=>'d-inline-block']) }}
-                                                    {{ Form::hidden('keterangan','-',['id'=>'keterangan_surat']) }}
-                                                    <button type="submit" class="btn btn-danger btn-sm btn-tolak">
-                                                        <i class="mdi mdi mdi-close btn-icon-prepend"></i>
-                                                        Tolak
-                                                    </button>
-                                                    {{ Form::close() }}
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
-                                    <div class="col">
-                                        {{ $pengajuanCutiList->appends(['page' => $pengajuanCutiList->currentPage()])->links() }}
-                                    </div>
                                 </div>
                                 @else
                                 <div class="row">
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Pendaftaran Cuti Kosong!' }}
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pengajuan Cuti Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Belum ada pengajuan pendaftaran cuti.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : 'Data pengajuan pendaftaran cuti belum ada.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -142,84 +97,23 @@
                                     <div class="col-12 col-md-6">
                                         <h4>Pendaftaran Cuti</h4>
                                     </div>
-                                    <div class="col-12 col-md-6 text-right">
-                                        <a href="{{ url('pegawai/pendaftaran-cuti/create')}}"
-                                            class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">+
-                                            Tambah Pendaftaran Cuti</a>
-                                    </div>
                                 </div>
                                 <hr class="mb-4">
-                                <div class="row mb-3">
-                                    <div class="col-sm-12">
-                                        {{ Form::open(['url'=>'pegawai/pendaftaran-cuti/search','method'=>'get']) }}
-                                        <div class="form-row">
-                                            <div class="col-sm-4 col-md-4 mt-1">
-                                                {{ Form::select('keywords',$mahasiswa,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> 'Cari mahasiswa...']) }}
-                                            </div>
-                                              <div class="col-sm-4 col-md-4 mt-1">
-                                            {{ Form::select('waktu_cuti',$waktuCuti,(request()->get('waktu_cuti') != null) ? request()->get('waktu_cuti'):null,['class'=>'form-control search','placeholder'=> 'Cari waktu cuti...']) }}
-                                            </div> 
-                                            <div class="col-sm-12 col-md">
-                                                <button class="btn btn-success btn-sm btn-tambah" type="submit">
-                                                    <i class="mdi mdi-magnify btn-icon-prepend"></i>
-                                                    Cari
-                                                </button>
-                                            </div>
-                                        </div>
-                                        {{ Form::close() }}
-                                    </div>
-                                </div>
-                                @if ($countPendaftaranCuti > 0)
-                                <div class="table-responsive">
-                                    <table class="table">
+                                @if ($countAllPendaftaran > 0)
+                                 <div class="table-responsive">
+                                    <table class="table display no-warp" id='datatables1' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
-                                                <th> Nama Mahasiswa</th>
+                                                <th data-priority="1"> Nama </th>
                                                 <th> Tahun Akademik</th>
                                                 <th> Alasan Cuti</th>
-                                                <th> Status</th>
+                                                <th data-priority="2"> Status</th>
+                                                <th> Waktu Pendaftaran</th>
                                                 <th> Keterangan</th>
-                                                <th> Aksi</th>
+                                                <th data-priority="3"> Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($pendaftaranCutiList as $pendaftaranCuti)
-                                            <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($pendaftaranCutiList->currentPage() - 1) }}</td>
-                                                <td> {{ $pendaftaranCuti->mahasiswa->nama }}</td>
-                                                <td> {{ $pendaftaranCuti->waktuCuti->tahunAkademik->tahun_akademik }} - {{ ucwords($pendaftaranCuti->waktuCuti->tahunAkademik->semester) }}</td>
-                                                <td> {{ $pendaftaranCuti->alasan_cuti }}</td>
-                                                <td> 
-                                                    <label class="badge badge-gradient-info">
-                                                        {{ ucwords($pendaftaranCuti->status) }}
-                                                    </label>
-                                                </td>
-                                                 <td> {{ $pendaftaranCuti->keterangan }}</td>
-                                                <td>
-                                                    <a href="{{ url('pegawai/pendaftaran-cuti/'.$pendaftaranCuti->id) }}" class="btn btn-outline-info btn-sm btn-pendaftaran-cuti-detail" data-toggle="modal" data-target="#exampleModal">
-                                                        <i class="mdi mdi-playlist-check btn-icon-prepend"></i>
-                                                        Detail
-                                                    </a>
-                                                    <a href="{{ url('pegawai/pendaftaran-cuti/'.$pendaftaranCuti->id.'/edit') }}"
-                                                        class="btn btn-warning btn-sm text-dark">
-                                                        <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>
-                                                        Edit
-                                                    </a>
-                                                    {{ Form::open(['method'=>'DELETE','action'=>['PendaftaranCutiController@destroy',$pendaftaranCuti->id],'class'=>'d-inline-block']) }}
-                                                    <button type="submit" class="btn btn-danger btn-sm sweet-delete">
-                                                        <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
-                                                        Hapus
-                                                    </button>
-                                                    {{ Form::close() }}
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
-                                    <div class="col">
-                                        {{ $pengajuanCutiList->appends(['page_pengajuan' => $pendaftaranCutiList->currentPage()])->links() }}
-                                    </div>
                                 </div>
                                 @else
                                 <div class="row">
@@ -229,7 +123,7 @@
                                             {{ (Session::has('search-title')) ? Session::get('search-title') : ' Pendaftaran Cuti Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi pendaftaran cuti terlebih dahulu.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : 'Data pendaftaran cuti belum ada.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -243,6 +137,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
@@ -262,4 +157,248 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="mahasiswa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='mahasiswa-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('datatables-javascript')
+    <script>
+        let link = "{{ url('pegawai/pendaftaran-cuti') }}";
+        let linkMhs = "{{ url('pegawai/detail/mahasiswa') }}";
+        
+        $('#datatables').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 0,
+                            "data": "nim",
+                            "render": function ( data, type, row, meta ) {
+                                return `<a href="${linkMhs}/${row.mahasiswa.nim}" class="btn-detail text-dark" data-toggle="modal" data-target="#mahasiswa">
+                                            <div class="mb-1">${row.mahasiswa.nama}</div>
+                                            <span class="text-muted small">NIM. ${row.mahasiswa.nim}</span>
+                                        </a>`;
+                            }
+                        },
+                        {
+                            "targets": 3,
+                            "data": "status",
+                            "render": function ( data, type, row, meta ) {
+                                if(row.status == 'Ditolak'){
+                                    return ` <label class="badge badge-gradient-danger">
+                                                ${row.status}
+                                            </label>`;
+                                }else if(row.status == 'Selesai'){
+                                    return ` <label class="badge badge-gradient-info">
+                                            ${row.status}
+                                        </label>`;
+                                }else{
+                                    return ` <label class="badge badge-gradient-warning text-dark">
+                                                ${row.status}
+                                            </label>`;
+                                }
+                            }
+                        },
+                        {
+                            "targets": 4,
+                            "data": "created_at",
+                            "render": function ( data, type, row, meta ) {
+                                return row.waktu_pengajuan;
+                            }
+                        },
+                        {
+                            "targets": 6,
+                            "data": "aksi",
+                            "render": function ( data, type, row, meta ) {
+                                let aksi = `<a href="${link+'/'+row.id}" class="dropdown-item btn-pendaftaran-cuti-detail" data-toggle="modal" data-target="#exampleModal">Detail</a>`;
+                                @if(Auth::user()->bagian =='front office')
+                                    aksi += `<a href="${link+'/'+row.id}/edit" class="dropdown-item">Edit</a>
+                                             <form action="${link+'/'+row.id}" method="post">
+                                                 <input name="_method" type="hidden" value="DELETE">
+                                                 <input name="_token" type="hidden" value="{{ @csrf_token() }}">
+                                                 <button type="submit" class="dropdown-item sweet-delete">
+                                                     Hapus
+                                                 </button>
+                                             </form>`;
+                                @else
+                                    aksi += `<form action="${link+'/verifikasi/'+row.id}" method="post">
+                                                <input name="_method" type="hidden" value="PATCH">
+                                                <input name="_token" type="hidden" value="{{ @csrf_token() }}">
+                                                <button type="submit" class="dropdown-item">
+                                                    Verifikasi Pendaftaran
+                                                </button>
+                                             </form>
+                                             <form action="${link+'/tolak/'+row.id}" method="post">
+                                                <input name="_method" type="hidden" value="PATCH">
+                                                <input name="_token" type="hidden" value="{{ @csrf_token() }}">
+                                                <input name="keterangan" type="hidden" value="-" id="keterangan_surat">
+                                                <button type="submit" class="dropdown-item btn-tolak">
+                                                    Tolak Pendaftaran
+                                                </button>
+                                             </form>`;
+                                @endif
+                                return `<div class="d-inline-block">
+                                            <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                            </a>
+                                            <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                ${aksi}
+                                            </div>
+                                        </div>`;
+                        }
+                    },
+                    {
+                        "targets": [7,8,9],
+                        "visible": false,
+                    },],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('pegawai/pendaftaran-cuti/pendaftaran/all') }}',
+            columns: [{
+                    data: 'mahasiswa.nim',
+                },
+                {
+                    data: 'tahun',
+                },
+                {
+                    data: 'alasan_cuti',
+                },
+                {
+                    data: 'status',
+                },
+                {
+                    data: 'created_at',
+                },
+                {
+                    data: 'keterangan',
+                },
+                {
+                    data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                },
+                {
+                    data: 'mahasiswa.nama',
+                }, 
+                {
+                    data: 'tahun_akademik.tahun_akademik',
+                },
+                {
+                    data: 'tahun_akademik.semester',
+                },
+            ],
+            "pageLength": {{ $perPage }},
+            "order": [[ 4, 'desc' ]],
+        });
+
+        $('#datatables1').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 0,
+                            "data": "nim",
+                            "render": function ( data, type, row, meta ) {
+                                return `<a href="${linkMhs}/${row.mahasiswa.nim}" class="btn-detail text-dark" data-toggle="modal" data-target="#mahasiswa">
+                                            <div class="mb-1">${row.mahasiswa.nama}</div>
+                                            <span class="text-muted small">NIM. ${row.mahasiswa.nim}</span>
+                                        </a>`;
+                            }
+                        },
+                        {
+                            "targets": 3,
+                            "data": "status",
+                            "render": function ( data, type, row, meta ) {
+                                if(row.status == 'Ditolak'){
+                                    return ` <label class="badge badge-gradient-danger">
+                                                ${row.status}
+                                            </label>`;
+                                }else if(row.status == 'Selesai'){
+                                    return ` <label class="badge badge-gradient-info">
+                                            ${row.status}
+                                        </label>`;
+                                }else{
+                                    return ` <label class="badge badge-gradient-warning text-dark">
+                                                ${row.status}
+                                            </label>`;
+                                }
+                            }
+                        },
+                        {
+                            "targets": 4,
+                            "data": "created_at",
+                            "render": function ( data, type, row, meta ) {
+                                return row.waktu_pengajuan;
+                            }
+                        },
+                        {
+                            "targets": 6,
+                            "data": "aksi",
+                            "render": function ( data, type, row, meta ) {
+                                return `<div class="d-inline-block">
+                                            <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                            </a>
+                                            <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                <a href="${link+'/'+row.id}" class="dropdown-item btn-pendaftaran-cuti-detail" data-toggle="modal" data-target="#exampleModal">Detail</a>
+                                            </div>
+                                        </div>`;
+                        }
+                    },
+                    {
+                        "targets": [7,8,9],
+                        "visible": false,
+                    },],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('pegawai/pendaftaran-cuti/all') }}',
+            columns: [{
+                    data: 'mahasiswa.nim',
+                },
+                {
+                    data: 'tahun',
+                },
+                {
+                    data: 'alasan_cuti',
+                },
+                {
+                    data: 'status',
+                },
+                {
+                    data: 'created_at',
+                },
+                {
+                    data: 'keterangan',
+                },
+                {
+                    data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                },
+                {
+                    data: 'mahasiswa.nama',
+                }, 
+                {
+                    data: 'tahun_akademik.tahun_akademik',
+                },
+                {
+                    data: 'tahun_akademik.semester',
+                },
+            ],
+            "pageLength": {{ $perPage }},
+            "order": [[ 4, 'desc' ]],
+        });
+    </script>
 @endsection

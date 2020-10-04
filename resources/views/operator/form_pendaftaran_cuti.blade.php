@@ -1,44 +1,30 @@
 <div class="row">
     <div class="col-md-12">
         <div class="form-group">
-            {{ Form::label('nim','NIM') }}
+            {{ Form::label('nim','Mahasiswa') }}
             <br>
             @if ($errors->any())
             @if ($errors->has('nim'))
-            {{ Form::text('nim',Auth::user()->nim,['class'=>'form-control form-control-lg is-invalid','id'=>'nim','readonly'=>'readonly']) }}
+            {{ Form::select('nim',$mahasiswa,null,['class'=>'form-control form-control-lg','id'=>'mahasiswa_list','placeholder'=> '-- Pilih Mahasiswa --']) }}
             <div class="text-danger-red mt-1"><small>{{ $errors->first('nim') }}</small></div>
             @else
-            {{ Form::text('nim',Auth::user()->nim,['class'=>'form-control form-control-lg','id'=>'nim','readonly'=>'readonly']) }}
+            {{ Form::select('nim',$mahasiswa,null,['class'=>'form-control form-control-lg','id'=>'mahasiswa_list','placeholder'=> '-- Pilih Mahasiswa --']) }}
             @endif
             @else
-            {{ Form::text('nim',Auth::user()->nim,['class'=>'form-control form-control-lg','id'=>'nim','readonly'=>'readonly']) }}
+            {{ Form::select('nim',$mahasiswa,null,['class'=>'form-control form-control-lg','id'=>'mahasiswa_list','placeholder'=> '-- Pilih Mahasiswa --']) }}
             @endif
-        </div>  
-        <div class="form-group">
-            {{ Form::label('nama','Nama') }}
-            <br>
-            @if ($errors->any())
-            @if ($errors->has('nama'))
-            {{ Form::text('nama',Auth::user()->nama,['class'=>'form-control form-control-lg is-invalid','id'=>'nama','disabled'=>'disabled']) }}
-            <div class="text-danger-red mt-1"><small>{{ $errors->first('nim') }}</small></div>
-            @else
-            {{ Form::text('nama',Auth::user()->nama,['class'=>'form-control form-control-lg','id'=>'nama','disabled'=>'disabled']) }}
-            @endif
-            @else
-            {{ Form::text('nama',Auth::user()->nama,['class'=>'form-control form-control-lg','id'=>'nama','disabled'=>'disabled']) }}
-            @endif
-        </div>  
+        </div> 
         <div class="form-group">
             {{ Form::label('id_waktu_cuti','Tahun Akademik') }}
             @if ($errors->any())
             @if ($errors->has('id_waktu_cuti'))
-            {{ Form::select('id_waktu_cuti',[$waktuCuti->id=>$waktuCuti->tahunAkademik->tahun_akademik.' - '.ucwords($waktuCuti->tahunAkademik->semester)],null,['class'=>'form-control form-control-lg is-invalid','id'=>'id_waktu_cuti','readonly']) }}
+            {{ Form::select('id_waktu_cuti',$waktuCuti,null,['class'=>'form-control form-control-lg is-invalid','id'=>'id_waktu_cuti']) }}
             <div class="invalid-feedback">{{ $errors->first('id_waktu_cuti') }}</div>
             @else
-            {{ Form::select('id_waktu_cuti',[$waktuCuti->id=>$waktuCuti->tahunAkademik->tahun_akademik.' - '.ucwords($waktuCuti->tahunAkademik->semester)],null,['class'=>'form-control form-control-lg ','id'=>'id_waktu_cuti','readonly']) }}
+            {{ Form::select('id_waktu_cuti',$waktuCuti,null,['class'=>'form-control form-control-lg ','id'=>'id_waktu_cuti']) }}
             @endif
             @else
-            {{ Form::select('id_waktu_cuti',[$waktuCuti->id=>$waktuCuti->tahunAkademik->tahun_akademik.' - '.ucwords($waktuCuti->tahunAkademik->semester)],null,['class'=>'form-control form-control-lg','id'=>'id_waktu_cuti','readonly']) }}
+            {{ Form::select('id_waktu_cuti',$waktuCuti,null,['class'=>'form-control form-control-lg','id'=>'id_waktu_cuti']) }}
             @endif
         </div>
         <div class="form-group">

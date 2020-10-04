@@ -11,15 +11,15 @@
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
                             <i class="mdi mdi-file-document-box"></i>
-                        </span> Pendaftaran Cuti</h3>
+                        </span> Pendaftaran Cuti </h3>
                 </div>
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Tambah Pendaftaran Cuti</h3>
-                                {{ Form::open(['url'=>'mahasiswa/pendaftaran-cuti','files'=>true]) }}
-                                @include('mahasiswa.form_pendaftaran_cuti',['buttonLabel'=>'Tambah'])
+                                <h3 class="mb-5">Edit Pendaftaran Cuti</h3>
+                                {{ Form::model($pendaftaranCuti,['method'=>'PATCH','url'=>url('operator/pendaftaran-cuti/'.$pendaftaranCuti->id),'files'=>true]) }}
+                                @include('operator.form_pendaftaran_cuti',['buttonLabel'=>'Simpan'])
                                 {{ Form::close() }}
                             </div>
                         </div>
@@ -30,4 +30,4 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection

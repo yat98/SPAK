@@ -53,4 +53,8 @@ class Operator extends Authenticable
     public function pengajuanSuratPersetujuanPindah(){
         return $this->hasMany('App\PengajuanSuratPersetujuanPindah','id_operator');
     }
+
+    public function pendaftaranCuti(){
+        return $this->hasMany('App\PendaftaranCuti','id_operator');
+    }
 }
