@@ -74,7 +74,7 @@
                                 </div>
                                 <hr class="mb-4">
                                 @if ($countAllPengajuan > 0)
-                                 <div class="table-responsive">
+                                <div class="table-responsive">
                                     <table class="table display no-warp" id='datatables' width="100%">
                                         <thead>
                                             <tr>

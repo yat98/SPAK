@@ -377,6 +377,12 @@
                 </ul>
             </div>
         </li>
+         <li class="nav-item {{ ($halaman == 'waktu-cuti') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/waktu-cuti') }}">
+                <span class="menu-title">Waktu Cuti</span>
+                <i class="mdi mdi mdi mdi-clock menu-icon"></i>
+            </a>
+        </li>
         <li class="nav-item {{ ($halaman == 'pendaftaran-cuti') ? 'active':'' }}">
             <a class="nav-link" href="{{ url(Request::segment(1).'/pendaftaran-cuti') }}">
                 <span class="menu-title">Pendaftaran Cuti</span>
@@ -433,12 +439,6 @@
                         </li>
                         <li class="nav-item"> 
                             <a class="nav-link {{ ($halaman == 'surat-persetujuan-pindah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-persetujuan-pindah') }}">Surat Persetujuan Pindah</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ ($halaman == 'surat-pengantar-cuti') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-pengantar-cuti') }}">Surat Pengantar Cuti</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ ($halaman == 'surat-pengantar-beasiswa') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-pengantar-beasiswa') }}">Surat Pengantar Beasiswa</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ ($halaman == 'surat-kegiatan-mahasiswa') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-kegiatan-mahasiswa') }}">Surat Kegiatan Mahasiswa</a>
@@ -499,6 +499,14 @@
                 </ul>
             </div>
         </li>
+        @if(Session::get('jabatan') == 'subbagian kemahasiswaan')
+        <li class="nav-item {{ ($halaman == 'waktu-cuti') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/waktu-cuti') }}">
+                <span class="menu-title">Waktu Cuti</span>
+                <i class="mdi mdi mdi mdi-clock menu-icon"></i>
+            </a>
+        </li>
+        @endif
         <li class="nav-item {{ ($halaman == 'pendaftaran-cuti') ? 'active':'' }}">
             <a class="nav-link" href="{{ url(Request::segment(1).'/pendaftaran-cuti') }}">
                 <span class="menu-title">Pendaftaran Cuti</span>

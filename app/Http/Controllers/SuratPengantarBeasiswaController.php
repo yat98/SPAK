@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use PDF;
 use Session;
 use App\User;
+use App\Operator;
+use DataTables;
 use App\KodeSurat;
 use App\SuratMasuk;
 use App\NotifikasiUser;
+use App\NotifikasiOperator;
 use Illuminate\Http\Request;
 use App\SuratPengantarBeasiswa;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SuratPengantarBeasiswaRequest;
 
 class SuratPengantarBeasiswaController extends Controller
@@ -18,120 +22,149 @@ class SuratPengantarBeasiswaController extends Controller
     public function index()
     {
         $perPage = $this->perPage;
-        $nomorSurat = $this->generateNomorSuratBeasiswa(['menunggu tanda tangan','selesai']);
-        $suratBeasiswaList = SuratPengantarBeasiswa::orderBy('status')->paginate($perPage);
-        $countAllSuratBeasiswa = SuratPengantarBeasiswa::all()->count();
-        $countSuratBeasiswa = $suratBeasiswaList->count();
-        return view('user.'.$this->segmentUser.'.surat_pengantar_beasiswa',compact('perPage','suratBeasiswaList','countAllSuratBeasiswa','countSuratBeasiswa','nomorSurat'));
+        
+        $countAllSurat = SuratPengantarBeasiswa::whereIn('status',['verifikasi kabag','selesai','menunggu tanda tangan'])
+                                             ->count();
+        
+        $countAllVerifikasi = SuratPengantarBeasiswa::where('status','verifikasi kasubag')
+                                                  ->count();
+
+        return view('user.'.$this->segmentUser.'.surat_pengantar_beasiswa',compact('perPage','countAllSurat','countAllVerifikasi'));
+    }
+
+    public function indexOperator(){
+        $perPage = $this->perPage;
+
+        $countAllSurat = SuratPengantarBeasiswa::count();
+                                                                         
+        return view($this->segmentUser.'.surat_pengantar_beasiswa',compact('perPage','countAllSurat'));
     }
 
     public function indexPimpinan(){
         $perPage = $this->perPage;
-        $nomorSurat = $this->generateNomorSuratBeasiswa(['selesai']);
-        $suratBeasiswaList = SuratPengantarBeasiswa::orderBy('status')->where('status','selesai')->paginate($perPage);
-        $pengajuanBeasiswaList = SuratPengantarBeasiswa::orderBy('status')->where('status','menunggu tanda tangan')->paginate($perPage);
-        $countAllSuratBeasiswa = SuratPengantarBeasiswa::all()->count();
-        $countAllPengajuanBeasiswa = SuratPengantarBeasiswa::where('status','menunggu tanda tangan')->count();
-        $countSuratBeasiswa = $suratBeasiswaList->count();
-        $countPengajuanBeasiswa = $pengajuanBeasiswaList->count();
-        return view('user.'.$this->segmentUser.'.surat_pengantar_beasiswa',compact('perPage','nomorSurat','suratBeasiswaList','pengajuanBeasiswaList','countAllSuratBeasiswa','countAllPengajuanBeasiswa','countSuratBeasiswa','countPengajuanBeasiswa'));
+
+        $countAllVerifikasi = SuratPengantarBeasiswa::where('status','verifikasi kabag')
+                                                  ->count();
+                                            
+        $countAllSurat = SuratPengantarBeasiswa::where('status','selesai')
+                                             ->count();
+        
+        $countAllTandaTangan = SuratPengantarBeasiswa::where('status','menunggu tanda tangan')
+                                                   ->where('nip',Auth::user()->nip)
+                                                   ->count();
+
+        return view('user.'.$this->segmentUser.'.surat_pengantar_beasiswa',compact('perPage','countAllVerifikasi','countAllSurat','countAllTandaTangan'));
+    }
+
+    public function getAllSurat(){
+        $suratBeasiswa = SuratPengantarBeasiswa::with(['mahasiswa','user','kodeSurat','operator']);
+
+        if(isset(Auth::user()->nip)){
+            if(Auth::user()->jabatan == 'kasubag kemahasiswaan'){
+                $suratBeasiswa = $suratBeasiswa->whereIn('status',['selesai','verifikasi kabag','menunggu tanda tangan']);
+            } else{
+                $suratBeasiswa = $suratBeasiswa->where('status','selesai');
+            }
+        }
+
+        return DataTables::of($suratBeasiswa)
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->make(true);
+    }
+
+    public function getAllPengajuan(){
+        $suratBeasiswa = SuratPengantarBeasiswa::with(['mahasiswa','user','kodeSurat','operator']);
+                                                    
+        if (Auth::user()->jabatan == 'kasubag kemahasiswaan') {
+            $suratBeasiswa = $suratBeasiswa->where('status','verifikasi kasubag');
+        }else if(Auth::user()->jabatan == 'kabag tata usaha'){
+            $suratBeasiswa = $suratBeasiswa->where('status','verifikasi kabag');
+        }
+
+        return DataTables::of($suratBeasiswa)
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->make(true);
+    }
+
+    public function getAllTandaTangan(){
+        $suratBeasiswa =  SuratPengantarBeasiswa::with(['mahasiswa','user','kodeSurat','operator'])
+                                                  ->where('nip',Auth::user()->nip);
+                                    
+        return DataTables::of($suratBeasiswa)
+                    ->addColumn('aksi', function ($data) {
+                        return $data->id;
+                    })
+                    ->editColumn("status", function ($data) {
+                        return ucwords($data->status);
+                    })
+                    ->editColumn("created_at", function ($data) {
+                        return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                    })
+                    ->make(true);                        
     }
 
     public function create(){
-        if(!$this->isKodeSuratBeasiswaExists() || !$this->isKodeSuratExists() || !$this->isTandaTanganExists()){
-            return redirect($this->segmentUser.'/surat-pengantar-beasiswa');
+        if(!$this->isKodeSuratExists()){
+            return redirect($this->segmentUser.'/surat-pengantar-cuti');
         }
         $mahasiswa = $this->generateMahasiswa();
         $suratMasuk = SuratMasuk::pluck('nomor_surat','id');
-        $kodeSurat = $this->generateKodeSurat();
+        $kodeSurat = KodeSurat::pluck('kode_surat','id');
         $nomorSuratBaru = $this->generateNomorSuratBaru();
-        $userList = $this->generatePimpinan();
+        $userList =$this->generateTandaTanganKemahasiswaan();
+        if(isset(Auth::user()->id)) return view($this->segmentUser.'.tambah_surat_pengantar_beasiswa',compact('mahasiswa','suratMasuk','nomorSuratBaru','kodeSurat','userList'));
         return view('user.'.$this->segmentUser.'.tambah_surat_pengantar_beasiswa',compact('mahasiswa','suratMasuk','nomorSuratBaru','kodeSurat','userList'));
     }
 
     public function show(SuratPengantarBeasiswa $suratBeasiswa){
-        $surat = collect($suratBeasiswa->load(['kodeSurat','user','suratMasuk','mahasiswa.prodi.jurusan','kasubag']));
-        if($suratBeasiswa->user->jabatan == 'wd3'){
-            $kode = explode('/',$suratBeasiswa->kodeSurat->kode_surat);
-            $nomorSurat = 'B/'.$suratBeasiswa->nomor_surat.'/'.$kode[0].'.3/'.$kode[1].'/'.$suratBeasiswa->created_at->format('Y');
-        }else{
-            $nomorSurat = 'B/'.$suratBeasiswa->nomor_surat.'/'.$suratBeasiswa->kodeSurat->kode_surat.'/'.$suratBeasiswa->created_at->format('Y');
-        }
+        $surat = collect($suratBeasiswa->load(['kodeSurat','user','suratMasuk','mahasiswa.prodi.jurusan','operator']));
+        $surat->put('dibuat',$suratBeasiswa->created_at->isoFormat('D MMMM YYYY HH:mm:ss'));
+        $surat->put('status',ucwords($suratBeasiswa->status));
+        $surat->put('tahun',$suratBeasiswa->created_at->isoFormat('Y'));
         $surat->put('nama_file',explode('.',$suratBeasiswa->suratMasuk->file_surat_masuk)[0]);
         $surat->put('link_file',asset('upload_surat_masuk/'.$suratBeasiswa->suratMasuk->file_surat_masuk));
-        $surat->put('created_at',$suratBeasiswa->created_at->isoFormat('D MMMM Y'));
-        $surat->put('updated_at',$suratBeasiswa->updated_at->isoFormat('D MMMM Y'));
-        $surat = $surat->put('nomor_surat',$nomorSurat);
         return $surat->toJson();
-    }
-
-    public function search(Request $request){
-        $input = $request->all();
-        if(isset($input['keywords'])){
-            $nomor = $input['keywords'] ?? ' ';
-            $perPage = $this->perPage;
-            $nomorSurat = $this->generateNomorSuratBeasiswa(['menunggu tanda tangan','selesai']);
-            $suratBeasiswaList = SuratPengantarBeasiswa::orderBy('status')->where('nomor_surat','like',"%$nomor%")->paginate($perPage);
-            $countAllSuratBeasiswa = SuratPengantarBeasiswa::all()->count();
-            $countSuratBeasiswa = $suratBeasiswaList->count();
-            if($countSuratBeasiswa < 1){
-                $this->setFlashData('search','Hasil Pencarian','Surat pengantar beasiswa tidak ditemukan!');
-            }
-            return view('user.'.$this->segmentUser.'.surat_pengantar_beasiswa',compact('perPage','suratBeasiswaList','countAllSuratBeasiswa','countSuratBeasiswa','nomorSurat'));
-        }else{
-            return redirect($this->segmentUser.'/surat-pengantar-beasiswa');
-        }
-    }
-
-    public function searchPimpinan(Request $request){
-        $input = $request->all();
-        if(isset($input['keywords'])){
-            $nomor = $input['keywords'] ?? ' ';
-            $perPage = $this->perPage;
-            $nomorSurat = $this->generateNomorSuratBeasiswa(['selesai']);
-            $suratBeasiswaList = SuratPengantarBeasiswa::orderBy('status')->where('nomor_surat','like',"%$nomor%")->where('status','selesai')->paginate($perPage);
-            $pengajuanBeasiswaList = SuratPengantarBeasiswa::orderBy('status')->where('status','menunggu tanda tangan')->paginate($perPage);
-            $countAllSuratBeasiswa = SuratPengantarBeasiswa::all()->count();
-            $countAllPengajuanBeasiswa = SuratPengantarBeasiswa::where('status','menunggu tanda tangan')->count();
-            $countSuratBeasiswa = $suratBeasiswaList->count();
-            $countPengajuanBeasiswa = $pengajuanBeasiswaList->count();
-            if($countSuratBeasiswa < 1){
-                $this->setFlashData('search','Hasil Pencarian','Surat pengantar beasiswa tidak ditemukan!');
-            }
-            return view('user.'.$this->segmentUser.'.surat_pengantar_beasiswa',compact('perPage','nomorSurat','suratBeasiswaList','pengajuanBeasiswaList','countAllSuratBeasiswa','countAllPengajuanBeasiswa','countSuratBeasiswa','countPengajuanBeasiswa'));
-        }else{
-            return redirect($this->segmentUser.'/surat-pengantar-beasiswa');
-        }
     }
 
     public function store(SuratPengantarBeasiswaRequest $request){
         $input = $request->all();
-        $input['nip_kasubag'] = Session::get('nip');
+        $input['id_operator'] = Auth::user()->id;
+        $user = User::where('status_aktif','aktif')
+        ->where('jabatan','kasubag kemahasiswaan')
+        ->first();
+        
         DB::beginTransaction();
         try{
             $suratBeasiswa = SuratPengantarBeasiswa::create($input);
-            if($request->nip != Session::get('nip')){
-                NotifikasiUser::create([
-                    'nip'=>$request->nip,
-                    'judul_notifikasi'=>'Surat Pengantar Beasiswa',
-                    'isi_notifikasi'=>'Tanda tangan surat pengantar beasiswa.',
-                    'link_notifikasi'=>url('pimpinan/surat-pengantar-beasiswa')
-                ]);
-            }
-        }catch(Exception $e){
-            DB::rollback();
-            $this->setFlashData('error','Gagal Menambahkan Data','Surat pengantar beasiswa gagal ditambahkan.');
-        }
-
-        try{
-             $suratBeasiswa->mahasiswa()->attach($request->nim);
+            $suratBeasiswa->mahasiswa()->attach($request->nim);
+            NotifikasiUser::create([
+                'nip'=>$user->nip,
+                'judul_notifikasi'=>'Surat Pengantar Beasiswa',
+                'isi_notifikasi'=>'Verifikasi surat pengantar beasiswa',
+                'link_notifikasi'=>url('pegawai/surat-pengantar-beasiswa')
+            ]);
         }catch(Exception $e){
             DB::rollback();
             $this->setFlashData('error','Gagal Menambahkan Data','Surat pengantar beasiswa gagal ditambahkan.');
         }
 
         DB::commit();
-
         $this->setFlashData('success','Berhasil','Surat pengantar beasiswa berhasil ditambahkan');
         return redirect($this->segmentUser.'/surat-pengantar-beasiswa');
     }
@@ -140,8 +173,9 @@ class SuratPengantarBeasiswaController extends Controller
     {
         $mahasiswa = $this->generateMahasiswa();
         $suratMasuk = SuratMasuk::pluck('nomor_surat','id');
-        $kodeSurat = $this->generateKodeSurat();
-        $userList = $this->generatePimpinan();
+        $kodeSurat = KodeSurat::pluck('kode_surat','id');
+        $userList =$this->generateTandaTanganKemahasiswaan();
+        if(isset(Auth::user()->id)) return view($this->segmentUser.'.edit_surat_pengantar_beasiswa',compact('mahasiswa','suratMasuk','kodeSurat','userList','suratBeasiswa'));
         return view('user.'.$this->segmentUser.'.edit_surat_pengantar_beasiswa',compact('mahasiswa','suratMasuk','kodeSurat','userList','suratBeasiswa'));
     }
 
@@ -169,72 +203,71 @@ class SuratPengantarBeasiswaController extends Controller
         return redirect($this->segmentUser.'/surat-pengantar-beasiswa');
     }
 
-    public function tandaTanganBeasiswa(Request $request){
+    public function verification(Request $request){
+        $status='verifikasi kabag';
+        $suratBeasiswa = SuratPengantarBeasiswa::findOrFail($request->id);
+        $user = $suratBeasiswa->user;
+
+        $isiNotifikasi = 'Verifikasi surat pengantar beasiswa';
+
+        if(Auth::user()->jabatan == 'kabag tata usaha' || $suratBeasiswa->user->jabatan == 'kabag tata usaha'){
+            $status='menunggu tanda tangan';
+            $isiNotifikasi = 'Tanda tangan surat pengantar beasiswa';
+        }
+
+        DB::beginTransaction();
+        try{
+            $suratBeasiswa->update([
+                'status'=>$status,
+            ]);
+            
+            if($status == 'verifikasi kabag'){
+                $user = User::where('jabatan','kabag tata usaha')->where('status_aktif','aktif')->first();
+            }
+
+            NotifikasiUser::create([
+                'nip'=>$user->nip,
+                'judul_notifikasi'=>'Surat Pengantar Beasiswa',
+                'isi_notifikasi'=>$isiNotifikasi,
+                'link_notifikasi'=>url('pimpinan/surat-pengantar-beasiswa')
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Pengajuan Gagal','Surat pengantar beasiswa gagal diverifikasi.');
+        }
+
+        DB::commit();
+        $this->setFlashData('success','Berhasil ','Surat pengantar beasiswa berhasil diverifikasi');
+        return redirect($this->segmentUser.'/surat-pengantar-beasiswa');
+    }
+
+    public function tandaTangan(Request $request){
         if(!$this->isTandaTanganExists()){
             return redirect($this->segmentUser.'/surat-pengantar-beasiswa');
         }
         $suratBeasiswa = SuratPengantarBeasiswa::findOrFail($request->id);
+        $operator = Operator::where('bagian','subbagian kemahasiswaan')->where('status_aktif','aktif')->first();  
         $suratBeasiswa->update([
             'status'=>'selesai',
         ]);
-        NotifikasiUser::create([
-            'nip'=>$suratBeasiswa->nip_kasubag,
+
+        NotifikasiOperator::create([
+            'id_operator'=>$operator->id,
             'judul_notifikasi'=>'Surat Pengantar Beasiswa',
             'isi_notifikasi'=>'Surat pengantar beasiswa telah di tanda tangani.',
-            'link_notifikasi'=>url('pegawai/surat-pengantar-beasiswa')
+            'link_notifikasi'=>url('mahasiswa/surat-pengantar-beasiswa')
         ]);
+
         $this->setFlashData('success','Berhasil','Tanda tangan surat pengantar beasiswa berhasil');
         return redirect($this->segmentUser.'/surat-pengantar-beasiswa');
     }
 
-    public function cetakSuratBeasiswa(SuratPengantarBeasiswa $suratBeasiswa){
+    public function cetak(SuratPengantarBeasiswa $suratBeasiswa){
         $jumlahCetak = ++$suratBeasiswa->jumlah_cetak;
         $suratBeasiswa->update([
             'jumlah_cetak'=>$jumlahCetak
         ]);
         $pdf = PDF::loadview('surat.surat_pengantar_beasiswa',compact('suratBeasiswa'))->setPaper('a4', 'potrait');
         return $pdf->stream('surat-pengantar-beasiswa'.' - '.$suratBeasiswa->created_at->format('dmY-Him').'.pdf');
-    }
-
-    private function generateKodeSurat()
-    {
-        $kode = [];
-        $kodeSuratList = KodeSurat::where('jenis_surat','surat pengantar beasiswa')->where('status_aktif','aktif')->get();
-        foreach ($kodeSuratList as $kodeSurat) {
-            $kode[$kodeSurat->id] = $kodeSurat->kode_surat;
-        }
-        return $kode;
-    }
-
-    private function generateNomorSuratBeasiswa($status){
-        $suratBeasiswaList = SuratPengantarBeasiswa::whereIn('status',$status)->get();
-        $nomorSuratList = [];
-        foreach ($suratBeasiswaList as $suratBeasiswa) {
-            if($suratBeasiswa->user->jabatan == 'dekan'){
-                $nomorSuratList[$suratBeasiswa->nomor_surat] = 'B/'.$suratBeasiswa->nomor_surat.'/'.$suratBeasiswa->kodeSurat->kode_surat.'/'.$suratBeasiswa->created_at->year;
-            }else{
-                $kode = explode('/',$suratBeasiswa->kodeSurat->kode_surat);
-                $nomorSuratList[$suratBeasiswa->nomor_surat] = 'B/'.$suratBeasiswa->nomor_surat.'/'.$kode[0].'.3/'.$kode[1].'/'.$suratBeasiswa->created_at->year;
-            }
-        }
-        return $nomorSuratList;
-    }
-
-    private function generatePimpinan(){
-        $user = [];
-        $pimpinanList = User::whereIn('jabatan',['dekan','wd3'])->where('status_aktif','aktif')->get();
-        foreach ($pimpinanList as $pimpinan) {
-            $user[$pimpinan->nip] = strtoupper($pimpinan->jabatan).' - '.$pimpinan->nama;
-        }
-        return $user;
-    }
-
-    private function isKodeSuratBeasiswaExists(){
-        $kodeSurat = KodeSurat::where('jenis_surat','surat pengantar beasiswa')->where('status_aktif','aktif')->first();
-        if(empty($kodeSurat)){
-            $this->setFlashData('info','Kode Surat Aktif Tidak Ada','Aktifkan kode surat terlebih dahulu!');
-            return false;
-        }
-        return true;
     }
 }

@@ -10,16 +10,16 @@
                 <div class="page-header">
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
-                            <i class="mdi mdi-clock"></i>
+                            <i class="mdi mdi-bank"></i>
                         </span> Waktu Cuti </h3>
                 </div>
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Tambah Waktu Cuti</h3>
-                                {{ Form::open(['url'=>'pegawai/waktu-cuti']) }}
-                                @include('user.pegawai.form_waktu_cuti',['buttonLabel'=>'Tambah'])
+                                <h3 class="mb-5">Edit Data Waktu Cuti</h3>
+                                {{ Form::model($waktuCuti,['method'=>'PATCH','url'=>url('operator/waktu-cuti/'.$waktuCuti->id)]) }}
+                                @include('operator.form_waktu_cuti',['buttonLabel'=>'Simpan'])
                                 {{ Form::close() }}
                             </div>
                         </div>

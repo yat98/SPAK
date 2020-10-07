@@ -49,14 +49,14 @@ class Controller extends BaseController
         return $tahun;
     }
 
-    protected function generateTahunAkademikAktif(){
-        $tahunAkademik = TahunAkademik::where('status_aktif','aktif')->get();
-        $tahunAkademikList = [];
-        foreach($tahunAkademik as $value){
-            $tahunAkademikList[$value->id] = $value->tahun_akademik.' - '.ucwords($value->semester);
-        }
-        return $tahunAkademikList;
-    }
+    // protected function generateTahunAkademikAktif(){
+    //     $tahunAkademik = TahunAkademik::where('status_aktif','aktif')->get();
+    //     $tahunAkademikList = [];
+    //     foreach($tahunAkademik as $value){
+    //         $tahunAkademikList[$value->id] = $value->tahun_akademik.' - '.ucwords($value->semester);
+    //     }
+    //     return $tahunAkademikList;
+    // }
 
     protected function generateAllTahunAkademik(){
         $tahunAkademik = TahunAkademik::all();

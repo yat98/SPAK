@@ -11,9 +11,11 @@ class SuratPengantarCuti extends Model
     protected $fillable = [
         'id_waktu_cuti',
         'id_kode_surat',
+        'id_operator',
         'nip',
         'nomor_surat',
         'jumlah_cetak',
+        'status',
     ];
 
     public function waktuCuti(){
@@ -22,6 +24,10 @@ class SuratPengantarCuti extends Model
 
     public function user(){
         return $this->belongsTo('App\User','nip');
+    }
+
+    public function operator(){
+        return $this->belongsTo('App\Operator','id_operator');
     }
 
     public function kodeSurat(){

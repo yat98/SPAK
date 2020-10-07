@@ -20,6 +20,12 @@ class AddRelationshipToSuratPengantarCutiTable extends Migration
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
 
+            $table->foreign('id_operator')
+                  ->references('id')
+                  ->on('operator')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
+
             $table->foreign('nip')
                   ->references('nip')
                   ->on('user')
@@ -43,6 +49,7 @@ class AddRelationshipToSuratPengantarCutiTable extends Migration
     {
         Schema::table('surat_pengantar_cuti', function (Blueprint $table) {
             $table->dropForeign(['id_waktu_cuti']);
+            $table->dropForeign(['id_operator']);
             $table->dropForeign(['nip']);
             $table->dropForeign(['id_kode_surat']);
         });

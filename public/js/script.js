@@ -232,11 +232,32 @@ $('.btn-password').on('click',function(e){
     <input class="form-control form-control-lg" id="password" name="password" type="password" value="">`)
 })
 
-$("#mahasiswa_list").select2();
-$("#id_surat_masuk").select2();
-$(".select").select2();
+$("#mahasiswa_list").select2({
+    theme: 'bootstrap4',
+    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+    placeholder: $(this).data('placeholder'),
+    allowClear: Boolean($(this).data('allow-clear')),
+});
+
+$("#id_surat_masuk").select2({
+    theme: 'bootstrap4',
+    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+    placeholder: $(this).data('placeholder'),
+    allowClear: Boolean($(this).data('allow-clear')),
+});
+
+$(".select").select2({
+    theme: 'bootstrap4',
+    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+    placeholder: $(this).data('placeholder'),
+    allowClear: Boolean($(this).data('allow-clear')),
+});
+
 $('.search').select2({
-    width: '100%'
+    theme: 'bootstrap4',
+    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+    placeholder: $(this).data('placeholder'),
+    allowClear: Boolean($(this).data('allow-clear')),
 });
 
 let wrapper = document.getElementById("signature-pad");
@@ -1574,8 +1595,7 @@ $('.table-responsive').on('click','.btn-pendaftaran-cuti-detail',function(e){
                 });
 });
 
-let terima = $('.btn-terima');
-terima.on('click',function(e){
+$('.btn-terima').on('click',function(e){
     e.preventDefault();
     Swal.fire({
         title: 'Yakin?',
@@ -1639,7 +1659,7 @@ $('.table-responsive').on('click','.btn-tolak', function(e){
     })
 });
 
-$('.btn-surat-pengantar-cuti-detail').on('click',function(e){
+$('.table-responsive').on('click','.btn-surat-pengantar-cuti-detail',function(e){
     e.preventDefault();
     $('#surat-pengantar-cuti-detail-content').empty();
     let url = $(this).attr('href');
@@ -1648,6 +1668,14 @@ $('.btn-surat-pengantar-cuti-detail').on('click',function(e){
                 .then(result => {
                     let cuti = result;
                     let pendaftaranCuti = '';
+                    let label;
+                    
+                    if (cuti.status == 'Selesai'){
+                        label=`<label class="badge badge-gradient-info">${cuti.status}</label>`;
+                    }else{
+                        label=`<label class="badge badge-gradient-warning text-dark">${cuti.status}</label>`;
+                    }
+
                     if(cuti.waktu_cuti.pendaftaran_cuti.length > 0){
                         cuti.waktu_cuti.pendaftaran_cuti.forEach((daftarCuti) => {
                             pendaftaranCuti += `<tr>
@@ -1657,6 +1685,10 @@ $('.btn-surat-pengantar-cuti-detail').on('click',function(e){
                                                     <td>${daftarCuti.alasan_cuti}</td>
                                                 </tr>`;
                         });
+                    }else{
+                        pendaftaranCuti += `<tr>
+                                                <td colspan='4'><p class='text-center'>Daftar Mahasiswa Cuti Kosong</p></td>
+                                            <tr>`;
                     }                    
                     let html = `<div class="row">
                                     <div class="col-4">
@@ -1667,6 +1699,18 @@ $('.btn-surat-pengantar-cuti-detail').on('click',function(e){
                                                     <td>${cuti.nomor_surat}</td>
                                                 </tr>
                                                 <tr>
+                                                    <th>Kode Surat</th>
+                                                    <td>${cuti.kode_surat.kode_surat}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Tahun</th>
+                                                    <td>${cuti.tahun}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Status</th>
+                                                    <td>${label}</td>
+                                                </tr>
+                                                <tr>
                                                     <th>Di Tandatangani Oleh</th>
                                                     <td>${cuti.user.nama}</td>
                                                 </tr>
@@ -1675,8 +1719,12 @@ $('.btn-surat-pengantar-cuti-detail').on('click',function(e){
                                                     <td>${cuti.jumlah_cetak}</td>
                                                 </tr>
                                                 <tr>
+                                                    <th>Diajukan Oleh</th>
+                                                    <td>${cuti.operator.nama}</td>
+                                                </tr>
+                                                <tr>
                                                     <th>Di Buat</th>
-                                                    <td>${cuti.created_at}</td>
+                                                    <td>${cuti.dibuat}</td>
                                                 </tr>
                                             </table>
                                         </div>
@@ -1706,7 +1754,7 @@ $('.btn-surat-pengantar-cuti-detail').on('click',function(e){
                 });
 });
 
-$('.btn-surat-pengantar-beasiswa-detail').on('click',function(e){
+$('.table-responsive').on('click','.btn-surat-pengantar-beasiswa-detail',function(e){
     e.preventDefault();
     $('#surat-pengantar-beasiswa-detail-content').empty();
     let url = $(this).attr('href');
@@ -1716,11 +1764,13 @@ $('.btn-surat-pengantar-beasiswa-detail').on('click',function(e){
                     let beasiswa = result;
                     let mahasiswa = '';
                     let label;
-                    if(beasiswa.status == 'menunggu tanda tangan'){
-                        label = `<label class="badge badge-gradient-warning text-dark">${beasiswa.status.ucwords()}</label>`;
+
+                    if (beasiswa.status == 'Selesai'){
+                        label=`<label class="badge badge-gradient-info">${beasiswa.status}</label>`;
                     }else{
-                        label = `<label class="badge badge-gradient-info">${beasiswa.status.ucwords()}</label>`;
+                        label=`<label class="badge badge-gradient-warning text-dark">${beasiswa.status}</label>`;
                     }
+                    
                     if(beasiswa.mahasiswa.length > 0){
                         beasiswa.mahasiswa.forEach((mhs) => {
                             mahasiswa += `<tr>
@@ -1730,6 +1780,10 @@ $('.btn-surat-pengantar-beasiswa-detail').on('click',function(e){
                                                     <td>${mhs.prodi.jurusan.nama_jurusan}</td>
                                                 </tr>`;
                         });
+                    }else{
+                        mahasiswa += `<tr>
+                                                <td colspan='4'><p class='text-center'>Daftar Mahasiswa Cuti Kosong</p></td>
+                                            <tr>`;
                     }
                     
                     let html = `<div class="row">
@@ -1741,16 +1795,24 @@ $('.btn-surat-pengantar-beasiswa-detail').on('click',function(e){
                                                     <td>${beasiswa.nomor_surat}</td>
                                                 </tr>
                                                 <tr>
+                                                    <th>Kode Surat</th>
+                                                    <td>${beasiswa.kode_surat.kode_surat}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Tahun</th>
+                                                    <td>${beasiswa.tahun}</td>
+                                                </tr>
+                                                <tr>
                                                     <th>Perihal</th>
                                                     <td>${beasiswa.surat_masuk.perihal}</td>
                                                 </tr>
                                                 <tr>
-                                                    <th>Diajukan Oleh</th>
-                                                    <td>${beasiswa.kasubag.nama}</td>
-                                                </tr>
-                                                <tr>
                                                     <th>Di Tandatangani Oleh</th>
                                                     <td>${beasiswa.user.nama}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Diajukan Oleh</th>
+                                                    <td>${beasiswa.operator.nama}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Status</th>
@@ -1770,7 +1832,7 @@ $('.btn-surat-pengantar-beasiswa-detail').on('click',function(e){
                                                 </tr>
                                                 <tr>
                                                     <th>Di Buat</th>
-                                                    <td>${beasiswa.created_at}</td>
+                                                    <td>${beasiswa.dibuat}</td>
                                                 </tr>
                                             </table>
                                         </div>

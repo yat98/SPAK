@@ -4,10 +4,16 @@ namespace App\Http\Controllers;
 
 use PDF;
 use App\User;
+use DataTables;
+use App\Operator;
 use App\KodeSurat;
 use App\WaktuCuti;
+use App\NotifikasiUser;
+use App\NotifikasiOperator;
 use App\SuratPengantarCuti;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SuratPengantarCutiRequest;
 
 class SuratPengantarCutiController extends Controller
@@ -15,59 +21,180 @@ class SuratPengantarCutiController extends Controller
     public function index()
     {
         $perPage = $this->perPage;
-        $nomorSurat = $this->generateNomorSuratCuti();
-        $suratCutiList = SuratPengantarCuti::orderByDesc('nomor_surat')->paginate($perPage);
-        $countAllSuratCuti = SuratPengantarCuti::all()->count();
-        $countSuratCuti = $suratCutiList->count();
-        return view('user.'.$this->segmentUser.'.surat_pengantar_cuti',compact('perPage','suratCutiList','countAllSuratCuti','countSuratCuti','nomorSurat'));
+        
+        $countAllSurat = SuratPengantarCuti::whereIn('status',['verifikasi kabag','selesai','menunggu tanda tangan'])
+                                             ->count();
+        
+        $countAllVerifikasi = SuratPengantarCuti::where('status','verifikasi kasubag')
+                                                  ->count();
+
+        return view('user.'.$this->segmentUser.'.surat_pengantar_cuti',compact('perPage','countAllSurat','countAllVerifikasi'));
     }
 
-    public function search(Request $request){
-        $input = $request->all();
-        if(isset($input['keywords'])){
-            $nomor = $input['keywords'] ?? ' ';
-            $perPage = $this->perPage;
-            $nomorSurat = $this->generateNomorSuratCuti();
-            $suratCutiList = SuratPengantarCuti::orderByDesc('nomor_surat')->where('nomor_surat','like',"%$nomor%")->paginate($perPage);
-            $countAllSuratCuti = SuratPengantarCuti::all()->count();
-            $countSuratCuti = $suratCutiList->count();
-            if($countSuratCuti < 1){
-                $this->setFlashData('search','Hasil Pencarian','Surat pengantar cuti tidak ditemukan!');
-            }
-            return view('user.'.$this->segmentUser.'.surat_pengantar_cuti',compact('perPage','suratCutiList','countAllSuratCuti','countSuratCuti','nomorSurat'));
-        }else{
-            return redirect($this->segmentUser.'/surat-pengantar-cuti');
+    public function indexOperator(){
+        $perPage = $this->perPage;
+
+        $countAllSurat = SuratPengantarCuti::count();
+                                                                         
+        return view($this->segmentUser.'.surat_pengantar_cuti',compact('perPage','countAllSurat'));
+    }
+
+    public function indexPimpinan(){
+        $perPage = $this->perPage;
+
+        $countAllVerifikasi = SuratPengantarCuti::where('status','verifikasi kabag')
+                                                  ->count();
+                                            
+        $countAllSurat = SuratPengantarCuti::where('status','selesai')
+                                             ->count();
+        
+        $countAllTandaTangan = SuratPengantarCuti::where('status','menunggu tanda tangan')
+                                                   ->where('nip',Auth::user()->nip)
+                                                   ->count();
+
+        return view('user.'.$this->segmentUser.'.surat_pengantar_cuti',compact('perPage','countAllVerifikasi','countAllSurat','countAllTandaTangan'));
+    }
+
+    public function getAllPengajuan(){
+        $suratCuti = SuratPengantarCuti::join('waktu_cuti','waktu_cuti.id','=','surat_pengantar_cuti.id_waktu_cuti')
+                            ->join('tahun_akademik','waktu_cuti.id_tahun_akademik','=','tahun_akademik.id')
+                            ->select(['surat_pengantar_cuti.*','tahun_akademik.semester','tahun_akademik.tahun_akademik'])
+                            ->with(['waktuCuti.tahunAkademik','user','kodeSurat']);
+                                                    
+        if (Auth::user()->jabatan == 'kasubag kemahasiswaan') {
+            $suratCuti = $suratCuti->where('status','verifikasi kasubag');
+        }else if(Auth::user()->jabatan == 'kabag tata usaha'){
+            $suratCuti = $suratCuti->where('status','verifikasi kabag');
         }
+
+        return DataTables::of($suratCuti)
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->addColumn('semester', function ($data) {
+                            return ucwords($data->waktuCuti->tahunAkademik->semester);
+                        })
+                        ->editColumn("tahun_akademik", function ($data) {
+                            return $data->waktuCuti->tahunAkademik->toArray();
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->make(true);
+    }
+
+    public function getAllSurat(){
+        $suratCuti = SuratPengantarCuti::join('waktu_cuti','waktu_cuti.id','=','surat_pengantar_cuti.id_waktu_cuti')
+                            ->join('tahun_akademik','waktu_cuti.id_tahun_akademik','=','tahun_akademik.id')
+                            ->select(['surat_pengantar_cuti.*','tahun_akademik.semester','tahun_akademik.tahun_akademik'])
+                            ->with(['waktuCuti.tahunAkademik','user','kodeSurat']);
+
+        if(isset(Auth::user()->nip)){
+            if(Auth::user()->jabatan == 'kasubag kemahasiswaan'){
+                $suratCuti = $suratCuti->whereIn('status',['selesai','verifikasi kabag','menunggu tanda tangan']);
+            } else{
+                $suratCuti = $suratCuti->where('status','selesai');
+            }
+        }
+
+        return DataTables::of($suratCuti)
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->addColumn('semester', function ($data) {
+                            return ucwords($data->waktuCuti->tahunAkademik->semester);
+                        })
+                        ->editColumn("tahun_akademik", function ($data) {
+                            return $data->waktuCuti->tahunAkademik->toArray();
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->make(true);
+    }
+
+    public function getAllTandaTangan(){
+        $suratCuti =  SuratPengantarCuti::join('waktu_cuti','waktu_cuti.id','=','surat_pengantar_cuti.id_waktu_cuti')
+                                          ->join('tahun_akademik','waktu_cuti.id_tahun_akademik','=','tahun_akademik.id')
+                                          ->where('surat_pengantar_cuti.nip',Auth::user()->nip)
+                                          ->select(['surat_pengantar_cuti.*','tahun_akademik.semester','tahun_akademik.tahun_akademik'])
+                                          ->with(['waktuCuti.tahunAkademik','user','kodeSurat']);
+                                    
+        return DataTables::of($suratCuti)
+                    ->addColumn('aksi', function ($data) {
+                        return $data->id;
+                    })
+                    ->addColumn('semester', function ($data) {
+                        return ucwords($data->waktuCuti->tahunAkademik->semester);
+                    })
+                    ->editColumn("tahun_akademik", function ($data) {
+                        return $data->waktuCuti->tahunAkademik->toArray();
+                    })
+                    ->editColumn("status", function ($data) {
+                        return ucwords($data->status);
+                    })
+                    ->editColumn("created_at", function ($data) {
+                        return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                    })
+                    ->make(true);                        
     }
 
     public function create()
     {
-        if(!$this->isKodeSuratCutiExists() || !$this->isKodeSuratExists() || !$this->isTandaTanganExists()){
+        if(!$this->isKodeSuratExists()){
             return redirect($this->segmentUser.'/surat-pengantar-cuti');
         }
         $waktuCuti = $this->generateWaktuCuti();
-        $userList = $this->generateKasubagKemahasiswaan();
         $nomorSuratBaru = $this->generateNomorSuratBaru();
-        $kodeSurat = $this->generateKodeSurat();
+        $userList =$this->generateTandaTanganKemahasiswaan();
+        $kodeSurat = KodeSurat::pluck('kode_surat','id');
+        if(isset(Auth::user()->id)) return view($this->segmentUser.'.tambah_surat_pengantar_cuti',compact('userList','nomorSuratBaru','kodeSurat','waktuCuti'));
         return view('user.'.$this->segmentUser.'.tambah_surat_pengantar_cuti',compact('userList','nomorSuratBaru','kodeSurat','waktuCuti'));
     }
     
     public function store(SuratPengantarCutiRequest $request)
     {
         $input = $request->all();
-        SuratPengantarCuti::create($input);
+        $input['id_operator'] = Auth::user()->id;
+
+        $user = User::where('status_aktif','aktif')
+                      ->where('jabatan','kasubag kemahasiswaan')
+                      ->first();
+
+        DB::beginTransaction();
+        try{
+            SuratPengantarCuti::create($input);
+
+            NotifikasiUser::create([
+                'nip'=>$user->nip,
+                'judul_notifikasi'=>'Surat Pengantar Cuti',
+                'isi_notifikasi'=>'Verifikasi surat pengantar cuti',
+                'link_notifikasi'=>url('pegawai/surat-pengantar-cuti')
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Gagal Mengubah Data','Surat pengantar cuti gagal ditambahkan.');
+        }
+
+        DB::commit();
+
         $this->setFlashData('success','Berhasil','Surat pengantar cuti berhasil ditambahkan');
         return redirect($this->segmentUser.'/surat-pengantar-cuti');
     }
 
     public function show(SuratPengantarCuti $suratCuti)
     {
-        $surat = collect($suratCuti->load(['waktuCuti.pendaftaranCuti.mahasiswa.prodi.jurusan','user']));
-        $kodeSurat = explode('/',$suratCuti->kodeSurat->kode_surat);
-        $nomorSurat = $suratCuti->nomor_surat.'/'.$kodeSurat[0].'.4/'.$kodeSurat[1].'/'.$suratCuti->created_at->year;
-
-        $surat->put('created_at',$suratCuti->created_at->isoFormat('D MMMM Y'));
-        $surat->put('nomor_surat',$nomorSurat);
+        $surat = collect($suratCuti->load(['waktuCuti.pendaftaranCuti.mahasiswa.prodi.jurusan','waktuCuti.tahunAkademik','user','operator','kodeSurat']));
+        $surat->put('dibuat',$suratCuti->created_at->isoFormat('D MMMM YYYY HH:mm:ss'));
+        $surat->put('semester',ucwords($suratCuti->waktuCuti->tahunAkademik->semester));
+        $surat->put('status',ucwords($suratCuti->status));
+        $surat->put('tahun',$suratCuti->created_at->isoFormat('Y'));
         $surat->put('updated_at',$suratCuti->updated_at->isoFormat('D MMMM Y'));
         return $surat->toJson();
     }
@@ -75,8 +202,9 @@ class SuratPengantarCutiController extends Controller
     public function edit(SuratPengantarCuti $suratCuti)
     {
         $waktuCuti = $this->generateWaktuCuti();
-        $userList = $this->generateKasubagKemahasiswaan();
-        $kodeSurat = $this->generateKodeSurat();
+        $userList =$this->generateTandaTanganKemahasiswaan();
+        $kodeSurat = KodeSurat::pluck('kode_surat','id');
+        if(isset(Auth::user()->id)) return view($this->segmentUser.'.edit_surat_pengantar_cuti',compact('userList','kodeSurat','waktuCuti','suratCuti'));
         return view('user.'.$this->segmentUser.'.edit_surat_pengantar_cuti',compact('userList','kodeSurat','waktuCuti','suratCuti'));
     }
 
@@ -95,7 +223,7 @@ class SuratPengantarCutiController extends Controller
         return redirect($this->segmentUser.'/surat-pengantar-cuti');
     }
 
-    public function cetakSuratCuti(SuratPengantarCuti $suratCuti){
+    public function cetak(SuratPengantarCuti $suratCuti){
         $jumlahCetak = ++$suratCuti->jumlah_cetak;
         $suratCuti->update([
             'jumlah_cetak'=>$jumlahCetak
@@ -104,32 +232,64 @@ class SuratPengantarCutiController extends Controller
         return $pdf->stream('surat-cuti'.' - '.$suratCuti->created_at->format('dmY-Him').'.pdf');
     }
 
-    private function generateNomorSuratCuti(){
-        $suratCutiList = SuratPengantarCuti::all();
-        $nomorSuratList = [];
-        foreach ($suratCutiList as $suratCuti) {
-            $kodeSurat = explode('/',$suratCuti->kodeSurat->kode_surat);
-            $nomorSuratList[$suratCuti->nomor_surat] = $suratCuti->nomor_surat.'/'.$kodeSurat[0].'.4/'.$kodeSurat[1].'/'.$suratCuti->created_at->year;
+    public function verification(Request $request){
+        $status='verifikasi kabag';
+        $suratCuti = SuratPengantarCuti::findOrFail($request->id);
+        $user = $suratCuti->user;
+
+        $isiNotifikasi = 'Verifikasi surat pengantar cuti';
+
+        if(Auth::user()->jabatan == 'kabag tata usaha' || $suratCuti->user->jabatan == 'kabag tata usaha'){
+            $status='menunggu tanda tangan';
+            $isiNotifikasi = 'Tanda tangan surat pengantar cuti';
         }
-        return $nomorSuratList;
+
+        DB::beginTransaction();
+        try{
+            $suratCuti->update([
+                'status'=>$status,
+            ]);
+            
+            if($status == 'verifikasi kabag'){
+                $user = User::where('jabatan','kabag tata usaha')->where('status_aktif','aktif')->first();
+            }
+
+            NotifikasiUser::create([
+                'nip'=>$user->nip,
+                'judul_notifikasi'=>'Surat Pengantar Cuti',
+                'isi_notifikasi'=>$isiNotifikasi,
+                'link_notifikasi'=>url('pimpinan/surat-pengantar-cuti')
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Pengajuan Gagal','Surat pengantar cuti gagal diverifikasi.');
+        }
+
+        DB::commit();
+        $this->setFlashData('success','Berhasil ','Surat pengantar cuti berhasil diverifikasi');
+        return redirect($this->segmentUser.'/surat-pengantar-cuti');
     }
 
-    private function generateKasubagKemahasiswaan(){
-        $user = [];
-        $kasubagList = User::where('jabatan','kasubag kemahasiswaan')->where('status_aktif','aktif')->get();
-        foreach ($kasubagList as $kasubag) {
-            $user[$kasubag->nip] = strtoupper($kasubag->jabatan).' - '.$kasubag->nama;
+    public function tandaTangan(Request $request){
+        if(!$this->isTandaTanganExists()){
+            return redirect($this->segmentUser.'/surat-pengantar-cuti');
         }
-        return $user;
-    }
+        
+        $suratCuti = SuratPengantarCuti::findOrFail($request->id);
+        $operator = Operator::where('bagian','subbagian kemahasiswaan')->where('status_aktif','aktif')->first();  
+        $suratCuti->update([
+            'status'=>'selesai',
+        ]);
 
-    private function generateKodeSurat(){
-        $kode = [];
-        $kodeSuratList = KodeSurat::where('jenis_surat','surat pengantar cuti')->where('status_aktif','aktif')->get();
-        foreach ($kodeSuratList as $kodeSurat) {
-            $kode[$kodeSurat->id] = $kodeSurat->kode_surat;
-        }
-        return $kode;
+        NotifikasiOperator::create([
+            'id_operator'=>$operator->id,
+            'judul_notifikasi'=>'Surat Pengantar Cuti',
+            'isi_notifikasi'=>'Surat pengantar cuti telah di tanda tangani.',
+            'link_notifikasi'=>url('mahasiswa/surat-pengantar-cuti')
+        ]);
+
+        $this->setFlashData('success','Berhasil','Tanda tangan surat pengantar cuti berhasil');
+        return redirect($this->segmentUser.'/surat-pengantar-cuti');
     }
 
     private function generateWaktuCuti(){
@@ -139,14 +299,5 @@ class SuratPengantarCutiController extends Controller
             $waktuCutiList[$value->id] = $value->tahunAkademik->tahun_akademik.' - '.ucwords($value->tahunAkademik->semester);
         }
         return $waktuCutiList;
-    }
-
-    private function isKodeSuratCutiExists(){
-        $kodeSurat = KodeSurat::where('jenis_surat','surat pengantar cuti')->where('status_aktif','aktif')->first();
-        if(empty($kodeSurat)){
-            $this->setFlashData('info','Kode Surat Aktif Tidak Ada','Aktifkan kode surat terlebih dahulu!');
-            return false;
-        }
-        return true;
     }
 }

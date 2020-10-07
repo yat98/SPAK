@@ -102,14 +102,11 @@
         @include('surat.kop_surat')
         <div class="border"></div>
         <div class="content mt-1">
-            @php
-                $kode = explode('/',$suratCuti->kodeSurat->kode_surat);
-            @endphp
             <table>
                 <tr>
                     <td>Nomor</td>
                     <td>:</td>
-                    <td>{{$suratCuti->nomor_surat}}/{{$kode[0].'.4/'.$kode[1]}}/{{$suratCuti->created_at->year}}</td>
+                    <td><span style="display:inline-block;width:20px;height:auto"></span>{{$suratCuti->nomor_surat}}/{{$suratCuti->kodeSurat->kode_surat}}<span style="display:inline-block;width:20px;height:auto"></span>/<span style="display:inline-block;width:50px;height:auto"></span>/{{$suratCuti->created_at->year}}</td>
                     <td class="text-right">{{$suratCuti->created_at->isoFormat('D MMMM Y')}}</td>
                 </tr>
                 <tr>
@@ -134,7 +131,7 @@
                         <td class="table">KET.</td>
                     </tr>
                     @foreach($suratCuti->waktuCuti->pendaftaranCuti as $pendaftaranCuti)
-                        @if($pendaftaranCuti->status == 'diterima')
+                        @if($pendaftaranCuti->status == 'selesai')
                             <tr class="table">
                                 <td class="table">{{ $loop->iteration }}</td>
                                 <td class="table">{{ $pendaftaranCuti->mahasiswa->nama }}</td>
@@ -150,13 +147,27 @@
         </div>
         <div class="signature">
             <div class="signature-content">
-                <p class="m-0"><b>a.n Wakil Dekan III,</b></p>
-                <p class="m-0"><b>Kasubag Kemahasiswaan,</b></p>
+                <p class="m-0"><b>{{$suratCuti->created_at->isoFormat('D MMMM Y')}}</b></p>
+                @if($suratCuti->user->jabatan == 'dekan')
+                    <p class="m-0"><b>Dekan</b></p>
+                @else
+                    <p class="m-0"><b>a.n Dekan,</b></p>
+                    @if($suratCuti->user->jabatan == 'wd3')
+                        <p class="m-0"><b>Wakil Dekan III</b></p>
+                    @elseif($suratCuti->user->jabatan == 'kabag tata usaha')
+                        <p class="m-0"><b>Kabag TU</b></p>
+                    @endif
+                @endif
+
                 <p class="m-0 tanda-tangan-margin">
-                    <img class="tanda-tangan" src="{{$suratCuti->user->tanda_tangan}}">
+                    @if($suratCuti->status == 'selesai')
+                        <img class="tanda-tangan" src="{{$suratCuti->user->tanda_tangan}}">
+                    @else
+                        <div class="tanda-tangan"></div>
+                    @endif
                 </p>
                 <p class="m-0"><b>{{$suratCuti->user->nama}}</b></p>
-                <p class="m-0"><b>NIP. {{substr($suratCuti->user->nip,0,8)}} {{substr($suratCuti->user->nip,8,6)}} {{substr($suratCuti->user->nip,14,1)}} {{substr($suratCuti->user->nip,15,3)}}</b></p>
+                <p class="m-0"><b>NIP. {{$suratCuti->user->nip}}</b></p>
             </div>
         </div>
    </div>

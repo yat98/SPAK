@@ -852,33 +852,7 @@
                                     </div>
                                     <hr class="mb-4">
                                     @if ($countAllSuratCuti > 0)
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th> No. </th>
-                                                    <th> Nomor Surat</th>
-                                                    <th> Tahun Akademik</th>
-                                                    <th> Di Buat</th>
-                                                    <th> Di Ubah</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($suratCutiList as $suratCuti)
-                                                @php
-                                                    $kode = explode('/',$suratCuti->kodeSurat->kode_surat);
-                                                @endphp
-                                                <tr>
-                                                    <td> {{ $loop->iteration  }}</td>
-                                                    <td> {{ $suratCuti->nomor_surat.'/'.$kode[0].'.4/.'.$kode[1].'/'.$suratCuti->created_at->format('Y') }}</td>
-                                                    <td> {{ $suratCuti->waktuCuti->tahunAkademik->tahun_akademik }} - {{ ucwords($suratCuti->waktuCuti->tahunAkademik->semester) }}</td>
-                                                    <td> {{ $suratCuti->created_at->diffForHumans() }}</td>
-                                                    <td> {{ $suratCuti->updated_at->diffForHumans() }}</td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    
                                     @else
                                     <div class="row">
                                         <div class="col text-center">

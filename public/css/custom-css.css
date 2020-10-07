@@ -110,6 +110,20 @@
     -moz-animation:spin 0.7s linear infinite;
     animation:spin 0.7s linear infinite;
 }
+
+.select2-selection__rendered{
+    color:#cacad5 !important;
+    font-size:13px !important;
+    line-height: 2.8 !important;
+}
+
+.select2-selection,.select2-selection--single{
+    border: 1px solid #ebedf2 !important;
+    padding-left: .4375rem !important;
+    padding-right: .4375rem !important;
+    line-height: 1.5 !important;
+}
+
 @-moz-keyframes spin { 100% { -moz-transform: rotate(-360deg); } }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(-360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(-360deg); transform:rotate(-360deg); } }

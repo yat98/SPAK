@@ -9,11 +9,10 @@ class SuratPengantarBeasiswa extends Model
     protected $table = 'surat_pengantar_beasiswa';
 
     protected $fillable = [
-        'id',
         'id_kode_surat',
         'id_surat_masuk',
+        'id_operator',
         'nip',
-        'nip_kasubag',
         'nomor_surat',
         'hal',
         'status',
@@ -32,8 +31,8 @@ class SuratPengantarBeasiswa extends Model
         return $this->belongsTo('App\User','nip');
     }
 
-    public function kasubag(){
-        return $this->belongsTo('App\User','nip_kasubag');
+    public function operator(){
+        return $this->belongsTo('App\Operator','id_operator');
     }
 
     public function mahasiswa(){

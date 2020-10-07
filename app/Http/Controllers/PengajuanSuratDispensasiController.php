@@ -276,7 +276,7 @@ class PengajuanSuratDispensasiController extends Controller
             ]);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Pengajuan Gagal','Pengajuan surat dispensasi gagal ditambahkan.');
+            $this->setFlashData('error','Pengajuan Gagal','Pengajuan surat dispensasi gagal diverifikasi.');
         }
 
         DB::commit();

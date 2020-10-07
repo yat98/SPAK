@@ -108,11 +108,7 @@
                 <tr>
                     <td>Nomor</td>
                     <td>:</td>
-                    @if($suratBeasiswa->user->jabatan == 'dekan')
-                        <td>B/{{$suratBeasiswa->nomor_surat}}/{{ $suratBeasiswa->kodeSurat->kode_surat }}/{{$suratBeasiswa->created_at->year}}</td>
-                    @else
-                        <td>B/{{$suratBeasiswa->nomor_surat}}/{{$kode[0].'.3/'.$kode[1]}}/{{$suratBeasiswa->created_at->year}}</td>
-                    @endif
+                    <td><span style="display:inline-block;width:20px;height:auto"></span>{{$suratBeasiswa->nomor_surat}}/{{$suratBeasiswa->kodeSurat->kode_surat}}<span style="display:inline-block;width:20px;height:auto"></span>/<span style="display:inline-block;width:50px;height:auto"></span>/{{$suratBeasiswa->created_at->year}}</td>
                     <td class="text-right">{{$suratBeasiswa->created_at->isoFormat('D MMMM Y')}}</td>
                 </tr>
                 <tr>
@@ -140,21 +136,32 @@
         </div>
         <div class="signature">
             <div class="signature-content">
+                <p class="m-0"><b>{{$suratBeasiswa->created_at->isoFormat('D MMMM Y')}}</b></p>
                 @if($suratBeasiswa->user->jabatan == 'dekan')
-                    <p class="m-0"><b>Dekan,</b></p>
+                    <p class="m-0"><b>Dekan</b></p>
                 @else
-                    <p class="m-0"><b>Wakil Dekan III,</b></p>
+                    <p class="m-0"><b>a.n Dekan,</b></p>
+                    @if($suratBeasiswa->user->jabatan == 'wd3')
+                        <p class="m-0"><b>Wakil Dekan III</b></p>
+                    @elseif($suratBeasiswa->user->jabatan == 'kabag tata usaha')
+                        <p class="m-0"><b>Kabag TU</b></p>
+                    @endif
                 @endif
+
                 <p class="m-0 tanda-tangan-margin">
-                    <img class="tanda-tangan" src="{{$suratBeasiswa->user->tanda_tangan}}">
+                    @if($suratBeasiswa->status == 'selesai')
+                        <img class="tanda-tangan" src="{{$suratBeasiswa->user->tanda_tangan}}">
+                    @else
+                        <div class="tanda-tangan"></div>
+                    @endif
                 </p>
                 <p class="m-0"><b>{{$suratBeasiswa->user->nama}}</b></p>
-                <p class="m-0"><b>NIP. {{substr($suratBeasiswa->user->nip,0,8)}} {{substr($suratBeasiswa->user->nip,8,6)}} {{substr($suratBeasiswa->user->nip,14,1)}} {{substr($suratBeasiswa->user->nip,15,3)}}</b></p>
+                <p class="m-0"><b>NIP. {{$suratBeasiswa->user->nip}}</b></p>
             </div>
         </div>
          <div style="height:520px"></div>
             @if($suratBeasiswa->mahasiswa->count() > 0)
-                    <table class="m-0 text-center table table-margin">
+                <table class="m-0 text-center table table-margin">
                     <tr class="table">
                         <td class="table">NO</td>
                         <td class="table">NAMA</td>
@@ -171,7 +178,7 @@
                             <td class="table">{{ $mahasiswa->prodi->jurusan->nama_jurusan }}</td>
                         </tr>
                     @endforeach
-                    </table>
+                </table>
             @endif
    </div>
 </body>

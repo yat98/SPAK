@@ -132,7 +132,7 @@
                                             @if(Auth::user()->bagian == 'front office')
                                             {{ (Session::has('search')) ? Session::get('search') : ' Data surat dispensasi belum ada.' }}
                                             @else
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat dispensasi terlebih dahulu.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Data surat dispensasi belum ada.' }}
                                             @endif
                                         </p>
                                     </div>

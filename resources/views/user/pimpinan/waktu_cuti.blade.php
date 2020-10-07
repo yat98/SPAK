@@ -39,7 +39,7 @@
                                         <h4>Waktu Cuti</h4>
                                     </div>
                                     <div class="col-12 col-md-6 text-right">
-                                        <a href="{{ url('pegawai/waktu-cuti/create')}}"
+                                        <a href="{{ url('pimpinan/waktu-cuti/create')}}"
                                             class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">
                                             <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
                                             Tambah Waktu Cuti</a>
@@ -85,7 +85,7 @@
 
 @section('datatables-javascript')
     <script>
-        let link = "{{ url('pegawai/waktu-cuti') }}";
+        let link = "{{ url('pimpinan/waktu-cuti') }}";
 
         $('#datatables').DataTable({
             responsive: true,
@@ -127,7 +127,7 @@
             language: bahasa,
             processing: true,
             serverSide: true,
-            ajax: '{{ url('pegawai/waktu-cuti/all') }}',
+            ajax: '{{ url('pimpinan/waktu-cuti/all') }}',
             columns: [{
                     data: 'tahun_akademik.tahun_akademik',
                 },

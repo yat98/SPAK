@@ -18,8 +18,8 @@
                         <div class="card">
                             <div class="card-body">
                                 <h3 class="mb-5">Tambah Waktu Cuti</h3>
-                                {{ Form::open(['url'=>'pegawai/waktu-cuti']) }}
-                                @include('user.pegawai.form_waktu_cuti',['buttonLabel'=>'Tambah'])
+                                {{ Form::open(['url'=>'pimpinan/waktu-cuti']) }}
+                                @include('user.pimpinan.form_waktu_cuti',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>
                         </div>

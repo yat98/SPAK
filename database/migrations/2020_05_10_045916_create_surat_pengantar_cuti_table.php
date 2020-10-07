@@ -17,8 +17,10 @@ class CreateSuratPengantarCutiTable extends Migration
             $table->increments('id');
             $table->integer('id_waktu_cuti')->unsigned();
             $table->integer('id_kode_surat')->unsigned();
+            $table->integer('id_operator')->unsigned();
             $table->char('nip',18)->index();
             $table->char('nomor_surat',6);
+            $table->enum('status',['selesai','verifikasi kasubag','verifikasi kabag','menunggu tanda tangan'])->default('verifikasi kasubag');
             $table->integer('jumlah_cetak')->default(0);
             $table->timestamps();
         });

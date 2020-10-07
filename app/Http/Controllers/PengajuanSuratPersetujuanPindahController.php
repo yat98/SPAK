@@ -301,7 +301,7 @@ class PengajuanSuratPersetujuanPindahController extends Controller
             ]);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Pengajuan Gagal','Pengajuan '.ucfirst($jenisSurat).' gagal ditambahkan.');
+            $this->setFlashData('error','Pengajuan Gagal','Surat persetujuan pindah gagal diverifikasi.');
         }
 
         DB::commit();

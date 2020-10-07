@@ -15,13 +15,13 @@ class CreateSuratPengantarBeasiswaTable extends Migration
     {
         Schema::create('surat_pengantar_beasiswa', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id_operator')->unsigned();
             $table->integer('id_kode_surat')->unsigned();
             $table->integer('id_surat_masuk')->unsigned();
             $table->char('nip',18)->index();
-            $table->char('nip_kasubag',18)->index();
             $table->char('nomor_surat',6);
             $table->string('hal',100);
-            $table->enum('status',['menunggu tanda tangan','selesai']);
+            $table->enum('status',['selesai','verifikasi kasubag','verifikasi kabag','menunggu tanda tangan'])->default('verifikasi kasubag');
             $table->integer('jumlah_cetak')->default('0');
             $table->timestamps();
         });

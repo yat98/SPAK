@@ -216,7 +216,7 @@ class PengajuanSuratRekomendasiController extends Controller
             ]);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Pengajuan Gagal','Pengajuan surat rekomendasi gagal ditambahkan.');
+            $this->setFlashData('error','Pengajuan Gagal','Pengajuan surat rekomendasi gagal diverifikasi.');
         }
 
         DB::commit();

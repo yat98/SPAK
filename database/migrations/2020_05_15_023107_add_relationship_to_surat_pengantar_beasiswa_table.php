@@ -26,13 +26,13 @@ class AddRelationshipToSuratPengantarBeasiswaTable extends Migration
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
 
-            $table->foreign('nip')
-                  ->references('nip')
-                  ->on('user')
+            $table->foreign('id_operator')
+                  ->references('id')
+                  ->on('operator')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
 
-            $table->foreign('nip_kasubag')
+            $table->foreign('nip')
                   ->references('nip')
                   ->on('user')
                   ->onUpdate('cascade')
@@ -51,7 +51,6 @@ class AddRelationshipToSuratPengantarBeasiswaTable extends Migration
             $table->dropForeign(['id_kode_surat']);
             $table->dropForeign(['id_surat_masuk']);
             $table->dropForeign(['nip']);
-            $table->dropForeign(['nip_kasubag']);
         });
     }
 }

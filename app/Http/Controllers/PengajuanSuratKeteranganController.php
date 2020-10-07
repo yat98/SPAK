@@ -350,7 +350,7 @@ class PengajuanSuratKeteranganController extends Controller
             ]);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Pengajuan Gagal','Pengajuan '.ucfirst($jenisSurat).' gagal ditambahkan.');
+            $this->setFlashData('error','Pengajuan Gagal','Pengajuan '.ucfirst($jenisSurat).' gagal diverifikasi.');
         }
 
         DB::commit();

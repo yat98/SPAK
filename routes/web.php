@@ -313,6 +313,15 @@ Route::group(['prefix' => 'operator'],function(){
             Route::post('/','PengajuanSuratPersetujuanPindahController@storePengajuan');
             Route::delete('/{pengajuan_persetujuan_pindah}','PengajuanSuratPersetujuanPindahController@destroy');
         });
+        // Surat Pengantar Cuti
+        Route::get('surat-pengantar-cuti','SuratPengantarCutiController@indexOperator');
+        Route::get('surat-pengantar-cuti/all','SuratPengantarCutiController@getAllSurat');
+        Route::get('surat-pengantar-cuti/{surat_pengantar_cuti}/cetak', 'SuratPengantarCutiController@cetak');
+        Route::resource('surat-pengantar-cuti','SuratPengantarCutiController')->except(['index']);
+        // Waktu Cuti
+        Route::get('waktu-cuti','WaktuCutiController@indexOperator');
+        Route::get('waktu-cuti/all','WaktuCutiController@getAllWaktuCuti');
+        Route::resource('waktu-cuti','WaktuCutiController')->except(['index']);
         // Pendaftaran Cuti
         Route::get('pendaftaran-cuti','PendaftaranCutiController@indexOperator');
         Route::get('pendaftaran-cuti/all','PendaftaranCutiController@getAllPendaftaran');
@@ -320,6 +329,11 @@ Route::group(['prefix' => 'operator'],function(){
         Route::patch('pendaftaran-cuti/verifikasi/{pendaftaran_cuti}', 'PendaftaranCutiController@verification');
         Route::patch('pendaftaran-cuti/tolak/{pendaftaran_cuti}', 'PendaftaranCutiController@tolakPendaftaran');
         Route::resource('pendaftaran-cuti','PendaftaranCutiController')->except(['index']);
+        // Surat Pengantar Beasiswa
+        Route::get('surat-pengantar-beasiswa','SuratPengantarBeasiswaController@indexOperator');
+        Route::get('surat-pengantar-beasiswa/all','SuratPengantarBeasiswaController@getAllSurat');
+        Route::get('surat-pengantar-beasiswa/{surat_pengantar_beasiswa}/cetak', 'SuratPengantarBeasiswaController@cetak');
+        Route::resource('surat-pengantar-beasiswa','SuratPengantarBeasiswaController')->except(['index']);
         // Detail Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Profil
@@ -392,7 +406,28 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::get('surat-persetujuan-pindah/verifikasi/all','PengajuanSuratPersetujuanPindahController@getAllPengajuan');
         Route::get('surat-persetujuan-pindah/{surat_persetujuan_pindah}','SuratPersetujuanPindahController@show');
         Route::get('surat-persetujuan-pindah/{surat_persetujuan_pindah}/cetak','SuratPersetujuanPindahController@cetak');
-         // Surat Kegiatan Mahasiswa
+        // Surat Pengantar Cuti
+        Route::get('surat-pengantar-cuti/all','SuratPengantarCutiController@getAllSurat');
+        Route::patch('surat-pengantar-cuti/verifikasi','SuratPengantarCutiController@verification');
+        Route::get('surat-pengantar-cuti/verifikasi/all','SuratPengantarCutiController@getAllPengajuan');
+        Route::get('surat-pengantar-cuti/{surat_pengantar_cuti}/cetak', 'SuratPengantarCutiController@cetak');
+        Route::resource('surat-pengantar-cuti','SuratPengantarCutiController');
+        // Pendaftaran Cuti
+        Route::get('pendaftaran-cuti/all','PendaftaranCutiController@getAllPendaftaran');
+        Route::get('pendaftaran-cuti/pendaftaran/all','PendaftaranCutiController@getAllPengajuanPendaftaran');
+        Route::patch('pendaftaran-cuti/verifikasi/{pendaftaran_cuti}', 'PendaftaranCutiController@verification');
+        Route::patch('pendaftaran-cuti/tolak/{pendaftaran_cuti}', 'PendaftaranCutiController@tolakPendaftaran');
+        Route::resource('pendaftaran-cuti','PendaftaranCutiController');
+        // Waktu Cuti
+        Route::get('waktu-cuti/all','WaktuCutiController@getAllWaktuCuti');
+        Route::resource('waktu-cuti','WaktuCutiController')->except(['show']);
+        // Surat Pengantar Beasiswa
+        Route::get('surat-pengantar-beasiswa/all','SuratPengantarBeasiswaController@getAllSurat');
+        Route::patch('surat-pengantar-beasiswa/verifikasi','SuratPengantarBeasiswaController@verification');
+        Route::get('surat-pengantar-beasiswa/verifikasi/all','SuratPengantarBeasiswaController@getAllPengajuan');
+        Route::get('surat-pengantar-beasiswa/{surat_pengantar_beasiswa}/cetak', 'SuratPengantarBeasiswaController@cetak');
+        Route::resource('surat-pengantar-beasiswa','SuratPengantarBeasiswaController');
+        // Surat Kegiatan Mahasiswa
         Route::get('surat-kegiatan-mahasiswa/pengajuan/{pengajuan_kegiatan_mahasiswa}/create','PengajuanSuratKegiatanMahasiswaController@createSurat');
         Route::get('surat-kegiatan-mahasiswa/pengajuan/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@show');
         Route::post('surat-kegiatan-mahasiswa/pengajuan','PengajuanSuratKegiatanMahasiswaController@storeSurat');
@@ -401,23 +436,6 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}/cetak', 'SuratKegiatanMahasiswaController@cetakSuratKegiatan');
         Route::get('surat-kegiatan-mahasiswa/search', 'SuratKegiatanMahasiswaController@search');
         Route::resource('surat-kegiatan-mahasiswa','SuratKegiatanMahasiswaController');
-        // Surat Tugas
-        Route::get('pendaftaran-cuti/all','PendaftaranCutiController@getAllPendaftaran');
-        Route::get('pendaftaran-cuti/pendaftaran/all','PendaftaranCutiController@getAllPengajuanPendaftaran');
-        Route::patch('pendaftaran-cuti/verifikasi/{pendaftaran_cuti}', 'PendaftaranCutiController@verification');
-        Route::patch('pendaftaran-cuti/tolak/{pendaftaran_cuti}', 'PendaftaranCutiController@tolakPendaftaran');
-        Route::resource('pendaftaran-cuti','PendaftaranCutiController');
-        // Surat Pengantar Cuti
-        Route::get('surat-pengantar-cuti/search', 'SuratPengantarCutiController@search');
-        Route::get('surat-pengantar-cuti/{surat_pengantar_cuti}/cetak', 'SuratPengantarCutiController@cetakSuratCuti');
-        Route::resource('surat-pengantar-cuti','SuratPengantarCutiController');
-        // Surat Pengantar Beasiswa
-        Route::get('surat-pengantar-beasiswa/search', 'SuratPengantarBeasiswaController@search');
-        Route::get('surat-pengantar-beasiswa/{surat_pengantar_beasiswa}/cetak', 'SuratPengantarBeasiswaController@cetakSuratBeasiswa');
-        Route::resource('surat-pengantar-beasiswa','SuratPengantarBeasiswaController');
-        // Waktu Cuti
-        Route::get('waktu-cuti/search', 'WaktuCutiController@search');
-        Route::resource('waktu-cuti','WaktuCutiController')->except('show');
         // Detail Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Surat Keterangan Lulus
@@ -635,19 +653,33 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::get('surat-persetujuan-pindah/tanda-tangan/all','SuratPersetujuanPindahController@getAllTandaTangan');
         Route::post('surat-persetujuan-pindah/tanda-tangan','SuratPersetujuanPindahController@tandaTangan');
         Route::get('surat-persetujuan-pindah/{surat_persetujuan_pindah}','SuratPersetujuanPindahController@show');
-        Route::patch('surat-persetujuan-pindah/verifikasi','PengajuanSuratPersetujuanPindahController@verification'); 
+        Route::patch('surat-persetujuan-pindah/verifikasi','PengajuanSuratPersetujuanPindahController@verification');
+        // Surat Pengantar Cuti
+        Route::get('surat-pengantar-cuti', 'SuratPengantarCutiController@indexPimpinan');
+        Route::get('surat-pengantar-cuti/all','SuratPengantarCutiController@getAllSurat');
+        Route::get('surat-pengantar-cuti/{surat_pengantar_cuti}/cetak','SuratPengantarCutiController@cetak');
+        Route::get('surat-pengantar-cuti/verifikasi/all','SuratPengantarCutiController@getAllPengajuan');
+        Route::get('surat-pengantar-cuti/tanda-tangan/all','SuratPengantarCutiController@getAllTandaTangan');
+        Route::post('surat-pengantar-cuti/tanda-tangan','SuratPengantarCutiController@tandaTangan');
+        Route::patch('surat-pengantar-cuti/verifikasi','SuratPengantarCutiController@verification');
+        Route::resource('surat-pengantar-cuti','SuratPengantarCutiController')->except('index');
+        // Waktu Cuti
+        Route::get('waktu-cuti','WaktuCutiController@indexPimpinan');
+        Route::get('waktu-cuti/all','WaktuCutiController@getAllWaktuCuti');
+        Route::resource('waktu-cuti','WaktuCutiController')->except(['show']);
         // Pendaftaran Cuti
         Route::get('pendaftaran-cuti','PendaftaranCutiController@indexPimpinan');
         Route::get('pendaftaran-cuti/all','PendaftaranCutiController@getAllPendaftaran');
         Route::resource('pendaftaran-cuti','PendaftaranCutiController')->only('show');
-        // Surat Pengantar Cuti
-        Route::get('surat-pengantar-cuti/search', 'SuratPengantarCutiController@search');
-        Route::resource('surat-pengantar-cuti','SuratPengantarCutiController');
         //  Surat Pengantar Beasiswa
         Route::get('surat-pengantar-beasiswa', 'SuratPengantarBeasiswaController@indexPimpinan');
-        Route::get('surat-pengantar-beasiswa/search', 'SuratPengantarBeasiswaController@searchPimpinan');
-        Route::resource('surat-pengantar-beasiswa', 'SuratPengantarBeasiswaController')->only('show');
-        Route::post('surat-pengantar-beasiswa/pengajuan/tanda-tangan','SuratPengantarBeasiswaController@tandaTanganBeasiswa');
+        Route::get('surat-pengantar-beasiswa/all','SuratPengantarBeasiswaController@getAllSurat');
+        Route::get('surat-pengantar-beasiswa/{surat_pengantar_beasiswa}/cetak','SuratPengantarBeasiswaController@cetak');
+        Route::get('surat-pengantar-beasiswa/verifikasi/all','SuratPengantarBeasiswaController@getAllPengajuan');
+        Route::get('surat-pengantar-beasiswa/tanda-tangan/all','SuratPengantarBeasiswaController@getAllTandaTangan');
+        Route::post('surat-pengantar-beasiswa/tanda-tangan','SuratPengantarBeasiswaController@tandaTangan');
+        Route::patch('surat-pengantar-beasiswa/verifikasi','SuratPengantarBeasiswaController@verification');
+        Route::resource('surat-pengantar-beasiswa','SuratPengantarBeasiswaController')->except('index');
         //  Surat Kegiatan Mahasiswa
         Route::get('surat-kegiatan-mahasiswa', 'SuratKegiatanMahasiswaController@indexPimpinan');
         Route::get('surat-kegiatan-mahasiswa/search', 'SuratKegiatanMahasiswaController@searchPimpinan');

@@ -216,7 +216,7 @@ class PengajuanSuratTugasController extends Controller
             ]);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Pengajuan Gagal','Pengajuan surat tugas gagal ditambahkan.');
+            $this->setFlashData('error','Pengajuan Gagal','Pengajuan surat tugas gagal diverifikasi.');
         }
 
         DB::commit();
