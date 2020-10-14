@@ -150,7 +150,7 @@
                             "render": function ( data, type, row, meta ) {
                                 let action = ` <a href="${link+'/'+row.id_surat_masuk}/progress" class="dropdown-item btn-surat-progress" data-toggle="modal" data-target="#exampleModal">Progres Surat</a>`;
 
-                                if(row.status == 'Diajukan'){
+                                if(row.status == 'Diajukan' || row.status == 'Ditolak'){
                                     action += `<a href="${link+'/'+row.id_surat_masuk}" class="dropdown-item btn-pengajuan-surat-dispensasi-detail" data-toggle="modal" data-target="#suratDispensasi">Detail</a>`;
                                 }else{
                                     action += `<a href="${linkSurat+'/'+row.id_surat_masuk}" class="dropdown-item btn-surat-dispensasi-detail" data-toggle="modal" data-target="#suratDispensasi">Detail</a>`;

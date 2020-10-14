@@ -59,15 +59,11 @@ class User extends Authenticable
         return $this->hasMany('App\SuratPengantarBeasiswa','nip','nip_kasubag');
     }
 
-    public function pengajuanSuratKegiatanMahasiswa(){
-        return $this->hasMany('App\PengajuanSuratKegiatanMahasiswa','nip');
-    }
-
     public function suratKegiatanMahasiswa(){
         return $this->hasMany('App\SuratKegiatanMahasiswa','nip');
     }
 
-    public function disposisiPengajuanKegiatan(){
+    public function disposisiUser(){
         return $this->belongsToMany('App\PengajuanSuratKegiatanMahasiswa','disposisi_surat_kegiatan_mahasiswa','id_pengajuan','nip')->withPivot('catatan')->withTimestamps();
     }
 
@@ -77,5 +73,13 @@ class User extends Authenticable
 
     public function suratKeteranganBebasPerlengkapan(){
         return $this->hasMany('App\SuratKeteranganBebasPerlengkapan','nip');
+    }
+
+    public function disposisiSuratKegiatanMahasiswa(){
+        return $this->hasMany('App\DisposisiSuratKegiatanMahasiswa','nip');
+    }
+
+    public function disposisiSuratKegiatanMahasiswaPimpinan(){
+        return $this->hasMany('App\DisposisiSuratKegiatanMahasiswa','nip_disposisi');
     }
 }

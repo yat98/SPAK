@@ -860,23 +860,6 @@
                                                 <th> Di Ubah</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($suratKegiatanList as $suratKegiatan)
-                                            <tr>
-                                                <td> {{ $loop->iteration }}</td>
-                                                <td> {{ $suratKegiatan->nomor_surat.'/'.$suratKegiatan->kodeSurat->kode_surat.'/'.$suratKegiatan->created_at->year }}</td>
-                                                 <td> {{ $suratKegiatan->pengajuanSuratKegiatanMahasiswa->nama_kegiatan }}</td>
-                                                <td> {{ $suratKegiatan->pengajuanSuratKegiatanMahasiswa->mahasiswa->pimpinanOrmawa->ormawa->nama }}</td>
-                                                <td> 
-                                                    <label class="badge badge-gradient-info">
-                                                        {{ ucwords($suratKegiatan->status) }}
-                                                    </label>
-                                                </td>
-                                                <td> {{ $suratKegiatan->created_at->diffForHumans() }}</td>
-                                                <td> {{ $suratKegiatan->updated_at->diffForHumans() }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
                                 </div>
                                 @else

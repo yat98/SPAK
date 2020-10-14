@@ -189,7 +189,7 @@ class PengajuanSuratPersetujuanPindahController extends Controller
             NotifikasiOperator::create([
                 'id_operator'=>$operator->id,
                 'judul_notifikasi'=>'Surat Persetujuan Pindah',
-                'isi_notifikasi'=>'Mahasiswa dengan nama '.$mahasiswa->nama.' membuat pengajuan surat persetujuan pindah.',
+                'isi_notifikasi'=>$isiNotifikasi,
                 'link_notifikasi'=>url('operator/surat-persetujuan-pindah')
             ]);
         }catch(Exception $e){

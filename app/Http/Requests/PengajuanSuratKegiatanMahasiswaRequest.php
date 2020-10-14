@@ -24,15 +24,18 @@ class PengajuanSuratKegiatanMahasiswaRequest extends FormRequest
     public function rules()
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
-            $fileSuratPermohonanRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
+            $fileSuratPermohonanRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:2048'; 
+            $fileProposalKegiatanRules = 'sometimes|mimes:pdf|max:2048';
         }else{
-            $fileSuratPermohonanRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
+            $fileSuratPermohonanRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:2048'; 
+            $fileProposalKegiatanRules = 'required|mimes:pdf|max:2048';
         }
         return [
+            'id_ormawa'=>'required|numeric',
             'nomor_surat_permohonan_kegiatan'=>'required|string',
             'nama_kegiatan'=>'required|string',
             'file_surat_permohonan_kegiatan'=>$fileSuratPermohonanRules,
-            'lampiran_panitia'=>'required|string',
+            'file_proposal_kegiatan'=>$fileProposalKegiatanRules,
         ];
     }
 }

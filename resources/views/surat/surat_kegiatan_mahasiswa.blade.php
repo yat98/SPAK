@@ -103,10 +103,10 @@
         <div class="border"></div>
         <div class="text-center mt-1 underline">
             <p class="m-0">KEPUTUSAN DEKAN FAKULTAS TEKNIK UNIVERSITAS NEGERI GORONTALO</p>
-            <p class="m-0" style="margin-top:2px"><i>Nomor : {{$suratKegiatan->nomor_surat}}/{{$suratKegiatan->kodeSurat->kode_surat}}/{{$suratKegiatan->created_at->year}}</i></p>
+            <p class="m-0" style="margin-top:2px"><i><span style="display:inline-block;width:20px;height:auto"></span>{{$suratKegiatan->nomor_surat}}/{{$suratKegiatan->kodeSurat->kode_surat}}<span style="display:inline-block;width:20px;height:auto"></span>/<span style="display:inline-block;width:50px;height:auto"></span>/{{$suratKegiatan->created_at->year}}</i></p>
             <p style="margin:12px 0px">TENTANG</p>
             <p>PANITIA KEGIATAN {{ strtoupper($suratKegiatan->pengajuanSuratKegiatanMahasiswa->nama_kegiatan) }}</p>
-            <p>{{ strtoupper($suratKegiatan->pengajuanSuratKegiatanMahasiswa->mahasiswa->pimpinanOrmawa->ormawa->nama) }}</p>
+            <p>{{ strtoupper($suratKegiatan->pengajuanSuratKegiatanMahasiswa->ormawa->nama) }}</p>
             <p>FAKULTAS TEKNIK</p>
             <p>UNIVERSITAS NEGERI GORONTALO</p>
         </div>
@@ -189,11 +189,26 @@
                 <p class="m-0">Ditetapkan di Gorontalo,</p>
                 <p class="m-0">pada tanggal {{ $suratKegiatan->updated_at->isoFormat('D MMMM Y') }},</p>
                 <p class="m-0">DEKAN FAKULTAS TEKNIK UNIVERSITAS NEGERI GORONTALO</p>
+                @if($suratKegiatan->user->jabatan == 'dekan')
+                    <p class="m-0"><b>Dekan</b></p>
+                @else
+                    <p class="m-0"><b>a.n Dekan,</b></p>
+                    @if($suratKegiatan->user->jabatan == 'wd3')
+                        <p class="m-0"><b>Wakil Dekan III</b></p>
+                    @elseif($suratKegiatan->user->jabatan == 'kabag tata usaha')
+                        <p class="m-0"><b>Kabag TU</b></p>
+                    @endif
+                @endif
+
                 <p class="m-0 tanda-tangan-margin">
-                    <img class="tanda-tangan" src="{{$suratKegiatan->user->tanda_tangan}}">
+                    @if($suratKegiatan->pengajuanSuratKegiatanMahasiswa->status == 'selesai')
+                        <img class="tanda-tangan" src="{{$suratKegiatan->user->tanda_tangan}}">
+                    @else
+                        <div class="tanda-tangan"></div>
+                    @endif
                 </p>
                 <p class="m-0"><b>{{$suratKegiatan->user->nama}}</b></p>
-                <p class="m-0"><b>NIP. {{substr($suratKegiatan->user->nip,0,8)}} {{substr($suratKegiatan->user->nip,8,6)}} {{substr($suratKegiatan->user->nip,14,1)}} {{substr($suratKegiatan->user->nip,15,3)}}</b></p>
+                <p class="m-0"><b>NIP. {{$suratKegiatan->user->nip}}</b></p>
             </div>
         </div>
         <div class="content" style="padding-top:60px;margin-bottom:15px">
@@ -214,10 +229,14 @@
                 <p class="m-0">pada tanggal {{ $suratKegiatan->updated_at->isoFormat('D MMMM Y') }},</p>
                 <p class="m-0">DEKAN FAKULTAS TEKNIK UNIVERSITAS NEGERI GORONTALO</p>
                 <p class="m-0 tanda-tangan-margin">
-                    <img class="tanda-tangan" src="{{$suratKegiatan->user->tanda_tangan}}">
+                     @if($suratKegiatan->pengajuanSuratKegiatanMahasiswa->status == 'selesai')
+                        <img class="tanda-tangan" src="{{$suratKegiatan->user->tanda_tangan}}">
+                    @else
+                        <div class="tanda-tangan"></div>
+                    @endif
                 </p>
                 <p class="m-0"><b>{{$suratKegiatan->user->nama}}</b></p>
-                <p class="m-0"><b>NIP. {{substr($suratKegiatan->user->nip,0,8)}} {{substr($suratKegiatan->user->nip,8,6)}} {{substr($suratKegiatan->user->nip,14,1)}} {{substr($suratKegiatan->user->nip,15,3)}}</b></p>
+                <p class="m-0"><b>NIP. {{$suratKegiatan->user->nip}}</b></p>
             </div>
         </div>
         <div class="content" style="padding-top:60px;margin-bottom:15px">

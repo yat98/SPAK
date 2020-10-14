@@ -10,35 +10,34 @@ class PengajuanSuratKegiatanMahasiswa extends Model
 
     protected $fillable = [
         'nim',
-        'nip',
+        'id_ormawa',
+        'id_operator',
         'nomor_surat_permohonan_kegiatan',
         'nama_kegiatan',
         'file_surat_permohonan_kegiatan',
+        'file_proposal_kegiatan',
         'lampiran_panitia',
-        'tanggal_diterima',
-        'tanggal_menunggu_tanda_tangan',
         'status',
         'keterangan',
     ];
-
-    protected $dates = [
-        'tanggal_diterima',
-        'tanggal_menunggu_tanda_tangan',
-    ];
-
-    public function user(){
-        return $this->belongsTo('App\User','nip');
-    }
 
     public function mahasiswa(){
         return $this->belongsTo('App\Mahasiswa','nim');
     }
 
+    public function ormawa(){
+        return $this->belongsTo('App\Ormawa','id_ormawa');
+    }
+
+    public function operator(){
+        return $this->belongsTo('App\Operator','id_operator');
+    }
+
     public function suratKegiatanMahasiswa(){
-        return $this->hasOne('App\SuratKegiatanMahasiswa','id_pengajuan_kegiatan');
+        return $this->hasOne('App\SuratKegiatanMahasiswa','id_pengajuan');
     }
 
     public function disposisiUser(){
-        return $this->belongsToMany('App\User','disposisi_surat_kegiatan_mahasiswa','id_pengajuan','nip')->withPivot('catatan')->withTimestamps();
+        return $this->belongsToMany('App\User','disposisi_surat_kegiatan_mahasiswa','id_pengajuan','nip')->withPivot(['nip','catatan'])->withTimestamps();
     }
 }

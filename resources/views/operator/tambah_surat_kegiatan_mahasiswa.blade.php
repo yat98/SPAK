@@ -11,15 +11,15 @@
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
                             <i class="mdi mdi-file-document-box"></i>
-                        </span> Surat Kegiatan Mahasiswa</h3>
+                        </span>Surat Kegiatan Mahasiswa</h3>
                 </div>
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Tambah Pengajuan Surat Kegiatan Mahasiswa</h3>
-                                {{ Form::open(['url'=>'mahasiswa/surat-kegiatan-mahasiswa/pengajuan','files'=>true]) }}
-                                @include('mahasiswa.form_pengajuan_surat_kegiatan_mahasiswa',['buttonLabel'=>'Tambah'])
+                                <h3 class="mb-5">Tambah Surat Kegiatan Mahasiswa</h3>
+                                {{ Form::open(['url'=>'operator/surat-kegiatan-mahasiswa']) }}
+                                @include('operator.form_surat_kegiatan_mahasiswa',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>
                         </div>

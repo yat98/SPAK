@@ -62,6 +62,11 @@ return [
             'root' => public_path('upload_persetujuan_pindah'),
         ],
 
+        'file_proposal_kegiatan' => [
+            'driver' => 'local',
+            'root' => public_path('upload_proposal_kegiatan'),
+        ],
+
         'file_permohonan_cuti' => [
             'driver' => 'local',
             'root' => public_path('upload_permohonan_cuti'),

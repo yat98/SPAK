@@ -14,8 +14,9 @@ class CreateSuratKegiatanMahasiswaTable extends Migration
     public function up()
     {
         Schema::create('surat_kegiatan_mahasiswa', function (Blueprint $table) {
-            $table->integer('id_pengajuan_kegiatan')->unsigned()->primary();
+            $table->integer('id_pengajuan')->unsigned()->primary();
             $table->integer('id_kode_surat')->unsigned();
+            $table->integer('id_operator')->unsigned();
             $table->char('nip',)->index();
             $table->char('nomor_surat',6);
             $table->text('menimbang');

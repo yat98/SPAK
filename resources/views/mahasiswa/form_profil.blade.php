@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12">
         <div class="form-group">
             {{ Form::label('nim','NIM') }}
             {{ Form::text('nim',null,['class'=>'form-control form-control-lg','id'=>'nim','readonly'=>'readonly']) }}

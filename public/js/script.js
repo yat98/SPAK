@@ -466,7 +466,6 @@ $('.table-responsive').on('click','.btn-surat-progress', function (e) {
             let bgColor = 'bg-gradient-info';
             let icon = `<i class="mdi mdi-marker-check icon-sm text-info"></i>`;
 
-
             switch (pengajuanSurat.status) {
                 case 'Selesai':
                     progressPercent = '100';
@@ -484,6 +483,77 @@ $('.table-responsive').on('click','.btn-surat-progress', function (e) {
                     break;
                 case 'Menunggu Tanda Tangan':
                     progressPercent = '80';
+                    break;
+                case 'Ditolak':
+                    progressPercent = '100';
+                    bgColor = 'bg-gradient-danger';
+                    icon = `<i class="mdi mdi-close-circle icon-sm text-danger"></i>`
+                    break;
+            }
+
+            let html = `<div class="row">
+                            <div class="col-12 mt-2">
+                                <p class="text-center text-muted mb-0">${progressPercent}%</p>
+                                <div class="progress">
+                                    <div class="progress-bar mt-0 ${bgColor} " role="progressbar" style="width: ${progressPercent}%" aria-valuenow="${progressPercent}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <p class="h6 m-0 mb-1 text-dark text-center">
+                                    ${icon}
+                                    ${pengajuanSurat.status}
+                                </p> 
+                                <p class="text-muted text-center mt-2 mb-0"><small>${pengajuanSurat.tanggal}</small></p>
+                            </div>
+                        </div>`;
+            $('#surat-progress-content').html(html);
+        })
+        .catch(() => {
+            errorMessage('Terjadi Kesalahan','Periksa koneksi anda kemudian refresh browser anda');
+        });
+});
+
+$('.table-responsive').on('click','.btn-surat-kegiatan-progress', function (e) {
+    e.preventDefault();
+    $('#surat-progress-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let pengajuanSurat = result;
+            let progressPercent = '0';
+            let bgColor = 'bg-gradient-info';
+            let icon = `<i class="mdi mdi-marker-check icon-sm text-info"></i>`;
+
+            switch (pengajuanSurat.status) {
+                case 'Selesai':
+                    progressPercent = '100';
+                    bgColor = 'bg-gradient-success';
+                    icon = `<i class="mdi mdi-marker-check icon-sm text-success"></i>`;
+                    break;
+                case 'Diajukan':
+                    progressPercent = '15';
+                    break;
+                case 'Disposisi Dekan':
+                    progressPercent = '25';
+                    break;
+                case 'Disposisi Wd1':
+                    progressPercent = '35';
+                    break;
+                case 'Disposisi Wd2':
+                    progressPercent = '45';
+                    break;
+                case 'Disposisi Wd3':
+                    progressPercent = '55';
+                    break;
+                case 'Verifikasi Kasubag':
+                    progressPercent = '65';
+                    break;
+                case 'Verifikasi Kabag':
+                    progressPercent = '75';
+                    break;
+                case 'Menunggu Tanda Tangan':
+                    progressPercent = '85';
                     break;
                 case 'Ditolak':
                     progressPercent = '100';
@@ -1361,6 +1431,11 @@ $('.table-responsive').on('click','.pengajuan-surat-pindah-detail',function(e){
                 });
 });
 
+$('.btn-proposal').on('click', function(e){
+    e.preventDefault();
+    $('#embed-proposal').toggleClass('d-none');
+});
+
 $('.table-responsive').on('click','.btn-surat-pindah-detail',function(e){
     e.preventDefault();
     $('#surat-pindah-detail-content').empty();
@@ -1883,79 +1958,6 @@ $('.btn-terima-kegiatan').on('click',function(e){
     })
 });
 
-$('.disposisi').on('click',function(e){
-    e.preventDefault();
-    Swal.fire({
-        title: 'Yakin?',
-        text: "Surat akan di disposisi",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Disposisi',
-        cancelButtonText: 'Tidak'
-    }).then((result) => {
-        if (result.value) {
-            if (result.value) {
-                Swal.fire({
-                    title: 'Catatan',
-                    input: 'textarea',
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Simpan',
-                    cancelButtonText: 'Cancel',
-                    inputPlaceholder: 'Catatan...',
-                    inputAttributes: {
-                      'aria-label': 'Catatan...'
-                    },
-                    showCancelButton: true,
-                    inputValidator: (value) => {
-                        return new Promise((resolve) => {
-                            if (value.trim() === undefined || value.trim() == null || value.length <= 0) {
-                                resolve('Catatan wajib diisi.')
-                            } else {
-                                $('#catatan_disposisi').val(value);
-                                let form = $(this).parents('form');
-                                form.submit();
-                            }
-                        })
-                    }
-                })
-            }
-        }
-    })
-});
-
-$('.btn-disposisi-detail').on('click',function(e){
-    e.preventDefault();
-    $('#disposisi-detail-content').empty();
-    let url = $(this).attr('href');
-    let a = fetch(url)
-                .then(response => response.json())
-                .then(result => {
-                    let disposisi = result;
-                    let content='';
-                    disposisi.forEach((d)=>{
-                        content += `<tr>
-                                        <td>${d.nama}</td>
-                                        <td>${d.pivot.catatan}</td>
-                                    </tr>`;
-                        
-                    });
-                    let html = `
-                                    <div class="table-responsive">
-                                            <table class="table">
-                                                <tr>
-                                                    <th>Diteruskan</th>
-                                                    <th>Disposisi</th>
-                                                </tr>
-                                                ${content}
-                                            </table>
-                                </div>`
-                    $('#disposisi-detail-content').html(html);
-                });
-});
-
 let namaOrmawaOld = '{ ORMAWA }';
 $('.ormawa-list').on('change',function(){
     let namaOrmawa = $('.ormawa-list option:selected').text();
@@ -1971,7 +1973,46 @@ $('.ormawa-list').on('change',function(){
 
     namaOrmawaOld = namaOrmawa;
 });
- 
+
+$('.table-responsive').on('click','.btn-disposisi-detail',function(e){
+    e.preventDefault();
+    $('#disposisi-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let length = (Object.keys(result).length) - 1;
+            let content = ``;
+
+            for(let i = 0;i<length;i++){
+                content += `<tr>
+                                <td>${result[i].user.jabatan.toUpperCase()} - ${result[i].user.nama}</td>`;
+
+                if(result[i].user_disposisi != null){
+                    content += `<td>${result[i].user_disposisi.jabatan.toUpperCase()} - ${result[i].user_disposisi.nama}</td>`;
+                }else{
+                    content += `<td> - </td>`;
+                }
+
+                content += `    <td>${result[i].catatan}</td>
+                                <td>${result.dibuat[i]}</td>
+                            </tr>`;
+            }
+
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>Dari</th>
+                                    <th>Disposisi Kepada</th>
+                                    <th>Catatan</th>
+                                    <th>Tanggal Disposisi</th>
+                                </tr>
+                                ${content}
+                            </table>
+                        </div>`;
+            $('#disposisi-detail-content').html(html);
+        });
+})
 $('.btn-pengajuan-surat-lulus-detail').on('click',function(e){
     e.preventDefault();
     $('#surat-keterangan-lulus-detail-content').empty();

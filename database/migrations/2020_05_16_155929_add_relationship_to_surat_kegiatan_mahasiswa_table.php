@@ -14,7 +14,7 @@ class AddRelationshipToSuratKegiatanMahasiswaTable extends Migration
     public function up()
     {
         Schema::table('surat_kegiatan_mahasiswa', function (Blueprint $table) {
-            $table->foreign('id_pengajuan_kegiatan')
+            $table->foreign('id_pengajuan')
                   ->references('id')
                   ->on('pengajuan_surat_kegiatan_mahasiswa')
                   ->onUpdate('cascade')
@@ -31,6 +31,12 @@ class AddRelationshipToSuratKegiatanMahasiswaTable extends Migration
                   ->on('user')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
+
+            $table->foreign('id_operator')
+                  ->references('id')
+                  ->on('operator')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
         });
     }
 
@@ -42,7 +48,8 @@ class AddRelationshipToSuratKegiatanMahasiswaTable extends Migration
     public function down()
     {
         Schema::table('surat_kegiatan_mahasiswa', function (Blueprint $table) {
-            $table->dropForeign(['id_pengajuan_kegiatan']);
+            $table->dropForeign(['id_pengajuan']);
+            $table->dropForeign(['id_operator']);
             $table->dropForeign(['id_kode_surat']);
             $table->dropForeign(['nip']);
         });

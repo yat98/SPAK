@@ -20,4 +20,8 @@ class Ormawa extends Model
     public function pimpinanOrmawa(){
         return $this->hasMany('App\PimpinanOrmawa','id_ormawa');
     }
+
+    public function pengajuanSuratKegiatanMahasiswa(){
+        return $this->hasMany('App\PengajuanSuratKegiatanMahasiswa','id_ormawa');
+    }
 }

@@ -6,6 +6,7 @@ use PDF;
 use Session;
 use Storage;
 use App\User;
+use DataTables;
 use App\Ormawa;
 use App\KodeSurat;
 use App\NotifikasiUser;
@@ -14,6 +15,7 @@ use App\NotifikasiMahasiswa;
 use Illuminate\Http\Request;
 use App\SuratKegiatanMahasiswa;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\PengajuanSuratKegiatanMahasiswa;
 use App\Http\Requests\SuratKegiatanMahasiswaRequest;
 use App\Http\Requests\PengajuanSuratKegiatanMahasiswaRequest;
@@ -21,181 +23,163 @@ use App\Http\Requests\PengajuanSuratKegiatanMahasiswaRequest;
 class SuratKegiatanMahasiswaController extends Controller
 {
     public function index(){
+
         $perPage = $this->perPage;
-        $countAllPengajuanKegiatan = PengajuanSuratKegiatanMahasiswa::whereNotIn('status',['selesai'])->count();
-        $countAllSuratKegiatan = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan_kegiatan')
-                                    ->where('status','selesai')
-                                    ->count();
+        
+        $countAllSurat = PengajuanSuratKegiatanMahasiswa::join('surat_kegiatan_mahasiswa','surat_kegiatan_mahasiswa.id_pengajuan','=','pengajuan_surat_kegiatan_mahasiswa.id')
+                                                          ->whereIn('status',['selesai','verifikasi kabag','menunggu tanda tangan'])
+                                                          ->count();
+        
+        $countAllVerifikasi = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','surat_kegiatan_mahasiswa.id_pengajuan','=','pengajuan_surat_kegiatan_mahasiswa.id')
+                                                      ->where('pengajuan_surat_kegiatan_mahasiswa.status','verifikasi kasubag')
+                                                      ->count();
 
-        $pengajuanKegiatanList = PengajuanSuratKegiatanMahasiswa::whereNotIn('status',['selesai'])->paginate($perPage);
-        $suratKegiatanList =  SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan_kegiatan')
-                                ->where('status','selesai')
-                                ->paginate($perPage);
+        return view('user.'.$this->segmentUser.'.surat_kegiatan_mahasiswa',compact('perPage','countAllSurat','countAllVerifikasi'));
+    }
 
-        $countPengajuanKegiatan = $pengajuanKegiatanList->count();
-        $countSuratKegiatan =  $suratKegiatanList->count();
+    public function indexOperator(){
+        $perPage = $this->perPage;
+                                   
+        $countAllPengajuan = PengajuanSuratKegiatanMahasiswa::whereIn('status',['diajukan','ditolak','disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi selesai']);
 
-        $nomorSurat = $this->generateNomorSuratKegiatan(['selesai']);
-        return view('user.'.$this->segmentUser.'.surat_kegiatan_mahasiswa',compact('countAllPengajuanKegiatan','perPage','countAllSuratKegiatan','countPengajuanKegiatan','nomorSurat','countSuratKegiatan','pengajuanKegiatanList','suratKegiatanList'));
+        if(Auth::user()->bagian == 'front office'){
+            $countAllPengajuan = $countAllPengajuan->where('id_operator',Auth::user()->id);
+        }
+
+        $countAllPengajuan = $countAllPengajuan->count();
+
+        $countAllSurat = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','surat_kegiatan_mahasiswa.id_pengajuan','=','pengajuan_surat_kegiatan_mahasiswa.id')
+                                            ->whereNotIn('pengajuan_surat_kegiatan_mahasiswa.status',['diajukan'])
+                                            ->count();
+                                                                         
+        return view($this->segmentUser.'.surat_kegiatan_mahasiswa',compact('countAllPengajuan','perPage','countAllSurat'));
     }
 
     public function indexPimpinan(){
         $perPage = $this->perPage;
-        $suratKegiatanList =  SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan_kegiatan')
-                                ->where('status','selesai')
-                                ->paginate($perPage);
-        $countAllSuratKegiatan = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan_kegiatan')
-                                ->where('status','selesai')
+        $countAllDisposisi = '';
+
+        $countAllVerifikasi = PengajuanSuratKegiatanMahasiswa::where('status','verifikasi kabag')
                                 ->count();
-        $countSuratKegiatan = $suratKegiatanList->count();
-        $nomorSurat = $this->generateNomorSuratKegiatan(['selesai']);
-        if(Session::get('jabatan') == 'dekan'){
-            $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::where('status','diterima')->count();
-            $disposisiList = PengajuanSuratKegiatanMahasiswa::orderByDesc('created_at')->whereIn('status',['diterima','disposisi dekan','disposisi wakil dekan I','disposisi wakil dekan II','disposisi wakil dekan III','surat dibuat'])->paginate($perPage);
-            $tandaTanganList = PengajuanSuratKegiatanMahasiswa::orderByDesc('created_at')->where('status','menunggu tanda tangan')->paginate($perPage);
-            $countDisposisi = $disposisiList->count();
-            $countTandaTangan = $tandaTanganList->count();
-            $countAllTandaTangan = PengajuanSuratKegiatanMahasiswa::where('status','menunggu tanda tangan')->count();
-            return view('user.'.$this->segmentUser.'.surat_kegiatan_mahasiswa',compact('countAllDisposisi','disposisiList','countDisposisi','perPage','countAllTandaTangan','tandaTanganList','countTandaTangan','suratKegiatanList','countSuratKegiatan','countAllSuratKegiatan','nomorSurat'));
-        }else if(Session::get('jabatan') == 'wd1'){
-            $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::where('status','disposisi dekan')->count();
-            $disposisiList = PengajuanSuratKegiatanMahasiswa::orderByDesc('updated_at')->whereIn('status',['disposisi dekan','disposisi wakil dekan I','disposisi wakil dekan II','disposisi wakil dekan III','surat dibuat','menunggu tanda tangan'])->paginate($perPage);
-        }else if(Session::get('jabatan') == 'wd2'){
-            $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::where('status','disposisi wakil dekan I')->count();
-            $disposisiList = PengajuanSuratKegiatanMahasiswa::orderByDesc('updated_at')->whereIn('status',['disposisi wakil dekan I','disposisi wakil dekan II','disposisi wakil dekan III','surat dibuat','menunggu tanda tangan'])->paginate($perPage);
-        }else if(Session::get('jabatan') == 'wd3'){
-            $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::where('status','disposisi wakil dekan II')->count();
-            $disposisiList = PengajuanSuratKegiatanMahasiswa::orderByDesc('updated_at')->whereIn('status',['disposisi wakil dekan II','disposisi wakil dekan III','surat dibuat','menunggu tanda tangan'])->paginate($perPage);
+
+        if(Auth::user()->jabatan != 'kabag tata usaha'){
+           $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::whereIn('status',['disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi selesai','verifikasi kasubag','verifikasi kabag'])
+                                ->count();
         }
-        $countDisposisi = $disposisiList->count();
-        return view('user.'.$this->segmentUser.'.surat_kegiatan_mahasiswa',compact('countAllDisposisi','disposisiList','countDisposisi','perPage','suratKegiatanList','countSuratKegiatan','countAllSuratKegiatan','nomorSurat'));
+                                            
+        $countAllSurat = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','surat_kegiatan_mahasiswa.id_pengajuan','=','pengajuan_surat_kegiatan_mahasiswa.id')
+                                          ->where('status','selesai')
+                                          ->count();
+        
+        $countAllTandaTangan = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','surat_kegiatan_mahasiswa.id_pengajuan','=','pengajuan_surat_kegiatan_mahasiswa.id')
+                                            ->where('status','menunggu tanda tangan')
+                                            ->where('nip',Auth::user()->nip)
+                                            ->count();
+
+        return view('user.pimpinan.surat_kegiatan_mahasiswa',compact('countAllVerifikasi','countAllDisposisi','perPage','countAllSurat','countAllTandaTangan'));
     }
 
-    public function search(Request $request){
-        $keyword = $request->all();
-        if(isset($keyword['keywords'])){
-            $nomor = $keyword['keywords'] != null ? $keyword['keywords'] : '';
-            $perPage = $this->perPage;
-            $countAllPengajuanKegiatan = PengajuanSuratKegiatanMahasiswa::whereNotIn('status',['selesai'])->count();
-            $countAllSuratKegiatan = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan_kegiatan')
-                                        ->where('status','selesai')
-                                        ->count();
-    
-            $pengajuanKegiatanList = PengajuanSuratKegiatanMahasiswa::whereNotIn('status',['selesai'])->paginate($perPage);
-            $suratKegiatanList =  SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan_kegiatan')
-                                    ->where('status','selesai')
-                                    ->where('nomor_surat',$nomor)
-                                    ->paginate($perPage);
-    
-            $countPengajuanKegiatan = $pengajuanKegiatanList->count();
-            $countSuratKegiatan =  $suratKegiatanList->count();
-    
-            $nomorSurat = $this->generateNomorSuratKegiatan(['selesai']);
-            if($countSuratKegiatan < 1){
-                $this->setFlashData('search','Hasil Pencarian','Surat kegiatan mahasiswa tidak ditemukan!');
-            }
-            return view('user.'.$this->segmentUser.'.surat_kegiatan_mahasiswa',compact('countAllPengajuanKegiatan','perPage','countAllSuratKegiatan','countPengajuanKegiatan','nomorSurat','countSuratKegiatan','pengajuanKegiatanList','suratKegiatanList'));
-        }else{
-            return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
-        }
-    }
+    public function getAllSurat(){
+        $suratKegiatan = PengajuanSuratKegiatanMahasiswa::join('ormawa','pengajuan_surat_kegiatan_mahasiswa.id_ormawa','=','ormawa.id')
+                                ->join('surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan')
+                                ->select(['pengajuan_surat_kegiatan_mahasiswa.*','ormawa.nama']) 
+                                ->with(['suratKegiatanMahasiswa.kodeSurat','ormawa']);
 
-    public function searchPimpinan(Request $request){
-        $keyword = $request->all();
-        if(isset($keyword['keywords'])){
-            $nomor = $keyword['keywords'] != null ? $keyword['keywords'] : '';
-            $perPage = $this->perPage;
-            
-            $suratKegiatanList =  SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan_kegiatan')
-                                ->where('nomor_surat',$nomor)
-                                ->where('status','selesai')
-                                ->paginate($perPage);
-            $countAllSuratKegiatan = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan_kegiatan')
-                                    ->where('status','selesai')
-                                    ->count();
-            $countSuratKegiatan = $suratKegiatanList->count();
-            $nomorSurat = $this->generateNomorSuratKegiatan(['selesai']);
-            if($countSuratKegiatan < 1){
-                $this->setFlashData('search','Hasil Pencarian','Surat kegiatan mahasiswa tidak ditemukan!');
+        if(isset(Auth::user()->id)){
+            $suratKegiatan = $suratKegiatan->whereIn('pengajuan_surat_kegiatan_mahasiswa.status',['verifikasi kasubag','verifikasi kabag','menunggu tanda tangan','selesai']);
+        }else if(isset(Auth::user()->nip)){
+            if(Auth::user()->jabatan == 'kasubag kemahasiswaan'){
+                $suratKegiatan = $suratKegiatan->whereIn('pengajuan_surat_kegiatan_mahasiswa.status',['selesai','verifikasi kabag','menunggu tanda tangan']);
+            } else{
+                $suratKegiatan = $suratKegiatan->where('pengajuan_surat_kegiatan_mahasiswa.status','selesai');
             }
-            if(Session::get('jabatan') == 'dekan'){
-                $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::where('status','diterima')->count();
-                $disposisiList = PengajuanSuratKegiatanMahasiswa::orderByDesc('created_at')->whereIn('status',['diterima','disposisi dekan','disposisi wakil dekan I','disposisi wakil dekan II','disposisi wakil dekan III','surat dibuat'])->paginate($perPage);
-                $tandaTanganList = PengajuanSuratKegiatanMahasiswa::orderByDesc('created_at')->where('status','menunggu tanda tangan')->paginate($perPage);
-                $countDisposisi = $disposisiList->count();
-                $countTandaTangan = $tandaTanganList->count();
-                $countAllTandaTangan = PengajuanSuratKegiatanMahasiswa::where('status','menunggu tanda tangan')->count();
-                return view('user.'.$this->segmentUser.'.surat_kegiatan_mahasiswa',compact('countAllDisposisi','disposisiList','countDisposisi','perPage','countAllTandaTangan','tandaTanganList','countTandaTangan','suratKegiatanList','countSuratKegiatan','countAllSuratKegiatan','nomorSurat'));
-            }else if(Session::get('jabatan') == 'wd1'){
-                $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::where('status','disposisi dekan')->count();
-                $disposisiList = PengajuanSuratKegiatanMahasiswa::orderByDesc('updated_at')->whereIn('status',['disposisi dekan','disposisi wakil dekan I','disposisi wakil dekan II','disposisi wakil dekan III','surat dibuat','menunggu tanda tangan'])->paginate($perPage);
-            }else if(Session::get('jabatan') == 'wd2'){
-                $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::where('status','disposisi wakil dekan I')->count();
-                $disposisiList = PengajuanSuratKegiatanMahasiswa::orderByDesc('updated_at')->whereIn('status',['disposisi wakil dekan I','disposisi wakil dekan II','disposisi wakil dekan III','surat dibuat','menunggu tanda tangan'])->paginate($perPage);
-            }else if(Session::get('jabatan') == 'wd3'){
-                $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::where('status','disposisi wakil dekan II')->count();
-                $disposisiList = PengajuanSuratKegiatanMahasiswa::orderByDesc('updated_at')->whereIn('status',['disposisi wakil dekan II','disposisi wakil dekan III','surat dibuat','menunggu tanda tangan'])->paginate($perPage);
-            }
-            $countDisposisi = $disposisiList->count();
-            return view('user.'.$this->segmentUser.'.surat_kegiatan_mahasiswa',compact('countAllDisposisi','disposisiList','countDisposisi','perPage','suratKegiatanList','countSuratKegiatan','countAllSuratKegiatan','nomorSurat'));
-        }else{
-            return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
         }
+        
+        return DataTables::of($suratKegiatan)
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();
+                        })
+                        ->editColumn("status", function ($data) {
+                            switch($data->status){
+                                case 'disposisi wd1':
+                                    return 'Disposisi WD1';
+                                    break;
+                                case 'disposisi wd2':
+                                    return 'Disposisi WD2';
+                                    break;
+                                case 'disposisi wd3':
+                                    return 'Disposisi WD3';
+                                    break;
+                                default:
+                                    return ucwords($data->status);
+                                    break;
+                            }
+                        })
+                        ->make(true);
     }
-
+        
     public function show(SuratKegiatanMahasiswa $suratKegiatan){
-        return view('user.pegawai.detail_surat_kegiatan_mahasiswa',compact('suratKegiatan'));
+        if(isset(Auth::user()->id) || isset(Auth::user()->nim)) return view($this->segmentUser.'.detail_surat_kegiatan_mahasiswa',compact('suratKegiatan'));
+        return view('user.'.$this->segmentUser.'.detail_surat_kegiatan_mahasiswa',compact('suratKegiatan'));
     }
 
-    public function create(){
-        $userList = $this->generatePimpinan();
-        $kodeSurat = $this->generateKodeSurat();
+    public function progress(PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
+        $data = collect($pengajuanKegiatan);
+        $data->put('status',ucwords($pengajuanKegiatan->status));
+
+        if($pengajuanKegiatan->status == 'selesai'){
+            $tanggalSelesai = $pengajuanKegiatan->suratKegiatanMahasiswa->updated_at->isoFormat('D MMMM Y HH:mm:ss');
+            $data->put('tanggal',$tanggalSelesai);
+        }else if($pengajuanKegiatan->status == 'ditolak'){
+            $tanggalDitolak = $pengajuanKegiatan->updated_at->isoFormat('D MMMM Y HH:mm:ss');
+            $data->put('tanggal',$tanggalDitolak);
+        }else{
+            $tanggal = $pengajuanKegiatan->updated_at->isoFormat('D MMMM Y HH:mm:ss');
+            $data->put('tanggal',$tanggal);
+        }
+
+        return json_encode($data->toArray(),JSON_HEX_QUOT | JSON_HEX_TAG);
+    }
+
+    public function createSurat(PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
+        if(!$this->isKodeSuratExists()){
+            return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
+        }
         $nomorSuratBaru = $this->generateNomorSuratBaru();
-        $ormawaList = Ormawa::pluck('nama','id')->toArray();
-        return view('user.'.$this->segmentUser.'.tambah_surat_kegiatan_mahasiswa',compact('kodeSurat','userList','nomorSuratBaru','ormawaList'));
+        $userList =$this->generateTandaTanganKemahasiswaan();
+        $kodeSurat = KodeSurat::pluck('kode_surat','id');
+        return view('operator.tambah_surat_kegiatan_mahasiswa',compact('pengajuanKegiatan','nomorSuratBaru','userList','kodeSurat'));
     }
 
-    public function store(Request $request){
-        $this->validate($request,[
-            'nomor_surat_permohonan_kegiatan'=>'required|string',
-            'nama_kegiatan'=>'required|string',
-            'file_surat_permohonan_kegiatan'=>'required|image|mimes:jpg,jpeg,bmp,png|max:1024',
-            'lampiran_panitia'=>'required|string',
-            'ormawa'=>'required|numeric'
-        ]);
+    public function storeSurat(SuratKegiatanMahasiswaRequest $request){
         $input = $request->all();
+        $pengajuanKegiatan = PengajuanSuratKegiatanMahasiswa::findOrFail($request->id_pengajuan);
+        $user = User::where('status_aktif','aktif')
+                          ->where('jabatan','kasubag kemahasiswaan')
+                          ->first();
+
         DB::beginTransaction();
         try {
-            $input['status'] = 'diterima';
-            $mahasiswa = PimpinanOrmawa::where('id_ormawa',$request->ormawa)->where('jabatan','sekretaris')->first();
-            $user = User::where('nip',Session::get('nip'))->first();
-            $dekan = User::where('jabatan','dekan')->where('status_aktif','aktif')->first();
-            $input['nim'] = $mahasiswa->nim;
-            $input['nip'] = $user->nip;
-            if ($request->has('file_surat_permohonan_kegiatan')) {
-                $imageFieldName = 'file_surat_permohonan_kegiatan';
-                $uploadPath = 'upload_surat_permohonan_kegiatan';
-                $input[$imageFieldName] = $this->uploadImage($imageFieldName, $request, $uploadPath);
-            }
-            PengajuanSuratKegiatanMahasiswa::create($input);
-            NotifikasiMahasiswa::create([
-                'nim'=>$input['nim'],
-                'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
-                'isi_notifikasi'=>'Surat Kegiatan Mahasiswa telah diterima.',
-                'link_notifikasi'=>url('mahasiswa/pengajuan/surat-kegiatan-mahasiswa')
+            SuratKegiatanMahasiswa::create($input);
+            
+            $pengajuanKegiatan->update([
+                'status'=>'verifikasi kasubag'
             ]);
+
             NotifikasiUser::create([
-                'nip'=>$dekan->nip,
+                'nip'=>$user->nip,
                 'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
-                'isi_notifikasi'=>'Disposisi surat kegiatan mahasiswa.',
-                'link_notifikasi'=>url('pimpinan/surat-kegiatan-mahasiswa')
+                'isi_notifikasi'=>'Verifikasi surat kegiatan mahasiswa.',
+                'link_notifikasi'=>url('pegawai/surat-kegiatan-mahasiswa')
             ]);
         }catch(Exception $e){
             DB::rollback();
             $this->setFlashData('error','Gagal Menambahkan Surat','Surat kegiatan mahasiswa gagal ditambahkan.');
         }
 
-        
         DB::commit();
         $this->setFlashData('success','Berhasil','Surat kegiatan mahasiswa ditambahkan');
         return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
@@ -222,61 +206,60 @@ class SuratKegiatanMahasiswaController extends Controller
         return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
     }
 
-    public function destroy(SuratKegiatanMahasiswa $suratKegiatan){
-        $imageFieldName = 'file_surat_masuk'; 
-        $this->deleteImage($imageFieldName,$suratKegiatan->file_surat_permohonan_kegiatan);
-        $suratKegiatan->pengajuanSuratKegiatanMahasiswa->delete();
-        $this->setFlashData('success','Berhasil','Surat kegiatan mahasiswa berhasil dihapus');
-        return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
-    }
-
-    public function tandaTanganKegiatan(Request $request){
+    public function tandaTangan(Request $request){
         if(!$this->isTandaTanganExists()){
             return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
         }
-        $suratKegiatan = SuratKegiatanMahasiswa::where('id_pengajuan_kegiatan',$request->id)->first();
+
+        $suratKegiatan = SuratKegiatanMahasiswa::findOrFail($request->id);
         
         $suratKegiatan->pengajuanSuratKegiatanMahasiswa->update([
             'status'=>'selesai',
         ]);
-        NotifikasiUser::create([
-            'nip'=>$suratKegiatan->pengajuanSuratKegiatanMahasiswa->nip,
-            'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
-            'isi_notifikasi'=>'Surat Kegiatan Mahasiswa telah selesai.',
-            'link_notifikasi'=>url('pegawai/surat-kegiatan-mahasiswa')
-        ]);
-        NotifikasiMahasiswa::create([
-            'nim'=>$suratKegiatan->pengajuanSuratKegiatanMahasiswa->nim,
-            'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
-            'isi_notifikasi'=>'Surat Kegiatan Mahasiswa telah selesai.',
-            'link_notifikasi'=>url('mahasiswa/pengajuan/surat-kegiatan-mahasiswa')
-        ]);
+
+        foreach($suratKegiatan->pengajuanSuratKegiatanMahasiswa->ormawa->pimpinanOrmawa as $mahasiswa){
+            NotifikasiMahasiswa::create([
+                'nim'=>$mahasiswa->nim,
+                'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
+                'isi_notifikasi'=>'Surat kegiatan mahasiswa telah di tanda tangani.',
+                'link_notifikasi'=>url('mahasiswa/surat-kegiatan-mahasiswa')
+            ]);
+        }
+
         $this->setFlashData('success','Berhasil','Tanda tangan surat kegiatan mahasiswa berhasil');
         return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
     }
 
-    public function cetakSuratKegiatan(SuratKegiatanMahasiswa $suratKegiatan){
-        $data = $suratKegiatan->pengajuanSuratKegiatanMahasiswa->mahasiswa->pimpinanOrmawa->ormawa->nama.' - '.$suratKegiatan->pengajuanSuratKegiatanMahasiswa->nama_kegiatan;
-        $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",3,3);
-        if(Session::has('nim')){
+    public function cetak(SuratKegiatanMahasiswa $suratKegiatan){
+        if(isset(Auth::user()->nim)){
+            $nim = $suratKegiatan->pengajuanSuratKegiatanMahasiswa->ormawa->pimpinanOrmawa->map(function ($mahasiswa) {
+                return strtoupper($mahasiswa->nim);
+            })->toArray();
+
+            if(!in_array(Auth::user()->nim,$nim)){ 
+                abort(404);
+            }
+
             if($suratKegiatan->jumlah_cetak >= 3){
-                $this->setFlashData('info','Cetak Surat Kegiatan Mahasiswa','Anda telah mencetak surat kegiatan mahasiswa sebanyak 3 kali.');
-                return redirect('mahasiswa/pengajuan/surat-kegiatan-mahasiswa');
+                $this->setFlashData('info','Cetak Surat','Anda telah mencetak surat kegiatan mahasiswa sebanyak 3 kali.');
+                return redirect('mahasiswa/surat-kegiatan-mahasiswa');
             }
         }
-        $jumlahCetak = ++$suratKegiatan->jumlah_cetak;
-        $suratKegiatan->update([
-            'jumlah_cetak'=>$jumlahCetak
-        ]);
+
+        $data = $suratKegiatan->pengajuanSuratKegiatanMahasiswa->ormawa->nama.' - '.$suratKegiatan->pengajuanSuratKegiatanMahasiswa->nama_kegiatan;
+        $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",3,3);
+
+        if (isset(Auth::user()->id) || isset(Auth::user()->nim)) {
+            if (Auth::user()->bagian == 'front office' || isset(Auth::user()->nim)) {
+                $jumlahCetak = ++$suratKegiatan->jumlah_cetak;
+                $suratKegiatan->update([
+                    'jumlah_cetak'=>$jumlahCetak
+                ]);
+            }
+        }   
+
         $pdf = PDF::loadview('surat.surat_kegiatan_mahasiswa',compact('suratKegiatan','qrCode'))->setPaper('a4', 'potrait');
         return $pdf->stream('surat-kegiatan-mahasiswa'.' - '.$suratKegiatan->created_at->format('dmY-Him').'.pdf');
-    }
-
-    private function generatePimpinan(){
-        $user = [];
-        $pimpinan = User::where('jabatan','dekan')->where('status_aktif','aktif')->first();
-        $user[$pimpinan->nip] = strtoupper($pimpinan->jabatan).' - '.$pimpinan->nama;
-        return $user;
     }
 
     private function uploadImage($imageFieldName, $request, $uploadPath){
@@ -297,25 +280,5 @@ class SuratKegiatanMahasiswaController extends Controller
             if($delete) return true;
             return false;
         }
-    }
-
-    private function generateKodeSurat(){
-        $kode = [];
-        $kodeSuratList = KodeSurat::where('jenis_surat','surat kegiatan mahasiswa')->where('status_aktif','aktif')->get();
-        foreach ($kodeSuratList as $kodeSurat) {
-            $kode[$kodeSurat->id] = $kodeSurat->kode_surat;
-        }
-        return $kode;
-    }
-
-    private function generateNomorSuratKegiatan($status){
-        $suratKegiatanList = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan_kegiatan')
-                            ->whereIn('status',$status)
-                            ->get();
-        $nomorSuratList = [];
-        foreach ($suratKegiatanList as $suratKegiatan) {
-            $nomorSuratList[$suratKegiatan->nomor_surat] = $suratKegiatan->nomor_surat.'/'.$suratKegiatan->kodeSurat->kode_surat.'/'.$suratKegiatan->created_at->year;
-        }
-        return $nomorSuratList;
     }
 }

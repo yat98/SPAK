@@ -65,4 +65,13 @@ class Operator extends Authenticable
     public function suratPengantarBeasiswa(){
         return $this->hasMany('App\SuratPengantarBeasiswa','id_operator');
     }
+
+    public function pengajuanSuratKegiatanMahasiswa(){
+        return $this->hasMany('App\SuratKegiatanMahasiswa','nim');
+    }
+
+    public function suratKegiatanMahasiswa(){
+        return $this->hasMany('App\SuratKegiatanMahasiswa','id_operator');
+    }
+
 }

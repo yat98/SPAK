@@ -39,15 +39,7 @@ Route::group(['prefix' => 'mahasiswa'],function(){
     Route::middleware(['auth:mahasiswa','mahasiswa'])->group(function(){
         // Dashboard
         Route::get('/','MahasiswaController@dashboard');
-        Route::group(['prefix' => 'pengajuan'],function(){
-            // Surat Kegiatan Mahasiswa
-            Route::get('surat-kegiatan-mahasiswa','PengajuanSuratKegiatanMahasiswaController@indexMahasiswa');
-            Route::get('surat-kegiatan-mahasiswa/create','PengajuanSuratKegiatanMahasiswaController@create');
-            Route::get('surat-kegiatan-mahasiswa/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@show');
-            Route::get('surat-kegiatan-mahasiswa/{pengajuan_kegiatan_mahasiswa}/progress','PengajuanSuratKegiatanMahasiswaController@progress');
-            Route::patch('surat-kegiatan-mahasiswa/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@update');
-            Route::get('surat-kegiatan-mahasiswa/{pengajuan_kegiatan_mahasiswa}/edit','PengajuanSuratKegiatanMahasiswaController@edit');
-            Route::post('surat-kegiatan-mahasiswa','PengajuanSuratKegiatanMahasiswaController@store');
+        Route::group(['prefix' => 'pengajuan'],function(){           
             // Surat Keterangan Lulus
             Route::get('surat-keterangan-lulus','PengajuanSuratKeteranganLulusController@indexMahasiswa');
             Route::get('surat-keterangan-lulus/{surat_keterangan_lulus}/cetak','SuratKeteranganLulusController@cetak');
@@ -167,10 +159,17 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         Route::get('pendaftaran-cuti','PendaftaranCutiController@indexMahasiswa');
         Route::get('pendaftaran-cuti/all','PendaftaranCutiController@getAllPengajuanPendaftaran');
         Route::resource('pendaftaran-cuti','PendaftaranCutiController')->except(['index','destroy']);
-
         // Surat Kegiatan Mahasiswa
-        Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}/cetak', 'SuratKegiatanMahasiswaController@cetakSuratKegiatan');
-        Route::resource('surat-kegiatan-mahasiswa','SuratKegiatanMahasiswaController')->only('show');
+        Route::get('surat-kegiatan-mahasiswa','PengajuanSuratKegiatanMahasiswaController@indexMahasiswa');
+        Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}','SuratKegiatanMahasiswaController@show');
+        Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}/cetak','SuratKegiatanMahasiswaController@cetak');
+        Route::group(['prefix'=>'surat-kegiatan-mahasiswa/pengajuan'],function(){
+            Route::get('/all','PengajuanSuratKegiatanMahasiswaController@getAllPengajuan');
+            Route::get('/create','PengajuanSuratKegiatanMahasiswaController@createPengajuan');
+            Route::get('/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@show');
+            Route::get('/{pengajuan_kegiatan_mahasiswa}/progress','SuratKegiatanMahasiswaController@progress');
+            Route::post('/','PengajuanSuratKegiatanMahasiswaController@storePengajuan');
+        });
         // Surat Keterangan Lulus
         Route::resource('surat-keterangan-lulus','SuratKeteranganLulusController')->only('show');
         // Surat Permohonan Pengambilan Material
@@ -334,6 +333,25 @@ Route::group(['prefix' => 'operator'],function(){
         Route::get('surat-pengantar-beasiswa/all','SuratPengantarBeasiswaController@getAllSurat');
         Route::get('surat-pengantar-beasiswa/{surat_pengantar_beasiswa}/cetak', 'SuratPengantarBeasiswaController@cetak');
         Route::resource('surat-pengantar-beasiswa','SuratPengantarBeasiswaController')->except(['index']);
+        // Surat Kegiatan Mahasiswa
+        Route::get('surat-kegiatan-mahasiswa','SuratKegiatanMahasiswaController@indexOperator');
+        Route::get('surat-kegiatan-mahasiswa/all','SuratKegiatanMahasiswaController@getAllSurat');
+        Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}','SuratKegiatanMahasiswaController@show');
+        Route::get('surat-kegiatan-mahasiswa/create/{pengajuan_kegiatan_mahasiswa}','SuratKegiatanMahasiswaController@createSurat');
+        Route::get('surat-kegiatan-mahasiswa/disposisi/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@disposisiPengajuan');
+        Route::post('surat-kegiatan-mahasiswa','SuratKegiatanMahasiswaController@storeSurat');
+        Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}/cetak','SuratKegiatanMahasiswaController@cetak');
+        Route::group(['prefix'=>'surat-kegiatan-mahasiswa/pengajuan'],function(){
+            Route::get('/create','PengajuanSuratKegiatanMahasiswaController@createPengajuan');
+            Route::get('/all','PengajuanSuratKegiatanMahasiswaController@getAllPengajuan');
+            Route::patch('/tolak-pengajuan/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@tolakPengajuan');
+            Route::get('/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@show');
+            Route::get('/{pengajuan_kegiatan_mahasiswa}/progress','SuratKegiatanMahasiswaController@progress');
+            Route::get('/{pengajuan_kegiatan_mahasiswa}/edit','PengajuanSuratKegiatanMahasiswaController@edit');
+            Route::patch('/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@update');
+            Route::post('/','PengajuanSuratKegiatanMahasiswaController@storePengajuan');
+            Route::delete('/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@destroy');
+        });
         // Detail Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Profil
@@ -358,9 +376,6 @@ Route::group(['prefix' => 'pegawai'],function(){
     Route::middleware(['auth:user','pegawai'])->group(function(){
         // Dashboard
         Route::get('/','UserController@indexPegawai');
-        // Tanda Tangan
-        Route::get('tanda-tangan','UserController@indexTandaTangan');
-        Route::post('tanda-tangan','UserController@updateTandaTangan');
         // Surat Masuk
         Route::get('surat-masuk/all','SuratMasukController@getAllSuratMasuk');
         Route::resource('surat-masuk','SuratMasukController');
@@ -428,14 +443,12 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::get('surat-pengantar-beasiswa/{surat_pengantar_beasiswa}/cetak', 'SuratPengantarBeasiswaController@cetak');
         Route::resource('surat-pengantar-beasiswa','SuratPengantarBeasiswaController');
         // Surat Kegiatan Mahasiswa
-        Route::get('surat-kegiatan-mahasiswa/pengajuan/{pengajuan_kegiatan_mahasiswa}/create','PengajuanSuratKegiatanMahasiswaController@createSurat');
-        Route::get('surat-kegiatan-mahasiswa/pengajuan/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@show');
-        Route::post('surat-kegiatan-mahasiswa/pengajuan','PengajuanSuratKegiatanMahasiswaController@storeSurat');
-        Route::patch('surat-kegiatan-mahasiswa/pengajuan/tolak/{pengajuan_kegiatan_mahasiswa}', 'PengajuanSuratKegiatanMahasiswaController@tolak');
-        Route::patch('surat-kegiatan-mahasiswa/pengajuan/terima/{pengajuan_kegiatan_mahasiswa}', 'PengajuanSuratKegiatanMahasiswaController@terima');
-        Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}/cetak', 'SuratKegiatanMahasiswaController@cetakSuratKegiatan');
-        Route::get('surat-kegiatan-mahasiswa/search', 'SuratKegiatanMahasiswaController@search');
-        Route::resource('surat-kegiatan-mahasiswa','SuratKegiatanMahasiswaController');
+        Route::get('surat-kegiatan-mahasiswa','SuratKegiatanMahasiswaController@index');
+        Route::get('surat-kegiatan-mahasiswa/all','SuratKegiatanMahasiswaController@getAllSurat');
+        Route::patch('surat-kegiatan-mahasiswa/verifikasi','PengajuanSuratKegiatanMahasiswaController@verification');
+        Route::get('surat-kegiatan-mahasiswa/verifikasi/all','PengajuanSuratKegiatanMahasiswaController@getAllPengajuan');
+        Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}','SuratKegiatanMahasiswaController@show');
+        Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}/cetak','SuratKegiatanMahasiswaController@cetak');
         // Detail Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Surat Keterangan Lulus
@@ -681,13 +694,19 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::patch('surat-pengantar-beasiswa/verifikasi','SuratPengantarBeasiswaController@verification');
         Route::resource('surat-pengantar-beasiswa','SuratPengantarBeasiswaController')->except('index');
         //  Surat Kegiatan Mahasiswa
-        Route::get('surat-kegiatan-mahasiswa', 'SuratKegiatanMahasiswaController@indexPimpinan');
-        Route::get('surat-kegiatan-mahasiswa/search', 'SuratKegiatanMahasiswaController@searchPimpinan');
-        Route::resource('surat-kegiatan-mahasiswa','SuratKegiatanMahasiswaController')->only('show');
+        Route::get('surat-kegiatan-mahasiswa','SuratKegiatanMahasiswaController@indexPimpinan');
+        Route::get('surat-kegiatan-mahasiswa/all','SuratKegiatanMahasiswaController@getAllSurat');
+        Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}/cetak','SuratKegiatanMahasiswaController@cetak');
+        Route::get('surat-kegiatan-mahasiswa/verifikasi/all','PengajuanSuratKegiatanMahasiswaController@getAllPengajuan');
+        Route::get('surat-kegiatan-mahasiswa/disposisi/all','PengajuanSuratKegiatanMahasiswaController@getAllDisposisiPimpinan');
+        Route::get('surat-kegiatan-mahasiswa/disposisi/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@createDisposisi');
+        Route::get('surat-kegiatan-mahasiswa/pengajuan/disposisi/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@showDisposisi');
+        Route::post('surat-kegiatan-mahasiswa/disposisi','PengajuanSuratKegiatanMahasiswaController@storeDisposisi');
+        Route::get('surat-kegiatan-mahasiswa/tanda-tangan/all','PengajuanSuratKegiatanMahasiswaController@getAllTandaTangan');
+        Route::post('surat-kegiatan-mahasiswa/tanda-tangan','SuratKegiatanMahasiswaController@tandaTangan');
+        Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}','SuratKegiatanMahasiswaController@show');
         Route::get('surat-kegiatan-mahasiswa/pengajuan/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@show');
-        Route::get('surat-kegiatan-mahasiswa/{pengajuan_kegiatan_mahasiswa}/disposisi','PengajuanSuratKegiatanMahasiswaController@detailDisposisi');
-        Route::post('surat-kegiatan-mahasiswa/pengajuan/tanda-tangan','SuratKegiatanMahasiswaController@tandaTanganKegiatan');
-        Route::post('surat-kegiatan-mahasiswa/disposisi','PengajuanSuratKegiatanMahasiswaController@disposisi');
+        Route::patch('surat-kegiatan-mahasiswa/verifikasi','PengajuanSuratKegiatanMahasiswaController@verification');
         // Mahasiswa
         Route::get('mahasiswa/search', 'MahasiswaController@search');
         Route::get('mahasiswa', 'MahasiswaController@indexPimpinan');

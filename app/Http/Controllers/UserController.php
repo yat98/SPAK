@@ -186,7 +186,7 @@ class UserController extends Controller
                                         ->get();
         $suratCutiList = SuratPengantarCuti::orderByDesc('nomor_surat')->get();
         $suratBeasiswaList = SuratPengantarBeasiswa::orderBy('status')->get();
-        $suratKegiatanList =  SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan_kegiatan')
+        $suratKegiatanList =  SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan')
                                 ->where('status','selesai')
                                 ->get();
         $waktuCutiList = WaktuCuti::all();
@@ -294,7 +294,7 @@ class UserController extends Controller
                                         ->get();
         $suratCutiList = SuratPengantarCuti::orderByDesc('nomor_surat')->get();
         $suratBeasiswaList = SuratPengantarBeasiswa::orderBy('status')->where('status','selesai')->get();
-        $suratKegiatanList =  SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan_kegiatan')
+        $suratKegiatanList =  SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan')
                                 ->where('status','selesai')
                                 ->get();
         $suratLulusList =  SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','pengajuan_surat_keterangan_lulus.id','=','surat_keterangan_lulus.id_pengajuan_surat_lulus')
@@ -387,7 +387,7 @@ class UserController extends Controller
                                             ->whereMonth('created_at',$bln)
                                             ->where('status','selesai')
                                             ->count(),
-            'Surat Kegiatan Mahasiswa'=> SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan_kegiatan')
+            'Surat Kegiatan Mahasiswa'=> SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan')
                                             ->where('status','selesai')
                                             ->whereYear('surat_kegiatan_mahasiswa.created_at',$thn)
                                             ->whereMonth('surat_kegiatan_mahasiswa.created_at',$bln)

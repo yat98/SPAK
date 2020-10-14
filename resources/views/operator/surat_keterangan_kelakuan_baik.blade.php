@@ -129,11 +129,7 @@
                                             {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            @if(Auth::user()->bagian == 'front office')
                                             {{ (Session::has('search')) ? Session::get('search') : ' Data surat keterangan kelakuan baik belum ada.' }}
-                                            @else
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Data surat keterangan kelakuan baik belum ada.' }}
-                                            @endif
                                         </p>
                                     </div>
                                 </div>

@@ -148,4 +148,28 @@ class Controller extends BaseController
         }
         return $user;
     }
+
+    protected function generateUserDisposisi(){
+        $user = [];
+        $pimpinan =  User::where('status_aktif','aktif');
+
+        switch(Auth::user()->jabatan){
+            case 'dekan':
+                $pimpinan->whereIn('jabatan',['wd1','wd2','wd3']);
+                break;
+            case 'wd1':
+                $pimpinan->whereIn('jabatan',['wd2','wd3']);
+                break;
+            case 'wd2':
+                $pimpinan->where('jabatan','wd3');
+                break;
+        }
+
+        $pimpinan = $pimpinan->get();
+        
+        foreach ($pimpinan as $p) {
+            $user[$p->nip] = strtoupper($p->jabatan).' - '.$p->nama;
+        }
+        return $user;
+    }
 }

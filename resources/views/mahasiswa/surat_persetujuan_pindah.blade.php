@@ -164,7 +164,7 @@
                             "render": function ( data, type, row, meta ) {
                                 let action = `<a href="${link+'/'+row.id}/progress" class="dropdown-item btn-surat-progress" data-toggle="modal" data-target="#exampleModal">Progres Surat</a>`;
 
-                                if(row.status == 'Diajukan'){
+                                if(row.status == 'Diajukan' || row.status == 'Ditolak'){
                                     action += `<a href="${link+'/'+row.id}" class="dropdown-item pengajuan-surat-pindah-detail" data-toggle="modal" data-target="#suratPindah">Detail</a>`;
                                 }else{
                                     action += `<a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-pindah-detail" data-toggle="modal" data-target="#suratPindah">

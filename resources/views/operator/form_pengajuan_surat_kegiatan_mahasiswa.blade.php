@@ -5,13 +5,13 @@
             <br>
             @if ($errors->any())
             @if ($errors->has('id_ormawa'))
-            {{ Form::select('id_ormawa',$ormawa,null,['class'=>'form-control form-control-lg is-invalid','readonly'=>'readonly']) }}
+            {{ Form::select('id_ormawa',$ormawa,null,['class'=>'form-control form-control-lg is-invalid']) }}
             <div class="text-danger-red mt-1"><small>{{ $errors->first('id_ormawa') }}</small></div>
             @else
-            {{ Form::select('id_ormawa',$ormawa,null,['class'=>'form-control form-control-lg is-valid','readonly'=>'readonly']) }}
+            {{ Form::select('id_ormawa',$ormawa,null,['class'=>'form-control form-control-lg is-valid']) }}
             @endif
             @else
-            {{ Form::select('id_ormawa',$ormawa,null,['class'=>'form-control form-control-lg','readonly'=>'readonly']) }}
+            {{ Form::select('id_ormawa',$ormawa,null,['class'=>'form-control form-control-lg']) }}
             @endif
         </div> 
         <div class="form-group">
@@ -22,7 +22,7 @@
             {{ Form::text('nomor_surat_permohonan_kegiatan',null,['class'=>'form-control form-control-lg is-invalid','id'=>'nomor_surat_permohonan_kegiatan']) }}
             <div class="text-danger-red mt-1"><small>{{ $errors->first('nomor_surat_permohonan_kegiatan') }}</small></div>
             @else
-            {{ Form::text('nomor_surat_permohonan_kegiatan',null,['class'=>'form-control form-control-lg','id'=>'nomor_surat_permohonan_kegiatan']) }}
+            {{ Form::text('nomor_surat_permohonan_kegiatan',null,['class'=>'form-control form-control-lg is-valid','id'=>'nomor_surat_permohonan_kegiatan']) }}
             @endif
             @else
             {{ Form::text('nomor_surat_permohonan_kegiatan',null,['class'=>'form-control form-control-lg','id'=>'nomor_surat_permohonan_kegiatan']) }}
@@ -36,7 +36,7 @@
             {{ Form::text('nama_kegiatan',null,['class'=>'form-control form-control-lg is-invalid','id'=>'nama_kegiatan']) }}
             <div class="text-danger-red mt-1"><small>{{ $errors->first('nama_kegiatan') }}</small></div>
             @else
-            {{ Form::text('nama_kegiatan',null,['class'=>'form-control form-control-lg','id'=>'nama_kegiatan']) }}
+            {{ Form::text('nama_kegiatan',null,['class'=>'form-control form-control-lg is-valid','id'=>'nama_kegiatan']) }}
             @endif
             @else
             {{ Form::text('nama_kegiatan',null,['class'=>'form-control form-control-lg','id'=>'nama_kegiatan']) }}
@@ -49,7 +49,7 @@
             {{ Form::textarea('lampiran_panitia',null,['class'=>'form-control form-control-lg is-invalid','id'=>'lampiran_panitia','rows'=>'100']) }}
             <div class="invalid-feedback">{{ $errors->first('lampiran_panitia') }}</div>
             @else
-            {{ Form::textarea('lampiran_panitia',null,['class'=>'form-control form-control-lg ','id'=>'lampiran_panitia','rows'=>'100']) }}
+            {{ Form::textarea('lampiran_panitia',null,['class'=>'form-control form-control-lg is-valid','id'=>'lampiran_panitia','rows'=>'100']) }}
             @endif
             @else
             {{ Form::textarea('lampiran_panitia',null,['class'=>'form-control form-control-lg','id'=>'lampiran_panitia','rows'=>'100']) }}
@@ -91,7 +91,7 @@
         </div>  
         <div class="form-group">
             @if(isset($pengajuanKegiatan))
-                 <div class="form-row">
+                <div class="form-row">
                     <div class="col-md-8 col-12">
                         {{ Form::label('file_proposal_kegiatan','File Proposal Kegiatan *(Ukuran File < 2MB, File PDF)',['class'=>'mt-2']) }}
                     </div>

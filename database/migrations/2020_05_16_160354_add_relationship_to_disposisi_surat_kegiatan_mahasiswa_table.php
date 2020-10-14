@@ -27,6 +27,12 @@ class AddRelationshipToDisposisiSuratKegiatanMahasiswaTable extends Migration
                   ->on('user')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
+
+            $table->foreign('nip_disposisi')
+                  ->references('nip')
+                  ->on('user')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
         });
     }
 
@@ -40,6 +46,7 @@ class AddRelationshipToDisposisiSuratKegiatanMahasiswaTable extends Migration
         Schema::table('disposisi_surat_kegiatan_mahasiswa', function (Blueprint $table) {
             $table->dropForeign(['id_pengajuan']);
             $table->dropForeign(['nip']);
+            $table->dropForeign(['nip_disposisi']);
         });
     }
 }

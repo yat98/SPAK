@@ -133,14 +133,7 @@ class SuratKeteranganAktifKuliahController extends Controller
             $pengajuanSuratKeterangan->update([
                 'status'=>'verifikasi kasubag'
             ]);
-
-            NotifikasiMahasiswa::create([
-                'nim'=>$pengajuanSuratKeterangan->nim,
-                'judul_notifikasi'=>'Surat Keterangan Aktif Kuliah',
-                'isi_notifikasi'=>'Surat keterangan aktif kuliah telah selesai di buat.',
-                'link_notifikasi'=>url('mahasiswa/surat-keterangan-aktif-kuliah')
-            ]);
-
+            
             NotifikasiUser::create([
                 'nip'=>$user->nip,
                 'judul_notifikasi'=>'Surat Keterangan Aktif Kuliah',
@@ -166,7 +159,7 @@ class SuratKeteranganAktifKuliahController extends Controller
         $nomorSuratBaru = $this->generateNomorSuratBaru();
         $userList =$this->generateTandaTanganKemahasiswaan();
         $kodeSurat = KodeSurat::pluck('kode_surat','id');
-        return view('operator.tambah_pengajuan_surat_keterangan',compact('pengajuanSuratKeterangan','jenisSurat','nomorSuratBaru','userList','kodeSurat'));
+        return view('operator.tambah_surat_keterangan',compact('pengajuanSuratKeterangan','jenisSurat','nomorSuratBaru','userList','kodeSurat'));
     }
 
     public function tolakPengajuan(Request $request, PengajuanSuratKeterangan $pengajuanSuratKeterangan){

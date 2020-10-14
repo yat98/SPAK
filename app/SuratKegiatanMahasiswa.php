@@ -8,14 +8,14 @@ class SuratKegiatanMahasiswa extends Model
 {
     protected $table = 'surat_kegiatan_mahasiswa';
 
-    protected $primaryKey = 'id_pengajuan_kegiatan';
+    protected $primaryKey = 'id_pengajuan';
 
     protected $fillable = [
-        'id_pengajuan_kegiatan',
+        'id_pengajuan',
         'id_kode_surat',
+        'id_operator',
         'nip',
         'nomor_surat',
-        'jumlah_cetak',
         'menimbang',
         'mengingat',
         'memperhatikan',
@@ -24,6 +24,7 @@ class SuratKegiatanMahasiswa extends Model
         'kedua',
         'ketiga',
         'keempat',
+        'jumlah_cetak',
     ];
 
     public function kodeSurat(){
@@ -31,10 +32,14 @@ class SuratKegiatanMahasiswa extends Model
     }
 
     public function pengajuanSuratKegiatanMahasiswa(){
-        return $this->belongsTo('App\PengajuanSuratKegiatanMahasiswa','id_pengajuan_kegiatan');
+        return $this->belongsTo('App\PengajuanSuratKegiatanMahasiswa','id_pengajuan');
     }
 
     public function user(){
         return $this->belongsTo('App\User','nip');
+    }
+
+    public function operator(){
+        return $this->belongsTo('App\Operator','id_operator');
     }
 }

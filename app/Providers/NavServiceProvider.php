@@ -240,7 +240,13 @@ class NavServiceProvider extends ServiceProvider
             } else if ($segment == 'surat-pengantar-beasiswa') {
                 $show = true;
                 $halaman = 'surat-pengantar-beasiswa';
+            } else if ($segment == 'surat-kegiatan-mahasiswa') {
+                $show = true;
+                $halaman = 'surat-kegiatan-mahasiswa';
             }
+        }
+        if ($segment == 'notifikasi') {
+            $show = false;
         }
         view()->share(['halaman'=>$halaman,'posisi'=>$posisi,'show'=>$show]);
     }

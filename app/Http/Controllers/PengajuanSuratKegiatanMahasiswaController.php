@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use Session;
 use Storage;
 use App\User;
+use App\Ormawa;
+use DataTables;
+use App\Operator;
 use App\KodeSurat;
 use App\Mahasiswa;
 use Carbon\Carbon;
 use App\NotifikasiUser;
+use App\NotifikasiOperator;
 use App\NotifikasiMahasiswa;
 use Illuminate\Http\Request;
 use App\SuratKegiatanMahasiswa;
@@ -24,29 +28,220 @@ class PengajuanSuratKegiatanMahasiswaController extends Controller
         $perPage = $this->perPage;
         $mahasiswa = Mahasiswa::where('nim',Auth::user()->nim)->first();
 
-        $pengajuanKegiatanList = PengajuanSuratKegiatanMahasiswa::join('mahasiswa','mahasiswa.nim','=','pengajuan_surat_kegiatan_mahasiswa.nim')
-                                    ->join('pimpinan_ormawa','pimpinan_ormawa.nim','=','mahasiswa.nim')
-                                    ->join('ormawa','pimpinan_ormawa.id_ormawa','=','ormawa.id')
-                                    ->select('*','pengajuan_surat_kegiatan_mahasiswa.id AS id') 
-                                    ->where('ormawa.nama',$mahasiswa->pimpinanOrmawa->ormawa->nama)
-                                    ->orderByDesc('pengajuan_surat_kegiatan_mahasiswa.created_at')
-                                    ->paginate($perPage);
-        
-        $countAllPengajuanKegiatan = $pengajuanKegiatanList->count();
-        $countPengajuanSurat = $pengajuanKegiatanList->count();
-        return view($this->segmentUser.'.pengajuan_surat_kegiatan_mahasiswa',compact('countAllPengajuanKegiatan','perPage','pengajuanKegiatanList','countPengajuanSurat'));
+        $countAllPengajuan = PengajuanSuratKegiatanMahasiswa::join('ormawa','pengajuan_surat_kegiatan_mahasiswa.id_ormawa','=','ormawa.id')
+                                ->join('pimpinan_ormawa','pimpinan_ormawa.id_ormawa','=','ormawa.id')
+                                ->where('pimpinan_ormawa.nim',Auth::user()->nim)
+                                ->count();
+
+        return view($this->segmentUser.'.surat_kegiatan_mahasiswa',compact('countAllPengajuan','perPage'));
     }
 
-    public function create(){
-        return view($this->segmentUser.'.tambah_pengajuan_surat_kegiatan_mahasiswa');
+    public function createPengajuan(){
+        $mahasiswa = Mahasiswa::where('nim',Auth::user()->nim)->first();
+        if(Auth::user()->nim){ 
+            $ormawa[$mahasiswa->pimpinanOrmawa->ormawa->id] = ucwords($mahasiswa->pimpinanOrmawa->ormawa->nama);
+        }else{
+            $ormawa = Ormawa::pluck('nama','id');
+        }
+        return view($this->segmentUser.'.tambah_pengajuan_surat_kegiatan_mahasiswa',compact('ormawa'));
+    }
+
+    public function getAllPengajuan(){
+        if(isset(Auth::user()->nim)){
+            return DataTables::of(PengajuanSuratKegiatanMahasiswa::join('ormawa','pengajuan_surat_kegiatan_mahasiswa.id_ormawa','=','ormawa.id')
+                                    ->join('pimpinan_ormawa','pimpinan_ormawa.id_ormawa','=','ormawa.id')
+                                    ->where('pimpinan_ormawa.nim',Auth::user()->nim)
+                                    ->select(['pengajuan_surat_kegiatan_mahasiswa.*','pimpinan_ormawa.nim','ormawa.nama']) 
+                                    ->with(['mahasiswa','ormawa','operator']))
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->editColumn("status", function ($data) {
+                            switch($data->status){
+                                case 'disposisi wd1':
+                                    return 'Disposisi WD1';
+                                    break;
+                                case 'disposisi wd2':
+                                    return 'Disposisi WD2';
+                                    break;
+                                case 'disposisi wd3':
+                                    return 'Disposisi WD3';
+                                    break;
+                                default:
+                                    return ucwords($data->status);
+                                    break;
+                            }
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();                            
+                        })
+                        ->make(true);
+        } else if(isset(Auth::user()->id)){
+            $pengajuanSurat;
+            
+            if(Auth::user()->bagian == 'front office'){
+                $pengajuanSurat = PengajuanSuratKegiatanMahasiswa::whereIn('pengajuan_surat_kegiatan_mahasiswa.status',['diajukan','ditolak','disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi selesai'])
+                                                 ->where('pengajuan_surat_kegiatan_mahasiswa.id_operator',Auth::user()->id);
+            }elseif(Auth::user()->bagian == 'subbagian kemahasiswaan'){
+                $pengajuanSurat = PengajuanSuratKegiatanMahasiswa::whereIn('pengajuan_surat_kegiatan_mahasiswa.status',['diajukan','ditolak','disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi selesai']);
+            }
+
+            $pengajuanSurat = $pengajuanSurat->join('ormawa','pengajuan_surat_kegiatan_mahasiswa.id_ormawa','=','ormawa.id')
+                                             ->select(['pengajuan_surat_kegiatan_mahasiswa.*','ormawa.nama']) 
+                                             ->with(['mahasiswa','ormawa','operator']);
+
+            return DataTables::of($pengajuanSurat)
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();                            
+                        })
+                        ->make(true);
+        } else if(isset(Auth::user()->nip)){
+            $pengajuanSurat = PengajuanSuratKegiatanMahasiswa::join('ormawa','pengajuan_surat_kegiatan_mahasiswa.id_ormawa','=','ormawa.id')
+                                ->join('surat_kegiatan_mahasiswa','surat_kegiatan_mahasiswa.id_pengajuan','=','pengajuan_surat_kegiatan_mahasiswa.id')
+                                ->select(['pengajuan_surat_kegiatan_mahasiswa.*','ormawa.nama']) 
+                                ->with(['mahasiswa','ormawa','operator','suratKegiatanMahasiswa.kodeSurat']);
+            
+            if (Auth::user()->jabatan == 'kasubag kemahasiswaan') {
+                $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_kegiatan_mahasiswa.status','verifikasi kasubag');
+            }else if(Auth::user()->jabatan == 'kabag tata usaha'){
+                $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_kegiatan_mahasiswa.status','verifikasi kabag');
+            }
+
+            return DataTables::of($pengajuanSurat)
+                            ->addColumn('aksi', function ($data) {
+                                return $data->id;
+                            })
+                            ->addColumn("waktu_pengajuan", function ($data) {
+                                return $data->created_at->diffForHumans();                            
+                            })
+                            ->editColumn("status", function ($data) {
+                                switch($data->status){
+                                    case 'disposisi wd1':
+                                        return 'Disposisi WD1';
+                                        break;
+                                    case 'disposisi wd2':
+                                        return 'Disposisi WD2';
+                                        break;
+                                    case 'disposisi wd3':
+                                        return 'Disposisi WD3';
+                                        break;
+                                    default:
+                                        return ucwords($data->status);
+                                        break;
+                                }
+                            })
+                            ->make(true);
+        }
+    }
+
+    public function getAllDisposisiPimpinan(){
+        $pengajuanSurat = PengajuanSuratKegiatanMahasiswa::join('ormawa','pengajuan_surat_kegiatan_mahasiswa.id_ormawa','=','ormawa.id')
+                                ->whereIn('pengajuan_surat_kegiatan_mahasiswa.status',['disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi selesai','verifikasi kasubag','verifikasi kabag'])
+                                ->select(['pengajuan_surat_kegiatan_mahasiswa.*','ormawa.nama']) 
+                                ->with(['mahasiswa','ormawa','operator']);
+
+        return DataTables::of($pengajuanSurat)
+                                ->addColumn('aksi', function ($data) {
+                                    return $data->id;
+                                })
+                                ->addColumn("waktu_pengajuan", function ($data) {
+                                    return $data->created_at->diffForHumans();                            
+                                })
+                                ->editColumn("status", function ($data) {
+                                    switch($data->status){
+                                        case 'disposisi wd1':
+                                            return 'Disposisi WD1';
+                                            break;
+                                        case 'disposisi wd2':
+                                            return 'Disposisi WD2';
+                                            break;
+                                        case 'disposisi wd3':
+                                            return 'Disposisi WD3';
+                                            break;
+                                        default:
+                                            return ucwords($data->status);
+                                            break;
+                                    }
+                                })
+                                ->make(true);
+    }
+
+    public function getAllTandaTangan(){
+        $suratKegiatan =  PengajuanSuratKegiatanMahasiswa::join('ormawa','pengajuan_surat_kegiatan_mahasiswa.id_ormawa','=','ormawa.id')
+                                                  ->join('surat_kegiatan_mahasiswa','surat_kegiatan_mahasiswa.id_pengajuan','=','pengajuan_surat_kegiatan_mahasiswa.id')
+                                                  ->where('pengajuan_surat_kegiatan_mahasiswa.status','menunggu tanda tangan')
+                                                  ->where('surat_kegiatan_mahasiswa.nip',Auth::user()->nip)
+                                                  ->select(['pengajuan_surat_kegiatan_mahasiswa.*','ormawa.nama']) 
+                                                  ->with(['mahasiswa','ormawa','operator','suratKegiatanMahasiswa.kodeSurat']);
+                                                  
+        return DataTables::of($suratKegiatan)
+                    ->addColumn('aksi', function ($data) {
+                        return $data->id;
+                    })
+                    ->editColumn("status", function ($data) {
+                        return ucwords($data->status);
+                    })
+                    ->addColumn("waktu_pengajuan", function ($data) {
+                        return $data->created_at->diffForHumans();                            
+                    })
+                    ->make(true);                        
+    }
+
+    public function verification(Request $request){
+        $status='verifikasi kabag';
+        $suratKegiatan = SuratKegiatanMahasiswa::findOrFail($request->id);
+        $user = $suratKegiatan->user;
+
+        $isiNotifikasi = 'Verifikasi surat kegiatan mahasiswa';
+
+        if(Auth::user()->jabatan == 'kabag tata usaha' || $suratKegiatan->user->jabatan == 'kabag tata usaha'){
+            $status='menunggu tanda tangan';
+            $isiNotifikasi = 'Tanda tangan surat kegiatan mahasiswa';
+        }
+
+        DB::beginTransaction();
+        try{
+            $suratKegiatan->pengajuanSuratKegiatanMahasiswa->update([
+                'status'=>$status,
+            ]);
+            
+            if($status == 'verifikasi kabag'){
+                $user = User::where('jabatan','kabag tata usaha')->where('status_aktif','aktif')->first();
+            }
+
+            NotifikasiUser::create([
+                'nip'=>$user->nip,
+                'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
+                'isi_notifikasi'=>$isiNotifikasi,
+                'link_notifikasi'=>url('pimpinan/surat-kegiatan-mahasiswa')
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Pengajuan Gagal','Surat kegiatan mahasiswa gagal diverifikasi.');
+        }
+        DB::commit();
+        $this->setFlashData('success','Berhasil ','Surat kegiatan mahasiswa berhasil diverifikasi');
+        return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
     }
 
     public function show(PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
-        return view('mahasiswa.detail_pengajuan_surat_kegiatan_mahasiswa',compact('pengajuanKegiatan'));
+        if(isset(Auth::user()->nip)) return view('user.'.$this->segmentUser.'.detail_pengajuan_surat_kegiatan_mahasiswa',compact('pengajuanKegiatan'));
+        return view($this->segmentUser.'.detail_pengajuan_surat_kegiatan_mahasiswa',compact('pengajuanKegiatan'));
     }
 
     public function edit(PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
-        return view($this->segmentUser.'.edit_pengajuan_surat_kegiatan_mahasiswa',compact('pengajuanKegiatan'));
+        if(Auth::user()->nim){ 
+            $ormawa[$mahasiswa->pimpinanOrmawa->ormawa->id] = ucwords($mahasiswa->pimpinanOrmawa->ormawa->nama);
+        }else{
+            $ormawa = Ormawa::pluck('nama','id');
+        }
+        return view($this->segmentUser.'.edit_pengajuan_surat_kegiatan_mahasiswa',compact('pengajuanKegiatan','ormawa'));
     }
 
     public function update(PengajuanSuratKegiatanMahasiswaRequest $request, PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
@@ -54,91 +249,163 @@ class PengajuanSuratKegiatanMahasiswaController extends Controller
         if ($request->has('file_surat_permohonan_kegiatan')) {
             $imageFieldName = 'file_surat_permohonan_kegiatan';
             $uploadPath = 'upload_surat_permohonan_kegiatan';
-            $this->deleteImage($imageFieldName,$pengajuanKegiatan->file_surat_permohonan_kegiatan);
-            $input[$imageFieldName] = $this->uploadImage($imageFieldName, $request, $uploadPath);
+            $this->delete($imageFieldName,$pengajuanKegiatan->file_surat_permohonan_kegiatan);
+            $input[$imageFieldName] = $this->upload($imageFieldName, $request, $uploadPath);
+        }
+        if ($request->has('file_proposal_kegiatan')) {
+            $imageFieldName = 'file_proposal_kegiatan';
+            $uploadPath = 'upload_proposal_kegiatan';
+            $this->delete($imageFieldName,$pengajuanKegiatan->file_proposal_kegiatan);
+            $input[$imageFieldName] = $this->upload($imageFieldName, $request, $uploadPath);
         }
         $pengajuanKegiatan->update($input);
         $this->setFlashData('success','Berhasil','Pengajuan surat kegiatan mahasiswa berhasil diubah');
-        return redirect($this->segmentUser.'/pengajuan/surat-kegiatan-mahasiswa');
+        return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
     }
 
-    public function progress(PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
-        $pengajuan = collect($pengajuanKegiatan->load('disposisiUser'));
-        $pengajuan->put('created_at',$pengajuanKegiatan->created_at->isoFormat('D MMMM Y H:m:s'));
-        $pengajuan->put('updated_at',$pengajuanKegiatan->updated_at->isoFormat('D MMMM Y H:m:s'));
-        foreach ($pengajuanKegiatan->disposisiUser as $disposisi) {
-            if($disposisi->jabatan == 'dekan'){
-                $pengajuan->put('tanggal_disposisi_dekan',$disposisi->pivot->created_at->isoFormat('D MMMM Y H:m:s'));
-            }
-            if($disposisi->jabatan == 'wd1'){
-                $pengajuan->put('tanggal_disposisi_wakil_dekan_1',$disposisi->pivot->created_at->isoFormat('D MMMM Y H:m:s'));
-            }
-            if($disposisi->jabatan == 'wd2'){
-                $pengajuan->put('tanggal_disposisi_wakil_dekan_2',$disposisi->pivot->created_at->isoFormat('D MMMM Y H:m:s'));
-            }
-            if($disposisi->jabatan == 'wd3'){
-                $pengajuan->put('tanggal_disposisi_wakil_dekan_3',$disposisi->pivot->created_at->isoFormat('D MMMM Y H:m:s'));
-            }
-        }
-        if($pengajuanKegiatan->status == 'menunggu tanda tangan'){
-            $pengajuan->put('tanggal_tanda_tangan',$pengajuanKegiatan->suratKegiatanMahasiswa->created_at->isoFormat('D MMMM Y H:m:s'));
-        }else if($pengajuanKegiatan->status == 'selesai'){
-            $pengajuan->put('tanggal_tanda_tangan',$pengajuanKegiatan->suratKegiatanMahasiswa->created_at->isoFormat('D MMMM Y H:m:s'));
-            $pengajuan->put('tanggal_selesai',$pengajuanKegiatan->updated_at->isoFormat('D MMMM Y H:m:s'));
-        }
-        if($pengajuanKegiatan->tanggal_diterima != null) $pengajuan->put('tanggal_diterima',$pengajuanKegiatan->tanggal_diterima->isoFormat('D MMMM Y H:m:s'));
-        if($pengajuanKegiatan->tanggal_menunggu_tanda_tangan != null)  $pengajuan->put('tanggal_menunggu_tanda_tangan',$pengajuanKegiatan->tanggal_diterima->isoFormat('D MMMM Y H:m:s'));
-        return json_encode($pengajuan->toArray(),JSON_HEX_QUOT | JSON_HEX_TAG);
-    }
-
-    public function detailDisposisi(PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
-        $disposisi = collect($pengajuanKegiatan->disposisiUser);
-        return $disposisi->toJson();
-    }
-
-    public function store(PengajuanSuratKegiatanMahasiswaRequest $request){
+    public function storePengajuan(PengajuanSuratKegiatanMahasiswaRequest $request){
         $input = $request->all();
-        $mahasiswa = Mahasiswa::findOrFail(Session::get('nim'));
-        $user = User::where('jabatan','kasubag kemahasiswaan')->where('status_aktif','aktif')->first();
-        $input['nim'] = $mahasiswa->nim;
-        $input['nip'] = $user->nip;
+        $mahasiswa = Mahasiswa::where('nim',Auth::user()->nim)->first();
+        $operator = Operator::where('bagian','subbagian kemahasiswaan')->where('status_aktif','aktif')->first();
+
+        if(isset(Auth::user()->nim)){
+            $input['nim'] = Auth::user()->nim;
+            $mahasiswa = Mahasiswa::where('nim',Auth::user()->nim)->first();
+            $isiNotifikasi = 'Mahasiswa dengan nama '.$mahasiswa->nama.' membuat pengajuan surat kegiatan mahasiswa.';
+        } else if(isset(Auth::user()->id)){
+            $input['id_operator'] = Auth::user()->id;
+            $isiNotifikasi = 'Front office membuat pengajuan surat kegiatan mahasiswa dengan nama kegiatan '.$request->nama_kegiatan;
+        }
+
         DB::beginTransaction();
         try {
             if ($request->has('file_surat_permohonan_kegiatan')) {
                 $imageFieldName = 'file_surat_permohonan_kegiatan';
                 $uploadPath = 'upload_surat_permohonan_kegiatan';
-                $input[$imageFieldName] = $this->uploadImage($imageFieldName, $request, $uploadPath);
+                $input[$imageFieldName] = $this->upload($imageFieldName, $request, $uploadPath);
+            }
+            if ($request->has('file_proposal_kegiatan')) {
+                $imageFieldName = 'file_proposal_kegiatan';
+                $uploadPath = 'upload_proposal_kegiatan';
+                $input[$imageFieldName] = $this->upload($imageFieldName, $request, $uploadPath);
             }
             PengajuanSuratKegiatanMahasiswa::create($input);
-            NotifikasiUser::create([
-                'nip'=>$user->nip,
-                'judul_notifikasi'=>'Pengajuan Surat Kegiatan Mahasiswa',
-                'isi_notifikasi'=>'Mahasiswa dengan nama '.$mahasiswa->nama.' membuat pengajuan surat kegiatan mahasiswa.',
-                'link_notifikasi'=>url('pegawai/surat-kegiatan-mahasiswa')
+            NotifikasiOperator::create([
+                'id_operator'=>$operator->id,
+                'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
+                'isi_notifikasi'=>$isiNotifikasi,
+                'link_notifikasi'=>url('operator/surat-kegiatan-mahasiswa')
             ]);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan kegiatan mahasiswa gagal ditambahkan.');
+            $this->setFlashData('error','Pengajuan Gagal','Pengajuan kegiatan mahasiswa gagal ditambahkan.');
         }
         DB::commit();
         $this->setFlashData('success','Berhasil','Pengajuan surat kegiatan mahasiswa berhasil ditambahkan');
-        return redirect($this->segmentUser.'/pengajuan/surat-kegiatan-mahasiswa');
+        return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
     }
 
-    public function terima(PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
+    public function destroy(PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
+        $this->delete('file_surat_permohonan_kegiatan',$pengajuanKegiatan->file_surat_permohonan_kegiatan);
+        $this->delete('file_proposal_kegiatan',$pengajuanKegiatan->file_proposal_kegiatan);
+        $pengajuanKegiatan->delete();
+        $this->setFlashData('success','Berhasil','Pengajuan surat kegiatan mahasiswa berhasil dihapus');
+        return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
+    }
+
+    public function createDisposisi(PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
+        $userDisposisi = $this->generateUserDisposisi();
+        return view('user.'.$this->segmentUser.'.tambah_disposisi_surat_kegiatan_mahasiswa',compact('userDisposisi','pengajuanKegiatan'));
+    }
+
+    public function storeDisposisi(Request $request){
+        if(Auth::user()->jabatan != 'wd3'){
+            $this->validate($request,[
+                'id'=>'required|numeric',
+                'nip_disposisi'=>'required',
+                'catatan'=>'required|string'
+            ]);
+        }else{
+            $this->validate($request,[
+                'id'=>'required|numeric',
+                'catatan'=>'required|string'
+            ]);
+        }
+
+        $input = $request->all();
+        $pengajuanKegiatan = PengajuanSuratKegiatanMahasiswa::findOrfail($request->id);
+        $status = 'disposisi selesai';
+        $userDisposisi = User::where('nip',$request->nip_disposisi)->first();
+        $input['nip'] = Auth::user()->nip;
+        $input['id_pengajuan'] = $pengajuanKegiatan->id;
+
+        DB::beginTransaction();
+        try {
+            if($userDisposisi != null){
+                switch($userDisposisi->jabatan){
+                    case 'wd1':
+                        $status = 'disposisi wd1';
+                        break;
+                    case 'wd2':
+                        $status = 'disposisi wd2';
+                        break;
+                    case 'wd3':
+                        $status = 'disposisi wd3';
+                        break;
+                }
+            }
+
+            if (Auth::user()->jabatan != 'wd3') {
+                NotifikasiUser::create([
+                    'nip'=>$userDisposisi->nip,
+                    'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
+                    'isi_notifikasi'=>'Disposisi surat kegiatan mahasiswa.',
+                    'link_notifikasi'=>url('pimpinan/surat-kegiatan-mahasiswa')
+                ]);
+            }else{
+                $operator = Operator::where('bagian','subbagian kemahasiswaan')->where('status_aktif','aktif')->first();
+                NotifikasiOperator::create([
+                    'id_operator'=>$operator->id,
+                    'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
+                    'isi_notifikasi'=>'Disposisi surat kegiatan mahasiswa telah selesai di disposisi.',
+                    'link_notifikasi'=>url('operator/surat-kegiatan-mahasiswa')
+                ]);
+            }
+
+            DisposisiSuratKegiatanMahasiswa::create($input);
+            $pengajuanKegiatan->update([
+                'status'=>$status,
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Disposisi Gagal','Disposisi surat kegiatan mahasiswa gagal.');
+        }
+
+        DB::commit();
+        $this->setFlashData('success','Berhasil','Pengajuan surat kegiatan mahasiswa telah di disposisi');
+        return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
+    }
+
+    public function showDisposisi(PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
+        $disposisiUser = DisposisiSuratKegiatanMahasiswa::where('id_pengajuan',$pengajuanKegiatan->id)
+                                                          ->get();
+        $data = collect($disposisiUser->load('user','userDisposisi'));
+        $dibuat = [];
+        foreach($disposisiUser as $disposisi){
+            $dibuat[] = $disposisi->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+        }
+        $data->put('dibuat',$dibuat);
+        return json_encode($data->toArray(),JSON_HEX_QUOT | JSON_HEX_TAG);
+    }
+
+    public function disposisiPengajuan(PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
         $user = User::where('jabatan','dekan')->where('status_aktif','aktif')->first();
         DB::beginTransaction();
         try {
             $pengajuanKegiatan->update([
-                'status'=>'diterima',
-                'tanggal_diterima'=>Carbon::now()
+                'status'=>'disposisi dekan',
             ]);
-            NotifikasiMahasiswa::create([
-                'nim'=>$pengajuanKegiatan->nim,
-                'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
-                'isi_notifikasi'=>'Surat Kegiatan Mahasiswa telah diterima.',
-                'link_notifikasi'=>url('mahasiswa/pengajuan/surat-kegiatan-mahasiswa')
-            ]);
+
             NotifikasiUser::create([
                 'nip'=>$user->nip,
                 'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
@@ -147,25 +414,29 @@ class PengajuanSuratKegiatanMahasiswaController extends Controller
             ]);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan kegiatan mahasiswa gagal ditambahkan.');
+            $this->setFlashData('error','Disposisi Gagal','Disposisi surat kegiatan mahasiswa gagal.');
         }
         DB::commit();
-        $this->setFlashData('success','Berhasil','Pengajuan surat kegiatan mahasiswa diterima');
+        $this->setFlashData('success','Berhasil','Pengajuan surat kegiatan mahasiswa telah di disposisi');
         return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
     }
     
-    public function tolak(Request $request, PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
+    public function tolakPengajuan(Request $request, PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
         $keterangan = $request->keterangan ?? '-';
         $pengajuanKegiatan->update([
             'status'=>'ditolak',
             'keterangan'=>$keterangan
         ]);
-        NotifikasiMahasiswa::create([
-            'nim'=>$pengajuanKegiatan->nim,
-            'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
-            'isi_notifikasi'=>'Surat Kegiatan Mahasiswa telah ditolak.',
-            'link_notifikasi'=>url('mahasiswa/pengajuan/surat-kegiatan-mahasiswa')
-        ]);
+
+        foreach($pengajuanKegiatan->ormawa->pimpinanOrmawa as $pimpinanOrmawa){
+            NotifikasiMahasiswa::create([
+                'nim'=>$pimpinanOrmawa->nim,
+                'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
+                'isi_notifikasi'=>'Surat Kegiatan Mahasiswa telah ditolak.',
+                'link_notifikasi'=>url('mahasiswa/surat-kegiatan-mahasiswa')
+            ]);
+        }
+        
         $this->setFlashData('success','Berhasil','Pengajuan surat kegiatan mahasiswa ditolak');
         return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
     }
@@ -279,23 +550,7 @@ class PengajuanSuratKegiatanMahasiswaController extends Controller
         return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
     }
 
-    private function generateKodeSurat(){
-        $kode = [];
-        $kodeSuratList = KodeSurat::where('jenis_surat','surat kegiatan mahasiswa')->where('status_aktif','aktif')->get();
-        foreach ($kodeSuratList as $kodeSurat) {
-            $kode[$kodeSurat->id] = $kodeSurat->kode_surat;
-        }
-        return $kode;
-    }
-
-    private function generatePimpinan(){
-        $user = [];
-        $pimpinan = User::where('jabatan','dekan')->where('status_aktif','aktif')->first();
-        $user[$pimpinan->nip] = strtoupper($pimpinan->jabatan).' - '.$pimpinan->nama;
-        return $user;
-    }
-
-    private function uploadImage($imageFieldName, $request, $uploadPath){
+    private function upload($imageFieldName, $request, $uploadPath){
         $image = $request->file($imageFieldName);
         $ext = $image->getClientOriginalExtension();
         if($image->isValid()){
@@ -306,21 +561,12 @@ class PengajuanSuratKegiatanMahasiswaController extends Controller
         return false;
     }
 
-    private function deleteImage($imageFieldName,$imageName){
+    private function delete($imageFieldName,$imageName){
         $exist = Storage::disk($imageFieldName)->exists($imageName);
         if(isset($imageName) && $exist){
             $delete = Storage::disk($imageFieldName)->delete($imageName);
             if($delete) return true;
             return false;
         }
-    }
-
-    private function isKodeSuratKegiatanExists(){
-        $kodeSurat = KodeSurat::where('jenis_surat','surat kegiatan mahasiswa')->where('status_aktif','aktif')->first();
-        if(empty($kodeSurat)){
-            $this->setFlashData('info','Kode Surat Aktif Tidak Ada','Aktifkan kode surat terlebih dahulu!');
-            return false;
-        }
-        return true;
     }
 }

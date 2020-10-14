@@ -10,20 +10,16 @@
                 <div class="page-header">
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
-                            <i class="mdi mdi-file-document-box menu-icon"></i>
-                        </span> {{ $jenisSurat }}</h3>
+                            <i class="mdi mdi-file-document-box"></i>
+                        </span>Surat Keterangan Aktif Kuliah</h3>
                 </div>
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Tambah {{ $jenisSurat }}</h3>
-                                @if($jenisSurat == 'Surat Keterangan Aktif Kuliah')
+                                <h3 class="mb-5">Tambah Surat Keterangan Aktif Kuliah</h3>
                                 {{ Form::open(['url'=>'operator/surat-keterangan-aktif-kuliah']) }}
-                                @else
-                                {{ Form::open(['url'=>'operator/surat-keterangan-kelakuan-baik']) }}
-                                @endif
-                                @include('operator.form_pengajuan_surat_keterangan')
+                                @include('operator.form_surat_keterangan',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>
                         </div>

@@ -88,10 +88,6 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>Keterangan</th>
-                                            <td>{{ $suratKegiatan->pengajuanSuratKegiatanMahasiswa->keterangan }}</td>
-                                        </tr>
-                                        <tr>
                                             <th>Di Tandatangani Oleh</th>
                                             <td>{{ $suratKegiatan->user->nama }}</td>
                                         </tr>

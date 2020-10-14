@@ -129,7 +129,7 @@ class SuratKeteranganKelakuanBaikController extends Controller
         $nomorSuratBaru = $this->generateNomorSuratBaru();
         $userList =$this->generateTandaTanganKemahasiswaan();
         $kodeSurat = KodeSurat::pluck('kode_surat','id');
-        return view('operator.tambah_pengajuan_surat_keterangan',compact('pengajuanSuratKeterangan','jenisSurat','nomorSuratBaru','userList','kodeSurat'));
+        return view('operator.tambah_surat_keterangan',compact('pengajuanSuratKeterangan','jenisSurat','nomorSuratBaru','userList','kodeSurat'));
     }
 
     public function storeSurat(Request $request){

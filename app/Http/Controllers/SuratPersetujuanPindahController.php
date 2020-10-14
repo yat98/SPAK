@@ -162,11 +162,13 @@ class SuratPersetujuanPindahController extends Controller
 
     public function createSurat(PengajuanSuratPersetujuanPindah $pengajuanSuratPindah)
     {
-        $mahasiswa = $this->generateMahasiswa();
+        if(!$this->isKodeSuratExists()){
+            return redirect($this->segmentUser.'/surat-persetujuan-pindah');
+        }
         $nomorSuratBaru = $this->generateNomorSuratBaru();
         $userList =$this->generateTandaTanganKemahasiswaan();
         $kodeSurat = KodeSurat::pluck('kode_surat','id');
-        return view($this->segmentUser.'.tambah_surat_persetujuan_pindah',compact('userList','kodeSurat','nomorSuratBaru','mahasiswa','userList','pengajuanSuratPindah'));
+        return view($this->segmentUser.'.tambah_surat_persetujuan_pindah',compact('userList','kodeSurat','nomorSuratBaru','userList','pengajuanSuratPindah'));
     }
 
     public function store(SuratPersetujuanPindahRequest $request)
@@ -258,14 +260,7 @@ class SuratPersetujuanPindahController extends Controller
             SuratPersetujuanPindah::create($input);
 
             $pengajuanSuratPindah->update([
-                'status'=>'menunggu tanda tangan',
-            ]);
-
-            NotifikasiMahasiswa::create([
-                'nim'=>$pengajuanSuratPindah->nim,
-                'judul_notifikasi'=>'Surat Persetujuan Pindah',
-                'isi_notifikasi'=>'Surat Persetujuan Pindah telah selesai di buat.',
-                'link_notifikasi'=>url('mahasiswa/surat-persetujuan-pindah')
+                'status'=>'verifikasi kasubag',
             ]);
 
             NotifikasiUser::create([
