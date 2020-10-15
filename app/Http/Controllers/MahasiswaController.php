@@ -19,6 +19,7 @@ use App\SuratDispensasi;
 use App\SuratKeterangan;
 use App\SuratRekomendasi;
 use App\SuratPengantarCuti;
+use App\PengajuanSuratTugas;
 use Illuminate\Http\Request;
 use App\SuratKeteranganLulus;
 use App\SuratPermohonanSurvei;
@@ -26,8 +27,10 @@ use App\SuratKegiatanMahasiswa;
 use App\SuratPengantarBeasiswa;
 use App\SuratPersetujuanPindah;
 use App\Imports\MahasiswaImport;
+use App\PengajuanSuratDispensasi;
 use App\PengajuanSuratKeterangan;
 use App\DaftarDispensasiMahasiswa;
+use App\PengajuanSuratRekomendasi;
 use Illuminate\Support\Facades\DB;
 use App\SuratRekomendasiPenelitian;
 use Illuminate\Support\Facades\Auth;
@@ -54,6 +57,51 @@ class MahasiswaController extends Controller
         $countAllProdi = ProgramStudi::all()->count();
         $countAllJurusan = Jurusan::all()->count(); 
         return view('user.'.$this->segmentUser.'.mahasiswa',compact('perPage','countAllProdi','countAllJurusan','countAllMahasiswa'));
+    }
+
+    public function indexMahasiswa(){
+        $perPageDashboard = $this->perPageDashboard;
+
+        $tgl = Carbon::now();
+        $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
+        $waktuCuti = isset($tahunAkademikAktif) ? WaktuCuti::where('id_tahun_akademik',$tahunAkademikAktif->id)->first():null;
+        $mahasiswa = Mahasiswa::where('nim',Auth::user()->nim)->first();
+        $countAllSuratKegiatan = null;
+        
+        $countAllSuratAktif = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
+                                                        ->where('nim',Auth::user()->nim)
+                                                        ->count();
+
+        $countAllSuratBaik = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
+                                                       ->where('nim',Auth::user()->nim)
+                                                       ->count();
+        
+        $countAllSuratDispensasi = PengajuanSuratDispensasi::join('daftar_dispensasi_mahasiswa','daftar_dispensasi_mahasiswa.id_pengajuan','=','pengajuan_surat_dispensasi.id_surat_masuk')
+                                                             ->where('daftar_dispensasi_mahasiswa.nim',Auth::user()->nim)
+                                                             ->count();
+
+        $countAllSuratRekomendasi = PengajuanSuratRekomendasi::join('daftar_rekomendasi_mahasiswa','daftar_rekomendasi_mahasiswa.id_pengajuan','=','pengajuan_surat_rekomendasi.id')
+                                                               ->where('daftar_rekomendasi_mahasiswa.nim',Auth::user()->nim)
+                                                               ->count();
+
+        $countAllSuratTugas = PengajuanSuratTugas::join('daftar_tugas_mahasiswa','daftar_tugas_mahasiswa.id_pengajuan','=','pengajuan_surat_tugas.id')
+                                                   ->where('daftar_tugas_mahasiswa.nim',Auth::user()->nim)
+                                                   ->count();
+        
+        $countAllSuratPindah = PengajuanSuratPersetujuanPindah::where('nim',Auth::user()->nim)
+                                                                ->count();
+
+        $countAllPendaftaran = PendaftaranCuti::where('nim',Auth::user()->nim)
+                                                ->count();
+        
+        if($mahasiswa->pimpinanOrmawa != null){
+            $countAllSuratKegiatan = PengajuanSuratKegiatanMahasiswa::join('ormawa','pengajuan_surat_kegiatan_mahasiswa.id_ormawa','=','ormawa.id')
+                                                                      ->join('pimpinan_ormawa','pimpinan_ormawa.id_ormawa','=','ormawa.id')
+                                                                      ->where('pimpinan_ormawa.nim',Auth::user()->nim)
+                                                                      ->count();
+        }
+
+        return view($this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllPendaftaran','countAllSuratKegiatan'));
     }
 
     public function getAllMahasiswa(){
@@ -302,82 +350,6 @@ class MahasiswaController extends Controller
        Session::flush();
        $this->setFlashData('success','Berhasil','Password  berhasil diubah');
        return redirect($this->segmentUser);
-    }
-
-    public function dashboard(){
-        $tgl = Carbon::now();
-        $pengajuanKegiatanList = null;
-        $mahasiswa = Mahasiswa::where('nim',Auth::user()->nim)->first();
-        $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
-        $waktuCuti = isset($tahunAkademikAktif) ? WaktuCuti::where('id_tahun_akademik',$tahunAkademikAktif->id)->first():null;
-
-        $pengajuanSuratKeteranganAktifList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
-                                               ->orderByDesc('created_at')
-                                               ->orderBy('status')
-                                               ->where('nim',Auth::user()->nim)
-                                               ->get();
-        $pengajuanSuratKeteranganList = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
-                                               ->where('nim',Auth::user()->nim)
-                                               ->orderByDesc('created_at')
-                                               ->orderBy('status')
-                                               ->get();
-        $pengajuanSuratPindahList = PengajuanSuratPersetujuanPindah::where('nim',Auth::user()->nim)
-                                               ->orderByDesc('created_at')
-                                               ->orderBy('status')
-                                               ->get();
-        $suratDispensasiList = [];
-        $suratRekomendasiList = [];
-        $suratTugasList = [];
-
-        $pengajuanSuratLulusList = PengajuanSuratKeteranganLulus::where('nim',Auth::user()->nim)->get();
-        $pengajuanSuratMaterialList = PengajuanSuratPermohonanPengambilanMaterial::join('daftar_kelompok_pengambilan_material','daftar_kelompok_pengambilan_material.id_pengajuan','=','pengajuan_surat_permohonan_pengambilan_material.id')
-                                        ->where('daftar_kelompok_pengambilan_material.nim',Auth::user()->nim)
-                                        ->get();
-        $pengajuanSuratSurveiList = PengajuanSuratPermohonanSurvei::where('nim',Auth::user()->nim)->get();
-        $pengajuanSuratPenelitianList = PengajuanSuratRekomendasiPenelitian::where('nim',Auth::user()->nim)->get();
-        $pengajuanSuratDataAwalList = PengajuanSuratPermohonanPengambilanDataAwal::where('nim',Auth::user()->nim)->get();
-
-        if(isset($mahasiswa->pimpinanOrmawa)){
-            $pengajuanKegiatanList = PengajuanSuratKegiatanMahasiswa::join('mahasiswa','mahasiswa.nim','=','pengajuan_surat_kegiatan_mahasiswa.nim')
-                                        ->join('pimpinan_ormawa','pimpinan_ormawa.nim','=','mahasiswa.nim')
-                                        ->join('ormawa','pimpinan_ormawa.id_ormawa','=','ormawa.id')
-                                        ->select('*','pengajuan_surat_kegiatan_mahasiswa.id AS id') 
-                                        ->where('ormawa.nama',$mahasiswa->pimpinanOrmawa->ormawa->nama)
-                                        ->orderByDesc('pengajuan_surat_kegiatan_mahasiswa.created_at')
-                                        ->get();
-        }
-        $pendaftaranCutiList = PendaftaranCuti::where('nim',Auth::user()->nim)->get();
-
-        $countAllPengajuan =    $pengajuanSuratKeteranganAktifList->count();
-        $countAllPengajuanBaik =    $pengajuanSuratKeteranganList->count();
-        $countAllPengajuanPindah =    $pengajuanSuratPindahList->count();
-        $countAllDispensasi =    0;
-        $countAllSuratRekomendasi =    0;
-        $countAllSuratTugas =    0;
-        $countAllPengajuanKegiatan = ($pengajuanKegiatanList != null) ? $pengajuanKegiatanList->count() : 0;
-        $countPendaftaranCuti = $pendaftaranCutiList->count();
-        $countAllPengajuanLulus = $pengajuanSuratLulusList->count();
-        $countAllPengajuanMaterial = $pengajuanSuratMaterialList->count();
-        $countAllPengajuanSurvei = $pengajuanSuratSurveiList->count();
-        $countAllPengajuanPenelitian = $pengajuanSuratPenelitianList->count();
-        $countAllPengajuanDataAwal = $pengajuanSuratDataAwalList->count();
-
-        $pengajuanSuratKeteranganAktifList = $pengajuanSuratKeteranganAktifList->take(5);
-        $pengajuanSuratKeteranganList = $pengajuanSuratKeteranganList->take(5);
-        $pengajuanSuratPindahList = $pengajuanSuratPindahList->take(5);
-        $suratDispensasiList = [];
-        $suratRekomendasiList = [];
-        $suratTugasList = [];
-        $pengajuanKegiatanList =  ($pengajuanKegiatanList != null) ? $pengajuanKegiatanList->take(5) : null;
-        $pendaftaranCutiList = $pendaftaranCutiList->take(5);
-        $pengajuanSuratLulusList = $pengajuanSuratLulusList->take(5);
-        $pengajuanSuratMaterialList = $pengajuanSuratMaterialList->take(5);
-        $pengajuanSuratSurveiList = $pengajuanSuratSurveiList->take(5) ;
-        $pengajuanSuratPenelitianList = $pengajuanSuratPenelitianList->take(5) ;
-        $pengajuanSuratDataAwalList = $pengajuanSuratDataAwalList->take(5) ;
-            
-        return view($this->segmentUser.'.dashboard',compact('tahunAkademikAktif','tgl','waktuCuti','pengajuanSuratKeteranganAktifList','countAllPengajuan','pengajuanSuratKeteranganList','countAllPengajuanBaik','pengajuanSuratKeteranganList','pengajuanSuratPindahList','countAllPengajuanPindah','suratDispensasiList','countAllDispensasi','countAllSuratRekomendasi','suratRekomendasiList','suratTugasList','countAllSuratTugas','pengajuanKegiatanList','countAllPengajuanKegiatan','pendaftaranCutiList','countPendaftaranCuti','pengajuanSuratLulusList','countAllPengajuanLulus','pengajuanSuratMaterialList','countAllPengajuanMaterial','pengajuanSuratSurveiList','pengajuanSuratPenelitianList','pengajuanSuratDataAwalList','countAllPengajuanSurvei','countAllPengajuanPenelitian','countAllPengajuanDataAwal',
-    ));
     }
     
     public function logout(){

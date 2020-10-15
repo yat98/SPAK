@@ -23,7 +23,7 @@
                                         class="mdi mdi-playlist-check mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllPendaftaran > 0 ? $countAllPendaftaran.' Pendaftaran Cuti' : 'Data Pendaftaran Kosong' }}
+                                    {{ $countAllPendaftaran > 0 ? $countAllPendaftaran.' Pendaftaran Cuti' : 'Pendaftaran Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -96,9 +96,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id='pendaftaran-detail-content'>
-                
-            </div>
+            <div class="modal-body" id='pendaftaran-detail-content'></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
             </div>

@@ -41,7 +41,10 @@ class PimpinanOrmawaRequest extends FormRequest
 
     public function withValidator(Validator $validator)
     {
-        $pimpinanOrmawaAktif = PimpinanOrmawa::where('status_aktif','aktif')->where('jabatan',$this->get('jabatan'));
+        $pimpinanOrmawaAktif = PimpinanOrmawa::where('status_aktif','aktif')
+                                               ->where('jabatan',$this->get('jabatan'))
+                                               ->where('id_ormawa',$this->get('id_ormawa'));
+        
         $validator->after(function($validator) use($pimpinanOrmawaAktif) {
                 if($pimpinanOrmawaAktif->exists() && $this->get('status_aktif') == 'aktif'){
                     if($this->method == 'PATCH' || $this->method == 'PUT'){

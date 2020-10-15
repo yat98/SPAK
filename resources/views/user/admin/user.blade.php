@@ -14,7 +14,7 @@
                         </span> User </h3>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 stretch-card grid-margin">
+                    <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-dark card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"

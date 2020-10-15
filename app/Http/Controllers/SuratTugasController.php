@@ -49,7 +49,7 @@ class SuratTugasController extends Controller
         $countAllSurat = SuratTugas::join('pengajuan_surat_tugas','surat_tugas.id_pengajuan','=','pengajuan_surat_tugas.id')
                                             ->whereNotIn('pengajuan_surat_tugas.status',['diajukan'])
                                             ->count();
-                                                                         
+        
         return view($this->segmentUser.'.surat_tugas',compact('countAllPengajuan','perPage','countAllSurat'));
     }
 
@@ -74,8 +74,9 @@ class SuratTugasController extends Controller
     public function indexMahasiswa(){
         $perPage = $this->perPage;
         $countAllSurat = PengajuanSuratTugas::join('daftar_tugas_mahasiswa','daftar_tugas_mahasiswa.id_pengajuan','=','pengajuan_surat_tugas.id')
-                                                   ->where('daftar_tugas_mahasiswa.nim',Auth::user()->nim)
-                                                   ->count();
+                                              ->where('daftar_tugas_mahasiswa.nim',Auth::user()->nim)
+                                              ->count();
+
         return view($this->segmentUser.'.surat_tugas',compact('perPage','countAllSurat'));
     }
 
