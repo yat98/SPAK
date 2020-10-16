@@ -75,7 +75,7 @@ class SuratRekomendasiController extends Controller
         $countAllSurat = SuratRekomendasi::join('pengajuan_surat_rekomendasi','surat_rekomendasi.id_pengajuan','=','pengajuan_surat_rekomendasi.id')
                                             ->whereNotIn('status',['diajukan'])
                                             ->count();
-                                                                         
+
         return view($this->segmentUser.'.surat_rekomendasi',compact('countAllPengajuan','perPage','countAllSurat'));
     }
 

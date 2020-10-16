@@ -148,9 +148,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id='pendaftaran-detail-content'>
-                
-            </div>
+            <div class="modal-body" id='pendaftaran-detail-content'></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
             </div>

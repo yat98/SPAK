@@ -47,8 +47,8 @@ class SuratTugasController extends Controller
         $countAllPengajuan = $countAllPengajuan->count();
 
         $countAllSurat = SuratTugas::join('pengajuan_surat_tugas','surat_tugas.id_pengajuan','=','pengajuan_surat_tugas.id')
-                                            ->whereNotIn('pengajuan_surat_tugas.status',['diajukan'])
-                                            ->count();
+                                     ->whereNotIn('pengajuan_surat_tugas.status',['diajukan'])
+                                     ->count();
         
         return view($this->segmentUser.'.surat_tugas',compact('countAllPengajuan','perPage','countAllSurat'));
     }

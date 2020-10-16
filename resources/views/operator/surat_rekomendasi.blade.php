@@ -29,7 +29,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
@@ -46,7 +45,6 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
@@ -96,7 +94,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
@@ -334,7 +331,7 @@
                                 }
                             }
                         },
-                         {
+                        {
                             "targets": 3,
                             "data": "created_at",
                             "render": function ( data, type, row, meta ) {
@@ -388,7 +385,7 @@
                 {
                     data: 'status',
                 },
-                 {
+                {
                     data: 'created_at',
                 },
                 {

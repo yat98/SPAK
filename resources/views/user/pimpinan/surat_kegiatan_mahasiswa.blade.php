@@ -567,15 +567,14 @@
                             "targets": 5,
                             "data": "aksi",
                             "render": function ( data, type, row, meta ) {
-                                let action = `<a href="${link+'/'+row.id}" class="dropdown-item">Detail</a>
-                                              <a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
-                                
                                 return `<div class="d-inline-block">
                                             <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
                                                 <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
                                             </a>
                                             <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
-                                                ${action}
+                                                <a href="${link+'/'+row.id}" class="dropdown-item">Detail</a>
+                                                <a href="${linkSurat+'/pengajuan/disposisi/'+row.id}" class="dropdown-item btn-disposisi-detail" data-toggle="modal" data-target="#disposisi">Lihat Disposisi</a>
+                                                <a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
                                             </div>
                                         </div>`;
                             },

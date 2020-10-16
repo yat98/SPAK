@@ -29,7 +29,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
@@ -46,7 +45,6 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
@@ -96,7 +94,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
@@ -129,11 +126,7 @@
                                             {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            @if(Auth::user()->bagian == 'front office')
                                             {{ (Session::has('search')) ? Session::get('search') : ' Data surat persetujuan pindah belum ada.' }}
-                                            @else
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Data surat persetujuan pindah belum ada.' }}
-                                            @endif
                                         </p>
                                     </div>
                                 </div>
@@ -373,7 +366,7 @@
                                 }
                             }
                         },
-                         {
+                        {
                             "targets": 3,
                             "data": "created_at",
                             "render": function ( data, type, row, meta ) {
@@ -396,7 +389,7 @@
                                                 </div>
                                             </div>`;
                                 @else
-                                    let action = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-detail" data-toggle="modal" data-target="#suratKeteranganDetail">
+                                    let action = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-pindah-detail" data-toggle="modal" data-target="#suratPindah">
                                                     Detail</a>`;
 
                                     if(row.status == 'Selesai'){
@@ -433,7 +426,7 @@
                 {
                     data: 'status',
                 },
-                 {
+                {
                     data: 'created_at',
                 },
                 {

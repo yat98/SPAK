@@ -23,7 +23,7 @@ class WaktuCutiController extends Controller
         $perPage = $this->perPage;
 
         $countAllWaktuCuti = WaktuCuti::count();
-                                                                         
+
         return view($this->segmentUser.'.waktu_cuti',compact('countAllWaktuCuti','perPage'));
     }
 
@@ -31,7 +31,7 @@ class WaktuCutiController extends Controller
         $perPage = $this->perPage;
 
         $countAllWaktuCuti = WaktuCuti::count();
-                                                                         
+
         return view('user.'.$this->segmentUser.'.waktu_cuti',compact('countAllWaktuCuti','perPage'));
     }
 

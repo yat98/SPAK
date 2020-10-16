@@ -29,7 +29,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
@@ -46,7 +45,6 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
@@ -97,7 +95,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
@@ -161,6 +158,24 @@
     </div>
 </div>
 @endif
+
+<div class="modal fade" id="disposisi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Disposisi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='disposisi-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('datatables-javascript')
@@ -244,6 +259,7 @@
 
                                     if(row.status == 'Disposisi Selesai'){
                                         aksi = `<a href="${link+'/'+row.id}" class="dropdown-item">Detail</a>
+                                                <a href="${linkSurat+'/pengajuan/disposisi/'+row.id}" class="dropdown-item btn-disposisi-detail" data-toggle="modal" data-target="#disposisi">Lihat Disposisi</a>
                                                 <a href="${linkSurat+'/create/'+row.id}" class="dropdown-item">Buat Surat</a>`;
                                     }
 
@@ -327,20 +343,19 @@
                             "targets": 5,
                             "data": "aksi",
                             "render": function ( data, type, row, meta ) {
-                               @if(Auth::user()->bagian != 'front office')
+                            @if(Auth::user()->bagian != 'front office')
                                     return `<div class="d-inline-block">
                                                 <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
                                                     <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
                                                 </a>
                                                 <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
-                                                    <a href="${linkSurat+'/'+row.id}" class="dropdown-item">
-                                                            Detail</a>
+                                                    <a href="${linkSurat+'/'+row.id}" class="dropdown-item">Detail</a>
                                                     <a href="${linkSurat+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
                                                 </div>
                                             </div>`;
                                 @else
-                                    let action = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item">
-                                                    Detail</a>`;
+                                    let action = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item">Detail</a>
+                                                  <a href="${linkSurat+'/pengajuan/disposisi/'+row.id}" class="dropdown-item btn-disposisi-detail" data-toggle="modal" data-target="#disposisi">Lihat Disposisi</a>`;
 
                                     if(row.status == 'Selesai'){
                                         action += `<a href="${linkSurat+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;

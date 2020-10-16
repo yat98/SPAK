@@ -46,7 +46,6 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
@@ -96,7 +95,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
@@ -387,7 +385,7 @@
                                 }
                             }
                         },
-                         {
+                        {
                             "targets": 3,
                             "data": "created_at",
                             "render": function ( data, type, row, meta ) {
@@ -409,7 +407,7 @@
                                                     <a href="${linkSurat+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
                                                 </div>
                                             </div>`;
-                               @else
+                                @else
                                     let action = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-detail" data-toggle="modal" data-target="#suratKeteranganDetail">
                                                     Detail</a>`;
 

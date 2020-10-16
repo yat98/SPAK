@@ -66,9 +66,9 @@ class SuratPersetujuanPindahController extends Controller
         $countAllPengajuan = $countAllPengajuan->count();
 
         $countAllSurat = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','surat_persetujuan_pindah.id_pengajuan','=','pengajuan_surat_persetujuan_pindah.id')
-                                            ->whereNotIn('status',['diajukan'])
-                                            ->count();
-                                                                         
+                                                 ->whereNotIn('status',['diajukan'])
+                                                 ->count();
+             
         return view($this->segmentUser.'.surat_persetujuan_pindah',compact('countAllPengajuan','perPage','countAllSurat'));
     }
 

@@ -202,7 +202,7 @@ Route::group(['prefix' => 'operator'],function(){
 
     Route::middleware(['auth:operator','operator'])->group(function(){
         // Dashboard
-        Route::get('/','OperatorController@operatorDashboard');
+        Route::get('/','OperatorController@indexOperator');
         // Surat Masuk
         Route::get('surat-masuk','SuratMasukController@indexOperator');
         Route::get('surat-masuk/all','SuratMasukController@getAllSuratMasuk');
@@ -343,6 +343,7 @@ Route::group(['prefix' => 'operator'],function(){
         Route::post('surat-kegiatan-mahasiswa','SuratKegiatanMahasiswaController@storeSurat');
         Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}/cetak','SuratKegiatanMahasiswaController@cetak');
         Route::group(['prefix'=>'surat-kegiatan-mahasiswa/pengajuan'],function(){
+            Route::get('/disposisi/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@showDisposisi');
             Route::get('/create','PengajuanSuratKegiatanMahasiswaController@createPengajuan');
             Route::get('/all','PengajuanSuratKegiatanMahasiswaController@getAllPengajuan');
             Route::patch('/tolak-pengajuan/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@tolakPengajuan');

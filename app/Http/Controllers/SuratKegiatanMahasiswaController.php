@@ -68,13 +68,13 @@ class SuratKegiatanMahasiswaController extends Controller
         }
                                             
         $countAllSurat = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','surat_kegiatan_mahasiswa.id_pengajuan','=','pengajuan_surat_kegiatan_mahasiswa.id')
-                                          ->where('status','selesai')
-                                          ->count();
+                            ->where('status','selesai')
+                            ->count();
         
         $countAllTandaTangan = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','surat_kegiatan_mahasiswa.id_pengajuan','=','pengajuan_surat_kegiatan_mahasiswa.id')
-                                            ->where('status','menunggu tanda tangan')
-                                            ->where('nip',Auth::user()->nip)
-                                            ->count();
+                                ->where('status','menunggu tanda tangan')
+                                ->where('nip',Auth::user()->nip)
+                                ->count();
 
         return view('user.pimpinan.surat_kegiatan_mahasiswa',compact('countAllVerifikasi','countAllDisposisi','perPage','countAllSurat','countAllTandaTangan'));
     }
