@@ -24,10 +24,10 @@ class SuratPengantarBeasiswaController extends Controller
         $perPage = $this->perPage;
         
         $countAllSurat = SuratPengantarBeasiswa::whereIn('status',['verifikasi kabag','selesai','menunggu tanda tangan'])
-                                             ->count();
+                                                 ->count();
         
         $countAllVerifikasi = SuratPengantarBeasiswa::where('status','verifikasi kasubag')
-                                                  ->count();
+                                                      ->count();
 
         return view('user.'.$this->segmentUser.'.surat_pengantar_beasiswa',compact('perPage','countAllSurat','countAllVerifikasi'));
     }
@@ -44,14 +44,14 @@ class SuratPengantarBeasiswaController extends Controller
         $perPage = $this->perPage;
 
         $countAllVerifikasi = SuratPengantarBeasiswa::where('status','verifikasi kabag')
-                                                  ->count();
+                                                      ->count();
                                             
         $countAllSurat = SuratPengantarBeasiswa::where('status','selesai')
-                                             ->count();
+                                                 ->count();
         
         $countAllTandaTangan = SuratPengantarBeasiswa::where('status','menunggu tanda tangan')
-                                                   ->where('nip',Auth::user()->nip)
-                                                   ->count();
+                                                       ->where('nip',Auth::user()->nip)
+                                                       ->count();
 
         return view('user.'.$this->segmentUser.'.surat_pengantar_beasiswa',compact('perPage','countAllVerifikasi','countAllSurat','countAllTandaTangan'));
     }

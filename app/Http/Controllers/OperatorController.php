@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Session;
 use DataTables;
 use App\Operator;
+use App\KodeSurat;
 use App\WaktuCuti;
 use Carbon\Carbon;
 use App\SuratMasuk;
@@ -38,6 +39,8 @@ class OperatorController extends Controller
         $tahunAkademikAktif = TahunAkademik::where('status_aktif','aktif')->first();
         $waktuCuti = isset($tahunAkademikAktif) ? WaktuCuti::where('id_tahun_akademik',$tahunAkademikAktif->id)->first():null;
 
+        $kodeSuratAktif = KodeSurat::where('status_aktif','aktif')->first();
+        
         $countAllSuratMasuk  = SuratMasuk::count();
 
         $countAllSuratAktif = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan','=','pengajuan_surat_keterangan.id')
@@ -79,7 +82,7 @@ class OperatorController extends Controller
         $countAllPendaftaran = PendaftaranCuti::where('status','selesai')
                                                 ->count();
 
-        return view($this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti'));
+        return view($this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','kodeSuratAktif','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti'));
     }
 
     public function getAllOperator(){

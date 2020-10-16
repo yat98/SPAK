@@ -132,6 +132,24 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="disposisi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Disposisi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='disposisi-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('datatables-javascript')
@@ -177,7 +195,7 @@
                                             </a>
                                             <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
                                                 <a href="${link+'/'+row.id}" class="dropdown-item">Detail</a>
-                                                <a href="${linkSurat+'/pengajuan/disposisi/'+row.id}" class="dropdown-item btn-disposisi-detail" data-toggle="modal" data-target="#disposisi">Lihat Disposisi</a>
+                                                <a href="${link+'/pengajuan/disposisi/'+row.id}" class="dropdown-item btn-disposisi-detail" data-toggle="modal" data-target="#disposisi">Lihat Disposisi</a>
                                                 <a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
                                                 <form action="${link+'/verifikasi'}" method="post">
                                                     <input name="_method" type="hidden" value="PATCH">
@@ -272,7 +290,7 @@
                                             </a>
                                             <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
                                                 <a href="${link+'/'+row.id}" class="dropdown-item">Detail</a>
-                                                <a href="${linkSurat+'/pengajuan/disposisi/'+row.id}" class="dropdown-item btn-disposisi-detail" data-toggle="modal" data-target="#disposisi">Lihat Disposisi</a>
+                                                <a href="${link+'/pengajuan/disposisi/'+row.id}" class="dropdown-item btn-disposisi-detail" data-toggle="modal" data-target="#disposisi">Lihat Disposisi</a>
                                                 <a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
                                             </div>
                                         </div>`;

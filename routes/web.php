@@ -447,6 +447,7 @@ Route::group(['prefix' => 'pegawai'],function(){
         // Surat Kegiatan Mahasiswa
         Route::get('surat-kegiatan-mahasiswa','SuratKegiatanMahasiswaController@index');
         Route::get('surat-kegiatan-mahasiswa/all','SuratKegiatanMahasiswaController@getAllSurat');
+        Route::get('surat-kegiatan-mahasiswa/pengajuan/disposisi/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@showDisposisi');
         Route::patch('surat-kegiatan-mahasiswa/verifikasi','PengajuanSuratKegiatanMahasiswaController@verification');
         Route::get('surat-kegiatan-mahasiswa/verifikasi/all','PengajuanSuratKegiatanMahasiswaController@getAllPengajuan');
         Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}','SuratKegiatanMahasiswaController@show');
@@ -605,8 +606,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
     
     Route::middleware(['auth:user','pimpinan'])->group(function(){
         // Dashboard
-        Route::get('/','UserController@pimpinanDashboard');
-        Route::get('search','UserController@chartPimpinanDashboard');
+        Route::get('/','UserController@indexPimpinan');
+        Route::get('search/kemahasiswaan','UserController@searchChartKemahasiswaan');
         // Kode Surat
         Route::get('kode-surat/all','KodeSuratController@getAllKodeSurat');
         Route::get('kode-surat/limit','KodeSuratController@getLimitKodeSurat');
