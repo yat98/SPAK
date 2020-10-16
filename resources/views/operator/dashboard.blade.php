@@ -206,6 +206,42 @@
                                 </div>
                             </div>
                         </div>
+                        @if(Auth::user()->bagian == 'subbagian kemahasiswaan')
+                            <div class="col-md-4 stretch-card grid-margin">
+                                <div class="card bg-gradient-info card-img-holder text-white">
+                                    <div class="card-body">
+                                        <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                            alt="circle-image" />
+                                        <h4 class="font-weight-normal mb-3">Surat Pengantar Cuti<i
+                                                class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                        </h4>
+                                        <h2 class="mb-5">
+                                            {{ $countAllSuratCuti > 0 ? $countAllSuratCuti.' Surat' : 'Data Surat Kosong' }}
+                                        </h2>
+                                        <h6 class="card-text">
+                                            <a href="{{ url('operator/surat-pengantar-cuti') }}" class="text-white">Lihat data surat</a>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 stretch-card grid-margin">
+                                <div class="card bg-gradient-info card-img-holder text-white">
+                                    <div class="card-body">
+                                        <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                            alt="circle-image" />
+                                        <h4 class="font-weight-normal mb-3">Surat Pengantar Beasiswa<i
+                                                class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                        </h4>
+                                        <h2 class="mb-5">
+                                            {{ $countAllSuratBeasiswa > 0 ? $countAllSuratBeasiswa.' Surat' : 'Data Surat Kosong' }}
+                                        </h2>
+                                        <h6 class="card-text">
+                                            <a href="{{ url('operator/surat-pengantar-beasiswa') }}" class="text-white">Lihat data surat</a>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         <div class="col-md-4 stretch-card grid-margin">
                             <div class="card bg-gradient-info card-img-holder text-white">
                                 <div class="card-body">
@@ -550,6 +586,88 @@
                             </div>
                         </div>
                     </div>  
+                    @if(Auth::user()->bagian == 'subbagian kemahasiswaan')
+                        <div class="row">
+                            <div class="col-12 grid-margin">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row mb-3">
+                                            <div class="col-12 col-md-6">
+                                                <h4>Surat Pengantar Cuti</h4>
+                                            </div>
+                                        </div>
+                                        <hr class="mb-4">
+                                        @if ($countAllSuratCuti > 0)
+                                        <div class="table-responsive dashboard">
+                                            <table class="table display no-warp" id='datatables7' width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th data-priority="1"> Nomor Surat</th>
+                                                        <th> Tahun Akademik</th>
+                                                        <th> Status</th>
+                                                        <th data-priority="2"> Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                        @else
+                                        <div class="row">
+                                            <div class="col text-center">
+                                                <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                                <h4 class="display-4 mt-3">
+                                                    {{ (Session::has('search-title')) ? Session::get('search-title') : 'Data Surat Kosong!' }}
+                                                </h4>
+                                                <p class="text-muted">
+                                                    {{ (Session::has('search')) ? Session::get('search') : '  Data surat pengantar cuti terlebih dahulu.' }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="row">
+                            <div class="col-12 grid-margin">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row mb-3">
+                                            <div class="col-12 col-md-6">
+                                                <h4>Surat Pengantar Beasiswa</h4>
+                                            </div>
+                                        </div>
+                                        <hr class="mb-4">
+                                        @if ($countAllSuratBeasiswa > 0)
+                                        <div class="table-responsive dashboard">
+                                            <table class="table display no-warp" id='datatables8' width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th data-priority="1"> Nomor Surat</th>
+                                                        <th> Hal</th>
+                                                        <th> Status</th>
+                                                        <th data-priority="2"> Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                        @else
+                                        <div class="row">
+                                            <div class="col text-center">
+                                                <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                                <h4 class="display-4 mt-3">
+                                                    {{ (Session::has('search-title')) ? Session::get('search-title') : 'Data Surat Kosong!' }}
+                                                </h4>
+                                                <p class="text-muted">
+                                                    {{ (Session::has('search')) ? Session::get('search') : '  Data surat pengantar beasiswa terlebih dahulu.' }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>    
+                    @endif
                     <div class="row">
                         <div class="col-12 grid-margin">
                             <div class="card">
@@ -562,7 +680,7 @@
                                     <hr class="mb-4">
                                     @if ($countAllSuratPindah > 0)
                                     <div class="table-responsive dashboard">
-                                        <table class="table display no-warp" id='datatables7' width="100%">
+                                        <table class="table display no-warp" id='datatables9' width="100%">
                                             <thead>
                                                 <tr>
                                                     <th data-priority="1"> Nama Kegiatan</th>
@@ -605,7 +723,7 @@
                                         <hr class="mb-4">
                                         @if ($countAllWaktuCuti > 0)
                                         <div class="table-responsive dashboard">
-                                            <table class="table display no-warp" id='datatables8' width="100%">
+                                            <table class="table display no-warp" id='datatables10' width="100%">
                                                 <thead>
                                                     <tr>
                                                         <th data-priority="1"> Tahun Akademik</th>
@@ -631,7 +749,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>  
+                        </div> 
                     @endif
                     <div class="row">
                         <div class="col-12 grid-margin">
@@ -645,7 +763,7 @@
                                     <hr class="mb-4">
                                     @if ($countAllPendaftaran > 0)
                                     <div class="table-responsive dashboard">
-                                        <table class="table display no-warp" id='datatables9' width="100%">
+                                        <table class="table display no-warp" id='datatables11' width="100%">
                                             <thead>
                                                 <tr>
                                                     <th data-priority="1"> Nama </th>
@@ -842,6 +960,42 @@
     </div>
 </div>
 
+<div class="modal fade" id="suratCuti" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='surat-pengantar-cuti-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="suratBeasiswa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='surat-pengantar-beasiswa-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="disposisi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -890,6 +1044,8 @@
         let linkSuratRekomendasi = "{{ url('operator/surat-rekomendasi') }}";
         let linkSuratTugas = "{{ url('operator/surat-tugas') }}";
         let linkSuratPindah = "{{ url('operator/surat-persetujuan-pindah') }}";
+        let linkSuratCuti = "{{ url('operator/surat-pengantar-cuti') }}";
+        let linkSuratBeasiswa = "{{ url('operator/surat-pengantar-beasiswa') }}";
         let linkSuratKegiatan = "{{ url('operator/surat-kegiatan-mahasiswa') }}";
         let linkWaktuCuti = "{{ url('operator/waktu-cuti') }}";
         let linkPendaftaran = "{{ url('operator/pendaftaran-cuti') }}";
@@ -1563,7 +1719,155 @@
             "order": [[1,'desc']],
         });
 
-        $('#datatables7').DataTable({
+        @if(Auth::user()->bagian == 'subbagian kemahasiswaan')
+            $('#datatables7').DataTable({
+                responsive: true,
+                columnDefs: [{
+                                "targets": 0,
+                                "data": "nomor_surat",
+                                "render": function ( data, type, row, meta ) {
+                                    return `${row.nomor_surat}/${row.kode_surat.kode_surat}`;
+                                }
+                            },
+                            {
+                                "targets": 1,
+                                "data": "tahun_akademik.tahun_akademik",
+                                "render": function ( data, type, row, meta ) {
+                                    return `${row.tahun_akademik.tahun_akademik} - ${row.semester}`;
+                                }
+                            },
+                            {
+                                "targets": 2,
+                                "data": "status",
+                                "render": function ( data, type, row, meta ) {
+                                    if(row.status == 'Ditolak'){
+                                        return ` <label class="badge badge-gradient-danger">
+                                                    ${row.status}
+                                                </label>`;
+                                    }else if(row.status == 'Selesai'){
+                                        return ` <label class="badge badge-gradient-info">
+                                                ${row.status}
+                                            </label>`;
+                                    }else{
+                                        return ` <label class="badge badge-gradient-warning text-dark">
+                                                    ${row.status}
+                                                </label>`;
+                                    }
+                                }
+                            },
+                            {
+                                "targets": 3,
+                                "data": "aksi",
+                                "render": function ( data, type, row, meta ) {
+                                    return `<div class="d-inline-block">
+                                                <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                    <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                                </a>
+                                                <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                    <a href="${linkSuratCuti+'/'+row.id}" class="dropdown-item btn-surat-pengantar-cuti-detail" data-toggle="modal" data-target="#suratCuti">Detail</a>
+                                                    <a href="${linkSuratCuti+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
+                                                </div>
+                                            </div>`;
+                                }
+                            },
+                            {
+                                "targets": [4],
+                                "visible": false,
+                            },
+                        ],
+                autoWidth: false,
+                language: bahasa,
+                processing: true,
+                serverSide: true,
+                ajax: '{{ url('operator/surat-pengantar-cuti/all') }}',
+                columns: [{
+                        data: 'nomor_surat',
+                    },
+                    {
+                        data: 'tahun_akademik.tahun_akademik',
+                    },
+                    {
+                        data: 'status',
+                    },
+                    {
+                        data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                    },
+                    {
+                        data: 'tahun_akademik.semester',
+                    },
+                ],
+                "pageLength": {{ $perPageDashboard }},
+                "order": [[ 0, 'desc' ]],
+            });
+
+            $('#datatables8').DataTable({
+                responsive: true,
+                columnDefs: [{
+                                "targets": 0,
+                                "data": "nomor_surat",
+                                "render": function ( data, type, row, meta ) {
+                                    return `${row.nomor_surat}/${row.kode_surat.kode_surat}`;
+                                }
+                            },
+                            {
+                                "targets": 2,
+                                "data": "status",
+                                "render": function ( data, type, row, meta ) {
+                                    if(row.status == 'Ditolak'){
+                                        return ` <label class="badge badge-gradient-danger">
+                                                    ${row.status}
+                                                </label>`;
+                                    }else if(row.status == 'Selesai'){
+                                        return ` <label class="badge badge-gradient-info">
+                                                ${row.status}
+                                            </label>`;
+                                    }else{
+                                        return ` <label class="badge badge-gradient-warning text-dark">
+                                                    ${row.status}
+                                                </label>`;
+                                    }
+                                }
+                            },
+                            {
+                                "targets": 3,
+                                "data": "aksi",
+                                "render": function ( data, type, row, meta ) {
+                                    return `<div class="d-inline-block">
+                                                <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                    <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                                </a>
+                                                <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                    <a href="${linkSuratBeasiswa+'/'+row.id}" class="dropdown-item btn-surat-pengantar-beasiswa-detail" data-toggle="modal" data-target="#suratBeasiswa">Detail</a>
+                                                    <a href="${linkSuratBeasiswa+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
+                                                </div>
+                                            </div>`;
+                                }
+                            },
+                        ],
+                autoWidth: false,
+                language: bahasa,
+                processing: true,
+                serverSide: true,
+                ajax: '{{ url('operator/surat-pengantar-beasiswa/all') }}',
+                columns: [{
+                        data: 'nomor_surat',
+                    },
+                    {
+                        data: 'hal',
+                    },
+                    {
+                        data: 'status',
+                    },
+                    {
+                        data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                    },
+                ],
+                "pageLength": {{ $perPageDashboard }},
+                "order": [[ 0, 'desc' ]],
+            });
+        @endif
+
+        $('#datatables9').DataTable({
             responsive: true,
             columnDefs: [{
                             "targets": 1,
@@ -1661,7 +1965,7 @@
         });
 
         @if(Auth::user()->bagian == 'subbagian kemahasiswaan')
-            $('#datatables8').DataTable({
+            $('#datatables10').DataTable({
                 responsive: true,
                 columnDefs: [{
                                 "targets": 0,
@@ -1698,7 +2002,7 @@
             });
         @endif
 
-        $('#datatables9').DataTable({
+        $('#datatables11').DataTable({
             responsive: true,
             columnDefs: [{
                             "targets": 0,

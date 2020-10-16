@@ -14,8 +14,10 @@ use App\PendaftaranCuti;
 use App\SuratDispensasi;
 use App\SuratKeterangan;
 use App\SuratRekomendasi;
+use App\SuratPengantarCuti;
 use Illuminate\Http\Request;
 use App\SuratKegiatanMahasiswa;
+use App\SuratPengantarBeasiswa;
 use App\SuratPersetujuanPindah;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -64,6 +66,10 @@ class OperatorController extends Controller
                                                        ->whereNotIn('status',['diajukan'])
                                                        ->count();
 
+        $countAllSuratCuti = SuratPengantarCuti::count();
+
+        $countAllSuratBeasiswa = SuratPengantarBeasiswa::count();
+
         $countAllSuratKegiatan = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','surat_kegiatan_mahasiswa.id_pengajuan','=','pengajuan_surat_kegiatan_mahasiswa.id')
                                                         ->where('status','selesai')
                                                         ->count();
@@ -73,7 +79,7 @@ class OperatorController extends Controller
         $countAllPendaftaran = PendaftaranCuti::where('status','selesai')
                                                 ->count();
 
-        return view($this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllPendaftaran','countAllWaktuCuti'));
+        return view($this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti'));
     }
 
     public function getAllOperator(){
