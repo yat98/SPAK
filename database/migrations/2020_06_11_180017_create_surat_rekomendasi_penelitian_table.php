@@ -17,6 +17,7 @@ class CreateSuratRekomendasiPenelitianTable extends Migration
             $table->integer('id_pengajuan')->unsigned()->index();
             $table->char('nip',18)->nullable();
             $table->integer('id_kode_surat')->unsigned();
+            $table->integer('id_operator')->unsigned();
             $table->char('nomor_surat',6);
             $table->text('tembusan');
             $table->integer('jumlah_cetak')->default(0);

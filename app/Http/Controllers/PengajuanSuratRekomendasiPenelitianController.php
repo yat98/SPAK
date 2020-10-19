@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use Session;
 use Storage;
 use App\User;
+use DataTables;
+use App\Operator;
 use App\Mahasiswa;
 use App\NotifikasiUser;
+use App\NotifikasiOperator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\PengajuanSuratRekomendasiPenelitian;
 use App\Http\Requests\PengajuanSuratRekomendasiPenelitianRequest;
 
@@ -16,52 +20,141 @@ class PengajuanSuratRekomendasiPenelitianController extends Controller
 {
     public function indexMahasiswa(){
         $perPage = $this->perPage;
-        $pengajuanSuratPenelitianList = PengajuanSuratRekomendasiPenelitian::where('nim',Session::get('nim'))->paginate($perPage);
-        $countAllPengajuan = $pengajuanSuratPenelitianList->count();
-        $countPengajuanSuratPenelitian = $pengajuanSuratPenelitianList->count();
-        return view($this->segmentUser.'.pengajuan_surat_rekomendasi_penelitian',compact('perPage','pengajuanSuratPenelitianList','countAllPengajuan','countPengajuanSuratPenelitian'));
+
+        $countAllPengajuan = PengajuanSuratRekomendasiPenelitian::where('nim',Auth::user()->nim)
+                                                                  ->count();
+        
+        return view($this->segmentUser.'.surat_rekomendasi_penelitian',compact('countAllPengajuan','perPage'));
     }
 
-    public function create(){
-        if(!$this->isSuratPenelitianDiajukanExists()){
-            return redirect($this->segmentUser.'/pengajuan/surat-rekomendasi-penelitian');
+    public function getAllPengajuan(){
+        if(isset(Auth::user()->nim)){
+            return DataTables::of(PengajuanSuratRekomendasiPenelitian::where('pengajuan_surat_rekomendasi_penelitian.nim',Auth::user()->nim)
+                                    ->join('mahasiswa','pengajuan_surat_rekomendasi_penelitian.nim','=','mahasiswa.nim')
+                                    ->select('mahasiswa.nama','pengajuan_surat_rekomendasi_penelitian.*','mahasiswa.nim')
+                                    ->with(['mahasiswa']))
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();                            
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->make(true);
+        } else if(isset(Auth::user()->id)){
+            $pengajuanSurat = PengajuanSuratRekomendasiPenelitian::join('mahasiswa','pengajuan_surat_rekomendasi_penelitian.nim','=','mahasiswa.nim')
+                                ->select('mahasiswa.nama','pengajuan_surat_rekomendasi_penelitian.*','mahasiswa.nim')
+                                ->with(['mahasiswa']);
+
+            if(Auth::user()->bagian == 'front office'){
+                $pengajuanSurat = $pengajuanSurat->whereIn('status',['diajukan','ditolak'])
+                                                 ->where('id_operator',Auth::user()->id);
+            }elseif(Auth::user()->bagian == 'subbagian pengajaran dan pendidikan'){
+                $pengajuanSurat = $pengajuanSurat->whereIn('status',['diajukan','ditolak']);
+            }
+
+            return DataTables::of($pengajuanSurat)
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id_pengajuan;
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();                            
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->make(true);
+        } else if(isset(Auth::user()->nip)){
+            $pengajuanSurat = PengajuanSuratRekomendasiPenelitian::join('mahasiswa','pengajuan_surat_rekomendasi_penelitian.nim','=','mahasiswa.nim')
+                                ->select('mahasiswa.nama','pengajuan_surat_rekomendasi_penelitian.*','mahasiswa.nim')
+                                ->with(['mahasiswa']);
+
+            if (Auth::user()->jabatan == 'kasubag kemahasiswaan') {
+                $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_rekomendasi_penelitian.status','verifikasi kasubag');
+            }else if(Auth::user()->jabatan == 'kabag tata usaha'){
+                $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_rekomendasi_penelitian.status','verifikasi kabag');
+            }
+
+            return DataTables::of($pengajuanSurat)
+                            ->addColumn('aksi', function ($data) {
+                                return $data->id_pengajuan;
+                            })
+                            ->addColumn("waktu_pengajuan", function ($data) {
+                                return $data->created_at->diffForHumans();                            
+                            })
+                            ->editColumn("status", function ($data) {
+                                return ucwords($data->status);
+                            })
+                            ->editColumn("created_at", function ($data) {
+                                return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                            })
+                            ->make(true);
         }
-        return view($this->segmentUser.'.tambah_pengajuan_surat_rekomendasi_penelitian');
     }
 
-    public function store(PengajuanSuratRekomendasiPenelitianRequest $request){
+    public function createPengajuan(){
+        if(isset(Auth::user()->nim)){
+            if(!$this->isSuratDiajukanExists()){
+                return redirect($this->segmentUser.'/surat-rekomendasi-penelitian');
+            }
+            return view($this->segmentUser.'.tambah_pengajuan_surat_rekomendasi_penelitian');
+        }else{
+            $mahasiswa = $this->generateMahasiswa();
+            return view($this->segmentUser.'.tambah_pengajuan_surat_rekomendasi_penelitian',compact('mahasiswa'));
+        }
+    }
+
+    public function storePengajuan(PengajuanSuratRekomendasiPenelitianRequest $request){
         $input = $request->all();
-        $mahasiswa = Mahasiswa::where('nim',Session::get('nim'))->first();
+        $input['id_operator'] = Auth::user()->id;
 
         if($request->has('file_rekomendasi_jurusan')){
             $imageFieldName = 'file_rekomendasi_jurusan'; 
             $uploadPath = 'upload_rekomendasi_jurusan';
             $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
         }
-        DB::beginTransaction();
 
+        $operator = Operator::where('bagian','subbagian pengajaran dan pendidikan')->where('status_aktif','aktif')->first();
+
+        if(isset(Auth::user()->nim)){
+            $mahasiswa = Mahasiswa::where('nim',Auth::user()->nim)->first();
+            $isiNotifikasi = 'Mahasiswa dengan nama '.$mahasiswa->nama.' membuat pengajuan surat rekomendasi penelitian.';
+        } else if(isset(Auth::user()->id)){
+            $mahasiswa = Mahasiswa::where('nim',$request->nim)->first();
+            $isiNotifikasi = 'Front office membuat pengajuan surat rekomendasi penelitian dengan nama mahasiswa '.$mahasiswa->nama;
+        }
+
+        DB::beginTransaction();
         try{ 
-            $user = User::where('jabatan','kasubag pendidikan dan pengajaran')->where('status_aktif','aktif')->first();
             PengajuanSuratRekomendasiPenelitian::create($input);
-            NotifikasiUser::create([
-                'nip'=>$user->nip,
+            NotifikasiOperator::create([
+                'id_operator'=>$operator->id,
                 'judul_notifikasi'=>'Surat Rekomendasi Penelitian',
-                'isi_notifikasi'=>'Mahasiswa dengan nama '.$mahasiswa->nama.' membuat pengajuan surat rekomendasi penelitian.',
-                'link_notifikasi'=>url('pegawai/surat-rekomendasi-penelitian')
+                'isi_notifikasi'=>$isiNotifikasi,
+                'link_notifikasi'=>url('operator/surat-rekomendasi-penelitian')
             ]);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan surat rekomendasi penelitian gagal dibuat.');
+            $this->setFlashData('error','Pengajuan Gagal','Pengajuan surat rekomendasi penelitian gagal dibuat.');
         }
 
         DB::commit();
         $this->setFlashData('success','Berhasil','Pengajuan surat rekomendasi penelitian berhasil ditambahkan.');
-        return redirect($this->segmentUser.'/pengajuan/surat-rekomendasi-penelitian');
+        return redirect($this->segmentUser.'/surat-rekomendasi-penelitian');
     }
 
-    public function edit(PengajuanSuratRekomendasiPenelitian $pengajuanSuratPenelitian)
+    public function edit(PengajuanSuratRekomendasiPenelitian $pengajuanSurat)
     {
-        return view($this->segmentUser.'.edit_pengajuan_surat_rekomendasi_penelitian',compact('pengajuanSuratPenelitian'));        
+        $mahasiswa = $this->generateMahasiswa();
+        return view($this->segmentUser.'.edit_pengajuan_surat_rekomendasi_penelitian',compact('pengajuanSurat','mahasiswa'));        
     }
 
     public function update(PengajuanSuratRekomendasiPenelitianRequest $request, PengajuanSuratRekomendasiPenelitian $pengajuanSuratPenelitian){
@@ -74,7 +167,15 @@ class PengajuanSuratRekomendasiPenelitianController extends Controller
         }
         $pengajuanSuratPenelitian->update($input);
         $this->setFlashData('success','Berhasil','Pengajuan surat rekomendasi penelitian berhasil diubah.');
-        return redirect($this->segmentUser.'/pengajuan/surat-rekomendasi-penelitian');
+        return redirect($this->segmentUser.'/surat-rekomendasi-penelitian');
+    }
+
+    public function destroy(PengajuanSuratRekomendasiPenelitian $pengajuanSurat)
+    {
+        $this->deleteImage('file_rekomendasi_jurusan',$pengajuanSurat->file_rekomendasi_jurusan);
+        $pengajuanSurat->delete();
+        $this->setFlashData('success','Berhasil','Pengajuan surat rekomendasi penelitian berhasil dihapus');
+        return redirect($this->segmentUser.'/surat-rekomendasi-penelitian');
     }
 
     public function progress(PengajuanSuratRekomendasiPenelitian $pengajuanSuratPenelitian){
@@ -100,11 +201,12 @@ class PengajuanSuratRekomendasiPenelitianController extends Controller
 
     public function show(PengajuanSuratRekomendasiPenelitian $pengajuanSuratPenelitian)
     {
-        $pengajuan = collect($pengajuanSuratPenelitian->load('mahasiswa.prodi.jurusan'));
-        $pengajuan->put('created_at',$pengajuanSuratPenelitian->created_at->isoFormat('D MMMM Y'));
+        $pengajuan = collect($pengajuanSuratPenelitian->load('mahasiswa.prodi.jurusan','operator'));
+        $pengajuan->put('status',ucwords($pengajuanSuratPenelitian->status));
+        $pengajuan->put('dibuat',$pengajuanSuratPenelitian->created_at->isoFormat('D MMMM Y HH:mm:ss'));
         $pengajuan->put('file_rekomendasi_jurusan',asset('upload_rekomendasi_jurusan/'.$pengajuanSuratPenelitian->file_rekomendasi_jurusan));
-
         $pengajuan->put('nama_file_rekomendasi_jurusan',explode('.',$pengajuanSuratPenelitian->file_rekomendasi_jurusan)[0]);
+
         return $pengajuan->toJson();
     }
 
@@ -128,7 +230,7 @@ class PengajuanSuratRekomendasiPenelitianController extends Controller
         }
     }
 
-    private function isSuratPenelitianDiajukanExists(){
+    private function isSuratDiajukanExists(){
         $suratPenelitian = PengajuanSuratRekomendasiPenelitian::where('status','diajukan')->exists();
         if($suratPenelitian){
             $this->setFlashData('info','Pengajuan Surat','Pengajuan surat rekomendasi penelitian sementara diproses!');

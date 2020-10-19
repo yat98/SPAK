@@ -11,14 +11,14 @@
                     <h3 class="page-title">
                         <span class="page-title-icon bg-gradient-primary text-white mr-2">
                             <i class="mdi mdi-file-document-box"></i>
-                        </span> Surat Keterangan Lulus</h3>
+                        </span>Surat Keterangan Lulus</h3>
                 </div>
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Buat Pengajuan Surat Keterangan Lulus</h3>
-                                {{ Form::open(['url'=>'mahasiswa/pengajuan/surat-keterangan-lulus','files'=>true]) }}
+                                <h3 class="mb-5">Tambah Pengajuan Surat Keterangan Lulus</h3>
+                                {{ Form::open(['url'=>'mahasiswa/surat-keterangan-lulus/pengajuan','files'=>true]) }}
                                 @include('mahasiswa.form_pengajuan_surat_keterangan_lulus',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>

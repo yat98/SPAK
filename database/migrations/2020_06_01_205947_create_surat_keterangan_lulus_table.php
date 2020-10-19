@@ -14,9 +14,10 @@ class CreateSuratKeteranganLulusTable extends Migration
     public function up()
     {
         Schema::create('surat_keterangan_lulus', function (Blueprint $table) {
-            $table->integer('id_pengajuan_surat_lulus')->unsigned()->primary();
+            $table->integer('id_pengajuan')->unsigned()->primary();
             $table->char('nip',18)->nullable();
             $table->integer('id_kode_surat')->unsigned();
+            $table->integer('id_operator')->unsigned();
             $table->char('nomor_surat',6);
             $table->integer('jumlah_cetak')->default(0);
             $table->timestamps();

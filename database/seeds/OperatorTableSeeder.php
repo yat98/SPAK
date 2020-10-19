@@ -17,7 +17,7 @@ class OperatorTableSeeder extends Seeder
 
         $bagianList = [
                         'subbagian kemahasiswaan',
-                        'subbagian pengajaran dan pendidikan',
+                        'subbagian pendidikan dan pengajaran',
                         'subbagian umum & bmn',
                         'front office'
         ];

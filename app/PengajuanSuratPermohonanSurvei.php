@@ -10,6 +10,7 @@ class PengajuanSuratPermohonanSurvei extends Model
 
     protected $fillable = [
         'nim',
+        'id_operator',
         'mata_kuliah',
         'kepada',
         'file_rekomendasi_jurusan',
@@ -24,6 +25,10 @@ class PengajuanSuratPermohonanSurvei extends Model
 
     public function mahasiswa(){
         return $this->belongsTo('App\Mahasiswa','nim');
+    }
+
+    public function operator(){
+        return $this->belongsTo('App\Operator','id_operator');
     }
 
     public function suratPermohonanSurvei(){

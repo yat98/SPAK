@@ -12,6 +12,7 @@ use App\NotifikasiUser;
 use App\NotifikasiMahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\SuratPermohonanPengambilanDataAwal;
 use App\PengajuanSuratPermohonanPengambilanDataAwal;
 use App\Http\Requests\SuratPermohonanPengambilanDataAwalRequest;
@@ -35,6 +36,24 @@ class SuratPermohonanPengambilanDataAwalController extends Controller
         $countPengajuanDataAwal = $pengajuanSuratDataAwalList->count();
         $countSuratDataAwal = $suratDataAwalList->count();
         return view('user.'.$this->segmentUser.'.surat_permohonan_pengambilan_data_awal',compact('perPage','mahasiswa','nomorSurat','pengajuanSuratDataAwalList','suratDataAwalList','countAllPengajuanDataAwal','countAllSuratDataAwal','countPengajuanDataAwal','countSuratDataAwal'));
+    }
+
+    public function indexOperator(){
+        $perPage = $this->perPage;
+
+        $countAllPengajuan = PengajuanSuratPermohonanPengambilanDataAwal::whereIn('status',['diajukan','ditolak']);
+
+        if(Auth::user()->bagian == 'front office'){
+            $countAllPengajuan = $countAllPengajuan->where('id_operator',Auth::user()->id);
+        }
+
+        $countAllPengajuan = $countAllPengajuan->count();
+
+        $countAllSurat = SuratPermohonanPengambilanDataAwal::join('pengajuan_surat_permohonan_pengambilan_data_awal','surat_permohonan_pengambilan_data_awal.id_pengajuan','=','pengajuan_surat_permohonan_pengambilan_data_awal.id')
+                                                 ->whereNotIn('status',['diajukan'])
+                                                 ->count();
+
+        return view($this->segmentUser.'.surat_permohonan_pengambilan_data_awal',compact('countAllPengajuan','perPage','countAllSurat'));
     }
 
     public function indexPimpinan(){
@@ -143,21 +162,32 @@ class SuratPermohonanPengambilanDataAwalController extends Controller
     {
         $surat = collect($suratDataAwal->load(['pengajuanSuratPermohonanPengambilanDataAwal.mahasiswa.prodi.jurusan','kodeSurat','user']));
         $kodeSurat = explode('/',$suratDataAwal->kodeSurat->kode_surat);
-        $surat->put('created_at',$suratDataAwal->created_at->isoFormat('D MMMM Y'));
-        $surat->put('updated_at',$suratDataAwal->created_at->isoFormat('D MMMM Y'));
+        $surat->put('status',ucwords($suratDataAwal->status));
+        $surat->put('dibuat',$suratDataAwal->created_at->isoFormat('D MMMM Y HH:mm:ss'));
         $surat->put('file_rekomendasi_jurusan',asset('upload_rekomendasi_jurusan/'.$suratDataAwal->pengajuanSuratPermohonanPengambilanDataAwal->file_rekomendasi_jurusan));
         $surat->put('nama_file_rekomendasi_jurusan',explode('.',$suratDataAwal->pengajuanSuratPermohonanPengambilanDataAwal->file_rekomendasi_jurusan)[0]);
         $surat->put('nomor_surat','B/'.$suratDataAwal->nomor_surat.'/'.$kodeSurat[0].'.1/'.$kodeSurat[1].'/'.$suratDataAwal->created_at->year);
+
         return $surat->toJson();
     }
 
-    public function destroy(SuratPermohonanPengambilanDataAwal $suratDataAwal)
-    {
-        $this->deleteImage('file_rekomendasi_jurusan',$suratDataAwal->pengajuanSuratPermohonanPengambilanDataAwal->file_rekomendasi_jurusan);
-        $suratDataAwal->pengajuanSuratPermohonanPengambilanDataAwal->delete();
-        $suratDataAwal->delete();
-        $this->setFlashData('success','Berhasil','Surat permohonan pengambilan data awal mahasiswa dengan nama '.$suratDataAwal->pengajuanSuratPermohonanPengambilanDataAwal->mahasiswa->nama.' berhasil dihapus');
-        return redirect($this->segmentUser.'/surat-permohonan-pengambilan-data-awal');
+    public function progress(PengajuanSuratPermohonanPengambilanDataAwal $pengajuanSurat){
+        $pengajuan = $pengajuanSurat->load(['suratPermohonanPengambilanDataAwal.user','mahasiswa']);
+        $data = collect($pengajuan);
+        $data->put('status',ucwords($pengajuanSurat->status));
+
+        if($pengajuan->status == 'selesai'){
+            $tanggalSelesai = $pengajuanSurat->suratPermohonanPengambilanDataAwal->updated_at->isoFormat('D MMMM Y HH:mm:ss');
+            $data->put('tanggal',$tanggalSelesai);
+        }else if($pengajuan->status == 'ditolak'){
+            $tanggalDitolak = $pengajuanSurat->updated_at->isoFormat('D MMMM Y HH:mm:ss');
+            $data->put('tanggal',$tanggalDitolak);
+        }else{
+            $tanggal = $pengajuanSurat->updated_at->isoFormat('D MMMM Y HH:mm:ss');
+            $data->put('tanggal',$tanggal);
+        }
+
+        return $data->toJson();
     }
 
     public function createSurat(PengajuanSuratPermohonanPengambilanDataAwal $pengajuanSuratDataAwal){

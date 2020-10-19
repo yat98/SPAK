@@ -643,7 +643,7 @@ $('.table-responsive').on('click','.btn-surat-masuk-detail',function(e){
                                             <td>
                                                 <a href="${suratMasuk.link_file}" class="btn btn-info btn-sm" data-lightbox="${suratMasuk.nama_file}">
                                                 <i class="mdi mdi mdi-eye"></i>
-                                                Lihat File Surat Masuk</a>
+                                                Lihat File</a>
                                             </td>
                                         </tr>
                                     </table>
@@ -783,7 +783,7 @@ $('.table-responsive').on('click','.btn-pengajuan-surat-dispensasi-detail',funct
                                                     <td>
                                                     <a href="${suratDispensasi.link_file}" class="btn btn-info btn-sm" data-lightbox="${suratDispensasi.nama_file}">
                                                         <i class="mdi mdi mdi-eye"></i>
-                                                        Lihat File Surat Masuk</a>
+                                                        Lihat File</a>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -909,7 +909,7 @@ $('.table-responsive').on('click','.btn-surat-dispensasi-detail',function(e){
                                                     <td>
                                                     <a href="${suratDispensasi.link_file}" class="btn btn-info btn-sm" data-lightbox="${suratDispensasi.nama_file}">
                                                         <i class="mdi mdi mdi-eye"></i>
-                                                        Lihat File Surat Masuk</a>
+                                                        Lihat File</a>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -1902,7 +1902,7 @@ $('.table-responsive').on('click','.btn-surat-pengantar-beasiswa-detail',functio
                                                     <td>
                                                         <a href="${beasiswa.link_file}" class="btn btn-info btn-sm" data-lightbox="${beasiswa.nama_file}">
                                                         <i class="mdi mdi mdi-eye"></i>
-                                                        Lihat File Surat Masuk</a>
+                                                        Lihat File</a>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -2013,7 +2013,7 @@ $('.table-responsive').on('click','.btn-disposisi-detail',function(e){
             $('#disposisi-detail-content').html(html);
         });
 })
-$('.btn-pengajuan-surat-lulus-detail').on('click',function(e){
+$('.table-responsive').on('click','.pengajuan-surat-keterangan-lulus-detail',function(e){
     e.preventDefault();
     $('#surat-keterangan-lulus-detail-content').empty();
     let url = $(this).attr('href');
@@ -2022,65 +2022,73 @@ $('.btn-pengajuan-surat-lulus-detail').on('click',function(e){
         .then(result => {
             let suratLulus = result;
             let label;
-            if(suratLulus.status == 'diajukan' || suratLulus.status == 'menunggu tanda tangan'){
-                label = `<label class="badge badge-gradient-warning text-dark">${suratLulus.status.ucwords()}</label>`;
-            }else if(suratLulus.status == 'selesai'){
-                label = `<label class="badge badge-gradient-info">${suratLulus.status.ucwords()}</label>`;
+            
+            if (suratLulus.status == 'Selesai'){
+                label=`<label class="badge badge-gradient-info">${suratLulus.status}</label>`;
+            }else if (suratLulus.status == 'Ditolak'){
+                label=`<label class="badge badge-gradient-danger">${suratLulus.status}</label>`;
             }else{
-                label = `<label class="badge badge-gradient-danger">${suratLulus.status.ucwords()}</label>`;
+                label=`<label class="badge badge-gradient-warning text-dark">${suratLulus.status}</label>`;
             }
+
+            if(suratLulus.id_operator == null){
+                diajukan = suratLulus.mahasiswa.nama;
+            }else{
+                diajukan = suratLulus.operator.nama;
+            }
+
             let html = `<div class="table-responsive">
-                                    <table class="table">
-                                        <tr>
-                                            <th>NIM</th>
-                                            <td>${suratLulus.mahasiswa.nim}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Nama</th>
-                                            <td>${suratLulus.mahasiswa.nama}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Program Studi</th>
-                                            <td>${suratLulus.mahasiswa.prodi.strata} - ${suratLulus.mahasiswa.prodi.nama_prodi}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Jurusan</th>
-                                            <td>${suratLulus.mahasiswa.prodi.jurusan.nama_jurusan}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>IPK</th>
-                                            <td>${suratLulus.ipk}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Status</th>
-                                            <td>${label}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Keterangan</th>
-                                            <td>${suratLulus.keterangan}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>File Surat Rekomendasi Jurusan</th>
-                                            <td>
-                                                <a href="${suratLulus.file_rekomendasi_jurusan}" class="btn btn-info btn-sm" data-lightbox="${suratLulus.nama_file_rekomendasi_jurusan}">
-                                                <i class="mdi mdi mdi-eye"></i>
-                                                Lihat File</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>File Berita Acara Ujian</th>
-                                            <td>
-                                                <a href="${suratLulus.file_berita_acara_ujian}" class="btn btn-info btn-sm" data-lightbox="${suratLulus.file_berita_acara_ujian}">
-                                                <i class="mdi mdi mdi-eye"></i>
-                                                Lihat File</a>
-                                            </td>
-                                        </tr>   
-                                        <tr>
-                                            <th>Di Buat</th>
-                                            <td>${suratLulus.created_at}</td>
-                                        </tr>
-                                    </table>
-                                </div>`;
+                            <table class="table">
+                                <tr>
+                                    <th>NIM</th>
+                                    <td>${suratLulus.mahasiswa.nim}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nama</th>
+                                    <td>${suratLulus.mahasiswa.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Program Studi</th>
+                                    <td>${suratLulus.mahasiswa.prodi.strata} - ${suratLulus.mahasiswa.prodi.nama_prodi}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jurusan</th>
+                                    <td>${suratLulus.mahasiswa.prodi.jurusan.nama_jurusan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>${label}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diajukan Oleh</th>
+                                    <td>${diajukan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Keterangan</th>
+                                    <td>${suratLulus.keterangan}</td>
+                                </tr>
+                                <tr>
+                                    <th>File Surat Rekomendasi Jurusan</th>
+                                    <td>
+                                        <a href="${suratLulus.file_rekomendasi_jurusan}" class="btn btn-info btn-sm" data-lightbox="${suratLulus.nama_file_rekomendasi_jurusan}">
+                                        <i class="mdi mdi mdi-eye"></i>
+                                        Lihat File</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>File Berita Acara Ujian</th>
+                                    <td>
+                                        <a href="${suratLulus.file_berita_acara_ujian}" class="btn btn-info btn-sm" data-lightbox="${suratLulus.file_berita_acara_ujian}">
+                                        <i class="mdi mdi mdi-eye"></i>
+                                        Lihat File</a>
+                                    </td>
+                                </tr>   
+                                <tr>
+                                    <th>Di Buat</th>
+                                    <td>${suratLulus.dibuat}</td>
+                                </tr>
+                            </table>
+                        </div>`;
             $('#surat-keterangan-lulus-detail-content').html(html);
         });
 });
@@ -2166,7 +2174,7 @@ $('.btn-surat-lulus-detail').on('click',function(e){
         });
 });
 
-$('.btn-pengajuan-surat-material-detail').on('click',function(e){
+$('.table-responsive').on('click','.pengajuan-surat-material-detail',function(e){
     e.preventDefault();
     $('#surat-material-detail-content').empty();
     let url = $(this).attr('href');
@@ -2174,14 +2182,21 @@ $('.btn-pengajuan-surat-material-detail').on('click',function(e){
         .then(response => response.json())
         .then(result => {
             let suratMaterial = result;
-            let label = '';
+            let label,diajukan;
             let daftarKelompok = '';
-            if(suratMaterial.status == 'diajukan' || suratMaterial.status == 'menunggu tanda tangan'){
-                label = `<label class="badge badge-gradient-warning text-dark">${suratMaterial.status.ucwords()}</label>`;
-            }else if(suratMaterial.status == 'selesai'){
-                label = `<label class="badge badge-gradient-info">${suratMaterial.status.ucwords()}</label>`;
+            
+            if (suratMaterial.status == 'Selesai'){
+                label=`<label class="badge badge-gradient-info">${suratMaterial.status}</label>`;
+            }else if (suratMaterial.status == 'Ditolak'){
+                label=`<label class="badge badge-gradient-danger">${suratMaterial.status}</label>`;
             }else{
-                label = `<label class="badge badge-gradient-danger">${suratMaterial.status.ucwords()}</label>`;
+                label=`<label class="badge badge-gradient-warning text-dark">${suratMaterial.status}</label>`;
+            }
+
+            if(suratMaterial.id_operator == null){
+                diajukan = suratMaterial.mahasiswa.nama;
+            }else{
+                diajukan = suratMaterial.operator.nama;
             }
             
             if(suratMaterial.daftar_kelompok.length > 0){
@@ -2192,8 +2207,9 @@ $('.btn-pengajuan-surat-material-detail').on('click',function(e){
                                        </tr>`;
                 });
             }
+
             let html = `<div class="row">
-                            <div class="col-5">
+                            <div class="col-7">
                                 <div class="table-responsive">
                                     <table class="table">
                                         <tr>
@@ -2209,12 +2225,12 @@ $('.btn-pengajuan-surat-material-detail').on('click',function(e){
                                             <td>${suratMaterial.nama_kelompok}</td>
                                         </tr>
                                         <tr>
-                                            <th>Diajukan Oleh</th>
-                                            <td>${suratMaterial.mahasiswa.nama}</td>
-                                        </tr>
-                                        <tr>
                                             <th>Status</th>
                                             <td>${label}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Diajukan Oleh</th>
+                                            <td>${diajukan}</td>
                                         </tr>
                                         <tr>
                                             <th>Keterangan</th>
@@ -2230,12 +2246,12 @@ $('.btn-pengajuan-surat-material-detail').on('click',function(e){
                                         </tr> 
                                         <tr>
                                             <th>Di Buat</th>
-                                            <td>${suratMaterial.created_at}</td>
+                                            <td>${suratMaterial.dibuat}</td>
                                         </tr>
                                     </table>
                                 </div>
                             </div>
-                            <div class="col-7">
+                            <div class="col-5">
                                 <div class="table-responsive">
                                     <table class="table">
                                         <tr>
@@ -2270,6 +2286,7 @@ $('.btn-surat-material-detail').on('click',function(e){
             
             let label = '';
             let daftarKelompok = '';
+            
             if(suratMaterial.status == 'diajukan' || suratMaterial.status == 'menunggu tanda tangan'){
                 label = `<label class="badge badge-gradient-warning text-dark">${suratMaterial.status.ucwords()}</label>`;
             }else if(suratMaterial.status == 'selesai'){
@@ -2366,7 +2383,7 @@ $('.btn-surat-material-detail').on('click',function(e){
         });
 });
 
-$('.btn-pengajuan-surat-survei-detail').on('click',function(e){
+$('.table-responsive').on('click','.pengajuan-surat-survei-detail',function(e){
     e.preventDefault();
     $('#surat-survei-detail-content').empty();
     let url = $(this).attr('href');
@@ -2374,71 +2391,83 @@ $('.btn-pengajuan-surat-survei-detail').on('click',function(e){
         .then(response => response.json())
         .then(result => {
             let suratSurvei = result;
-            let label;
-            if(suratSurvei.status == 'diajukan' || suratSurvei.status == 'menunggu tanda tangan'){
-                label = `<label class="badge badge-gradient-warning text-dark">${suratSurvei.status.ucwords()}</label>`;
-            }else if(suratSurvei.status == 'selesai'){
-                label = `<label class="badge badge-gradient-info">${suratSurvei.status.ucwords()}</label>`;
+            let label,diajukan;
+            
+            if (suratSurvei.status == 'Selesai'){
+                label=`<label class="badge badge-gradient-info">${suratSurvei.status}</label>`;
+            }else if (suratSurvei.status == 'Ditolak'){
+                label=`<label class="badge badge-gradient-danger">${suratSurvei.status}</label>`;
             }else{
-                label = `<label class="badge badge-gradient-danger">${suratSurvei.status.ucwords()}</label>`;
+                label=`<label class="badge badge-gradient-warning text-dark">${suratSurvei.status}</label>`;
             }
+
+            if(suratSurvei.id_operator == null){
+                diajukan = suratSurvei.mahasiswa.nama;
+            }else{
+                diajukan = suratSurvei.operator.nama;
+            }
+
             let html = `<div class="table-responsive">
-                                    <table class="table">
-                                        <tr>
-                                            <th>NIM</th>
-                                            <td>${suratSurvei.mahasiswa.nim}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Nama</th>
-                                            <td>${suratSurvei.mahasiswa.nama}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Program Studi</th>
-                                            <td>${suratSurvei.mahasiswa.prodi.strata} - ${suratSurvei.mahasiswa.prodi.nama_prodi}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Jurusan</th>
-                                            <td>${suratSurvei.mahasiswa.prodi.jurusan.nama_jurusan}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Kepada</th>
-                                            <td>${suratSurvei.kepada}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Mata Kuliah</th>
-                                            <td>${suratSurvei.mata_kuliah}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Data Survei</th>
-                                            <td>${suratSurvei.data_survei}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Status</th>
-                                            <td>${label}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Keterangan</th>
-                                            <td>${suratSurvei.keterangan}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>File Surat Rekomendasi Jurusan</th>
-                                            <td>
-                                                <a href="${suratSurvei.file_rekomendasi_jurusan}" class="btn btn-info btn-sm" data-lightbox="${suratSurvei.nama_file_rekomendasi_jurusan}">
-                                                <i class="mdi mdi mdi-eye"></i>
-                                                Lihat File</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Di Buat</th>
-                                            <td>${suratSurvei.created_at}</td>
-                                        </tr>
-                                    </table>
-                                </div>`;
+                            <table class="table">
+                                <tr>
+                                    <th>NIM</th>
+                                    <td>${suratSurvei.mahasiswa.nim}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nama</th>
+                                    <td>${suratSurvei.mahasiswa.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Program Studi</th>
+                                    <td>${suratSurvei.mahasiswa.prodi.strata} - ${suratSurvei.mahasiswa.prodi.nama_prodi}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jurusan</th>
+                                    <td>${suratSurvei.mahasiswa.prodi.jurusan.nama_jurusan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Kepada</th>
+                                    <td>${suratSurvei.kepada}</td>
+                                </tr>
+                                <tr>
+                                    <th>Mata Kuliah</th>
+                                    <td>${suratSurvei.mata_kuliah}</td>
+                                </tr>
+                                <tr>
+                                    <th>Data Survei</th>
+                                    <td>${suratSurvei.data_survei}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>${label}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diajukan Oleh</th>
+                                    <td>${diajukan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Keterangan</th>
+                                    <td>${suratSurvei.keterangan}</td>
+                                </tr>
+                                <tr>
+                                    <th>File Surat Rekomendasi Jurusan</th>
+                                    <td>
+                                        <a href="${suratSurvei.file_rekomendasi_jurusan}" class="btn btn-info btn-sm" data-lightbox="${suratSurvei.nama_file_rekomendasi_jurusan}">
+                                        <i class="mdi mdi mdi-eye"></i>
+                                        Lihat File</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Di Buat</th>
+                                    <td>${suratSurvei.dibuat}</td>
+                                </tr>
+                            </table>
+                        </div>`;
             $('#surat-survei-detail-content').html(html);
         });
 });
 
-$('.btn-pengajuan-penelitian-detail').on('click',function(e){
+$('.table-responsive').on('click','.pengajuan-surat-penelitian-detail',function(e){
     e.preventDefault();
     $('#surat-penelitian-detail-content').empty();
     let url = $(this).attr('href');
@@ -2446,67 +2475,79 @@ $('.btn-pengajuan-penelitian-detail').on('click',function(e){
         .then(response => response.json())
         .then(result => {
             let suratPenelitian = result;
-            let label;
-            if(suratPenelitian.status == 'diajukan' || suratPenelitian.status == 'menunggu tanda tangan'){
-                label = `<label class="badge badge-gradient-warning text-dark">${suratPenelitian.status.ucwords()}</label>`;
-            }else if(suratPenelitian.status == 'selesai'){
-                label = `<label class="badge badge-gradient-info">${suratPenelitian.status.ucwords()}</label>`;
+            let label,diajukan;
+
+            if (suratPenelitian.status == 'Selesai'){
+                label=`<label class="badge badge-gradient-info">${suratPenelitian.status}</label>`;
+            }else if (suratPenelitian.status == 'Ditolak'){
+                label=`<label class="badge badge-gradient-danger">${suratPenelitian.status}</label>`;
             }else{
-                label = `<label class="badge badge-gradient-danger">${suratPenelitian.status.ucwords()}</label>`;
+                label=`<label class="badge badge-gradient-warning text-dark">${suratPenelitian.status}</label>`;
             }
+
+            if(suratPenelitian.id_operator == null){
+                diajukan = suratPenelitian.mahasiswa.nama;
+            }else{
+                diajukan = suratPenelitian.operator.nama;
+            }
+
             let html = `<div class="table-responsive">
-                                    <table class="table">
-                                        <tr>
-                                            <th>NIM</th>
-                                            <td>${suratPenelitian.mahasiswa.nim}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Nama</th>
-                                            <td>${suratPenelitian.mahasiswa.nama}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Program Studi</th>
-                                            <td>${suratPenelitian.mahasiswa.prodi.strata} - ${suratPenelitian.mahasiswa.prodi.nama_prodi}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Jurusan</th>
-                                            <td>${suratPenelitian.mahasiswa.prodi.jurusan.nama_jurusan}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Kepada</th>
-                                            <td>${suratPenelitian.kepada}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Judul</th>
-                                            <td>${suratPenelitian.judul}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Status</th>
-                                            <td>${label}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Keterangan</th>
-                                            <td>${suratPenelitian.keterangan}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>File Surat Rekomendasi Jurusan</th>
-                                            <td>
-                                                <a href="${suratPenelitian.file_rekomendasi_jurusan}" class="btn btn-info btn-sm" data-lightbox="${suratPenelitian.nama_file_rekomendasi_jurusan}">
-                                                <i class="mdi mdi mdi-eye"></i>
-                                                Lihat File</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Di Buat</th>
-                                            <td>${suratPenelitian.created_at}</td>
-                                        </tr>
-                                    </table>
-                                </div>`;
+                            <table class="table">
+                                <tr>
+                                    <th>NIM</th>
+                                    <td>${suratPenelitian.mahasiswa.nim}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nama</th>
+                                    <td>${suratPenelitian.mahasiswa.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Program Studi</th>
+                                    <td>${suratPenelitian.mahasiswa.prodi.strata} - ${suratPenelitian.mahasiswa.prodi.nama_prodi}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jurusan</th>
+                                    <td>${suratPenelitian.mahasiswa.prodi.jurusan.nama_jurusan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Kepada</th>
+                                    <td>${suratPenelitian.kepada}</td>
+                                </tr>
+                                <tr>
+                                    <th>Judul</th>
+                                    <td>${suratPenelitian.judul}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>${label}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diajukan Oleh</th>
+                                    <td>${diajukan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Keterangan</th>
+                                    <td>${suratPenelitian.keterangan}</td>
+                                </tr>
+                                <tr>
+                                    <th>File Surat Rekomendasi Jurusan</th>
+                                    <td>
+                                        <a href="${suratPenelitian.file_rekomendasi_jurusan}" class="btn btn-info btn-sm" data-lightbox="${suratPenelitian.nama_file_rekomendasi_jurusan}">
+                                        <i class="mdi mdi mdi-eye"></i>
+                                        Lihat File</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Di Buat</th>
+                                    <td>${suratPenelitian.dibuat}</td>
+                                </tr>
+                            </table>
+                        </div>`;
             $('#surat-penelitian-detail-content').html(html);
         });
 });
 
-$('.btn-pengajuan-surat-data-awal-detail').on('click',function(e){
+$('.table-responsive').on('click','.pengajuan-surat-data-awal-detail',function(e){
     e.preventDefault();
     $('#surat-data-awal-detail-content').empty();
     let url = $(this).attr('href');
@@ -2514,62 +2555,74 @@ $('.btn-pengajuan-surat-data-awal-detail').on('click',function(e){
         .then(response => response.json())
         .then(result => {
             let suratDataAwal = result;
-            let label;
-            if(suratDataAwal.status == 'diajukan' || suratDataAwal.status == 'menunggu tanda tangan'){
-                label = `<label class="badge badge-gradient-warning text-dark">${suratDataAwal.status.ucwords()}</label>`;
-            }else if(suratDataAwal.status == 'selesai'){
-                label = `<label class="badge badge-gradient-info">${suratDataAwal.status.ucwords()}</label>`;
+            let label,diajukan;
+
+            if (suratDataAwal.status == 'Selesai'){
+                label=`<label class="badge badge-gradient-info">${suratDataAwal.status}</label>`;
+            }else if (suratDataAwal.status == 'Ditolak'){
+                label=`<label class="badge badge-gradient-danger">${suratDataAwal.status}</label>`;
             }else{
-                label = `<label class="badge badge-gradient-danger">${suratDataAwal.status.ucwords()}</label>`;
+                label=`<label class="badge badge-gradient-warning text-dark">${suratDataAwal.status}</label>`;
             }
+
+            if(suratDataAwal.id_operator == null){
+                diajukan = suratDataAwal.mahasiswa.nama;
+            }else{
+                diajukan = suratDataAwal.operator.nama;
+            }
+
             let html = `<div class="table-responsive">
-                                    <table class="table">
-                                        <tr>
-                                            <th>NIM</th>
-                                            <td>${suratDataAwal.mahasiswa.nim}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Nama</th>
-                                            <td>${suratDataAwal.mahasiswa.nama}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Program Studi</th>
-                                            <td>${suratDataAwal.mahasiswa.prodi.strata} - ${suratDataAwal.mahasiswa.prodi.nama_prodi}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Jurusan</th>
-                                            <td>${suratDataAwal.mahasiswa.prodi.jurusan.nama_jurusan}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Kepada</th>
-                                            <td>${suratDataAwal.kepada}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Tempat Pengambilan Data</th>
-                                            <td>${suratDataAwal.tempat_pengambilan_data}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Status</th>
-                                            <td>${label}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Keterangan</th>
-                                            <td>${suratDataAwal.keterangan}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>File Surat Rekomendasi Jurusan</th>
-                                            <td>
-                                                <a href="${suratDataAwal.file_rekomendasi_jurusan}" class="btn btn-info btn-sm" data-lightbox="${suratDataAwal.nama_file_rekomendasi_jurusan}">
-                                                <i class="mdi mdi mdi-eye"></i>
-                                                Lihat File</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Di Buat</th>
-                                            <td>${suratDataAwal.created_at}</td>
-                                        </tr>
-                                    </table>
-                                </div>`;
+                            <table class="table">
+                                <tr>
+                                    <th>NIM</th>
+                                    <td>${suratDataAwal.mahasiswa.nim}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nama</th>
+                                    <td>${suratDataAwal.mahasiswa.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Program Studi</th>
+                                    <td>${suratDataAwal.mahasiswa.prodi.strata} - ${suratDataAwal.mahasiswa.prodi.nama_prodi}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jurusan</th>
+                                    <td>${suratDataAwal.mahasiswa.prodi.jurusan.nama_jurusan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Kepada</th>
+                                    <td>${suratDataAwal.kepada}</td>
+                                </tr>
+                                <tr>
+                                    <th>Tempat Pengambilan Data</th>
+                                    <td>${suratDataAwal.tempat_pengambilan_data}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>${label}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diajukan Oleh</th>
+                                    <td>${diajukan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Keterangan</th>
+                                    <td>${suratDataAwal.keterangan}</td>
+                                </tr>
+                                <tr>
+                                    <th>File Surat Rekomendasi Jurusan</th>
+                                    <td>
+                                        <a href="${suratDataAwal.file_rekomendasi_jurusan}" class="btn btn-info btn-sm" data-lightbox="${suratDataAwal.nama_file_rekomendasi_jurusan}">
+                                        <i class="mdi mdi mdi-eye"></i>
+                                        Lihat File</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Di Buat</th>
+                                    <td>${suratDataAwal.dibuat}</td>
+                                </tr>
+                            </table>
+                        </div>`;
             $('#surat-data-awal-detail-content').html(html);
         });
 });

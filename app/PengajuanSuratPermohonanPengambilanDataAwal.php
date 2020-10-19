@@ -10,6 +10,7 @@ class PengajuanSuratPermohonanPengambilanDataAwal extends Model
 
     protected $fillable = [
         'nim',
+        'id_operator',
         'kepada',
         'tempat_pengambilan_data',
         'file_rekomendasi_jurusan',
@@ -19,6 +20,10 @@ class PengajuanSuratPermohonanPengambilanDataAwal extends Model
 
     public function mahasiswa(){
         return $this->belongsTo('App\Mahasiswa','nim');
+    }
+
+    public function operator(){
+        return $this->belongsTo('App\Operator','id_operator');
     }
 
     public function suratPermohonanPengambilanDataAwal(){

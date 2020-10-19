@@ -76,7 +76,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('surat_pengantar_beasiswa', SuratPengantarBeasiswa::class);
         Route::model('pengajuan_kegiatan_mahasiswa', PengajuanSuratKegiatanMahasiswa::class);
         Route::model('surat_kegiatan_mahasiswa', SuratKegiatanMahasiswa::class);
-        Route::model('pengajuan_surat_keterangan_lulus', PengajuanSuratKeteranganLulus::class);
+        Route::model('pengajuan_surat_lulus', PengajuanSuratKeteranganLulus::class);
         Route::model('surat_keterangan_lulus', SuratKeteranganLulus::class);
         Route::model('pengajuan_surat_material', PengajuanSuratPermohonanPengambilanMaterial::class);
         Route::model('surat_material', SuratPermohonanPengambilanMaterial::class);

@@ -29,7 +29,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="col-md-6 stretch-card grid-margin">
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">

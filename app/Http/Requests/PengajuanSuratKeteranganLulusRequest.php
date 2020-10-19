@@ -24,18 +24,17 @@ class PengajuanSuratKeteranganLulusRequest extends FormRequest
     public function rules()
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
-            $fileRekomendasiJurusanRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
-            $fileBeritaAcaraUjianRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
+            $fileRekomendasiJurusanRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:2048'; 
+            $fileBeritaAcaraUjianRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:2048'; 
         }else{
-            $fileRekomendasiJurusanRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
-            $fileBeritaAcaraUjianRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
+            $fileRekomendasiJurusanRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:2048'; 
+            $fileBeritaAcaraUjianRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:2048'; 
         }
         return [
             'nim'=>'required',
             'file_rekomendasi_jurusan'=>$fileRekomendasiJurusanRules,
             'file_berita_acara_ujian'=>$fileBeritaAcaraUjianRules,
             'tanggal_wisuda'=>'required|date',
-            'ipk'=>'required',
         ];
     }
 }

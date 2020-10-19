@@ -8,7 +8,7 @@ class SuratKeteranganLulus extends Model
 {
     protected $table = 'surat_keterangan_lulus';
 
-    protected $primaryKey = 'id_pengajuan_surat_lulus';
+    protected $primaryKey = 'id_pengajuan';
     
     protected $fillable = [
         'id_pengajuan_surat_lulus',
@@ -27,6 +27,6 @@ class SuratKeteranganLulus extends Model
     }
 
     public function pengajuanSuratKeteranganLulus(){
-        return $this->belongsTo('App\PengajuanSuratKeteranganLulus','id_pengajuan_surat_lulus');
+        return $this->belongsTo('App\PengajuanSuratKeteranganLulus','id_pengajuan');
     }
 }

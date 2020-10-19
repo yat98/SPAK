@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use PDF;
-use Storage;
 use Session;
+use Storage;
 use App\User;
 use App\KodeSurat;
 use App\Mahasiswa;
@@ -12,6 +12,7 @@ use App\NotifikasiUser;
 use App\NotifikasiMahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\SuratPermohonanPengambilanMaterial;
 use App\PengajuanSuratPermohonanPengambilanMaterial;
 use App\Http\Requests\SuratPermohonanPengambilanMaterialRequest;
@@ -55,6 +56,43 @@ class SuratPermohonanPengambilanMaterialController extends Controller
         $countAllSuratMaterial=$suratMaterialList->count();
         $countsuratMaterial=$suratMaterialList->count();
         return view('user.'.$this->segmentUser.'.surat_permohonan_pengambilan_material',compact('perPage','mahasiswa','nomorSurat','pengajuanSuratMaterialList','countAllPengajuanMaterial','suratMaterialList','countAllSuratMaterial','countsuratMaterial'));
+    }
+
+    public function indexOperator(){
+        $perPage = $this->perPage;
+
+        $countAllPengajuan = PengajuanSuratPermohonanPengambilanMaterial::whereIn('status',['diajukan','ditolak']);
+
+        if(Auth::user()->bagian == 'front office'){
+            $countAllPengajuan = $countAllPengajuan->where('id_operator',Auth::user()->id);
+        }
+
+        $countAllPengajuan = $countAllPengajuan->count();
+
+        $countAllSurat = SuratPermohonanPengambilanMaterial::join('pengajuan_surat_permohonan_pengambilan_material','surat_permohonan_pengambilan_material.id_pengajuan','=','pengajuan_surat_permohonan_pengambilan_material.id')
+                                                 ->whereNotIn('status',['diajukan'])
+                                                 ->count();
+
+        return view($this->segmentUser.'.surat_permohonan_pengambilan_material',compact('countAllPengajuan','perPage','countAllSurat'));
+    }
+
+    public function progress(PengajuanSuratPermohonanPengambilanMaterial $pengajuanSurat){
+        $pengajuan = $pengajuanSurat->load(['suratPermohonanPengambilanMaterial.user','mahasiswa']);
+        $data = collect($pengajuan);
+        $data->put('status',ucwords($pengajuanSurat->status));
+
+        if($pengajuan->status == 'selesai'){
+            $tanggalSelesai = $pengajuanSurat->suratPermohonanPengambilanMaterial->updated_at->isoFormat('D MMMM Y HH:mm:ss');
+            $data->put('tanggal',$tanggalSelesai);
+        }else if($pengajuan->status == 'ditolak'){
+            $tanggalDitolak = $pengajuanSurat->updated_at->isoFormat('D MMMM Y HH:mm:ss');
+            $data->put('tanggal',$tanggalDitolak);
+        }else{
+            $tanggal = $pengajuanSurat->updated_at->isoFormat('D MMMM Y HH:mm:ss');
+            $data->put('tanggal',$tanggal);
+        }
+
+        return $data->toJson();
     }
 
     public function tandaTanganMaterial(Request $request){
@@ -181,92 +219,6 @@ class SuratPermohonanPengambilanMaterialController extends Controller
         return redirect($this->segmentUser.'/surat-permohonan-pengambilan-material');
     }
 
-    public function destroy(SuratPermohonanPengambilanMaterial $suratMaterial){
-        $this->deleteImage('file_rekomendasi_jurusan',$suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->file_rekomendasi_jurusan);
-        $suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->delete();
-        $this->setFlashData('success','Berhasil','Surat permohonan pengambilan material berhasil dihapus.');
-        return redirect($this->segmentUser.'/surat-permohonan-pengambilan-material');
-    }
-
-    public function search(Request $request){
-        $keyword = $request->all();
-        if(isset($keyword['keywords']) || isset($keyword['nomor_surat'])){
-            $perPage = $this->perPage;
-
-            
-            $mahasiswa = $this->generateMahasiswa();
-            $nomorSurat = $this->generateNomorSuratMaterial(['selesai','menunggu tanda tangan']);
-            $pengajuanSuratMaterialList =  PengajuanSuratPermohonanPengambilanMaterial::whereNotIn('status',['menunggu tanda tangan','selesai'])
-                                            ->orderByDesc('created_at')
-                                            ->orderBy('status')
-                                            ->paginate($perPage,['*'],'page_pengajuan');
-    
-            $suratMaterialList =  SuratPermohonanPengambilanMaterial::join('pengajuan_surat_permohonan_pengambilan_material','pengajuan_surat_permohonan_pengambilan_material.id','=','surat_permohonan_pengambilan_material.id_pengajuan')
-                                    ->whereIn('status',['selesai','menunggu tanda tangan'])
-                                    ->orderBy('status');
-    
-            $countAllSuratMaterial = SuratPermohonanPengambilanMaterial::join('pengajuan_surat_permohonan_pengambilan_material','pengajuan_surat_permohonan_pengambilan_material.id','=','surat_permohonan_pengambilan_material.id_pengajuan')
-                                        ->whereIn('status',['selesai','menunggu tanda tangan'])
-                                        ->orderBy('status')
-                                        ->count();
-
-            $countPengajuanSuratMaterial = $pengajuanSuratMaterialList->count();
-            
-
-            (isset($keyword['nomor_surat'])) ? $suratMaterialList = $suratMaterialList->where('nomor_surat',$keyword['nomor_surat']):'';
-            (isset($keyword['keywords'])) ? $suratMaterialList = $suratMaterialList->where('nim',$keyword['keywords']):'';
-
-            $suratMaterialList = $suratMaterialList->paginate($perPage)->appends($request->except('page'));
-
-            $countAllPengajuanSuratMaterial = $pengajuanSuratMaterialList->count();
-            $countSuratMaterial = $suratMaterialList->count();
-            if($countSuratMaterial < 1){
-                $this->setFlashData('search','Hasil Pencarian','Surat keterangan lulus tidak ditemukan!');
-            }
-
-            return view('user.'.$this->segmentUser.'.surat_permohonan_pengambilan_material',compact('perPage','mahasiswa','nomorSurat','pengajuanSuratMaterialList','suratMaterialList','countAllPengajuanSuratMaterial','countAllSuratMaterial','countPengajuanSuratMaterial','countSuratMaterial'));
-        }else{
-            return redirect($this->segmentUser.'/surat-keterangan-lulus');
-        }
-    }
-
-    public function searchPimpinan(Request $request){
-        $keyword = $request->all();
-        if(isset($keyword['keywords']) || isset($keyword['nomor_surat'])){
-            $perPage = $this->perPage;
-            $mahasiswa = $this->generateMahasiswa();
-            $nomorSurat = $this->generateNomorSuratMaterial(['selesai']);
-
-
-            $pengajuanSuratMaterialList =SuratPermohonanPengambilanMaterial::join('pengajuan_surat_permohonan_pengambilan_material','pengajuan_surat_permohonan_pengambilan_material.id','=','surat_permohonan_pengambilan_material.id_pengajuan')
-                                        ->whereIn('status',['menunggu tanda tangan'])
-                                        ->orderByDesc('surat_permohonan_pengambilan_material.created_at')
-                                        ->paginate($perPage);
-            $countAllPengajuanMaterial = $pengajuanSuratMaterialList->count();
-            $suratMaterialList =  SuratPermohonanPengambilanMaterial::join('pengajuan_surat_permohonan_pengambilan_material','pengajuan_surat_permohonan_pengambilan_material.id','=','surat_permohonan_pengambilan_material.id_pengajuan')
-                                    ->whereIn('status',['selesai'])
-                                    ->orderBy('status');
-
-            (isset($keyword['nomor_surat'])) ? $suratMaterialList = $suratMaterialList->where('nomor_surat',$keyword['nomor_surat']):'';
-            (isset($keyword['keywords'])) ? $suratMaterialList = $suratMaterialList->where('nim',$keyword['keywords']):'';
-            
-            $suratMaterialList = $suratMaterialList->paginate($perPage)->appends($request->except('page'));
-
-            $countAllSuratMaterial = SuratPermohonanPengambilanMaterial::join('pengajuan_surat_permohonan_pengambilan_material','pengajuan_surat_permohonan_pengambilan_material.id','=','surat_permohonan_pengambilan_material.id_pengajuan')
-                                        ->whereIn('status',['selesai'])
-                                        ->count();
-            $countsuratMaterial = $suratMaterialList->count();
-
-            if($countsuratMaterial < 1){
-                $this->setFlashData('search','Hasil Pencarian','Surat permohonan pengambilan material tidak ditemukan!');
-            }
-
-            return view('user.'.$this->segmentUser.'.surat_permohonan_pengambilan_material',compact('perPage','mahasiswa','nomorSurat','pengajuanSuratMaterialList','countAllPengajuanMaterial','suratMaterialList','countAllSuratMaterial','countsuratMaterial'));
-        }else{
-            return redirect($this->segmentUser.'/surat-permohonan-pengambilan-material');
-        }
-    }
-
     public function show(SuratPermohonanPengambilanMaterial $suratMaterial)
     {
         $surat = collect($suratMaterial->load(['pengajuanSuratPermohonanPengambilanMaterial.mahasiswa.prodi.jurusan','pengajuanSuratPermohonanPengambilanMaterial.daftarKelompok','user']));
@@ -286,47 +238,6 @@ class SuratPermohonanPengambilanMaterialController extends Controller
         $userList =$this->generatePimpinan();
         $kodeSurat = $this->generateKodeSurat();
         return view('user.pegawai.tambah_pengajuan_surat_permohonan_pengambilan_material',compact('pengajuanSuratMaterial','nomorSuratBaru','userList','kodeSurat'));
-    }
-
-    public function storeSurat(Request $request){
-        $this->validate($request,[
-            'id_pengajuan'=>'required',
-            'id_kode_surat'=>'required',
-            'nomor_surat'=>'required|numeric|min:1|unique:surat_keterangan_lulus,nomor_surat|unique:surat_permohonan_pengambilan_material,nomor_surat|unique:surat_permohonan_survei,nomor_surat|unique:surat_rekomendasi_penelitian,nomor_surat|unique:surat_permohonan_pengambilan_data_awal,nomor_surat',
-            'nip'=>'required',
-        ]);
-        $pengajuanSuratMaterial = PengajuanSuratPermohonanPengambilanMaterial::findOrFail($request->id_pengajuan);
-        $input = [
-            'id_pengajuan'=>$pengajuanSuratMaterial->id,
-            'nomor_surat'=>$request->nomor_surat,
-            'id_kode_surat'=>$request->id_kode_surat,
-            'nip' => $request->nip,
-        ];
-        DB::beginTransaction();
-        try{
-            $pengajuanSuratMaterial->update([
-                'status'=>'menunggu tanda tangan'
-            ]);
-            SuratPermohonanPengambilanMaterial::create($input);
-            NotifikasiMahasiswa::create([
-                'nim'=>$pengajuanSuratMaterial->nim,
-                'judul_notifikasi'=>'Surat Permohonan Pengambilan Material',
-                'isi_notifikasi'=>'Surat permohonan pengambilan material telah selesai di buat.',
-                'link_notifikasi'=>url('mahasiswa/pengajuan/surat-permohonan-pengambilan-material')
-            ]);
-            NotifikasiUser::create([
-                'nip'=>$request->nip,
-                'judul_notifikasi'=>'Surat Permohonan Pengambilan Material',
-                'isi_notifikasi'=>'Tanda tangan surat permohonan pengambilan material.',
-                'link_notifikasi'=>url('pimpinan/surat-permohonan-pengambilan-material')
-            ]);
-        }catch(Exception $e){
-            DB::rollback();
-            $this->setFlashData('error','Gagal Menambahkan Data','Surat permohonan pengambilan material gagal ditambahkan.');
-        }
-        DB::commit();
-        $this->setFlashData('success','Berhasil','Surat permohonan pengambilan material berhasil ditambahkan');
-        return redirect($this->segmentUser.'/surat-permohonan-pengambilan-material');
     }
 
     public function tolakPengajuan(Request $request, PengajuanSuratPermohonanPengambilanMaterial $pengajuanSuratMaterial){

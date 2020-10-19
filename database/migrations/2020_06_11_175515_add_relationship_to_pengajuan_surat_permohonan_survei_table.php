@@ -19,6 +19,12 @@ class AddRelationshipToPengajuanSuratPermohonanSurveiTable extends Migration
                   ->on('mahasiswa')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
+
+            $table->foreign('id_operator')
+                  ->references('id')
+                  ->on('operator')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
         });
     }
 
@@ -31,6 +37,7 @@ class AddRelationshipToPengajuanSuratPermohonanSurveiTable extends Migration
     {
         Schema::table('pengajuan_surat_permohonan_survei', function (Blueprint $table) {
             $table->dropForeign(['nim']);
+            $table->dropForeign(['id_operator']);
         });
     }
 }

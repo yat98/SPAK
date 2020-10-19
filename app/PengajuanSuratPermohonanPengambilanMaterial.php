@@ -10,6 +10,7 @@ class PengajuanSuratPermohonanPengambilanMaterial extends Model
 
     protected $fillable = [
         'nim',
+        'id_operator',
         'kepada',
         'nama_kegiatan',
         'nama_kelompok',
@@ -20,6 +21,10 @@ class PengajuanSuratPermohonanPengambilanMaterial extends Model
 
     public function mahasiswa(){
         return $this->belongsTo('App\Mahasiswa','nim');
+    }
+
+    public function operator(){
+        return $this->belongsTo('App\Operator','id_operator');
     }
 
     public function suratPermohonanPengambilanMaterial(){

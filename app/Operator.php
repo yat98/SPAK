@@ -74,4 +74,23 @@ class Operator extends Authenticable
         return $this->hasMany('App\SuratKegiatanMahasiswa','id_operator');
     }
 
+    public function pengajuanSuratKeteranganLulus(){
+        return $this->hasMany('App\PengajuanSuratKeteranganLulus','id_operator');
+    }
+
+    public function pengajuanSuratPermohonanPengambilanMaterial(){
+        return $this->hasMany('App\PengajuanSuratPermohonanPengambilanMaterial','id_operator');
+    }
+
+    public function pengajuanSuratPermohonanSurvei(){
+        return $this->hasMany('App\PengajuanSuratPermohonanSurvei','id_operator');
+    }
+
+    public function pengajuanSuratRekomendasiPenelitian(){
+        return $this->hasMany('App\PengajuanSuratRekomendasiPenelitian','id_operator');
+    }
+
+    public function pengajuanSuratPermohonanPengambilanDataAwal(){
+        return $this->hasMany('App\PengajuanSuratPermohonanPengambilanDataAwal','id_operator');
+    }
 }

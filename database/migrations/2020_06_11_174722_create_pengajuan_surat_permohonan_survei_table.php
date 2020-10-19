@@ -16,11 +16,12 @@ class CreatePengajuanSuratPermohonanSurveiTable extends Migration
         Schema::create('pengajuan_surat_permohonan_survei', function (Blueprint $table) {
             $table->increments('id');
             $table->char('nim',25)->index();
+            $table->integer('id_operator')->unsigned()->nullable();
             $table->string('mata_kuliah');
             $table->string('kepada');
             $table->string('file_rekomendasi_jurusan');
             $table->string('data_survei');
-            $table->enum('status',['diajukan','menunggu tanda tangan','selesai','ditolak'])->default('diajukan');
+            $table->enum('status',['diajukan','selesai','ditolak','verifikasi kasubag','verifikasi kabag','menunggu tanda tangan'])->default('diajukan');
             $table->string('keterangan')->default('-');
             $table->timestamps();
         });

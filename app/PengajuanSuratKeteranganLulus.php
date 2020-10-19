@@ -10,11 +10,11 @@ class PengajuanSuratKeteranganLulus extends Model
 
     protected $fillable = [
         'nim',
+        'id_operator',
         'status',
         'file_rekomendasi_jurusan',
         'file_berita_acara_ujian',
         'tanggal_wisuda',
-        'ipk',
         'keterangan',
         'status'
     ];
@@ -25,7 +25,11 @@ class PengajuanSuratKeteranganLulus extends Model
         return $this->belongsTo('App\Mahasiswa','nim');
     }
 
+    public function operator(){
+        return $this->belongsTo('App\Operator','id_operator');
+    }
+
     public function suratKeteranganLulus(){
-        return $this->hasOne('App\SuratKeteranganLulus','id_pengajuan_surat_lulus');
+        return $this->hasOne('App\SuratKeteranganLulus','id_pengajuan');
     }
 }

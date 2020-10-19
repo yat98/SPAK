@@ -11,6 +11,7 @@ use App\NotifikasiMahasiswa;
 use Illuminate\Http\Request;
 use App\SuratKeteranganLulus;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\PengajuanSuratKeteranganLulus;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\SuratKeteranganLulusRequest;
@@ -35,6 +36,24 @@ class SuratKeteranganLulusController extends Controller
         $countPengajuanSuratLulus = $pengajuanSuratLulusList->count();
         $countSuratLulus = $suratLulusList->count();
         return view('user.'.$this->segmentUser.'.surat_keterangan_lulus',compact('perPage','mahasiswa','pengajuanSuratLulusList','suratLulusList','countAllpengajuanSuratLulus','countAllsuratLulus','countPengajuanSuratLulus','countSuratLulus','nomorSurat'));
+    }
+
+    public function indexOperator(){
+        $perPage = $this->perPage;
+
+        $countAllPengajuan = PengajuanSuratKeteranganLulus::whereIn('status',['diajukan','ditolak']);
+
+        if(Auth::user()->bagian == 'front office'){
+            $countAllPengajuan = $countAllPengajuan->where('id_operator',Auth::user()->id);
+        }
+
+        $countAllPengajuan = $countAllPengajuan->count();
+
+        $countAllSurat = SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','surat_keterangan_lulus.id_pengajuan','=','pengajuan_surat_keterangan_lulus.id')
+                                                 ->whereNotIn('status',['diajukan'])
+                                                 ->count();
+             
+        return view($this->segmentUser.'.surat_keterangan_lulus',compact('countAllPengajuan','perPage','countAllSurat'));
     }
 
     public function indexPimpinan(){
@@ -183,6 +202,25 @@ class SuratKeteranganLulusController extends Controller
         return $surat->toJson();
     }
 
+    public function progress(PengajuanSuratKeteranganLulus $pengajuanSurat){
+        $pengajuan = $pengajuanSurat->load(['suratKeteranganLulus.user','mahasiswa']);
+        $data = collect($pengajuan);
+        $data->put('status',ucwords($pengajuanSurat->status));
+
+        if($pengajuan->status == 'selesai'){
+            $tanggalSelesai = $pengajuanSurat->suratKeteranganLulus->updated_at->isoFormat('D MMMM Y HH:mm:ss');
+            $data->put('tanggal',$tanggalSelesai);
+        }else if($pengajuan->status == 'ditolak'){
+            $tanggalDitolak = $pengajuanSurat->updated_at->isoFormat('D MMMM Y HH:mm:ss');
+            $data->put('tanggal',$tanggalDitolak);
+        }else{
+            $tanggal = $pengajuanSurat->updated_at->isoFormat('D MMMM Y HH:mm:ss');
+            $data->put('tanggal',$tanggal);
+        }
+
+        return $data->toJson();
+    }
+
     public function edit(SuratKeteranganLulus $suratLulus)
     {
         $kodeSurat = $this->generateKodeSurat();
@@ -213,16 +251,6 @@ class SuratKeteranganLulusController extends Controller
         $suratLulus->pengajuanSuratKeteranganLulus->update($input);
         $suratLulus->update($input);
         $this->setFlashData('success','Berhasil','Surat keterangan lulus mahasiswa dengan nama '.$suratLulus->pengajuanSuratKeteranganLulus->mahasiswa->nama.' berhasil diubah');
-        return redirect($this->segmentUser.'/surat-keterangan-lulus');
-    }
-
-    public function destroy(SuratKeteranganLulus $suratLulus)
-    {
-        $this->deleteImage('file_rekomendasi_jurusan',$suratLulus->pengajuanSuratKeteranganLulus->file_rekomendasi_jurusan);
-        $this->deleteImage('file_berita_acara_ujian',$suratLulus->pengajuanSuratKeteranganLulus->file_berita_acara_ujian);
-        $suratLulus->pengajuanSuratKeteranganLulus->delete();
-        $suratLulus->delete();
-        $this->setFlashData('success','Berhasil','Surat keterangan lulus mahasiswa dengan nama '.$suratLulus->pengajuanSuratKeteranganLulus->mahasiswa->nama.' berhasil dihapus');
         return redirect($this->segmentUser.'/surat-keterangan-lulus');
     }
     

@@ -13,6 +13,7 @@ use App\NotifikasiMahasiswa;
 use Illuminate\Http\Request;
 use App\SuratPermohonanSurvei;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\PengajuanSuratPermohonanSurvei;
 use App\Http\Requests\SuratPermohonanSurveiRequest;
 
@@ -35,6 +36,24 @@ class SuratPermohonanSurveiController extends Controller
         $countPengajuanSuratSurvei = $pengajuanSuratSurveiList->count();
         $countSuratSurvei = $suratSurveiList->count();
         return view('user.'.$this->segmentUser.'.surat_permohonan_survei',compact('perPage','mahasiswa','nomorSurat','pengajuanSuratSurveiList','suratSurveiList','countAllPengajuanSuratSurvei','countAllSuratSurvei','countPengajuanSuratSurvei','countSuratSurvei'));
+    }
+
+    public function indexOperator(){
+        $perPage = $this->perPage;
+
+        $countAllPengajuan = PengajuanSuratPermohonanSurvei::whereIn('status',['diajukan','ditolak']);
+
+        if(Auth::user()->bagian == 'front office'){
+            $countAllPengajuan = $countAllPengajuan->where('id_operator',Auth::user()->id);
+        }
+
+        $countAllPengajuan = $countAllPengajuan->count();
+
+        $countAllSurat = SuratPermohonanSurvei::join('pengajuan_surat_permohonan_survei','surat_permohonan_survei.id_pengajuan','=','pengajuan_surat_permohonan_survei.id')
+                                                 ->whereNotIn('status',['diajukan'])
+                                                 ->count();
+             
+        return view($this->segmentUser.'.surat_permohonan_survei',compact('countAllPengajuan','perPage','countAllSurat'));
     }
 
     public function indexPimpinan(){
@@ -151,64 +170,23 @@ class SuratPermohonanSurveiController extends Controller
         return redirect($this->segmentUser.'/surat-permohonan-survei');
     }
 
-    public function destroy(SuratPermohonanSurvei $suratSurvei)
-    {
-        $this->deleteImage('file_rekomendasi_jurusan',$suratSurvei->pengajuanSuratPermohonanSurvei->file_rekomendasi_jurusan);
-        $suratSurvei->pengajuanSuratPermohonanSurvei->delete();
-        $suratSurvei->delete();
-        $this->setFlashData('success','Berhasil','Surat permohonan survei mahasiswa dengan nama '.$suratSurvei->pengajuanSuratPermohonanSurvei->mahasiswa->nama.' berhasil dihapus');
-        return redirect($this->segmentUser.'/surat-permohonan-survei');
-    }
+    public function progress(PengajuanSuratPermohonanSurvei $pengajuanSurat){
+        $pengajuan = $pengajuanSurat->load(['suratPermohonanSurvei.user','mahasiswa']);
+        $data = collect($pengajuan);
+        $data->put('status',ucwords($pengajuanSurat->status));
 
-    public function createSurat(PengajuanSuratPermohonanSurvei $pengajuanSuratSurvei){
-        if(!$this->isKodeSuratSurveiExists() || !$this->isKodeSuratExists()){
-            return redirect($this->segmentUser.'/surat-permohonan-survei');
+        if($pengajuan->status == 'selesai'){
+            $tanggalSelesai = $pengajuanSurat->suratPermohonanSurvei->updated_at->isoFormat('D MMMM Y HH:mm:ss');
+            $data->put('tanggal',$tanggalSelesai);
+        }else if($pengajuan->status == 'ditolak'){
+            $tanggalDitolak = $pengajuanSurat->updated_at->isoFormat('D MMMM Y HH:mm:ss');
+            $data->put('tanggal',$tanggalDitolak);
+        }else{
+            $tanggal = $pengajuanSurat->updated_at->isoFormat('D MMMM Y HH:mm:ss');
+            $data->put('tanggal',$tanggal);
         }
-        $nomorSuratBaru = $this->generateNomorSuratBaru();
-        $userList =$this->generatePimpinan();
-        $kodeSurat = $this->generateKodeSurat();
-        return view('user.pegawai.tambah_pengajuan_surat_permohonan_survei',compact('pengajuanSuratSurvei','nomorSuratBaru','userList','kodeSurat'));
-    }
 
-    public function storeSurat(Request $request){
-        $this->validate($request,[
-            'id_pengajuan'=>'required',
-            'id_kode_surat'=>'required',
-            'nomor_surat'=>'required|numeric|min:1|unique:surat_keterangan_lulus,nomor_surat|unique:surat_permohonan_pengambilan_material,nomor_surat|unique:surat_permohonan_survei,nomor_surat|unique:surat_rekomendasi_penelitian,nomor_surat|unique:surat_permohonan_pengambilan_data_awal,nomor_surat',
-            'nip'=>'required',
-        ]);
-        $pengajuanSuratSurvei = PengajuanSuratPermohonanSurvei::findOrFail($request->id_pengajuan);
-        $input = [
-            'id_pengajuan'=>$pengajuanSuratSurvei->id,
-            'nomor_surat'=>$request->nomor_surat,
-            'id_kode_surat'=>$request->id_kode_surat,
-            'nip' => $request->nip,
-        ];
-        DB::beginTransaction();
-        try{
-            $pengajuanSuratSurvei->update([
-                'status'=>'menunggu tanda tangan'
-            ]);
-            SuratPermohonanSurvei::create($input);
-            NotifikasiMahasiswa::create([
-                'nim'=>$pengajuanSuratSurvei->nim,
-                'judul_notifikasi'=>'Surat Permohonan Survei',
-                'isi_notifikasi'=>'Surat permohonan survei telah selesai di buat.',
-                'link_notifikasi'=>url('mahasiswa/pengajuan/surat-permohonan-survei')
-            ]);
-            NotifikasiUser::create([
-                'nip'=>$request->nip,
-                'judul_notifikasi'=>'Surat Permohonan Survei',
-                'isi_notifikasi'=>'Tanda tangan surat permohonan survei.',
-                'link_notifikasi'=>url('pimpinan/surat-permohonan-survei')
-            ]);
-        }catch(Exception $e){
-            DB::rollback();
-            $this->setFlashData('error','Gagal Menambahkan Data','Surat permohonan survei gagal ditambahkan.');
-        }
-        DB::commit();
-        $this->setFlashData('success','Berhasil','Surat permohonan survei mahasiswa dengan nama '.$pengajuanSuratSurvei->mahasiswa->nama.' berhasil ditambahkan');
-        return redirect($this->segmentUser.'/surat-permohonan-survei');
+        return $data->toJson();
     }
 
     public function tolakPengajuan(Request $request, PengajuanSuratPermohonanSurvei $pengajuanSuratSurvei){

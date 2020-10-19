@@ -31,7 +31,6 @@ class AddRelationshipToPengajuanSuratKeteranganTable extends Migration
                   ->on('operator')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
-
         });
     }
 

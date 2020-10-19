@@ -17,8 +17,8 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Buat Pengajuan Surat Rekomendasi Penelitian</h3>
-                                {{ Form::open(['url'=>'mahasiswa/pengajuan/surat-rekomendasi-penelitian','files'=>true]) }}
+                                <h3 class="mb-5">Tambah Pengajuan Surat Rekomendasi Penelitian</h3>
+                                {{ Form::open(['url'=>'mahasiswa/surat-rekomendasi-penelitian/pengajuan','files'=>true]) }}
                                 @include('mahasiswa.form_pengajuan_surat_rekomendasi_penelitian',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>

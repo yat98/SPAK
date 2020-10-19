@@ -263,7 +263,7 @@
                         <a class="nav-link {{ ($halaman == 'surat-rekomendasi-penelitian') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-rekomendasi-penelitian') }}">Surat Rekomendasi <br> Penelitian</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ ($halaman == 'surat-permohnan-pengambilan-data-awal') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-permohonan-pengambilan-data-awal') }}">Surat Permohonan <br> Pengambilan Data Awal</a>
+                        <a class="nav-link {{ ($halaman == 'surat-permohonan-pengambilan-data-awal') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-permohonan-pengambilan-data-awal') }}">Surat Permohonan <br> Pengambilan Data Awal</a>
                     </li>
                      <li class="nav-item">
                         <a class="nav-link {{ ($halaman == 'surat-keterangan-bebas-perpustakaan') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-bebas-perpustakaan') }}">Surat Keterangan <br> Bebas Perpustakaan</a>
@@ -341,7 +341,7 @@
                     <li class="nav-item"> 
                         <a class="nav-link {{ ($halaman == 'surat-dispensasi') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-dispensasi') }}">Surat Dispensasi</a>
                     </li>
-                     <li class="nav-item"> 
+                    <li class="nav-item"> 
                         <a class="nav-link {{ ($halaman == 'surat-rekomendasi') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-rekomendasi') }}">Surat Rekomendasi</a>
                     </li>
                     <li class="nav-item"> 
@@ -356,7 +356,7 @@
                     <li class="nav-item">
                         <a class="nav-link {{ ($halaman == 'surat-pengantar-beasiswa') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-pengantar-beasiswa') }}">Surat Pengantar Beasiswa</a>
                     </li>
-                     <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link {{ ($halaman == 'surat-kegiatan-mahasiswa') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-kegiatan-mahasiswa') }}">Surat Kegiatan Mahasiswa</a>
                     </li>
                     <li class="nav-item"> 
@@ -494,6 +494,22 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {{ ($halaman == 'surat-kegiatan-mahasiswa') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-kegiatan-mahasiswa') }}">Surat Kegiatan Mahasiswa</a>
+                        </li>
+                    @elseif(Session::get('jabatan') == 'subbagian pendidikan dan pengajaran')
+                        <li class="nav-item"> 
+                            <a class="nav-link {{ ($halaman == 'surat-keterangan-lulus') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-lulus') }}">Surat Keterangan Lulus</a>
+                        </li>
+                        <li class="nav-item"> 
+                            <a class="nav-link {{ ($halaman == 'surat-permohonan-pengambilan-material') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-permohonan-pengambilan-material') }}">Surat Permohonan <br> Pengambilan Material</a>
+                        </li>
+                        <li class="nav-item"> 
+                            <a class="nav-link {{ ($halaman == 'surat-permohonan-survei') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-permohonan-survei') }}">Surat Permohonan Survei</a>
+                        </li>
+                        <li class="nav-item"> 
+                            <a class="nav-link {{ ($halaman == 'surat-rekomendasi-penelitian') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-rekomendasi-penelitian') }}">Surat Rekomendasi <br> Penelitian</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ ($halaman == 'surat-permohonan-pengambilan-data-awal') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-permohonan-pengambilan-data-awal') }}">Surat Permohonan <br> Pengambilan Data Awal</a>
                         </li>
                     @endif
                 </ul>

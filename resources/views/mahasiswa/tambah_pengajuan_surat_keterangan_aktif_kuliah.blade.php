@@ -13,27 +13,6 @@
                             <i class="mdi mdi-file-document-box"></i>
                         </span>Surat Keterangan Aktif Kuliah</h3>
                 </div>
-                @if (Session::has('info-badge'))   
-                <div class="row">
-                    <div class="col-12 grid-margin">
-                        <div class="card">
-                            <div class="card-body bg-info text-white">
-                                <div class="row">
-                                    <div class="col-12 d-flex align-items-center">
-                                        <div class="d-flex flex-row align-items-center">
-                                        <i class="mdi mdi-information icon-lg text-white"></i>
-                                        <h3 class="h3 mb-0 ml-1"> Informasi </h3>
-                                      </div>
-                                    </div>
-                                    <div class="col-12 mt-3">
-                                        <p>{{ Session::get('info-badge') }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                @endif
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">

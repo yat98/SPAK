@@ -14,7 +14,7 @@ class AddRelationshipToSuratKeteranganLulusTable extends Migration
     public function up()
     {
         Schema::table('surat_keterangan_lulus', function (Blueprint $table) {
-            $table->foreign('id_pengajuan_surat_lulus')
+            $table->foreign('id_pengajuan')
                   ->references('id')
                   ->on('pengajuan_surat_keterangan_lulus')
                   ->onUpdate('cascade')
@@ -31,6 +31,12 @@ class AddRelationshipToSuratKeteranganLulusTable extends Migration
                   ->on('kode_surat')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
+
+            $table->foreign('id_operator')
+                  ->references('id')
+                  ->on('operator')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
         });
     }
 
@@ -42,9 +48,10 @@ class AddRelationshipToSuratKeteranganLulusTable extends Migration
     public function down()
     {
         Schema::table('surat_keterangan_lulus', function (Blueprint $table) {
-            $table->dropForeign(['id_pengajuan_surat_lulus']);
+            $table->dropForeign(['id_pengajuan']);
             $table->dropForeign(['nip']);
             $table->dropForeign(['id_kode_surat']);
+            $table->dropForeign(['id_operator']);
         });
     }
 }

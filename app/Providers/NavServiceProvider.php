@@ -243,7 +243,22 @@ class NavServiceProvider extends ServiceProvider
             } else if ($segment == 'surat-kegiatan-mahasiswa') {
                 $show = true;
                 $halaman = 'surat-kegiatan-mahasiswa';
-            }
+            } else if ($segment == 'surat-keterangan-lulus') {
+                $show = true;
+                $halaman = 'surat-keterangan-lulus';
+            } else if ($segment == 'surat-permohonan-pengambilan-material') {
+                $show = true;
+                $halaman = 'surat-permohonan-pengambilan-material';
+            } else if ($segment == 'surat-permohonan-survei') {
+                $show = true;
+                $halaman = 'surat-permohonan-survei';
+            } else if ($segment == 'surat-rekomendasi-penelitian') {
+                $show = true;
+                $halaman = 'surat-rekomendasi-penelitian';
+            } else if ($segment == 'surat-permohonan-pengambilan-data-awal') {
+                $show = true;
+                $halaman = 'surat-permohonan-pengambilan-data-awal';
+            } 
         }
         if ($segment == 'notifikasi') {
             $show = false;

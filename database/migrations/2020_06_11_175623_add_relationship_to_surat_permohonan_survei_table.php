@@ -31,6 +31,12 @@ class AddRelationshipToSuratPermohonanSurveiTable extends Migration
                   ->on('user')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
+
+            $table->foreign('id_operator')
+                  ->references('id')
+                  ->on('operator')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
         });
     }
 
@@ -45,6 +51,7 @@ class AddRelationshipToSuratPermohonanSurveiTable extends Migration
             $table->dropForeign(['id_pengajuan']);
             $table->dropForeign(['id_kode_surat']);
             $table->dropForeign(['nip']);
+            $table->dropForeign(['id_operator']);
         });
     }
 }

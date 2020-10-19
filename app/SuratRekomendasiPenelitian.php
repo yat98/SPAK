@@ -13,6 +13,7 @@ class SuratRekomendasiPenelitian extends Model
     protected $fillable = [
         'id_pengajuan',
         'nip',
+        'id_operator',
         'id_kode_surat',
         'nomor_surat',
         'jumlah_cetak',

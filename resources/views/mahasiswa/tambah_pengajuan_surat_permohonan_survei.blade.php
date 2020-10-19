@@ -17,8 +17,8 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Buat Pengajuan Surat Permohonan Survei</h3>
-                                {{ Form::open(['url'=>'mahasiswa/pengajuan/surat-permohonan-survei','files'=>true]) }}
+                                <h3 class="mb-5">Tambah Pengajuan Surat Permohonan Survei</h3>
+                                {{ Form::open(['url'=>'mahasiswa/surat-permohonan-survei/pengajuan','files'=>true]) }}
                                 @include('mahasiswa.form_pengajuan_surat_permohonan_survei',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>

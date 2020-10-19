@@ -10,6 +10,7 @@ class PengajuanSuratRekomendasiPenelitian extends Model
 
     protected $fillable = [
         'nim',
+        'id_operator',
         'kepada',
         'judul',
         'file_rekomendasi_jurusan',
@@ -19,6 +20,10 @@ class PengajuanSuratRekomendasiPenelitian extends Model
 
     public function mahasiswa(){
         return $this->belongsTo('App\Mahasiswa','nim');
+    }
+
+    public function operator(){
+        return $this->belongsTo('App\Operator','id_operator');
     }
 
     public function suratRekomendasiPenelitian(){

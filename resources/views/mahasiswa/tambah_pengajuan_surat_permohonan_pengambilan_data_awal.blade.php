@@ -17,8 +17,8 @@
                     <div class="col-12 grid-margin">
                         <div class="card">
                             <div class="card-body">
-                                <h3 class="mb-5">Buat Pengajuan Surat Permohonan Pengambilan Data Awal</h3>
-                                {{ Form::open(['url'=>'mahasiswa/pengajuan/surat-permohonan-pengambilan-data-awal','files'=>true]) }}
+                                <h3 class="mb-5">Tambah Pengajuan Surat Permohonan Pengambilan Data Awal</h3>
+                                {{ Form::open(['url'=>'mahasiswa/surat-permohonan-pengambilan-data-awal/pengajuan','files'=>true]) }}
                                 @include('mahasiswa.form_pengajuan_surat_permohonan_pengambilan_data_awal',['buttonLabel'=>'Tambah'])
                                 {{ Form::close() }}
                             </div>

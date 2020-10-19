@@ -24,9 +24,9 @@ class PengajuanSuratRekomendasiPenelitianRequest extends FormRequest
     public function rules()
     {
         if($this->method() == 'PATCH' || $this->method() == 'PUT'){
-            $fileRekomendasiJurusanRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
+            $fileRekomendasiJurusanRules = 'sometimes|image|mimes:jpg,jpeg,bmp,png|max:2048'; 
         }else{
-            $fileRekomendasiJurusanRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:1024'; 
+            $fileRekomendasiJurusanRules = 'required|image|mimes:jpg,jpeg,bmp,png|max:2048'; 
         }
         return [
             'nim'=>'required',

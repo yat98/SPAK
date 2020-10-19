@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Storage;
 use DB;
 use Session;
+use Storage;
 use App\User;
+use DataTables;
+use App\Operator;
 use App\Mahasiswa;
 use App\NotifikasiUser;
+use App\NotifikasiOperator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\PengajuanSuratKeteranganLulus;
 use App\Http\Requests\PengajuanSuratKeteranganLulusRequest;
 
@@ -17,24 +21,105 @@ class PengajuanSuratKeteranganLulusController extends Controller
     public function indexMahasiswa()
     {
         $perPage = $this->perPage;
-        $pengajuanSuratLulusList = PengajuanSuratKeteranganLulus::where('nim',Session::get('nim'))->paginate($perPage);
-        $countAllPengajuan = $pengajuanSuratLulusList->count();
-        $countPengajuanSuratLulus = $pengajuanSuratLulusList->count();
-        return view($this->segmentUser.'.pengajuan_surat_keterangan_lulus',compact('perPage','pengajuanSuratLulusList','countAllPengajuan','countPengajuanSuratLulus'));
+
+        $countAllPengajuan = PengajuanSuratKeteranganLulus::where('nim',Auth::user()->nim)
+                                                            ->count();
+        
+        return view($this->segmentUser.'.surat_keterangan_lulus',compact('countAllPengajuan','perPage'));
     }
 
-    public function create()
-    {
-        if(!$this->isSuratLulusDiajukanExists()){
-            return redirect($this->segmentUser.'/pengajuan/surat-keterangan-lulus');
+    public function getAllPengajuan(){
+        if(isset(Auth::user()->nim)){
+            return DataTables::of(PengajuanSuratKeteranganLulus::where('pengajuan_surat_keterangan_lulus.nim',Auth::user()->nim)
+                                    ->select('mahasiswa.nama','pengajuan_surat_keterangan_lulus.*','mahasiswa.nim')
+                                    ->join('mahasiswa','pengajuan_surat_keterangan_lulus.nim','=','mahasiswa.nim')
+                                    ->with(['mahasiswa']))
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();                            
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->make(true);
+        } else if(isset(Auth::user()->id)){
+            $pengajuanSurat;
+
+            if(Auth::user()->bagian == 'front office'){
+                $pengajuanSurat = PengajuanSuratKeteranganLulus::whereIn('status',['diajukan','ditolak'])
+                                                                 ->where('id_operator',Auth::user()->id);
+            }elseif(Auth::user()->bagian == 'subbagian pengajaran dan pendidikan'){
+                $pengajuanSurat = PengajuanSuratKeteranganLulus::whereIn('status',['diajukan','ditolak']);
+            }
+
+            $pengajuanSurat = $pengajuanSurat->select('mahasiswa.nama','pengajuan_surat_keterangan_lulus.*','mahasiswa.nim')
+                                             ->join('mahasiswa','pengajuan_surat_keterangan_lulus.nim','=','mahasiswa.nim')
+                                             ->with(['mahasiswa']);
+
+            return DataTables::of($pengajuanSurat)
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id_pengajuan;
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();                            
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->make(true);
+        } else if(isset(Auth::user()->nip)){
+            $pengajuanSurat = PengajuanSuratKeterangan::select('mahasiswa.nama','pengajuan_surat_keterangan_lulus.*','mahasiswa.nim')
+                                                        ->join('mahasiswa','pengajuan_surat_keterangan_lulus.nim','=','mahasiswa.nim')
+                                                        ->with(['mahasiswa']);
+                                                        
+            if (Auth::user()->jabatan == 'kasubag kemahasiswaan') {
+                $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_keterangan.status','verifikasi kasubag');
+            }else if(Auth::user()->jabatan == 'kabag tata usaha'){
+                $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_keterangan.status','verifikasi kabag');
+            }
+
+            return DataTables::of($pengajuanSurat)
+                            ->addColumn('aksi', function ($data) {
+                                return $data->id_pengajuan;
+                            })
+                            ->addColumn("waktu_pengajuan", function ($data) {
+                                return $data->created_at->diffForHumans();                            
+                            })
+                            ->editColumn("status", function ($data) {
+                                return ucwords($data->status);
+                            })
+                            ->editColumn("created_at", function ($data) {
+                                return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                            })
+                            ->make(true);
         }
-        return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_lulus');
     }
 
-    public function store(PengajuanSuratKeteranganLulusRequest $request)
+    public function createPengajuan()
+    {
+        if(isset(Auth::user()->nim)){
+            if(!$this->isSuratDiajukanExists()){
+                return redirect($this->segmentUser.'/surat-keterangan-lulus');
+            }
+            return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_lulus');
+        }else{
+            $mahasiswa = $this->generateMahasiswa();
+            return view($this->segmentUser.'.tambah_pengajuan_surat_keterangan_lulus',compact('mahasiswa'));
+        }
+    }
+
+    public function storePengajuan(PengajuanSuratKeteranganLulusRequest $request)
     {
         $input = $request->all();
-        $mahasiswa = Mahasiswa::where('nim',Session::get('nim'))->first();
+        $input['id_operator'] = Auth::user()->id;
 
         if($request->has('file_rekomendasi_jurusan')){
             $imageFieldName = 'file_rekomendasi_jurusan'; 
@@ -47,52 +132,40 @@ class PengajuanSuratKeteranganLulusController extends Controller
             $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
         }
 
-        DB::beginTransaction();
+        $operator = Operator::where('bagian','subbagian pengajaran dan pendidikan')->where('status_aktif','aktif')->first();
 
+        if(isset(Auth::user()->nim)){
+            $mahasiswa = Mahasiswa::where('nim',Auth::user()->nim)->first();
+            $isiNotifikasi = 'Mahasiswa dengan nama '.$mahasiswa->nama.' membuat pengajuan surat keterangan lulus.';
+        } else if(isset(Auth::user()->id)){
+            $mahasiswa = Mahasiswa::where('nim',$request->nim)->first();
+            $isiNotifikasi = 'Front office membuat pengajuan surat keterangan lulus dengan nama mahasiswa '.$mahasiswa->nama;
+        }
+        
+        DB::beginTransaction();
         try{ 
-            $user = User::where('jabatan','kasubag pendidikan dan pengajaran')->where('status_aktif','aktif')->first();
             PengajuanSuratKeteranganLulus::create($input);
-            NotifikasiUser::create([
-                'nip'=>$user->nip,
+            NotifikasiOperator::create([
+                'id_operator'=>$operator->id,
                 'judul_notifikasi'=>'Surat Keterangan Lulus',
-                'isi_notifikasi'=>'Mahasiswa dengan nama '.$mahasiswa->nama.' membuat pengajuan surat keterangan lulus.',
-                'link_notifikasi'=>url('pegawai/surat-keterangan-lulus')
+                'isi_notifikasi'=>$isiNotifikasi,
+                'link_notifikasi'=>url('operator/surat-keterangan-lulus')
             ]);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Gagal Melakukan Pengajuan Surat','Pengajuan surat keterangan lulus gagal dibuat.');
+            $this->setFlashData('error','Pengajuan Gagal','Pengajuan surat keterangan lulus gagal ditambahkan.');
         }
-
         DB::commit();
+
         $this->setFlashData('success','Berhasil','Pengajuan surat keterangan lulus berhasil ditambahkan.');
-        return redirect($this->segmentUser.'/pengajuan/surat-keterangan-lulus');
-    }
-
-    public function progress(PengajuanSuratKeteranganLulus $pengajuanSuratLulus){
-        $pengajuan = $pengajuanSuratLulus->load(['mahasiswa']);
-        $data = collect($pengajuan);
-        $tanggalDiajukan = $pengajuanSuratLulus->created_at->isoFormat('D MMMM Y - HH:m:s');
-        $data->put('tanggal_diajukan',$tanggalDiajukan);
-
-        if($pengajuanSuratLulus->status == 'selesai'){
-            $tanggalSelesai = $pengajuanSuratLulus->updated_at->isoFormat('D MMMM Y - HH:m:s');
-            $tanggalTunggu = $pengajuanSuratLulus->suratKeteranganLulus->created_at->isoFormat('D MMMM Y - HH:m:s');
-            $data->put('tanggal_tunggu_tanda_tangan',$tanggalTunggu);
-            $data->put('tanggal_selesai',$tanggalSelesai);
-        }else if($pengajuanSuratLulus->status == 'ditolak'){
-            $tanggalDitolak = $pengajuanSuratLulus->updated_at->isoFormat('D MMMM Y - HH:m:s');
-            $data->put('tanggal_ditolak',$tanggalDitolak);
-        }else if($pengajuanSuratLulus->status == 'menunggu tanda tangan'){
-            $tanggalTunggu = $pengajuanSuratLulus->updated_at->isoFormat('D MMMM Y - HH:m:s');
-            $data->put('tanggal_tunggu_tanda_tangan',$tanggalTunggu);
-        }
-        return $data->toJson();
+        return redirect($this->segmentUser.'/surat-keterangan-lulus');
     }
 
     public function show(PengajuanSuratKeteranganLulus $pengajuanSuratLulus)
     {
-        $pengajuan = collect($pengajuanSuratLulus->load('mahasiswa.prodi.jurusan'));
-        $pengajuan->put('created_at',$pengajuanSuratLulus->created_at->isoFormat('D MMMM Y'));
+        $pengajuan = collect($pengajuanSuratLulus->load('mahasiswa.prodi.jurusan','operator'));
+        $pengajuan->put('status',ucwords($pengajuanSuratLulus->status));
+        $pengajuan->put('dibuat',$pengajuanSuratLulus->created_at->isoFormat('D MMMM Y HH:mm:ss'));
         $pengajuan->put('tanggal_wisuda',$pengajuanSuratLulus->tanggal_wisuda->isoFormat('D MMMM Y'));
         $pengajuan->put('file_rekomendasi_jurusan',asset('upload_rekomendasi_jurusan/'.$pengajuanSuratLulus->file_rekomendasi_jurusan));
         $pengajuan->put('file_berita_acara_ujian',asset('upload_berita_acara_ujian/'.$pengajuanSuratLulus->file_berita_acara_ujian));
@@ -102,9 +175,10 @@ class PengajuanSuratKeteranganLulusController extends Controller
         return $pengajuan->toJson();
     }
 
-    public function edit(PengajuanSuratKeteranganLulus $pengajuanSuratLulus)
-    {
-        return view($this->segmentUser.'.edit_pengajuan_surat_keterangan_lulus',compact('pengajuanSuratLulus'));        
+    public function edit(PengajuanSuratKeteranganLulus $pengajuanSurat)
+    {   
+        $mahasiswa = $this->generateMahasiswa();
+        return view($this->segmentUser.'.edit_pengajuan_surat_keterangan_lulus',compact('mahasiswa','pengajuanSurat'));
     }
 
     public function update(PengajuanSuratKeteranganLulusRequest $request, PengajuanSuratKeteranganLulus $pengajuanSuratLulus)
@@ -124,7 +198,16 @@ class PengajuanSuratKeteranganLulusController extends Controller
         }
         $pengajuanSuratLulus->update($input);
         $this->setFlashData('success','Berhasil','Pengajuan surat keterangan lulus berhasil diubah.');
-        return redirect($this->segmentUser.'/pengajuan/surat-keterangan-lulus');
+        return redirect($this->segmentUser.'/surat-keterangan-lulus');
+    }
+
+    public function destroy(PengajuanSuratKeteranganLulus $pengajuanSurat)
+    {
+        $this->deleteImage('file_rekomendasi_jurusan',$pengajuanSurat->file_rekomendasi_jurusan);
+        $this->deleteImage('file_berita_acara_ujian',$pengajuanSurat->file_berita_acara_ujian);
+        $pengajuanSurat->delete();;
+        $this->setFlashData('success','Berhasil','Pengajuan surat keterangan lulus berhasil dihapus');
+        return redirect($this->segmentUser.'/surat-keterangan-lulus');
     }
 
     private function uploadImage($imageFieldName, $request, $uploadPath){
@@ -147,7 +230,7 @@ class PengajuanSuratKeteranganLulusController extends Controller
         }
     }
 
-    private function isSuratLulusDiajukanExists(){
+    private function isSuratDiajukanExists(){
         $suratKeterangan = PengajuanSuratKeteranganLulus::where('status','diajukan')->exists();
         if($suratKeterangan){
             $this->setFlashData('info','Pengajuan Surat','Pengajuan surat keterangan lulus sementara diproses!');

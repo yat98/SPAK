@@ -1,17 +1,20 @@
+@if(isset($pengajuanSurat))
+    {{ Form::hidden('id',$pengajuanSurat->id) }}
+@endif
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12">
         <div class="form-group">
             {{ Form::label('nim','NIM') }}
             <br>
             @if ($errors->any())
             @if ($errors->has('nim'))
-            {{ Form::text('nim',Session::get('nim'),['class'=>'form-control form-control-lg is-invalid','id'=>'nim','readonly'=>'readonly']) }}
+            {{ Form::text('nim',Auth::user()->nim,['class'=>'form-control form-control-lg is-invalid','id'=>'nim','readonly'=>'readonly']) }}
             <div class="text-danger-red mt-1"><small>{{ $errors->first('nim') }}</small></div>
             @else
-            {{ Form::text('nim',Session::get('nim'),['class'=>'form-control form-control-lg','id'=>'nim','readonly'=>'readonly']) }}
+            {{ Form::text('nim',Auth::user()->nim,['class'=>'form-control form-control-lg is-valid','id'=>'nim','readonly'=>'readonly']) }}
             @endif
             @else
-            {{ Form::text('nim',Session::get('nim'),['class'=>'form-control form-control-lg','id'=>'nim','readonly'=>'readonly']) }}
+            {{ Form::text('nim',Auth::user()->nim,['class'=>'form-control form-control-lg','id'=>'nim','readonly'=>'readonly']) }}
             @endif
         </div>  
         <div class="form-group">
@@ -19,13 +22,13 @@
             <br>
             @if ($errors->any())
             @if ($errors->has('nama'))
-            {{ Form::text('nama',Session::get('username'),['class'=>'form-control form-control-lg is-invalid','id'=>'nama','disabled'=>'disabled']) }}
+            {{ Form::text('nama',Auth::user()->nama,['class'=>'form-control form-control-lg is-invalid','id'=>'nama','disabled'=>'disabled']) }}
             <div class="text-danger-red mt-1"><small>{{ $errors->first('nim') }}</small></div>
             @else
-            {{ Form::text('nama',Session::get('username'),['class'=>'form-control form-control-lg','id'=>'nama','disabled'=>'disabled']) }}
+            {{ Form::text('nama',Auth::user()->nama,['class'=>'form-control form-control-lg is-valid','id'=>'nama','disabled'=>'disabled']) }}
             @endif
             @else
-            {{ Form::text('nama',Session::get('username'),['class'=>'form-control form-control-lg','id'=>'nama','disabled'=>'disabled']) }}
+            {{ Form::text('nama',Auth::user()->nama,['class'=>'form-control form-control-lg','id'=>'nama','disabled'=>'disabled']) }}
             @endif
         </div> 
         <div class="form-group">
@@ -55,13 +58,13 @@
             @endif
         </div>
         <div class="form-group">
-            @if(isset($pengajuanSuratDataAwal))
+            @if(isset($pengajuanSurat))
                 <div class="form-row">
                     <div class="col-md-8 col-12">
-                        {{ Form::label('file_rekomendasi_jurusan','File Surat Rekomendasi Jurusan *(Ukuran File < 1MB)',['class'=>'mt-2']) }}
+                        {{ Form::label('file_rekomendasi_jurusan','File Surat Rekomendasi Jurusan *(Ukuran File < 2MB)',['class'=>'mt-2']) }}
                     </div>
                     <div class="col-md-4 col-12 text-right">
-                        <a href="{{ asset('upload_rekomendasi_jurusan/'.$pengajuanSuratDataAwal->file_rekomendasi_jurusan) }}"  data-lightbox="{{ explode('.',$pengajuanSuratDataAwal->file_rekomendasi_jurusan)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
+                        <a href="{{ asset('upload_rekomendasi_jurusan/'.$pengajuanSurat->file_rekomendasi_jurusan) }}"  data-lightbox="{{ explode('.',$pengajuanSurat->file_rekomendasi_jurusan)[0] }}" class="btn btn-sm btn-info ml-4">Lihat File</a>
                         <a href="" class="btn btn-sm btn-warning btn-ubah-file-pindah">Ubah File</a>    
                     </div>
                 </div>
@@ -74,7 +77,7 @@
                     </span>
                 </div>
             @else
-                {{ Form::label('file_rekomendasi_jurusan','File Surat Rekomendasi Jurusan *(Ukuran File < 1MB)') }}
+                {{ Form::label('file_rekomendasi_jurusan','File Surat Rekomendasi Jurusan *(Ukuran File < 2MB)') }}
                 {{ Form::file('file_rekomendasi_jurusan',['class'=>'file-upload-default','id'=>'file_rekomendasi_jurusan']) }}
                 <div class="input-group col-xs-12">
                     {{ Form::text('',null,['class'=>'form-control file-upload-info','placeholder'=>'Upload File Surat Rekomendasi Jurusan','disabled'=>'disabled']) }}
