@@ -14,7 +14,7 @@ class AddRelationshipToPengajuanSuratPermohonanPengambilanMaterialTable extends 
     public function up()
     {
         Schema::table('pengajuan_surat_permohonan_pengambilan_material', function (Blueprint $table) {
-            $table->foreign('nim')
+            $table->foreign('nim','pengajuan_surat_permohonan_pengambilan_material_nim_foreign')
                   ->references('nim')
                   ->on('mahasiswa')
                   ->onUpdate('cascade')
@@ -36,8 +36,8 @@ class AddRelationshipToPengajuanSuratPermohonanPengambilanMaterialTable extends 
     public function down()
     {
         Schema::table('pengajuan_surat_permohonan_pengambilan_material', function (Blueprint $table) {
-            $table->dropForeign(['nim']);
-            $table->dropForeign(['id_operator']);
+            $table->dropForeign('pengajuan_surat_permohonan_pengambilan_material_nim_foreign');
+            $table->dropForeign('pengajuan_surat_material_id_operator_foreign');
         });
     }
 }

@@ -52,7 +52,7 @@ class PengajuanSuratPermohonanPengambilanMaterialController extends Controller
             if(Auth::user()->bagian == 'front office'){
                 $pengajuanSurat = PengajuanSuratPermohonanPengambilanMaterial::whereIn('status',['diajukan','ditolak'])
                                     ->where('id_operator',Auth::user()->id);
-            }elseif(Auth::user()->bagian == 'subbagian pengajaran dan pendidikan'){
+            }elseif(Auth::user()->bagian == 'subbagian pendidikan dan pengajaran'){
                 $pengajuanSurat = PengajuanSuratPermohonanPengambilanMaterial::whereIn('status',['diajukan','ditolak']);
             }
             
@@ -107,7 +107,7 @@ class PengajuanSuratPermohonanPengambilanMaterialController extends Controller
 
     public function storePengajuan(PengajuanSuratPermohonanPengambilanMaterialRequest $request){
         $input = $request->all();
-        $operator = Operator::where('bagian','subbagian pengajaran dan pendidikan')->where('status_aktif','aktif')->first();
+        $operator = Operator::where('bagian','subbagian pendidikan dan pengajaran')->where('status_aktif','aktif')->first();
 
         if(isset(Auth::user()->nim)){
             $input['nim'] = Auth::user()->nim;

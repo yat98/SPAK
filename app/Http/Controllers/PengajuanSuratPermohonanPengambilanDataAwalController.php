@@ -54,7 +54,7 @@ class PengajuanSuratPermohonanPengambilanDataAwalController extends Controller
             if(Auth::user()->bagian == 'front office'){
                 $pengajuanSurat = $pengajuanSurat->whereIn('status',['diajukan','ditolak'])
                                                  ->where('id_operator',Auth::user()->id);
-            }elseif(Auth::user()->bagian == 'subbagian pengajaran dan pendidikan'){
+            }elseif(Auth::user()->bagian == 'subbagian pendidikan dan pengajaran'){
                 $pengajuanSurat = $pengajuanSurat->whereIn('status',['diajukan','ditolak']);
             }
 
@@ -122,7 +122,7 @@ class PengajuanSuratPermohonanPengambilanDataAwalController extends Controller
             $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
         }
 
-        $operator = Operator::where('bagian','subbagian pengajaran dan pendidikan')->where('status_aktif','aktif')->first();
+        $operator = Operator::where('bagian','subbagian pendidikan dan pengajaran')->where('status_aktif','aktif')->first();
 
         if(isset(Auth::user()->nim)){
             $mahasiswa = Mahasiswa::where('nim',Auth::user()->nim)->first();
