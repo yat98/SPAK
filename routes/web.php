@@ -759,35 +759,55 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}','SuratKegiatanMahasiswaController@show');
         Route::get('surat-kegiatan-mahasiswa/pengajuan/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@show');
         Route::patch('surat-kegiatan-mahasiswa/verifikasi','PengajuanSuratKegiatanMahasiswaController@verification');
+        // Surat Keterangan Lulus
+        Route::get('surat-keterangan-lulus','SuratKeteranganLulusController@indexPimpinan');
+        Route::get('surat-keterangan-lulus/all','SuratKeteranganLulusController@getAllSurat');
+        Route::get('surat-keterangan-lulus/{surat_keterangan_lulus}/cetak','SuratKeteranganLulusController@cetak');
+        Route::get('surat-keterangan-lulus/verifikasi/all','PengajuanSuratKeteranganLulusController@getAllPengajuan');
+        Route::get('surat-keterangan-lulus/tanda-tangan/all','SuratKeteranganLulusController@getAllTandaTangan');
+        Route::post('surat-keterangan-lulus/tanda-tangan','SuratKeteranganLulusController@tandaTangan');
+        Route::get('surat-keterangan-lulus/{surat_keterangan_lulus}','SuratKeteranganLulusController@show');
+        Route::patch('surat-keterangan-lulus/verifikasi','PengajuanSuratKeteranganLulusController@verification'); 
+        // Surat Permohonan Pengambilan Material
+        Route::get('surat-permohonan-pengambilan-material','SuratPermohonanPengambilanMaterialController@indexPimpinan');
+        Route::get('surat-permohonan-pengambilan-material/all','SuratPermohonanPengambilanMaterialController@getAllSurat');
+        Route::get('surat-permohonan-pengambilan-material/{surat_material}/cetak','SuratPermohonanPengambilanMaterialController@cetak');
+        Route::get('surat-permohonan-pengambilan-material/verifikasi/all','PengajuanSuratPermohonanPengambilanMaterialController@getAllPengajuan');
+        Route::get('surat-permohonan-pengambilan-material/tanda-tangan/all','SuratPermohonanPengambilanMaterialController@getAllTandaTangan');
+        Route::post('surat-permohonan-pengambilan-material/tanda-tangan','SuratPermohonanPengambilanMaterialController@tandaTangan');
+        Route::get('surat-permohonan-pengambilan-material/{surat_material}','SuratPermohonanPengambilanMaterialController@show');
+        Route::patch('surat-permohonan-pengambilan-material/verifikasi','PengajuanSuratPermohonanPengambilanMaterialController@verification'); 
+        // Surat Permohonan Survei
+        Route::get('surat-permohonan-survei','SuratPermohonanSurveiController@indexPimpinan');
+        Route::get('surat-permohonan-survei/all','SuratPermohonanSurveiController@getAllSurat');
+        Route::get('surat-permohonan-survei/{surat_permohonan_survei}/cetak','SuratPermohonanSurveiController@cetak');
+        Route::get('surat-permohonan-survei/verifikasi/all','PengajuanSuratPermohonanSurveiController@getAllPengajuan');
+        Route::get('surat-permohonan-survei/tanda-tangan/all','SuratPermohonanSurveiController@getAllTandaTangan');
+        Route::post('surat-permohonan-survei/tanda-tangan','SuratPermohonanSurveiController@tandaTangan');
+        Route::get('surat-permohonan-survei/{surat_permohonan_survei}','SuratPermohonanSurveiController@show');
+        Route::patch('surat-permohonan-survei/verifikasi','PengajuanSuratPermohonanSurveiController@verification'); 
+        // Surat Rekomendasi Penelitian
+        Route::get('surat-rekomendasi-penelitian','SuratRekomendasiPenelitianController@indexPimpinan');
+        Route::get('surat-rekomendasi-penelitian/all','SuratRekomendasiPenelitianController@getAllSurat');
+        Route::get('surat-rekomendasi-penelitian/{surat_rekomendasi_penelitian}/cetak','SuratRekomendasiPenelitianController@cetak');
+        Route::get('surat-rekomendasi-penelitian/verifikasi/all','PengajuanSuratRekomendasiPenelitianController@getAllPengajuan');
+        Route::get('surat-rekomendasi-penelitian/tanda-tangan/all','SuratRekomendasiPenelitianController@getAllTandaTangan');
+        Route::post('surat-rekomendasi-penelitian/tanda-tangan','SuratRekomendasiPenelitianController@tandaTangan');
+        Route::get('surat-rekomendasi-penelitian/{surat_rekomendasi_penelitian}','SuratRekomendasiPenelitianController@show');
+        Route::patch('surat-rekomendasi-penelitian/verifikasi','PengajuanSuratRekomendasiPenelitianController@verification'); 
+        // Surat Permohonan Pengambilan Data Awal
+        Route::get('surat-permohonan-pengambilan-data-awal','SuratPermohonanPengambilanDataAwalController@indexPimpinan');
+        Route::get('surat-permohonan-pengambilan-data-awal/all','SuratPermohonanPengambilanDataAwalController@getAllSurat');
+        Route::get('surat-permohonan-pengambilan-data-awal/{surat_data_awal}/cetak','SuratPermohonanPengambilanDataAwalController@cetak');
+        Route::get('surat-permohonan-pengambilan-data-awal/verifikasi/all','PengajuanSuratPermohonanPengambilanDataAwalController@getAllPengajuan');
+        Route::get('surat-permohonan-pengambilan-data-awal/tanda-tangan/all','SuratPermohonanPengambilanDataAwalController@getAllTandaTangan');
+        Route::post('surat-permohonan-pengambilan-data-awal/tanda-tangan','SuratPermohonanPengambilanDataAwalController@tandaTangan');
+        Route::get('surat-permohonan-pengambilan-data-awal/{surat_data_awal}','SuratPermohonanPengambilanDataAwalController@show');
+        Route::patch('surat-permohonan-pengambilan-data-awal/verifikasi','PengajuanSuratPermohonanPengambilanDataAwalController@verification'); 
         // Mahasiswa
         Route::get('mahasiswa', 'MahasiswaController@indexPimpinan');
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         Route::get('mahasiswa/{mahasiswa}','MahasiswaController@showPimpinan');
-        // Surat Keterangan Lulus
-        Route::get('surat-keterangan-lulus/search', 'SuratKeteranganLulusController@searchPimpinan');
-        Route::get('surat-keterangan-lulus', 'SuratKeteranganLulusController@indexPimpinan');
-        Route::get('surat-keterangan-lulus/{surat_keterangan_lulus}','SuratKeteranganLulusController@show');
-        Route::post('surat-keterangan-lulus/pengajuan/tanda-tangan','SuratKeteranganLulusController@tandaTanganLulus');
-        // Surat Permohonan Pengambilan Material
-        Route::get('surat-permohonan-pengambilan-material','SuratPermohonanPengambilanMaterialController@indexPimpinan');
-        Route::get('surat-permohonan-pengambilan-material/search', 'SuratPermohonanPengambilanMaterialController@searchPimpinan');
-        Route::get('surat-permohonan-pengambilan-material/{surat_material}','SuratPermohonanPengambilanMaterialController@show');
-        Route::post('surat-permohonan-pengambilan-material/pengajuan/tanda-tangan','SuratPermohonanPengambilanMaterialController@tandaTanganMaterial');
-        // Surat Permohonan Survei
-        Route::get('surat-permohonan-survei','SuratPermohonanSurveiController@indexPimpinan');
-        Route::get('surat-permohonan-survei/search', 'SuratPermohonanSurveiController@searchPimpinan');
-        Route::get('surat-permohonan-survei/{surat_permohonan_survei}','SuratPermohonanSurveiController@show');
-        Route::post('surat-permohonan-survei/pengajuan/tanda-tangan','SuratPermohonanSurveiController@tandaTanganSurvei');
-        // Surat Rekomendasi Penelitian
-        Route::get('surat-rekomendasi-penelitian','SuratRekomendasiPenelitianController@indexPimpinan');
-        Route::get('surat-rekomendasi-penelitian/search', 'SuratRekomendasiPenelitianController@searchPimpinan');
-        Route::get('surat-rekomendasi-penelitian/{surat_rekomendasi_penelitian}','SuratRekomendasiPenelitianController@show');
-        Route::post('surat-rekomendasi-penelitian/pengajuan/tanda-tangan','SuratRekomendasiPenelitianController@tandaTanganPenelitian');
-        // Surat Permohonan Pengambilan Data Awal
-        Route::get('surat-permohonan-pengambilan-data-awal','SuratPermohonanPengambilanDataAwalController@indexPimpinan');
-        Route::get('surat-permohonan-pengambilan-data-awal/search', 'SuratPermohonanPengambilanDataAwalController@searchPimpinan');
-        Route::get('surat-permohonan-pengambilan-data-awal/{surat_data_awal}','SuratPermohonanPengambilanDataAwalController@show');
-        Route::post('surat-permohonan-pengambilan-data-awal/pengajuan/tanda-tangan','SuratPermohonanPengambilanDataAwalController@tandaTanganDataAwal');
          // Notifikasi
         Route::get('notifikasi','NotifikasiUserController@index');
         Route::get('notifikasi/all','NotifikasiUserController@getAllNotifikasi');

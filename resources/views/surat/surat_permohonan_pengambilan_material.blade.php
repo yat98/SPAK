@@ -176,7 +176,7 @@
         <div class="content" style="padding-top:105px">
             <?= $qrCode ?>
         </div>
-         <div style="height:370px"></div>
+         <div style="height:350px"></div>
             <p class="m-0">
                 <b>Lampiran :</b>
             </p>

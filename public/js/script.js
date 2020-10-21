@@ -82,7 +82,6 @@ let jenisUser = document.getElementById('jenis_user');
 $('#jenis-user').on('click', function () {
     let username = $('#username');
     let value = '';
-    console.log($(this).val());
     switch ($(this).val()) {
         case 'pimpinan':
             value = 'nip';
@@ -3091,7 +3090,6 @@ $('.table-responsive').on('click','.prodi-detail', function (e) {
 
 $('.table-responsive').on('click','.tahun-akademik-detail', function (e) {
     e.preventDefault();
-    console.log('a');
     $('#tahun-akademik-detail-content').empty();
     let url = $(this).attr('href');
     let a = fetch(url)
@@ -3136,7 +3134,6 @@ $('.table-responsive').on('click','.tahun-akademik-detail', function (e) {
 
 $('.table-responsive').on('click','.status-mahasiswa-detail', function (e) {
     e.preventDefault();
-    console.log('a');
     $('#status-mahasiswa-detail-content').empty();
     let url = $(this).attr('href');
     let a = fetch(url)

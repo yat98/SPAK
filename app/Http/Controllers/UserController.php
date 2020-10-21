@@ -278,8 +278,8 @@ class UserController extends Controller
 
         $chartKemahasiswaan = $this->getChartKemahasiswaan($bulan,$tahun);
 
-        $chartPendidikanPengajaran = $this->getChartPendidikanDanPengajaran($bulan,$tahun);       
-
+        $chartPendidikanPengajaran = $this->getChartPendidikanDanPengajaran($bulan,$tahun); 
+              
         return view('user.'.$this->segmentUser.'.dashboard',compact('perPageDashboard','bulanList','tahunList','tgl','tahunAkademikAktif','waktuCuti','kodeSuratAktif','countAllKodeSurat','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti','chartKemahasiswaan','chartPendidikanPengajaran'));
     }
 
@@ -437,7 +437,7 @@ class UserController extends Controller
 
     private function getChartPendidikanDanPengajaran($bln,$thn){
         return [
-            'Surat Keterangan Lulus'=> SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','pengajuan_surat_keterangan_lulus.id','=','surat_keterangan_lulus.id_pengajuan_surat_lulus')
+            'Surat Keterangan Lulus'=> SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','pengajuan_surat_keterangan_lulus.id','=','surat_keterangan_lulus.id_pengajuan')
                                             ->whereIn('status',['selesai'])
                                             ->whereYear('surat_keterangan_lulus.created_at',$thn)
                                             ->whereMonth('surat_keterangan_lulus.created_at',$bln)

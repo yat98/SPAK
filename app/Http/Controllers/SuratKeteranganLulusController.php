@@ -53,23 +53,20 @@ class SuratKeteranganLulusController extends Controller
 
     public function indexPimpinan(){
         $perPage = $this->perPage;
-        $mahasiswa = $this->generateMahasiswa();
-        $nomorSurat = $this->generateNomorSuratLulus(['selesai']);
-        $pengajuanSuratLulusList= PengajuanSuratKeteranganLulus::where('status','menunggu tanda tangan')
-                                    ->orderByDesc('created_at')
-                                    ->orderBy('status')
-                                    ->paginate($perPage,['*'],'page_pengajuan');
-        $suratLulusList = SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','pengajuan_surat_keterangan_lulus.id','=','surat_keterangan_lulus.id_pengajuan_surat_lulus')
-                                ->where('status','selesai')
-                                ->orderBy('status')
-                                ->paginate($perPage,['*'],'page');
-        $countAllPengajuanSuratLulus = $pengajuanSuratLulusList->count();
-        $countAllSuratLulus = SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','pengajuan_surat_keterangan_lulus.id','=','surat_keterangan_lulus.id_pengajuan_surat_lulus')
-                                ->where('status','selesai')
-                                ->orderBy('status')
-                                ->count();
-        $countSuratLulus = $suratLulusList->count();
-        return view('user.'.$this->segmentUser.'.surat_keterangan_lulus',compact('countSuratLulus','perPage','mahasiswa','nomorSurat','pengajuanSuratLulusList','suratLulusList','countAllPengajuanSuratLulus','countAllSuratLulus'));
+
+        $countAllVerifikasi = PengajuanSuratKeteranganLulus::where('status','verifikasi kabag')
+                                            ->count();
+
+        $countAllSurat = SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','surat_keterangan_lulus.id_pengajuan','=','pengajuan_surat_keterangan_lulus.id')
+                                            ->where('status','selesai')
+                                            ->count();
+        
+        $countAllTandaTangan = SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','surat_keterangan_lulus.id_pengajuan','=','pengajuan_surat_keterangan_lulus.id')
+                                            ->where('status','menunggu tanda tangan')
+                                            ->where('nip',Auth::user()->nip)
+                                            ->count();
+
+        return view('user.pimpinan.surat_keterangan_lulus',compact('countAllVerifikasi','perPage','countAllSurat','countAllTandaTangan'));
     }
 
     public function getAllSurat(){
@@ -103,28 +100,48 @@ class SuratKeteranganLulusController extends Controller
                         ->make(true);
     }
 
-    public function tandaTanganLulus(Request $request){
+    public function getAllTandaTangan(){
+        $suratLulus =  PengajuanSuratKeteranganLulus::join('surat_keterangan_lulus','surat_keterangan_lulus.id_pengajuan','=','pengajuan_surat_keterangan_lulus.id')
+                                    ->where('status','menunggu tanda tangan')
+                                    ->where('surat_keterangan_lulus.nip',Auth::user()->nip)
+                                    ->select('surat_keterangan_lulus.nomor_surat','pengajuan_surat_keterangan_lulus.*')
+                                    ->with(['mahasiswa','suratKeteranganLulus.kodeSurat']);
+                                    
+        return DataTables::of($suratLulus)
+                                    ->addColumn('aksi', function ($data) {
+                                        return $data->id;
+                                    })
+                                    ->addColumn('waktu_pengajuan', function ($data) {
+                                        return $data->created_at->diffForHumans();
+                                    })
+                                    ->editColumn("status", function ($data) {
+                                        return ucwords($data->status);
+                                    })
+                                    ->editColumn("created_at", function ($data) {
+                                        return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                                    })
+                                    ->make(true);                            
+    }
+
+    public function tandaTangan(Request $request){
         if(!$this->isTandaTanganExists()){
             return redirect($this->segmentUser.'/surat-keterangan-lulus');
         }
-        $user  = User::where('status_aktif','aktif')->where('jabatan','kasubag pendidikan dan pengajaran')->first();
-        $pengajuanSuratLulus = PengajuanSuratKeteranganLulus::where('id',$request->id)->first();
-        $pengajuanSuratLulus->update([
+
+        $suratLulus = SuratKeteranganLulus::findOrFail($request->id);
+        
+        $suratLulus->pengajuanSuratKeteranganLulus->update([
             'status'=>'selesai',
         ]);
+
         NotifikasiMahasiswa::create([
-            'nim'=>$pengajuanSuratLulus->nim,
+            'nim'=>$suratLulus->pengajuanSuratKeteranganLulus->nim,
             'judul_notifikasi'=>'Surat Keterangan Lulus',
             'isi_notifikasi'=>'Surat keterangan lulus telah di tanda tangani.',
-            'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-lulus')
+            'link_notifikasi'=>url('mahasiswa/surat-keterangan-lulus')
         ]);
-        NotifikasiUser::create([
-            'nip'=>$user->nip,
-            'judul_notifikasi'=>'Surat Keterangan Lulus',
-            'isi_notifikasi'=>'Surat keterangan lulus telah di tanda tangani.',
-            'link_notifikasi'=>url('pegawai/surat-keterangan-lulus')
-        ]);
-        $this->setFlashData('success','Berhasil','Surat keterangan lulus mahasiswa dengan nama '.$pengajuanSuratLulus->mahasiswa->nama.' berhasil ditanda tangani');
+
+        $this->setFlashData('success','Berhasil','Tanda tangan surat keterangan lulus berhasil');
         return redirect($this->segmentUser.'/surat-keterangan-lulus');
     }
 
@@ -148,66 +165,6 @@ class SuratKeteranganLulusController extends Controller
         }
         DB::commit();
         $this->setFlashData('success','Berhasil','Pengajuan surat keterangan lulus berhasil ditolak');
-        return redirect($this->segmentUser.'/surat-keterangan-lulus');
-    }
-
-    public function create()
-    {
-        if(!$this->isKodeSuratLulusExists() || !$this->isKodeSuratExists()){
-            return redirect($this->segmentUser.'/surat-keterangan-lulus');
-        }
-        $kodeSurat = $this->generateKodeSurat();
-        $mahasiswa = $this->generateMahasiswa();
-        $userList =$this->generatePimpinan();
-        $nomorSuratBaru = $this->generateNomorSuratBaru();
-        return view('user.pegawai.tambah_surat_keterangan_lulus',compact('nomorSuratBaru','mahasiswa','kodeSurat','userList'));
-    }
-
-    public function store(SuratKeteranganLulusRequest $request)
-    {
-        $input = $request->all();
-        if($request->has('file_rekomendasi_jurusan')){
-            $imageFieldName = 'file_rekomendasi_jurusan'; 
-            $uploadPath = 'upload_rekomendasi_jurusan';
-            $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
-        }
-        if($request->has('file_berita_acara_ujian')){
-            $imageFieldName = 'file_berita_acara_ujian'; 
-            $uploadPath = 'upload_berita_acara_ujian';
-            $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
-        }
-
-        DB::beginTransaction();
-        try{
-            $input['status'] = 'menunggu tanda tangan';
-            $pengajuanSuratLulus = PengajuanSuratKeteranganLulus::create($input);
-        }catch(Exception $e){
-            DB::rollback();
-            $this->setFlashData('error','Gagal Menambahkan Data','Surat keterangan lulus gagal ditambahkan.');
-        }
-
-        try{
-            $input['id_pengajuan_surat_lulus'] =  $pengajuanSuratLulus->id;
-            SuratKeteranganLulus::create($input);
-            NotifikasiMahasiswa::create([
-                'nim'=>$pengajuanSuratLulus->nim,
-                'judul_notifikasi'=>'Surat Keterangan Lulus',
-                'isi_notifikasi'=>'Surat keterangan lulus telah selesai di buat.',
-                'link_notifikasi'=>url('mahasiswa/pengajuan/surat-keterangan-lulus')
-            ]);
-            NotifikasiUser::create([
-                'nip'=>$request->nip,
-                'judul_notifikasi'=>'Surat Keterangan Lulus',
-                'isi_notifikasi'=>'Tanda tangan surat keterangan lulus.',
-                'link_notifikasi'=>url('pimpinan/surat-keterangan-lulus')
-            ]);
-        }catch(Exception $e){
-            DB::rollback();
-            $this->setFlashData('error','Gagal Menambahkan Data','Surat keterangan lulus gagal ditambahkan.');
-        }
-
-        DB::commit();
-        $this->setFlashData('success','Berhasil','Surat keterangan lulus mahasiswa dengan nama '.$pengajuanSuratLulus->mahasiswa->nama.' berhasil ditambahkan');
         return redirect($this->segmentUser.'/surat-keterangan-lulus');
     }
 
@@ -243,39 +200,6 @@ class SuratKeteranganLulusController extends Controller
         }
 
         return $data->toJson();
-    }
-
-    public function edit(SuratKeteranganLulus $suratLulus)
-    {
-        $kodeSurat = $this->generateKodeSurat();
-        $mahasiswa = $this->generateMahasiswa();
-        $user = User::where('nip',$suratLulus->nip)->first();
-        $userList = [
-            $user->nip => strtoupper($user->jabatan).' - '.$user->nama
-        ];
-        $pengajuanSuratLulus = $suratLulus->pengajuanSuratKeteranganLulus;
-        return view('user.pegawai.edit_surat_keterangan_lulus',compact('suratLulus','mahasiswa','kodeSurat','userList','pengajuanSuratLulus'));
-    }
-
-    public function update(SuratKeteranganLulusRequest $request, SuratKeteranganLulus $suratLulus)
-    {
-        $input = $request->all();
-        if($request->has('file_rekomendasi_jurusan')){
-            $imageFieldName = 'file_rekomendasi_jurusan'; 
-            $uploadPath = 'upload_rekomendasi_jurusan';
-            $this->deleteImage($imageFieldName,$suratLulus->pengajuanSuratKeteranganLulus->file_rekomendasi_jurusan);
-            $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
-        }
-        if($request->has('file_berita_acara_ujian')){
-            $imageFieldName = 'file_berita_acara_ujian'; 
-            $uploadPath = 'upload_berita_acara_ujian';
-            $this->deleteImage($imageFieldName,$suratLulus->pengajuanSuratKeteranganLulus->file_berita_acara_ujian);
-            $input[$imageFieldName] = $this->uploadImage($imageFieldName,$request,$uploadPath);
-        }
-        $suratLulus->pengajuanSuratKeteranganLulus->update($input);
-        $suratLulus->update($input);
-        $this->setFlashData('success','Berhasil','Surat keterangan lulus mahasiswa dengan nama '.$suratLulus->pengajuanSuratKeteranganLulus->mahasiswa->nama.' berhasil diubah');
-        return redirect($this->segmentUser.'/surat-keterangan-lulus');
     }
     
     public function createSurat(PengajuanSuratKeteranganLulus $pengajuanSurat)
@@ -343,7 +267,7 @@ class SuratKeteranganLulusController extends Controller
                 return redirect('mahasiswa/surat-keterangan-lulus');
             }
         }
-
+        
         $data = $suratLulus->pengajuanSuratKeteranganLulus->mahasiswa->nim.' - '.$suratLulus->pengajuanSuratKeteranganLulus->mahasiswa->prodi->nama_prodi;
         $qrCode = \DNS2D::getBarcodeHTML($data, "QRCODE",4,4);
 
