@@ -14,6 +14,7 @@ class SuratPermohonanSurvei extends Model
         'id_pengajuan',
         'nip',
         'id_kode_surat',
+        'id_operator',
         'nomor_surat',
         'jumlah_cetak',
     ];

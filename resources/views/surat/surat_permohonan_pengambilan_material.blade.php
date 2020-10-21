@@ -1,3 +1,16 @@
+@if($suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->nim != null)
+    @php
+        $strata = $suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->mahasiswa->prodi->strata;
+        $namaProdi = $suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->mahasiswa->prodi->nama_prodi;
+        $namaJurusan = $suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->mahasiswa->prodi->jurusan->nama_jurusan;
+    @endphp
+@else
+    @php
+        $strata = $suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->daftarKelompok[0]->prodi->strata;
+        $namaProdi = $suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->daftarKelompok[0]->prodi->nama_prodi;
+        $namaJurusan = $suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->daftarKelompok[0]->prodi->jurusan->nama_jurusan;
+    @endphp
+@endif
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -101,20 +114,17 @@
    <div class="container">
         @include('surat.kop_surat')
         <div class="border"></div>
-            @php
-                $kode = explode('/',$suratMaterial->kodeSurat->kode_surat);
-            @endphp
             <table style="padding:0px 14px;line-height:1;margin-top:10px">
                 <tr>
                     <td>Nomor</td>
                     <td>:</td>
-                    <td>B/{{$suratMaterial->nomor_surat}}/{{$kode[0].'.1/'.$kode[1]}}/{{$suratMaterial->created_at->year}}</td>
+                    <td><span style="display:inline-block;width:20px;height:auto"></span>{{$suratMaterial->nomor_surat}}/{{$suratMaterial->kodeSurat->kode_surat}}<span style="display:inline-block;width:20px;height:auto"></span>/<span style="display:inline-block;width:50px;height:auto"></span>/{{$suratMaterial->created_at->year}}</td>
                     <td class="text-right">{{$suratMaterial->created_at->isoFormat('D MMMM Y')}}</td>
                 </tr>
                 <tr>
                     <td>Lampiran</td>
                     <td>:</td>
-                    <td colspan="2">1 Lembar</td>
+                    <td colspan="2"><span style="display:inline-block;width:20px;height:auto"></span>Lembar</td>
                 </tr>
                 <tr>
                     <td>Perihal</td>
@@ -132,7 +142,7 @@
             <div class="content mt-1">
 
             <p class="m-0"style="margin-top:20px">
-                Sehubungan dengan kegiatan {{ ucwords($suratMaterial->nama_kegiatan) }} <b>Program Studi {{ $suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->mahasiswa->prodi->strata }} {{ $suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->mahasiswa->prodi->nama_prodi }} {{ $suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->mahasiswa->prodi->jurusan->nama_jurusan }} Fakultas Teknik Universitas Negeri Gorontalo</b>, maka dengan ini kami memohon bantuan Bapak/Ibu untuk diperkenankan mahasiswa kami dapat melakukan pengambilan material. (Nama-nama terlampir).
+                Sehubungan dengan kegiatan {{ ucwords($suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->nama_kegiatan) }} <b>Program Studi {{ $strata }} - {{ $namaProdi }} Jurusan {{ $namaJurusan }} Fakultas Teknik Universitas Negeri Gorontalo</b>, maka dengan ini kami memohon bantuan Bapak/Ibu untuk diperkenankan mahasiswa kami dapat melakukan pengambilan material. (Nama-nama terlampir).
             </p>
             <p class="m-0">
                 Demikian surat ini disampaikan, atas kerjasamanya diucapkan terima kasih.
@@ -140,18 +150,33 @@
         </div>
         <div class="signature">
             <div class="signature-content">
-                <p class="m-0"><b>Wakil Dekan 1 Bidang Akademik,</b></p>
+                <p class="m-0"><b>{{$suratMaterial->created_at->isoFormat('D MMMM Y')}}</b></p>
+                @if($suratMaterial->user->jabatan == 'dekan')
+                    <p class="m-0"><b>Dekan</b></p>
+                @else
+                    <p class="m-0"><b>a.n Dekan,</b></p>
+                    @if($suratMaterial->user->jabatan == 'wd1')
+                        <p class="m-0"><b>Wakil Dekan Bidang Akademik,</b></p>
+                    @elseif($suratMaterial->user->jabatan == 'kabag tata usaha')
+                        <p class="m-0"><b>Kabag TU</b></p>
+                    @endif
+                @endif
+
                 <p class="m-0 tanda-tangan-margin">
-                    <img class="tanda-tangan" src="{{$suratMaterial->user->tanda_tangan}}">
+                    @if($suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->status == 'selesai')
+                        <img class="tanda-tangan" src="{{$suratMaterial->user->tanda_tangan}}">
+                    @else
+                        <div class="tanda-tangan"></div>
+                    @endif
                 </p>
                 <p class="m-0"><b>{{$suratMaterial->user->nama}}</b></p>
-                <p class="m-0"><b>NIP. {{substr($suratMaterial->user->nip,0,8)}} {{substr($suratMaterial->user->nip,8,6)}} {{substr($suratMaterial->user->nip,14,1)}} {{substr($suratMaterial->user->nip,15,3)}}</b></p>
+                <p class="m-0"><b>NIP. {{$suratMaterial->user->nip}}</b></p>
             </div>
         </div>
         <div class="content" style="padding-top:105px">
             <?= $qrCode ?>
         </div>
-         <div style="height:325px"></div>
+         <div style="height:370px"></div>
             <p class="m-0">
                 <b>Lampiran :</b>
             </p>

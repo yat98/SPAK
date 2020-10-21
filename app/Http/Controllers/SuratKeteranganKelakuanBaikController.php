@@ -197,7 +197,7 @@ class SuratKeteranganKelakuanBaikController extends Controller
             ]);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Gagal Mengubah Data','Surat keterangan kelakuan baik gagal ditolak.');
+            $this->setFlashData('error','Gagal','Pengajuan surat keterangan kelakuan baik gagal ditolak.');
         }
         DB::commit();
         $this->setFlashData('success','Berhasil','Pengajuan surat keterangan kelakuan baik mahasiswa dengan nama '.$pengajuanSuratKeterangan->mahasiswa->nama.' ditolak');

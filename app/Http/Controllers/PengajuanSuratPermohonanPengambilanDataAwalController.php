@@ -74,10 +74,11 @@ class PengajuanSuratPermohonanPengambilanDataAwalController extends Controller
                         ->make(true);
         } else if(isset(Auth::user()->nip)){
             $pengajuanSurat = PengajuanSuratPermohonanPengambilanDataAwal::join('mahasiswa','pengajuan_surat_permohonan_pengambilan_data_awal.nim','=','mahasiswa.nim')
+                                ->join('surat_permohonan_pengambilan_data_awal','pengajuan_surat_permohonan_pengambilan_data_awal.id','=','surat_permohonan_pengambilan_data_awal.id_pengajuan')
                                 ->select('mahasiswa.nama','pengajuan_surat_permohonan_pengambilan_data_awal.*','mahasiswa.nim')
-                                ->with(['mahasiswa']);
+                                ->with(['mahasiswa','SuratPermohonanPengambilanDataAwal.kodeSurat']);
 
-            if (Auth::user()->jabatan == 'kasubag kemahasiswaan') {
+            if (Auth::user()->jabatan == 'kasubag pendidikan dan pengajaran') {
                 $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_permohonan_pengambilan_data_awal.status','verifikasi kasubag');
             }else if(Auth::user()->jabatan == 'kabag tata usaha'){
                 $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_permohonan_pengambilan_data_awal.status','verifikasi kabag');
@@ -175,6 +176,44 @@ class PengajuanSuratPermohonanPengambilanDataAwalController extends Controller
         $this->deleteImage('file_rekomendasi_jurusan',$pengajuanSurat->file_rekomendasi_jurusan);
         $pengajuanSurat->delete();
         $this->setFlashData('success','Berhasil','Pengajuan surat permohonan pengambilan data awal berhasil dihapus');
+        return redirect($this->segmentUser.'/surat-permohonan-pengambilan-data-awal');
+    }
+
+    public function verification(Request $request){
+        $status='verifikasi kabag';
+        $pengajuan = PengajuanSuratPermohonanPengambilanDataAwal::findOrFail($request->id);
+        $user = $pengajuan->suratPermohonanPengambilanDataAwal->user;
+
+        $isiNotifikasi = 'Verifikasi surat permohonan pengambilan data awal mahasiswa dengan nama '.$pengajuan->mahasiswa->nama;
+
+        if(Auth::user()->jabatan == 'kabag tata usaha' || $pengajuan->suratPermohonanPengambilanDataAwal->user->jabatan == 'kabag tata usaha'){
+            $status='menunggu tanda tangan';
+            $isiNotifikasi = 'Tanda tangan surat permohonan pengambilan data awal mahasiswa dengan nama '.$pengajuan->mahasiswa->nama;
+        }
+
+        DB::beginTransaction();
+        try{
+            $pengajuan->update([
+                'status'=>$status,
+            ]);
+            
+            if($status == 'verifikasi kabag'){
+                $user = User::where('jabatan','kabag tata usaha')->where('status_aktif','aktif')->first();
+            }
+
+            NotifikasiUser::create([
+                'nip'=>$user->nip,
+                'judul_notifikasi'=>'Surat Permohonan Pengambilan Data Awal',
+                'isi_notifikasi'=>$isiNotifikasi,
+                'link_notifikasi'=>url('pimpinan/surat-permohonan-pengambilan-data-awal')
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Pengajuan Gagal','Surat permohonan pengambilan data awal gagal diverifikasi.');
+        }
+
+        DB::commit();
+        $this->setFlashData('success','Berhasil ','Surat permohonan pengambilan data awal berhasil diverifikasi');
         return redirect($this->segmentUser.'/surat-permohonan-pengambilan-data-awal');
     }
 

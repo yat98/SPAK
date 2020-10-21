@@ -276,7 +276,7 @@ class SuratPersetujuanPindahController extends Controller
         }
         DB::commit();
 
-        $this->setFlashData('success','Berhasil','Surat persetujuan pindah mahasiswa dengan nama berhasil ditambahkan');
+        $this->setFlashData('success','Berhasil','Surat persetujuan pindah mahasiswa berhasil ditambahkan');
         return redirect($this->segmentUser.'/surat-persetujuan-pindah');
     }
 
@@ -296,7 +296,7 @@ class SuratPersetujuanPindahController extends Controller
             ]);
         }catch(Exception $e){
             DB::rollback();
-            $this->setFlashData('error','Gagal Menambahkan Data','Surat Persetujuan Pindah gagal ditambahkan.');
+            $this->setFlashData('error','Gagal','Pengajuan surat persetujuan pindah gagal ditolak.');
         }
         DB::commit();
 

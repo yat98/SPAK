@@ -71,10 +71,15 @@ class PengajuanSuratPermohonanPengambilanMaterialController extends Controller
                         })
                         ->make(true);
         } else if(isset(Auth::user()->nip)){
-            if (Auth::user()->jabatan == 'kasubag kemahasiswaan') {
-                $pengajuanSurat = PengajuanSuratPermohonanPengambilanMaterial::where('status','verifikasi kasubag');
+            $pengajuanSurat = PengajuanSuratPermohonanPengambilanMaterial::leftJoin('mahasiswa','pengajuan_surat_permohonan_pengambilan_material.nim','=','mahasiswa.nim')
+                                ->join('surat_permohonan_pengambilan_material','pengajuan_surat_permohonan_pengambilan_material.id','=','surat_permohonan_pengambilan_material.id_pengajuan')
+                                ->select('mahasiswa.nama','pengajuan_surat_permohonan_pengambilan_material.*','mahasiswa.nim')
+                                ->with(['mahasiswa','suratPermohonanPengambilanMaterial.kodeSurat']);
+            
+            if (Auth::user()->jabatan == 'kasubag pendidikan dan pengajaran') {
+                $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_permohonan_pengambilan_material.status','verifikasi kasubag');
             }else if(Auth::user()->jabatan == 'kabag tata usaha'){
-                $pengajuanSurat = PengajuanSuratPermohonanPengambilanMaterial::where('status','verifikasi kabag');
+                $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_permohonan_pengambilan_material.status','verifikasi kabag');
             }
 
             return DataTables::of($pengajuanSurat)
@@ -168,6 +173,44 @@ class PengajuanSuratPermohonanPengambilanMaterialController extends Controller
         $this->deleteImage('file_rekomendasi_jurusan',$pengajuanSurat->file_rekomendasi_jurusan);
         $pengajuanSurat->delete();
         $this->setFlashData('success','Berhasil','Pengajuan surat permohonan pengambilan material berhasil dihapus.');
+        return redirect($this->segmentUser.'/surat-permohonan-pengambilan-material');
+    }
+
+    public function verification(Request $request){
+        $status='verifikasi kabag';
+        $pengajuan = PengajuanSuratPermohonanPengambilanMaterial::findOrFail($request->id);
+        $user = $pengajuan->suratPermohonanPengambilanMaterial->user;
+
+        $isiNotifikasi = 'Verifikasi surat permohonan pengambilan material';
+
+        if(Auth::user()->jabatan == 'kabag tata usaha' || $pengajuan->suratPermohonanPengambilanMaterial->user->jabatan == 'kabag tata usaha'){
+            $status='menunggu tanda tangan';
+            $isiNotifikasi = 'Tanda tangan surat permohonan pengambilan material.';
+        }
+
+        DB::beginTransaction();
+        try{
+            $pengajuan->update([
+                'status'=>$status,
+            ]);
+            
+            if($status == 'verifikasi kabag'){
+                $user = User::where('jabatan','kabag tata usaha')->where('status_aktif','aktif')->first();
+            }
+
+            NotifikasiUser::create([
+                'nip'=>$user->nip,
+                'judul_notifikasi'=>'Surat Permohonan Pengambilan Material',
+                'isi_notifikasi'=>$isiNotifikasi,
+                'link_notifikasi'=>url('pimpinan/surat-permohonan-pengambilan-material')
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Pengajuan Gagal','Surat permohonan pengambilan material gagal diverifikasi.');
+        }
+
+        DB::commit();
+        $this->setFlashData('success','Berhasil ','Surat permohonan pengambilan material berhasil diverifikasi');
         return redirect($this->segmentUser.'/surat-permohonan-pengambilan-material');
     }
 

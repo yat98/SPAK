@@ -415,7 +415,7 @@ $('.table-responsive').on('click', '.tolak-surat', function(e){
     e.preventDefault();
     Swal.fire({
         title: 'Yakin?',
-        text: "pengajuan surat akan ditolak",
+        text: "Pengajuan surat akan ditolak",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -2093,7 +2093,7 @@ $('.table-responsive').on('click','.pengajuan-surat-keterangan-lulus-detail',fun
         });
 });
 
-$('.btn-surat-lulus-detail').on('click',function(e){
+$('.table-responsive').on('click','.btn-surat-lulus-detail',function(e){
     $('#surat-keterangan-lulus-detail-content').empty();
     let url = $(this).attr('href');
     let a = fetch(url)
@@ -2101,25 +2101,23 @@ $('.btn-surat-lulus-detail').on('click',function(e){
         .then(result => {
             let suratLulus = result.pengajuan_surat_keterangan_lulus;
             let label;
-            if(suratLulus.status == 'diajukan' || suratLulus.status == 'menunggu tanda tangan'){
-                label = `<label class="badge badge-gradient-warning text-dark">${suratLulus.status.ucwords()}</label>`;
+            
+            if (result.status == 'Selesai'){
+                label=`<label class="badge badge-gradient-info">${result.status}</label>`;
+            }else if (suratLulus.status == 'Ditolak'){
+                label=`<label class="badge badge-gradient-danger">${result.status}</label>`;
             }else{
-                label = `<label class="badge badge-gradient-info">${suratLulus.status.ucwords()}</label>`;
+                label=`<label class="badge badge-gradient-warning text-dark">${result.status}</label>`;
             }
+
+            if(suratLulus.id_operator == null){
+                diajukan = suratLulus.mahasiswa.nama;
+            }else{
+                diajukan = suratLulus.operator.nama;
+            }
+
             let html = `<div class="table-responsive">
                             <table class="table">
-                                <tr>
-                                    <th>Nomor Surat</th>
-                                    <td>${result.nomor_surat}</td>
-                                </tr>
-                                <tr>
-                                    <th>Di Tandangani Oleh</th>
-                                    <td>${result.user.nama}</td>
-                                </tr>
-                                <tr>
-                                    <th>Jumlah Cetak</th>
-                                    <td>${result.jumlah_cetak}</td>
-                                </tr>
                                 <tr>
                                     <th>NIM</th>
                                     <td>${suratLulus.mahasiswa.nim}</td>
@@ -2138,12 +2136,36 @@ $('.btn-surat-lulus-detail').on('click',function(e){
                                 </tr>
                                 <tr>
                                     <th>IPK</th>
-                                    <td>${suratLulus.ipk}</td>
+                                    <td>${suratLulus.mahasiswa.ipk}</td>
                                 </tr>
                                 <tr>
+                                    <th>Nomor Surat</th>
+                                    <td>${result.nomor_surat}</td>
+                                </tr>
+                                <tr>
+                                    <th>Kode Surat</th>
+                                    <td>${result.kode_surat.kode_surat}</td>
+                                </tr>
+                                <tr>
+                                    <th>Tahun</th>
+                                    <td>${result.tahun}</td>
+                                </tr>
                                     <th>Status</th>
                                     <td>${label}</td>
                                 </tr>
+                                <tr>
+                                    <th>Diajukan Oleh</th>
+                                    <td>${diajukan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Di Tandangani Oleh</th>
+                                    <td>${result.user.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jumlah Cetak</th>
+                                    <td>${result.jumlah_cetak}</td>
+                                </tr>
+                                <tr>
                                 <tr>
                                     <th>Keterangan</th>
                                     <td>${suratLulus.keterangan}</td>
@@ -2166,7 +2188,7 @@ $('.btn-surat-lulus-detail').on('click',function(e){
                                 </tr>   
                                 <tr>
                                     <th>Di Buat</th>
-                                    <td>${result.created_at}</td>
+                                    <td>${result.dibuat}</td>
                                 </tr>
                             </table>
                         </div>`;
@@ -2276,7 +2298,7 @@ $('.table-responsive').on('click','.pengajuan-surat-material-detail',function(e)
         });
 });
 
-$('.btn-surat-material-detail').on('click',function(e){
+$('.table-responsive').on('click','.btn-surat-material-detail',function(e){
     $('#surat-material-detail-content').empty();
     let url = $(this).attr('href');
     let a = fetch(url)
@@ -2287,12 +2309,18 @@ $('.btn-surat-material-detail').on('click',function(e){
             let label = '';
             let daftarKelompok = '';
             
-            if(suratMaterial.status == 'diajukan' || suratMaterial.status == 'menunggu tanda tangan'){
-                label = `<label class="badge badge-gradient-warning text-dark">${suratMaterial.status.ucwords()}</label>`;
-            }else if(suratMaterial.status == 'selesai'){
-                label = `<label class="badge badge-gradient-info">${suratMaterial.status.ucwords()}</label>`;
+            if (result.status == 'Selesai'){
+                label=`<label class="badge badge-gradient-info">${result.status}</label>`;
+            }else if (result.status == 'Ditolak'){
+                label=`<label class="badge badge-gradient-danger">${result.status}</label>`;
             }else{
-                label = `<label class="badge badge-gradient-danger">${suratMaterial.status.ucwords()}</label>`;
+                label=`<label class="badge badge-gradient-warning text-dark">${result.status}</label>`;
+            }
+
+            if(suratMaterial.id_operator == null){
+                diajukan = suratMaterial.mahasiswa.nama;
+            }else{
+                diajukan = suratMaterial.operator.nama;
             }
             
             if(suratMaterial.daftar_kelompok.length > 0){
@@ -2304,21 +2332,9 @@ $('.btn-surat-material-detail').on('click',function(e){
                 });
             }
             let html = `<div class="row">
-                            <div class="col-5">
+                            <div class="col-6">
                                 <div class="table-responsive">
                                     <table class="table">
-                                        <tr>
-                                            <th>Nomor Surat</th>
-                                            <td>${result.nomor_surat}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Ditanda Tangani Oleh</th>
-                                            <td>${result.user.nama}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Jumlah Cetak</th>
-                                            <td>${result.jumlah_cetak}</td>
-                                        </tr>
                                         <tr>
                                             <th>Nama Kegiatan</th>
                                             <td>${suratMaterial.nama_kegiatan}</td>
@@ -2332,12 +2348,32 @@ $('.btn-surat-material-detail').on('click',function(e){
                                             <td>${suratMaterial.nama_kelompok}</td>
                                         </tr>
                                         <tr>
-                                            <th>Diajukan Oleh</th>
-                                            <td>${suratMaterial.mahasiswa.nama}</td>
+                                            <th>Nomor Surat</th>
+                                            <td>${result.nomor_surat}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Kode Surat</th>
+                                            <td>${result.kode_surat.kode_surat}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Tahun</th>
+                                            <td>${result.tahun}</td>
                                         </tr>
                                         <tr>
                                             <th>Status</th>
                                             <td>${label}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Diajukan Oleh</th>
+                                            <td>${diajukan}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Di Tandatangani Oleh</th>
+                                            <td>${result.user.nama}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Jumlah Cetak</th>
+                                            <td>${result.jumlah_cetak}</td>
                                         </tr>
                                         <tr>
                                             <th>Keterangan</th>
@@ -2353,12 +2389,12 @@ $('.btn-surat-material-detail').on('click',function(e){
                                         </tr> 
                                         <tr>
                                             <th>Di Buat</th>
-                                            <td>${result.created_at}</td>
+                                            <td>${result.dibuat}</td>
                                         </tr>
                                     </table>
                                 </div>
                             </div>
-                            <div class="col-7">
+                            <div class="col-6">
                                 <div class="table-responsive">
                                     <table class="table">
                                         <tr>
@@ -2627,35 +2663,31 @@ $('.table-responsive').on('click','.pengajuan-surat-data-awal-detail',function(e
         });
 });
 
-$('.btn-surat-survei-detail').on('click',function(e){
+$('.table-responsive').on('click','.btn-surat-survei-detail',function(e){
     $('#surat-survei-detail-content').empty();
     let url = $(this).attr('href');
     let a = fetch(url)
         .then(response => response.json())
         .then(result => {
             let suratSurvei = result.pengajuan_surat_permohonan_survei;
-            let label;
-            if(suratSurvei.status == 'diajukan' || suratSurvei.status == 'menunggu tanda tangan'){
-                label = `<label class="badge badge-gradient-warning text-dark">${suratSurvei.status.ucwords()}</label>`;
-            }else if(suratSurvei.status == 'selesai'){
-                label = `<label class="badge badge-gradient-info">${suratSurvei.status.ucwords()}</label>`;
+            let label,diajukan;
+            
+            if (result.status == 'Selesai'){
+                label=`<label class="badge badge-gradient-info">${result.status}</label>`;
+            }else if (result.status == 'Ditolak'){
+                label=`<label class="badge badge-gradient-danger">${result.status}</label>`;
             }else{
-                label = `<label class="badge badge-gradient-danger">${suratSurvei.status.ucwords()}</label>`;
+                label=`<label class="badge badge-gradient-warning text-dark">${result.status}</label>`;
             }
+
+            if(suratSurvei.id_operator == null){
+                diajukan = suratSurvei.mahasiswa.nama;
+            }else{
+                diajukan = suratSurvei.operator.nama;
+            }
+
             let html = `<div class="table-responsive">
                                     <table class="table">
-                                        <tr>
-                                            <th>Nomor Surat</th>
-                                            <td>${result.nomor_surat}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Di Tandangani Oleh</th>
-                                            <td>${result.user.nama}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Jumlah Cetak</th>
-                                            <td>${result.jumlah_cetak}</td>
-                                        </tr>
                                         <tr>
                                             <th>NIM</th>
                                             <td>${suratSurvei.mahasiswa.nim}</td>
@@ -2685,8 +2717,32 @@ $('.btn-surat-survei-detail').on('click',function(e){
                                             <td>${suratSurvei.data_survei}</td>
                                         </tr>
                                         <tr>
+                                            <th>Nomor Surat</th>
+                                            <td>${result.nomor_surat}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Kode Surat</th>
+                                            <td>${result.kode_surat.kode_surat}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Tahun</th>
+                                            <td>${result.tahun}</td>
+                                        </tr>
+                                        <tr>
                                             <th>Status</th>
                                             <td>${label}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Diajukan Oleh</th>
+                                            <td>${diajukan}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Di Tandangani Oleh</th>
+                                            <td>${result.user.nama}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Jumlah Cetak</th>
+                                            <td>${result.jumlah_cetak}</td>
                                         </tr>
                                         <tr>
                                             <th>Keterangan</th>
@@ -2702,7 +2758,7 @@ $('.btn-surat-survei-detail').on('click',function(e){
                                         </tr>
                                         <tr>
                                             <th>Di Buat</th>
-                                            <td>${result.created_at}</td>
+                                            <td>${result.dibuat}</td>
                                         </tr>
                                     </table>
                                 </div>`;
@@ -2710,55 +2766,47 @@ $('.btn-surat-survei-detail').on('click',function(e){
         });
 });
 
-$('.btn-surat-penelitian-detail').on('click',function(e){
+$('.table-responsive').on('click','.btn-surat-penelitian-detail',function(e){
     $('#surat-penelitian-detail-content').empty();
     let url = $(this).attr('href');
     let a = fetch(url)
         .then(response => response.json())
         .then(result => {
             let suratPenelitian = result.pengajuan_surat_rekomendasi_penelitian;
-            let label;
-            if(suratPenelitian.status == 'diajukan' || suratPenelitian.status == 'menunggu tanda tangan'){
-                label = `<label class="badge badge-gradient-warning text-dark">${suratPenelitian.status.ucwords()}</label>`;
-            }else if(suratPenelitian.status == 'selesai'){
-                label = `<label class="badge badge-gradient-info">${suratPenelitian.status.ucwords()}</label>`;
+            let label,diajukan;
+
+            if (result.status == 'Selesai'){
+                label=`<label class="badge badge-gradient-info">${result.status}</label>`;
+            }else if (result.status == 'Ditolak'){
+                label=`<label class="badge badge-gradient-danger">${result.status}</label>`;
             }else{
-                label = `<label class="badge badge-gradient-danger">${suratPenelitian.status.ucwords()}</label>`;
+                label=`<label class="badge badge-gradient-warning text-dark">${result.status}</label>`;
             }
+
+            if(suratPenelitian.id_operator == null){
+                diajukan = suratPenelitian.mahasiswa.nama;
+            }else{
+                diajukan = suratPenelitian.operator.nama;
+            }
+
             let html = `<div class="table-responsive">
                                     <table class="table">
-                                    <tr>
-                                        <th>Nomor Surat</th>
-                                        <td>${result.nomor_surat}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Tembusan</th>
-                                        <td>${result.tembusan}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Di Tandangani Oleh</th>
-                                        <td>${result.user.nama}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Jumlah Cetak</th>
-                                        <td>${result.jumlah_cetak}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>NIM</th>
-                                        <td>${suratPenelitian.mahasiswa.nim}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Nama</th>
-                                        <td>${suratPenelitian.mahasiswa.nama}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Program Studi</th>
-                                        <td>${suratPenelitian.mahasiswa.prodi.strata} - ${suratPenelitian.mahasiswa.prodi.nama_prodi}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Jurusan</th>
-                                        <td>${suratPenelitian.mahasiswa.prodi.jurusan.nama_jurusan}</td>
-                                    </tr>
+                                        <tr>
+                                            <th>NIM</th>
+                                            <td>${suratPenelitian.mahasiswa.nim}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <td>${suratPenelitian.mahasiswa.nama}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Program Studi</th>
+                                            <td>${suratPenelitian.mahasiswa.prodi.strata} - ${suratPenelitian.mahasiswa.prodi.nama_prodi}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Jurusan</th>
+                                            <td>${suratPenelitian.mahasiswa.prodi.jurusan.nama_jurusan}</td>
+                                        </tr>   
                                         <tr>
                                             <th>Kepada</th>
                                             <td>${suratPenelitian.kepada}</td>
@@ -2766,6 +2814,34 @@ $('.btn-surat-penelitian-detail').on('click',function(e){
                                         <tr>
                                             <th>Judul</th>
                                             <td>${suratPenelitian.judul}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Nomor Surat</th>
+                                            <td>${result.nomor_surat}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Kode Surat</th>
+                                            <td>${result.kode_surat.kode_surat}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Tahun</th>
+                                            <td>${result.tahun}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Tembusan</th>
+                                            <td>${result.tembusan}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Di Tandangani Oleh</th>
+                                            <td>${result.user.nama}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Diajukan Oleh</th>
+                                            <td>${diajukan}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Jumlah Cetak</th>
+                                            <td>${result.jumlah_cetak}</td>
                                         </tr>
                                         <tr>
                                             <th>Status</th>
@@ -2785,7 +2861,7 @@ $('.btn-surat-penelitian-detail').on('click',function(e){
                                         </tr>
                                         <tr>
                                             <th>Di Buat</th>
-                                            <td>${result.created_at}</td>
+                                            <td>${result.dibuat}</td>
                                         </tr>
                                     </table>
                                 </div>`;
@@ -2793,35 +2869,31 @@ $('.btn-surat-penelitian-detail').on('click',function(e){
         });
 });
 
-$('.btn-surat-data-awal-detail').on('click',function(e){
+$('.table-responsive').on('click','.btn-surat-data-awal-detail',function(e){
     $('#surat-data-awal-detail-content').empty();
     let url = $(this).attr('href');
     let a = fetch(url)
         .then(response => response.json())
         .then(result => {
             let suratDataAwal = result.pengajuan_surat_permohonan_pengambilan_data_awal;
-            let label;
-            if(suratDataAwal.status == 'diajukan' || suratDataAwal.status == 'menunggu tanda tangan'){
-                label = `<label class="badge badge-gradient-warning text-dark">${suratDataAwal.status.ucwords()}</label>`;
-            }else if(suratDataAwal.status == 'selesai'){
-                label = `<label class="badge badge-gradient-info">${suratDataAwal.status.ucwords()}</label>`;
+            let label,diajukan;
+            
+            if (result.status == 'Selesai'){
+                label=`<label class="badge badge-gradient-info">${result.status}</label>`;
+            }else if (result.status == 'Ditolak'){
+                label=`<label class="badge badge-gradient-danger">${result.status}</label>`;
             }else{
-                label = `<label class="badge badge-gradient-danger">${suratDataAwal.status.ucwords()}</label>`;
+                label=`<label class="badge badge-gradient-warning text-dark">${result.status}</label>`;
             }
+
+            if(suratDataAwal.id_operator == null){
+                diajukan = suratDataAwal.mahasiswa.nama;
+            }else{
+                diajukan = suratDataAwal.operator.nama;
+            }
+
             let html = `<div class="table-responsive">
                                     <table class="table">
-                                        <tr>
-                                            <th>Nomor Surat</th>
-                                            <td>${result.nomor_surat}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Di Tandangani Oleh</th>
-                                            <td>${result.user.nama}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Jumlah Cetak</th>
-                                            <td>${result.jumlah_cetak}</td>
-                                        </tr>
                                         <tr>
                                             <th>NIM</th>
                                             <td>${suratDataAwal.mahasiswa.nim}</td>
@@ -2847,8 +2919,32 @@ $('.btn-surat-data-awal-detail').on('click',function(e){
                                             <td>${suratDataAwal.tempat_pengambilan_data}</td>
                                         </tr>
                                         <tr>
+                                            <th>Nomor Surat</th>
+                                            <td>${result.nomor_surat}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Kode Surat</th>
+                                            <td>${result.kode_surat.kode_surat}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Tahun</th>
+                                            <td>${result.tahun}</td>
+                                        </tr>
+                                        <tr>
                                             <th>Status</th>
                                             <td>${label}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Diajukan Oleh</th>
+                                            <td>${diajukan}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Di Tandangani Oleh</th>
+                                            <td>${result.user.nama}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Jumlah Cetak</th>
+                                            <td>${result.jumlah_cetak}</td>
                                         </tr>
                                         <tr>
                                             <th>Keterangan</th>
@@ -2864,7 +2960,7 @@ $('.btn-surat-data-awal-detail').on('click',function(e){
                                         </tr>
                                         <tr>
                                             <th>Di Buat</th>
-                                            <td>${result.created_at}</td>
+                                            <td>${result.dibuat}</td>
                                         </tr>
                                     </table>
                                 </div>`;

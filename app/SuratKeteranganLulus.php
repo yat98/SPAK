@@ -11,9 +11,10 @@ class SuratKeteranganLulus extends Model
     protected $primaryKey = 'id_pengajuan';
     
     protected $fillable = [
-        'id_pengajuan_surat_lulus',
+        'id_pengajuan',
         'nip',
         'id_kode_surat',
+        'id_operator',
         'nomor_surat',
         'jumlah_cetak',
     ];

@@ -82,10 +82,7 @@
         <div class="border"></div>
         <div class="text-center mt-3">
             <p class="m-0" style="font-size:23px;margin-bottom:5px"><b><span>SURAT KETERANGAN</span></b></p>
-            @php
-                $kode = explode('/',$suratLulus->kodeSurat->kode_surat);
-            @endphp
-            <p class="m-0"><b>Nomor :B/{{$suratLulus->nomor_surat}}/{{$kode[0].'.1/'.$kode[1]}}/{{$suratLulus->created_at->year}}</b></p>
+            <p class="m-0"><b><i>Nomor: <span style="display:inline-block;width:20px;height:auto"></span>{{$suratLulus->nomor_surat}}/{{$suratLulus->kodeSurat->kode_surat}}<span style="display:inline-block;width:20px;height:auto"></span>/<span style="display:inline-block;width:50px;height:auto"></span>/{{$suratLulus->created_at->year}}</i></b></p>
         </div>
         <div class="content">
             <p class="m-0">Dekan Fakultas Teknik Universitas Negeri Gorontalo, dengan ini menerangkan bahwa:</p>
@@ -111,22 +108,37 @@
                     <td>: {{$suratLulus->pengajuanSuratKeteranganLulus->mahasiswa->prodi->nama_prodi}}</td>
                 </tr>
             </table>
-            <p class="m-0">Benar-benar telah menempuh Ujian Sarjana (S1) pada Fakultas Teknik Universitas Negeri Gorontalo dengan Indeks Prestasi {{ $suratLulus->pengajuanSuratKeteranganLulus->ipk }} pada tanggal {{ $suratLulus->pengajuanSuratKeteranganLulus->tanggal_wisuda->isoFormat('D MMMM Y') }}, dan  akan diwisuda.</p>
+            <p class="m-0">Benar-benar telah menempuh Ujian Sarjana (S1) pada Fakultas Teknik Universitas Negeri Gorontalo dengan Indeks Prestasi {{ $suratLulus->pengajuanSuratKeteranganLulus->mahasiswa->ipk }} pada tanggal {{ $suratLulus->pengajuanSuratKeteranganLulus->tanggal_wisuda->isoFormat('D MMMM Y') }}, dan  akan diwisuda.</p>
             <p class="m-0">Demikian surat keterangan ini di buat dan diberikan kepada yang bersangkutan untuk dipergunakan sebagaimana mestinya.</p>
         </div>
         <div class="signature">
             <div class="signature-content">
-                <p class="m-0"><b>Wakil Dekan Bidang Akademik,</b></p>
+                <p class="m-0"><b>{{$suratLulus->created_at->isoFormat('D MMMM Y')}}</b></p>
+                @if($suratLulus->user->jabatan == 'dekan')
+                    <p class="m-0"><b>Dekan</b></p>
+                @else
+                    <p class="m-0"><b>a.n Dekan,</b></p>
+                    @if($suratLulus->user->jabatan == 'wd1')
+                        <p class="m-0"><b>Wakil Dekan Bidang Akademik,</b></p>
+                    @elseif($suratLulus->user->jabatan == 'kabag tata usaha')
+                        <p class="m-0"><b>Kabag TU</b></p>
+                    @endif
+                @endif
+
                 <p class="m-0 tanda-tangan-margin">
-                    <img class="tanda-tangan" src="{{$suratLulus->user->tanda_tangan}}">
+                    @if($suratLulus->pengajuanSuratKeteranganLulus->status == 'selesai')
+                        <img class="tanda-tangan" src="{{$suratLulus->user->tanda_tangan}}">
+                    @else
+                        <div class="tanda-tangan"></div>
+                    @endif
                 </p>
                 <p class="m-0"><b>{{$suratLulus->user->nama}}</b></p>
-                <p class="m-0"><b>NIP. {{substr($suratLulus->user->nip,0,8)}} {{substr($suratLulus->user->nip,8,6)}} {{substr($suratLulus->user->nip,14,1)}} {{substr($suratLulus->user->nip,15,3)}}</b></p>
+                <p class="m-0"><b>NIP. {{$suratLulus->user->nip}}</b></p>
             </div>
         </div>
         <div class="content" style="padding-top:90px">
             <?= $qrCode ?>
         </div>
-   </div>
+    </div>
 </body>
 </html>

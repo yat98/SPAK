@@ -268,11 +268,10 @@
                                                 </div>
                                             </div>`; 
                                 @else
-                                    let aksi = '';
+                                    let aksi = `<a href="${link+'/'+row.id}" class="dropdown-item pengajuan-surat-keterangan-lulus-detail" data-toggle="modal" data-target="#suratKeterangan">Detail</a>`;
                                     if(row.status == 'Diajukan'){
-                                        aksi = `<a href="${link+'/'+row.id}" class="dropdown-item pengajuan-surat-keterangan-lulus-detail" data-toggle="modal" data-target="#suratKeterangan">Detail</a>
-                                                <a href="${linkSurat+'/create/'+row.id}" class="dropdown-item">Buat Surat</a>
-                                                    <form action="${link+'/tolak-pengajuan/'+row.id}" method="post">
+                                        aksi += `<a href="${linkSurat+'/create/'+row.id}" class="dropdown-item">Buat Surat</a>
+                                                <form action="${link+'/tolak-pengajuan/'+row.id}" method="post">
                                                     <input name="_method" type="hidden" value="PATCH">
                                                     <input name="_token" type="hidden" value="{{ @csrf_token() }}">
                                                     <input name="keterangan" type="hidden" value="-" id="keterangan_surat">
@@ -280,6 +279,8 @@
                                                         Tolak Pengajuan
                                                     </button>
                                                 </form>`;
+                                    }else if(row.status == 'Ditolak'){
+                                        aksi = `<a href="${link+'/'+row.id}" class="dropdown-item pengajuan-surat-keterangan-lulus-detail" data-toggle="modal" data-target="#suratKeterangan">Detail</a>`;
                                     }else{
                                         aksi = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item surat-keterangan-detail" data-toggle="modal" data-target="#suratKeterangan">Detail</a>`;
                                     }
@@ -383,13 +384,13 @@
                                                     <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
                                                 </a>
                                                 <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
-                                                    <a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-detail" data-toggle="modal" data-target="#suratKeterangan">
+                                                    <a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-lulus-detail" data-toggle="modal" data-target="#suratKeterangan">
                                                             Detail</a>
                                                     <a href="${linkSurat+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
                                                 </div>
                                             </div>`;
                                 @else
-                                    let action = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-detail" data-toggle="modal" data-target="#suratKeterangan">
+                                    let action = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-lulus-detail" data-toggle="modal" data-target="#suratKeterangan">
                                                     Detail</a>`;
 
                                     if(row.status == 'Selesai'){

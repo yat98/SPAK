@@ -73,12 +73,12 @@ class PengajuanSuratPermohonanSurveiController extends Controller
                         })
                         ->make(true);
         } else if(isset(Auth::user()->nip)){
-            $pengajuanSurat = PengajuanSuratPermohonanSurvei::where('pengajuan_surat_permohonan_survei.nim',Auth::user()->nim)
-                                ->join('mahasiswa','pengajuan_surat_permohonan_survei.nim','=','mahasiswa.nim')
+            $pengajuanSurat = PengajuanSuratPermohonanSurvei::join('mahasiswa','pengajuan_surat_permohonan_survei.nim','=','mahasiswa.nim')
+                                ->join('surat_permohonan_survei','pengajuan_surat_permohonan_survei.id','=','surat_permohonan_survei.id_pengajuan')
                                 ->select('mahasiswa.nama','pengajuan_surat_permohonan_survei.*','mahasiswa.nim')
-                                ->with(['mahasiswa']);
+                                ->with(['mahasiswa','suratPermohonanSurvei.kodeSurat']);
 
-            if (Auth::user()->jabatan == 'kasubag kemahasiswaan') {
+            if (Auth::user()->jabatan == 'kasubag pendidikan dan pengajaran') {
                 $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_permohonan_survei.status','verifikasi kasubag');
             }else if(Auth::user()->jabatan == 'kabag tata usaha'){
                 $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_permohonan_survei.status','verifikasi kabag');
@@ -187,6 +187,44 @@ class PengajuanSuratPermohonanSurveiController extends Controller
         $this->deleteImage('file_rekomendasi_jurusan',$pengajuanSurvei->file_rekomendasi_jurusan);
         $pengajuanSurvei->delete();
         $this->setFlashData('success','Berhasil','Pengajuan surat permohonan survei berhasil dihapus');
+        return redirect($this->segmentUser.'/surat-permohonan-survei');
+    }
+
+    public function verification(Request $request){
+        $status='verifikasi kabag';
+        $pengajuan = PengajuanSuratPermohonanSurvei::findOrFail($request->id);
+        $user = $pengajuan->suratPermohonanSurvei->user;
+
+        $isiNotifikasi = 'Verifikasi surat permohonan survei mahasiswa dengan nama '.$pengajuan->mahasiswa->nama;
+
+        if(Auth::user()->jabatan == 'kabag tata usaha' || $pengajuan->suratPermohonanSurvei->user->jabatan == 'kabag tata usaha'){
+            $status='menunggu tanda tangan';
+            $isiNotifikasi = 'Tanda tangan surat permohonan survei mahasiswa dengan nama '.$pengajuan->mahasiswa->nama;
+        }
+
+        DB::beginTransaction();
+        try{
+            $pengajuan->update([
+                'status'=>$status,
+            ]);
+            
+            if($status == 'verifikasi kabag'){
+                $user = User::where('jabatan','kabag tata usaha')->where('status_aktif','aktif')->first();
+            }
+
+            NotifikasiUser::create([
+                'nip'=>$user->nip,
+                'judul_notifikasi'=>'Surat Permohonan Survei',
+                'isi_notifikasi'=>$isiNotifikasi,
+                'link_notifikasi'=>url('pimpinan/surat-permohonan-survei')
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Pengajuan Gagal','Surat permohonan survei gagal diverifikasi.');
+        }
+
+        DB::commit();
+        $this->setFlashData('success','Berhasil ','Surat permohonan survei berhasil diverifikasi');
         return redirect($this->segmentUser.'/surat-permohonan-survei');
     }
 

@@ -101,14 +101,11 @@
    <div class="container">
         @include('surat.kop_surat')
         <div class="border"></div>
-            @php
-                $kode = explode('/',$suratDataAwal->kodeSurat->kode_surat);
-            @endphp
             <table style="padding:0px 14px;line-height:1;margin-top:10px">
                 <tr>
                     <td>Nomor</td>
                     <td>:</td>
-                    <td>B/{{$suratDataAwal->nomor_surat}}/{{$kode[0].'.1/'.$kode[1]}}/{{$suratDataAwal->created_at->year}}</td>
+                    <td><span style="display:inline-block;width:20px;height:auto"></span>{{$suratDataAwal->nomor_surat}}/{{$suratDataAwal->kodeSurat->kode_surat}}<span style="display:inline-block;width:20px;height:auto"></span>/<span style="display:inline-block;width:50px;height:auto"></span>/{{$suratDataAwal->created_at->year}}</td>
                     <td class="text-right">{{$suratDataAwal->created_at->isoFormat('D MMMM Y')}}</td>
                 </tr>
                 <tr>
@@ -152,13 +149,28 @@
             </p>
         </div>
         <div class="signature">
-            <div class="signature-content">
-                <p class="m-0"><b>Wakil Dekan 1 Bidang Akademik,</b></p>
+              <div class="signature-content">
+                <p class="m-0"><b>{{$suratDataAwal->created_at->isoFormat('D MMMM Y')}}</b></p>
+                @if($suratDataAwal->user->jabatan == 'dekan')
+                    <p class="m-0"><b>Dekan</b></p>
+                @else
+                    <p class="m-0"><b>a.n Dekan,</b></p>
+                    @if($suratDataAwal->user->jabatan == 'wd1')
+                        <p class="m-0"><b>Wakil Dekan Bidang Akademik,</b></p>
+                    @elseif($suratDataAwal->user->jabatan == 'kabag tata usaha')
+                        <p class="m-0"><b>Kabag TU</b></p>
+                    @endif
+                @endif
+
                 <p class="m-0 tanda-tangan-margin">
-                    <img class="tanda-tangan" src="{{$suratDataAwal->user->tanda_tangan}}">
+                    @if($suratDataAwal->pengajuanSuratPermohonanPengambilanDataAwal->status == 'selesai')
+                        <img class="tanda-tangan" src="{{$suratDataAwal->user->tanda_tangan}}">
+                    @else
+                        <div class="tanda-tangan"></div>
+                    @endif
                 </p>
                 <p class="m-0"><b>{{$suratDataAwal->user->nama}}</b></p>
-                <p class="m-0"><b>NIP. {{substr($suratDataAwal->user->nip,0,8)}} {{substr($suratDataAwal->user->nip,8,6)}} {{substr($suratDataAwal->user->nip,14,1)}} {{substr($suratDataAwal->user->nip,15,3)}}</b></p>
+                <p class="m-0"><b>NIP. {{$suratDataAwal->user->nip}}</b></p>
             </div>
         </div>
          <div class="content" style="padding-top:90px">

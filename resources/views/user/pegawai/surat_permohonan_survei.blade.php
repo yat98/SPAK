@@ -19,11 +19,11 @@
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Pengajuan Surat Permohonan Survei<i
+                                <h4 class="font-weight-normal mb-3">Verifikasi Surat Permohonan Survei<i
                                         class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllPengajuanSuratSurvei > 0 ? $countAllPengajuanSuratSurvei.' Pengajuan Surat' : 'Pengajuan Surat Kosong' }}
+                                    {{ $countAllVerifikasi > 0 ? $countAllVerifikasi.' Verifikasi Surat' : 'Verifikasi Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -38,7 +38,7 @@
                                         class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
                                 </h4>
                                 <h2 class="mb-5">
-                                    {{ $countAllSuratSurvei > 0 ? $countAllSuratSurvei.' Surat Permohonan Survei' : 'Surat Permohonan Survei Kosong' }}
+                                    {{ $countAllSurat > 0 ? $countAllSurat.' Surat' : 'Data Surat Kosong' }}
                                 </h2>
                                 <h6 class="card-text"></h6>
                             </div>
@@ -51,81 +51,33 @@
                             <div class="card-body">
                                 <div class="row mb-3">
                                     <div class="col-12 col-md-6">
-                                        <h4>Pengajuan Surat Permohonan Survei</h4>
+                                        <h4>Verifikasi Surat Permohonan Survei</h4>
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                @if ($countPengajuanSuratSurvei > 0)
-                                <div class="table-responsive">
-                                    <table class="table">
+                                @if ($countAllVerifikasi > 0)
+                               <div class="table-responsive">
+                                    <table class="table display no-warp" id='datatables' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
-                                                <th> Nama Mahasiswa</th>
-                                                <th> Status</th>
-                                                <th> Keterangan</th>
-                                                <th> Aksi</th>
+                                                <th data-priority="1"> Nama</th>
+                                                <th> Nomor Surat</th>
+                                                <th data-priority="2"> Status</th>
+                                                <th> Waktu Pengajuan</th>
+                                                <th data-priority="3"> Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($pengajuanSuratSurveiList as $pengajuanSuratSurvei)
-                                            <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($pengajuanSuratSurveiList->currentPage() - 1) }}</td>
-                                                <td> {{ $pengajuanSuratSurvei->mahasiswa->nama }}</td>
-                                                <td> 
-                                                    @if ($pengajuanSuratSurvei->status == 'diajukan')
-                                                    <label class="badge badge-gradient-warning text-dark">
-                                                        {{ ucwords($pengajuanSuratSurvei->status) }}
-                                                    </label>
-                                                    @elseif($pengajuanSuratSurvei->status == 'ditolak')
-                                                    <label class="badge badge-gradient-danger">
-                                                        {{ ucwords($pengajuanSuratSurvei->status) }}
-                                                    </label>
-                                                    @endif
-                                                </td>
-                                                <td> {{ $pengajuanSuratSurvei->keterangan }}</td>
-                                                <td>
-                                                    <a href="{{ url('pegawai/detail/mahasiswa/'.$pengajuanSuratSurvei->nim) }}" class="btn-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
-                                                        <i class="mdi mdi-account btn-icon-prepend"></i>
-                                                        Detail</a>
-
-                                                    <a href="{{ url('pegawai/surat-permohonan-survei/pengajuan/'.$pengajuanSuratSurvei->id) }}" class="btn-pengajuan-surat-survei-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#suratSurvei">
-                                                        <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
-                                                        Detail
-                                                    </a>    
-
-                                                    @if ($pengajuanSuratSurvei->status == 'diajukan')
-                                                    <a href="{{ url('pegawai/surat-permohonan-survei/pengajuan/create/'.$pengajuanSuratSurvei->id) }}" class="btn btn-sm btn-info">
-                                                        <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
-                                                            Buat Surat
-                                                    </a>
-
-                                                    {{ Form::open(['url'=>'pegawai/surat-permohonan-survei/pengajuan/tolak-pengajuan/'.$pengajuanSuratSurvei->id,'class'=>'d-inline-block','method'=>'PATCH']) }}
-                                                    {{ Form::hidden('keterangan','-',['id'=>'keterangan_surat']) }}
-                                                    <button type="submit" class="btn btn-danger btn-sm tolak-surat">
-                                                        <i class="mdi mdi mdi-close btn-icon-prepend"></i>
-                                                        Tolak
-                                                    </button>
-                                                    {{ Form::close() }}
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
-                                    <div class="col">
-                                        {{ $pengajuanSuratSurveiList->appends(['page' => $pengajuanSuratSurveiList->currentPage()])->links() }}
-                                    </div>
                                 </div>
                                 @else
                                 <div class="row">
                                     <div class="col text-center">
                                         <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
                                         <h4 class="display-4 mt-3">
-                                            Pengajuan Surat Kosong!
+                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Verifikasi Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            Pengajuan surat permohonan survei belum ada.
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Verifikasi surat permohonan survei belum ada.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -140,93 +92,21 @@
                                     <div class="col-12 col-md-6">
                                         <h4>Surat Permohonan Survei</h4>
                                     </div>
-                                    <div class="col-12 col-md-6 text-right">
-                                        <a href="{{ url('pegawai/surat-permohonan-survei/create')}}"
-                                            class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">+
-                                            Tambah Surat Permohonan Survei</a>
-                                    </div>
                                 </div>
                                 <hr class="mb-4">
-                                <div class="row mb-3">
-                                    <div class="col-sm-12">
-                                        {{ Form::open(['url'=>'pegawai/surat-permohonan-survei/search','method'=>'get']) }}
-                                        <div class="form-row">
-                                            <div class="col-sm-4 col-md-4 mt-1">
-                                                {{ Form::select('nomor_surat',$nomorSurat,(request()->get('nomor_surat') != null) ? request()->get('nomor_surat'):null,['class'=>'form-control search','placeholder'=> 'Cari kode surat...']) }}
-                                            </div>
-                                            <div class="col-sm-4 col-md-4 mt-1">
-                                                {{ Form::select('keywords',$mahasiswa,(request()->get('keywords') != null) ? request()->get('keywords'):null,['class'=>'form-control search','placeholder'=> 'Cari mahasiswa...']) }}
-                                            </div>
-                                            <div class="col-sm-12 col-md">
-                                                <button class="btn btn-success btn-sm btn-tambah" type="submit">
-                                                    <i class="mdi mdi-magnify btn-icon-prepend"></i>
-                                                    Cari
-                                                </button>
-                                            </div>
-                                        </div>
-                                        {{ Form::close() }}
-                                    </div>
-                                </div>
-                                @if ($countSuratSurvei > 0)
-                                <div class="table-responsive">
-                                    <table class="table">
+                                @if ($countAllSurat > 0)
+                               <div class="table-responsive">
+                                    <table class="table display no-warp" id='datatables1' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
+                                                <th data-priority="1"> Nama</th>
                                                 <th> Nomor Surat</th>
-                                                <th> Nama Mahasiswa</th>
-                                                <th> Status</th>
-                                                <th> Aksi</th>
+                                                <th data-priority="2"> Status</th>
+                                                <th> Waktu Pengajuan</th>
+                                                <th data-priority="3"> Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($suratSurveiList as $suratSurvei)
-                                            <tr>
-                                                @php
-                                                    $kode = explode('/',$suratSurvei->kodeSurat->kode_surat);
-                                                @endphp
-                                                <td> {{ $loop->iteration + $perPage * ($suratSurveiList->currentPage() - 1) }}</td>
-                                                <td> {{ 'B/'.$suratSurvei->nomor_surat.'/'.$kode[0].'.1/'.$kode[1].'/'.$suratSurvei->created_at->year }}</td>
-                                                <td> {{ $suratSurvei->pengajuanSuratPermohonanSurvei->mahasiswa->nama }}</td>
-                                                <td> 
-                                                    @if($suratSurvei->status == 'menunggu tanda tangan')
-                                                         <label class="badge badge-gradient-warning text-dark">
-                                                            {{ ucwords($suratSurvei->status) }}
-                                                        </label>
-                                                    @else
-                                                    <label class="badge badge-gradient-info">
-                                                        {{ ucwords($suratSurvei->status) }}
-                                                    </label>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <a href="{{ url('pegawai/surat-permohonan-survei/'.$suratSurvei->id_pengajuan) }}" class="btn-surat-survei-detail btn btn-outline-info btn-sm" data-toggle="modal" data-target="#suratSurvei">
-                                                        <i class="mdi mdi-file-document-box btn-icon-prepend"></i>
-                                                        Detail</a>
-                                                    @if($suratSurvei->status == 'selesai')
-                                                    <a href="{{ url('pegawai/surat-permohonan-survei/'.$suratSurvei->id_pengajuan.'/cetak') }}" class="btn btn-info btn-sm" target="_blank">
-                                                        <i class="mdi mdi mdi-printer btn-icon-prepend"></i>
-                                                        Cetak</a>
-                                                    @endif
-                                                    <a href="{{ url('pegawai/surat-permohonan-survei/'.$suratSurvei->id_pengajuan.'/edit') }}"
-                                                        class="btn btn-warning btn-sm text-dark">
-                                                        <i class="mdi mdi-tooltip-edit btn-icon-prepend"></i>
-                                                        Edit
-                                                    </a>
-                                                    {{ Form::open(['method'=>'DELETE','action'=>['SuratPermohonanSurveiController@destroy',$suratSurvei->id_pengajuan],'class'=>'d-inline-block']) }}
-                                                    <button type="submit" class="btn btn-danger btn-sm sweet-delete">
-                                                        <i class="mdi mdi-delete-forever btn-icon-prepend"></i>
-                                                        Hapus
-                                                    </button>
-                                                    {{ Form::close() }}
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
-                                    <div class="col">
-                                        {{ $suratSurveiList->appends(['page_pengajuan' => $pengajuanSuratSurveiList->currentPage()])->links() }}
-                                    </div>
                                 </div>
                                 @else
                                 <div class="row">
@@ -236,7 +116,7 @@
                                             {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Silahkan mengisi data surat permohonan survei terlebih dahulu.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : ' Data surat permohonan survei belum ada.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -250,23 +130,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-        <div class="modal-content bg-white">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id='surat-keterangan-aktif-detail-content'></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+
 <div class="modal fade" id="suratSurvei" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -277,13 +141,234 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" id='surat-survei-detail-content'>
-                
-            </div>
+            <div class="modal-body" id='surat-survei-detail-content'></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="mahasiswa" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='mahasiswa-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('datatables-javascript')
+    <script>
+        let link = "{{ url('pegawai/surat-permohonan-survei') }}";
+        let linkMhs = "{{ url('pegawai/detail/mahasiswa') }}";
+
+        $('#datatables').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 0,
+                            "data": "mahasiswa.nama",
+                            "render": function ( data, type, row, meta ) {
+                                return `<a href="${linkMhs}/${row.mahasiswa.nim}" class="btn-detail text-dark" data-toggle="modal" data-target="#mahasiswa">
+                                            <div class="mb-1">${row.mahasiswa.nama}</div>
+                                            <span class="text-muted small">NIM. ${row.mahasiswa.nim}</span>
+                                        </a>`;
+                            }
+                        },
+                        {
+                            "targets": 1,
+                            "data": "surat_permohonan_survei.nomor_surat",
+                            "render": function ( data, type, row, meta ) {
+                                return `${row.surat_permohonan_survei.nomor_surat}/${row.surat_permohonan_survei.kode_surat.kode_surat}`;
+                            }
+                        },
+                        {
+                            "targets": 2,
+                            "data": "status",
+                            "render": function ( data, type, row, meta ) {
+                                if(row.status == 'Ditolak'){
+                                    return ` <label class="badge badge-gradient-danger">
+                                                ${row.status}
+                                            </label>`;
+                                }else if(row.status == 'Selesai'){
+                                    return ` <label class="badge badge-gradient-info">
+                                            ${row.status}
+                                        </label>`;
+                                }else{
+                                    return ` <label class="badge badge-gradient-warning text-dark">
+                                                ${row.status}
+                                            </label>`;
+                                }
+                            }
+                        },
+                        {
+                            "targets": 3,
+                            "data": "created_at",
+                            "render": function ( data, type, row, meta ) {
+                                return row.waktu_pengajuan;
+                            }
+                        },
+                        {
+                            "targets": 4,
+                            "data": "aksi",
+                            "render": function ( data, type, row, meta ) {
+                                return `<div class="d-inline-block">
+                                            <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                            </a>
+                                            <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                <a href="${link+'/'+row.id}" class="dropdown-item btn-surat-survei-detail" data-toggle="modal" data-target="#suratSurvei">
+                                                        Detail</a>
+                                                <a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
+                                                <form action="${link+'/verifikasi'}" method="post">
+                                                    <input name="_method" type="hidden" value="PATCH">
+                                                    <input name="_token" type="hidden" value="{{ @csrf_token() }}">
+                                                    <input name="id" type="hidden" value="${row.id}">
+                                                    <button type="submit" class="dropdown-item btn-verification">
+                                                        Verifikasi
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>`;
+                            },
+                        },
+                        {
+                            "targets": [5],
+                            "visible": false,
+                        }
+            ],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('pegawai/surat-permohonan-survei/verifikasi/all') }}',
+            columns: [{
+                    data: 'mahasiswa.nama',
+                },
+                {
+                    data: 'surat_permohonan_survei.nomor_surat',
+                },
+                {
+                    data: 'status',
+                },
+                {
+                    data: 'created_at',
+                },
+                {
+                    data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                },
+                {
+                    data: 'nim',
+                },
+            ],
+            pageLength: {{ $perPage }},
+            order: [[ 1, 'desc' ]],
+        });
+
+        $('#datatables1').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 0,
+                            "data": "mahasiswa.nama",
+                            "render": function ( data, type, row, meta ) {
+                                return `<a href="${linkMhs}/${row.mahasiswa.nim}" class="btn-detail text-dark" data-toggle="modal" data-target="#mahasiswa">
+                                            <div class="mb-1">${row.mahasiswa.nama}</div>
+                                            <span class="text-muted small">NIM. ${row.mahasiswa.nim}</span>
+                                        </a>`;
+                            }
+                        },
+                        {
+                            "targets": 1,
+                            "data": "surat_permohonan_survei.nomor_surat",
+                            "render": function ( data, type, row, meta ) {
+                                return `${row.surat_permohonan_survei.nomor_surat}/${row.surat_permohonan_survei.kode_surat.kode_surat}`;
+                            }
+                        },
+                        {
+                            "targets": 2,
+                            "data": "status",
+                            "render": function ( data, type, row, meta ) {
+                                if(row.status == 'Ditolak'){
+                                    return ` <label class="badge badge-gradient-danger">
+                                                ${row.status}
+                                            </label>`;
+                                }else if(row.status == 'Selesai'){
+                                    return ` <label class="badge badge-gradient-info">
+                                            ${row.status}
+                                        </label>`;
+                                }else{
+                                    return ` <label class="badge badge-gradient-warning text-dark">
+                                                ${row.status}
+                                            </label>`;
+                                }
+                            }
+                        },
+                            {
+                            "targets": 3,
+                            "data": "nomor_surat",
+                            "render": function ( data, type, row, meta ) {
+                                return row.waktu_pengajuan;
+                            }
+                        },
+                        {
+                            "targets": 4,
+                            "data": "aksi",
+                            "render": function ( data, type, row, meta ) {
+                                let action = `<a href="${link+'/'+row.id}" class="dropdown-item btn-surat-survei-detail" data-toggle="modal" data-target="#suratSurvei">
+                                                Detail</a>
+                                              <a href="${link+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
+                                
+                                return `<div class="d-inline-block">
+                                            <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                            </a>
+                                            <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                ${action}
+                                            </div>
+                                        </div>`;
+                            },
+                        },
+                        {
+                            "targets": [5],
+                            "visible": false,
+                        }
+            ],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('pegawai/surat-permohonan-survei/all') }}',
+            columns: [{
+                    data: 'mahasiswa.nama',
+                },
+                {
+                    data: 'surat_permohonan_survei.nomor_surat',
+                },
+                {
+                    data: 'status',
+                },
+                {
+                    data: 'created_at',
+                },
+                {
+                    data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                },
+                {
+                    data: 'nim',
+                },
+            ],
+            "pageLength": {{ $perPage }},
+            "order": [[1,'desc']],
+        });
+    </script>
 @endsection

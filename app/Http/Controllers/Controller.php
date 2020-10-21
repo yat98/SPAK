@@ -149,6 +149,18 @@ class Controller extends BaseController
         return $user;
     }
 
+    protected function generateTandaTanganPendidikanDanPengajaran(){
+        $user = [];
+        $pimpinan = User::whereIn('jabatan',['dekan','wd1','kabag tata usaha'])
+                        ->where('status_aktif','aktif')
+                        ->orderBy('jabatan')
+                        ->get();
+        foreach ($pimpinan as $p) {
+            $user[$p->nip] = strtoupper($p->jabatan).' - '.$p->nama;
+        }
+        return $user;
+    }
+
     protected function generateUserDisposisi(){
         $user = [];
         $pimpinan =  User::where('status_aktif','aktif');

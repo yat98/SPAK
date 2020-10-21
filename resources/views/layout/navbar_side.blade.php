@@ -152,7 +152,6 @@
                             <a class="nav-link {{ ($halaman == 'surat-kegiatan-mahasiswa') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-kegiatan-mahasiswa') }}">Surat Kegiatan Mahasiswa</a>
                         </li>
                     @endif
-
                     @if(Session::get('jabatan') == 'kasubag pendidikan dan pengajaran')
                         <li class="nav-item"> 
                             <a class="nav-link {{ ($halaman == 'surat-keterangan-lulus') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-lulus') }}">Surat Keterangan Lulus</a>
@@ -170,7 +169,6 @@
                             <a class="nav-link {{ ($halaman == 'surat-permohonan-pengambilan-data-awal') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-permohonan-pengambilan-data-awal') }}">Surat Permohonan <br> Pengambilan Data Awal</a>
                         </li>
                     @endif
-
                      @if(Session::get('jabatan') == 'kasubag umum & bmn')
                         <li class="nav-item"> 
                             <a class="nav-link {{ ($halaman == 'surat-keterangan-bebas-perpustakaan') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-bebas-perpustakaan') }}">Surat Keterangan <br>Bebas Perpustakaan</a>
@@ -412,12 +410,12 @@
             </a>
             <div class="collapse {{ ($show) ? 'show':''}}" id="ui-basic">
                 <ul class="nav flex-column sub-menu overflow-hidden">
+                    <li class="nav-item">
+                        <a class="nav-link {{ ($halaman == 'surat-masuk') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-masuk') }}">
+                            Surat Masuk
+                        </a>
+                    </li>
                     @if(Session::get('jabatan') == 'front office')
-                        <li class="nav-item">
-                            <a class="nav-link {{ ($halaman == 'surat-masuk') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-masuk') }}">
-                                Surat Masuk
-                            </a>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-aktif-kuliah') }}">
                                 Surat Keterangan <br> Aktif Kuliah
@@ -523,12 +521,14 @@
             </a>
         </li>
         @endif
+        @if(Session::get('jabatan') == 'front office' || Session::get('jabatan') == 'subbagian kemahasiswaan')
         <li class="nav-item {{ ($halaman == 'pendaftaran-cuti') ? 'active':'' }}">
             <a class="nav-link" href="{{ url(Request::segment(1).'/pendaftaran-cuti') }}">
                 <span class="menu-title">Pendaftaran Cuti</span>
                 <i class="mdi mdi mdi mdi-playlist-check menu-icon"></i>
             </a>
         </li>
+        @endif
         <li class="nav-item {{ ($halaman == 'profil') ? 'active':'' }}">
             <a class="nav-link" href="{{ url(Request::segment(1).'/profil') }}">
                 <span class="menu-title">Ubah Profil</span>

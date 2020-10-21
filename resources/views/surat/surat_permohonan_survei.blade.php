@@ -108,7 +108,7 @@
                 <tr>
                     <td>Nomor</td>
                     <td>:</td>
-                    <td>B/{{$suratSurvei->nomor_surat}}/{{$kode[0].'.1/'.$kode[1]}}/{{$suratSurvei->created_at->year}}</td>
+                    <td><span style="display:inline-block;width:20px;height:auto"></span>{{$suratSurvei->nomor_surat}}/{{$suratSurvei->kodeSurat->kode_surat}}<span style="display:inline-block;width:20px;height:auto"></span>/<span style="display:inline-block;width:50px;height:auto"></span>/{{$suratSurvei->created_at->year}}</td>
                     <td class="text-right">{{$suratSurvei->created_at->isoFormat('D MMMM Y')}}</td>
                 </tr>
                 <tr>
@@ -160,12 +160,27 @@
         </div>
         <div class="signature">
             <div class="signature-content">
-                <p class="m-0"><b>Wakil Dekan 1 Bidang Akademik,</b></p>
+                <p class="m-0"><b>{{$suratSurvei->created_at->isoFormat('D MMMM Y')}}</b></p>
+                @if($suratSurvei->user->jabatan == 'dekan')
+                    <p class="m-0"><b>Dekan</b></p>
+                @else
+                    <p class="m-0"><b>a.n Dekan,</b></p>
+                    @if($suratSurvei->user->jabatan == 'wd1')
+                        <p class="m-0"><b>Wakil Dekan Bidang Akademik,</b></p>
+                    @elseif($suratSurvei->user->jabatan == 'kabag tata usaha')
+                        <p class="m-0"><b>Kabag TU</b></p>
+                    @endif
+                @endif
+
                 <p class="m-0 tanda-tangan-margin">
-                    <img class="tanda-tangan" src="{{$suratSurvei->user->tanda_tangan}}">
+                    @if($suratSurvei->pengajuanSuratPermohonanSurvei->status == 'selesai')
+                        <img class="tanda-tangan" src="{{$suratSurvei->user->tanda_tangan}}">
+                    @else
+                        <div class="tanda-tangan"></div>
+                    @endif
                 </p>
                 <p class="m-0"><b>{{$suratSurvei->user->nama}}</b></p>
-                <p class="m-0"><b>NIP. {{substr($suratSurvei->user->nip,0,8)}} {{substr($suratSurvei->user->nip,8,6)}} {{substr($suratSurvei->user->nip,14,1)}} {{substr($suratSurvei->user->nip,15,3)}}</b></p>
+                <p class="m-0"><b>NIP. {{$suratSurvei->user->nip}}</b></p>
             </div>
         </div>
         <div class="content" style="padding-top:90px">

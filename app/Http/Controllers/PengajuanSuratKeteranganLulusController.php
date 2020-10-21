@@ -76,14 +76,15 @@ class PengajuanSuratKeteranganLulusController extends Controller
                         })
                         ->make(true);
         } else if(isset(Auth::user()->nip)){
-            $pengajuanSurat = PengajuanSuratKeterangan::select('mahasiswa.nama','pengajuan_surat_keterangan_lulus.*','mahasiswa.nim')
+            $pengajuanSurat = PengajuanSuratKeteranganLulus::select('mahasiswa.nama','pengajuan_surat_keterangan_lulus.*','mahasiswa.nim')
                                                         ->join('mahasiswa','pengajuan_surat_keterangan_lulus.nim','=','mahasiswa.nim')
-                                                        ->with(['mahasiswa']);
+                                                        ->join('surat_keterangan_lulus','pengajuan_surat_keterangan_lulus.id','=','surat_keterangan_lulus.id_pengajuan')
+                                                        ->with(['mahasiswa','suratKeteranganLulus.kodeSurat']);
                                                         
-            if (Auth::user()->jabatan == 'kasubag kemahasiswaan') {
-                $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_keterangan.status','verifikasi kasubag');
+            if (Auth::user()->jabatan == 'kasubag pendidikan dan pengajaran') {
+                $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_keterangan_lulus.status','verifikasi kasubag');
             }else if(Auth::user()->jabatan == 'kabag tata usaha'){
-                $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_keterangan.status','verifikasi kabag');
+                $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_keterangan_lulus.status','verifikasi kabag');
             }
 
             return DataTables::of($pengajuanSurat)
@@ -208,6 +209,44 @@ class PengajuanSuratKeteranganLulusController extends Controller
         $this->deleteImage('file_berita_acara_ujian',$pengajuanSurat->file_berita_acara_ujian);
         $pengajuanSurat->delete();;
         $this->setFlashData('success','Berhasil','Pengajuan surat keterangan lulus berhasil dihapus');
+        return redirect($this->segmentUser.'/surat-keterangan-lulus');
+    }
+
+    public function verification(Request $request){
+        $status='verifikasi kabag';
+        $pengajuan = PengajuanSuratKeteranganLulus::findOrFail($request->id);
+        $user = $pengajuan->suratKeteranganLulus->user;
+
+        $isiNotifikasi = 'Verifikasi surat keterangan lulus mahasiswa dengan nama '.$pengajuan->mahasiswa->nama;
+
+        if(Auth::user()->jabatan == 'kabag tata usaha' || $pengajuan->suratKeteranganLulus->user->jabatan == 'kabag tata usaha'){
+            $status='menunggu tanda tangan';
+            $isiNotifikasi = 'Tanda tangan surat persetujuan pindah mahasiswa dengan nama '.$pengajuan->mahasiswa->nama;
+        }
+
+        DB::beginTransaction();
+        try{
+            $pengajuan->update([
+                'status'=>$status,
+            ]);
+            
+            if($status == 'verifikasi kabag'){
+                $user = User::where('jabatan','kabag tata usaha')->where('status_aktif','aktif')->first();
+            }
+
+            NotifikasiUser::create([
+                'nip'=>$user->nip,
+                'judul_notifikasi'=>'Surat Keterangan Lulus',
+                'isi_notifikasi'=>$isiNotifikasi,
+                'link_notifikasi'=>url('pimpinan/surat-keterangan-lulus')
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Pengajuan Gagal','Surat keterangan lulus gagal diverifikasi.');
+        }
+
+        DB::commit();
+        $this->setFlashData('success','Berhasil ','Surat keterangan lulus berhasil diverifikasi');
         return redirect($this->segmentUser.'/surat-keterangan-lulus');
     }
 

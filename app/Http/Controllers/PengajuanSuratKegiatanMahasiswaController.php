@@ -420,26 +420,6 @@ class PengajuanSuratKegiatanMahasiswaController extends Controller
         $this->setFlashData('success','Berhasil','Pengajuan surat kegiatan mahasiswa telah di disposisi');
         return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
     }
-    
-    public function tolakPengajuan(Request $request, PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
-        $keterangan = $request->keterangan ?? '-';
-        $pengajuanKegiatan->update([
-            'status'=>'ditolak',
-            'keterangan'=>$keterangan
-        ]);
-
-        foreach($pengajuanKegiatan->ormawa->pimpinanOrmawa as $pimpinanOrmawa){
-            NotifikasiMahasiswa::create([
-                'nim'=>$pimpinanOrmawa->nim,
-                'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
-                'isi_notifikasi'=>'Surat Kegiatan Mahasiswa telah ditolak.',
-                'link_notifikasi'=>url('mahasiswa/surat-kegiatan-mahasiswa')
-            ]);
-        }
-        
-        $this->setFlashData('success','Berhasil','Pengajuan surat kegiatan mahasiswa ditolak');
-        return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
-    }
 
     public function disposisi(Request $request){
         $pengajuanKegiatan = PengajuanSuratKegiatanMahasiswa::findOrFail($request->id);
@@ -495,61 +475,7 @@ class PengajuanSuratKegiatanMahasiswaController extends Controller
         $this->setFlashData('success','Berhasil','Surat kegiatan mahasiswa didisposisi');
         return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
     }
-
-    public function createSurat(PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
-        if(!$this->isKodeSuratKegiatanExists() || !$this->isKodeSuratExists()){
-            return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
-        }
-        $userList = $this->generatePimpinan();
-        $kodeSurat = $this->generateKodeSurat();
-        $nomorSuratBaru = $this->generateNomorSuratBaru();
-        return view('user.'.$this->segmentUser.'.tambah_pengajuan_surat_kegiatan_mahasiswa',compact('pengajuanKegiatan','kodeSurat','userList','nomorSuratBaru')); 
-    }
-
-    public function storeSurat(Request $request){
-        $this->validate($request,[
-            'id_pengajuan_kegiatan'=>'required|numeric',
-            'id_kode_surat'=>'required|numeric',
-            'nip'=>'required|numeric',  
-            'nomor_surat'=>'required|numeric|min:1|unique:surat_kegiatan_mahasiswa,nomor_surat|unique:surat_pengantar_beasiswa,nomor_surat|unique:surat_pengantar_cuti,nomor_surat|unique:surat_persetujuan_pindah,nomor_surat|unique:surat_rekomendasi,nomor_surat|unique:surat_tugas,nomor_surat|unique:surat_dispensasi,nomor_surat|unique:surat_keterangan,nomor_surat',
-            'menimbang'=>'required|string',
-            'mengingat'=>'required|string',
-            'memperhatikan'=>'required|string',
-            'menetapkan'=>'required|string',
-            'kesatu'=>'required|string',
-            'kedua'=>'required|string',
-            'ketiga'=>'required|string',
-            'keempat'=>'required|string',
-        ]);
-        $input = $request->all();
-        DB::beginTransaction();
-        try {
-            $pengajuanKegiatan = PengajuanSuratKegiatanMahasiswa::where('id',$request->id_pengajuan_kegiatan)->first();
-            SuratKegiatanMahasiswa::create($input);
-            NotifikasiMahasiswa::create([
-                'nim'=>$pengajuanKegiatan->nim,
-                'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
-                'isi_notifikasi'=>'Surat Kegiatan Mahasiswa telah dibuat.',
-                'link_notifikasi'=>url('mahasiswa/pengajuan/surat-kegiatan-mahasiswa')
-            ]);
-            $pengajuanKegiatan->update([
-                'status'=>'menunggu tanda tangan'
-            ]);
-            NotifikasiUser::create([
-                'nip'=>$request->nip,
-                'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
-                'isi_notifikasi'=>'Tanda tangan surat kegiatan mahasiswa',
-                'link_notifikasi'=>url('pimpinan/surat-kegiatan-mahasiswa')
-            ]);
-        }catch(Exception $e){
-            DB::rollback();
-            $this->setFlashData('error','Gagal Menambahkan Surat','Surat kegiatan mahasiswa gagal ditambahkan.');
-        }
-        DB::commit();
-        $this->setFlashData('success','Berhasil','Surat kegiatan mahasiswa ditambahkan');
-        return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
-    }
-
+    
     private function upload($imageFieldName, $request, $uploadPath){
         $image = $request->file($imageFieldName);
         $ext = $image->getClientOriginalExtension();

@@ -73,11 +73,12 @@ class PengajuanSuratRekomendasiPenelitianController extends Controller
                         })
                         ->make(true);
         } else if(isset(Auth::user()->nip)){
-            $pengajuanSurat = PengajuanSuratRekomendasiPenelitian::join('mahasiswa','pengajuan_surat_rekomendasi_penelitian.nim','=','mahasiswa.nim')
+            $pengajuanSurat = PengajuanSuratRekomendasiPenelitian::join('surat_rekomendasi_penelitian','pengajuan_surat_rekomendasi_penelitian.id','=','surat_rekomendasi_penelitian.id_pengajuan')
+                                ->join('mahasiswa','pengajuan_surat_rekomendasi_penelitian.nim','=','mahasiswa.nim')
                                 ->select('mahasiswa.nama','pengajuan_surat_rekomendasi_penelitian.*','mahasiswa.nim')
-                                ->with(['mahasiswa']);
+                                ->with(['mahasiswa','suratRekomendasiPenelitian.kodeSurat']);
 
-            if (Auth::user()->jabatan == 'kasubag kemahasiswaan') {
+            if (Auth::user()->jabatan == 'kasubag pendidikan dan pengajaran') {
                 $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_rekomendasi_penelitian.status','verifikasi kasubag');
             }else if(Auth::user()->jabatan == 'kabag tata usaha'){
                 $pengajuanSurat = $pengajuanSurat->where('pengajuan_surat_rekomendasi_penelitian.status','verifikasi kabag');
@@ -175,6 +176,44 @@ class PengajuanSuratRekomendasiPenelitianController extends Controller
         $this->deleteImage('file_rekomendasi_jurusan',$pengajuanSurat->file_rekomendasi_jurusan);
         $pengajuanSurat->delete();
         $this->setFlashData('success','Berhasil','Pengajuan surat rekomendasi penelitian berhasil dihapus');
+        return redirect($this->segmentUser.'/surat-rekomendasi-penelitian');
+    }
+
+    public function verification(Request $request){
+        $status='verifikasi kabag';
+        $pengajuan = PengajuanSuratRekomendasiPenelitian::findOrFail($request->id);
+        $user = $pengajuan->suratRekomendasiPenelitian->user;
+
+        $isiNotifikasi = 'Verifikasi surat rekomendasi penelitian mahasiswa dengan nama '.$pengajuan->mahasiswa->nama;
+
+        if(Auth::user()->jabatan == 'kabag tata usaha' || $pengajuan->suratRekomendasiPenelitian->user->jabatan == 'kabag tata usaha'){
+            $status='menunggu tanda tangan';
+            $isiNotifikasi = 'Tanda tangan surat rekomendasi penelitian mahasiswa dengan nama '.$pengajuan->mahasiswa->nama;
+        }
+
+        DB::beginTransaction();
+        try{
+            $pengajuan->update([
+                'status'=>$status,
+            ]);
+            
+            if($status == 'verifikasi kabag'){
+                $user = User::where('jabatan','kabag tata usaha')->where('status_aktif','aktif')->first();
+            }
+
+            NotifikasiUser::create([
+                'nip'=>$user->nip,
+                'judul_notifikasi'=>'Surat Rekomendasi Penelitian',
+                'isi_notifikasi'=>$isiNotifikasi,
+                'link_notifikasi'=>url('pimpinan/surat-rekomendasi-penelitian')
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Pengajuan Gagal','Surat rekomendasi penelitian gagal diverifikasi.');
+        }
+
+        DB::commit();
+        $this->setFlashData('success','Berhasil ','Surat rekomendasi penelitian berhasil diverifikasi');
         return redirect($this->segmentUser.'/surat-rekomendasi-penelitian');
     }
 

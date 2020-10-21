@@ -206,6 +206,33 @@ class SuratKegiatanMahasiswaController extends Controller
         return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
     }
 
+    
+    public function tolakPengajuan(Request $request, PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
+        $keterangan = $request->keterangan ?? '-';
+        DB::beginTransaction();
+        try{
+            $pengajuanKegiatan->update([
+                'status'=>'ditolak',
+                'keterangan'=>$keterangan
+            ]);
+
+            foreach($pengajuanKegiatan->ormawa->pimpinanOrmawa as $pimpinanOrmawa){
+                NotifikasiMahasiswa::create([
+                    'nim'=>$pimpinanOrmawa->nim,
+                    'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
+                    'isi_notifikasi'=>'Pengajuan surat Kegiatan Mahasiswa telah ditolak.',
+                    'link_notifikasi'=>url('mahasiswa/surat-kegiatan-mahasiswa')
+                ]);
+            }
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Gagal','Pengajuan surat keterangan kegiatan mahasiswa gagal ditolak.');
+        }
+        DB::commit();
+        $this->setFlashData('success','Berhasil','Pengajuan surat kegiatan mahasiswa ditolak');
+        return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');
+    }
+
     public function tandaTangan(Request $request){
         if(!$this->isTandaTanganExists()){
             return redirect($this->segmentUser.'/surat-kegiatan-mahasiswa');

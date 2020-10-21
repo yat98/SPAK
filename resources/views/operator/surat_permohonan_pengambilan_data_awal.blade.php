@@ -268,11 +268,10 @@
                                                 </div>
                                             </div>`; 
                                 @else
-                                    let aksi = '';
+                                    let aksi = `<a href="${link+'/'+row.id}" class="dropdown-item pengajuan-surat-data-awal-detail" data-toggle="modal" data-target="#suratDataAwal">Detail</a>`;
                                     if(row.status == 'Diajukan'){
-                                        aksi = `<a href="${link+'/'+row.id}" class="dropdown-item pengajuan-surat-penelitian-detail" data-toggle="modal" data-target="#suratDataAwal">Detail</a>
-                                                <a href="${linkSurat+'/create/'+row.id}" class="dropdown-item">Buat Surat</a>
-                                                    <form action="${link+'/tolak-pengajuan/'+row.id}" method="post">
+                                        aksi += `<a href="${linkSurat+'/create/'+row.id}" class="dropdown-item">Buat Surat</a>
+                                                <form action="${link+'/tolak-pengajuan/'+row.id}" method="post">
                                                     <input name="_method" type="hidden" value="PATCH">
                                                     <input name="_token" type="hidden" value="{{ @csrf_token() }}">
                                                     <input name="keterangan" type="hidden" value="-" id="keterangan_surat">
@@ -280,6 +279,8 @@
                                                         Tolak Pengajuan
                                                     </button>
                                                 </form>`;
+                                    }else if(row.status == 'Ditolak'){
+                                        aksi = `<a href="${link+'/'+row.id}" class="dropdown-item pengajuan-surat-data-awal-detail" data-toggle="modal" data-target="#suratDataAwal">Detail</a>`;
                                     }else{
                                         aksi = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item surat-keterangan-detail" data-toggle="modal" data-target="#suratDataAwal">Detail</a>`;
                                     }
@@ -342,9 +343,9 @@
                         },
                         {
                             "targets": 1,
-                            "data": "surat_keterangan_lulus.nomor_surat",
+                            "data": "surat_permohonan_pengambilan_data_awal.nomor_surat",
                             "render": function ( data, type, row, meta ) {
-                                return `${row.surat_keterangan_lulus.nomor_surat}/${row.surat_keterangan_lulus.kode_surat.kode_surat}`;
+                                return `${row.surat_permohonan_pengambilan_data_awal.nomor_surat}/${row.surat_permohonan_pengambilan_data_awal.kode_surat.kode_surat}`;
                             }
                         },
                         {
@@ -383,13 +384,13 @@
                                                     <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
                                                 </a>
                                                 <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
-                                                    <a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-detail" data-toggle="modal" data-target="#suratDataAwal">
+                                                    <a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-data-awal-detail" data-toggle="modal" data-target="#suratDataAwal">
                                                             Detail</a>
                                                     <a href="${linkSurat+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
                                                 </div>
                                             </div>`;
                                 @else
-                                    let action = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-detail" data-toggle="modal" data-target="#suratDataAwal">
+                                    let action = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-data-awal-detail" data-toggle="modal" data-target="#suratDataAwal">
                                                     Detail</a>`;
 
                                     if(row.status == 'Selesai'){
@@ -416,12 +417,12 @@
             language: bahasa,
             processing: true,
             serverSide: true,
-            ajax: '{{ url('operator/surat-keterangan-lulus/all') }}',
+            ajax: '{{ url('operator/surat-permohonan-pengambilan-data-awal/all') }}',
             columns: [{
                     data: 'mahasiswa.nama',
                 },
                 {
-                    data: 'surat_keterangan_lulus.nomor_surat',
+                    data: 'surat_permohonan_pengambilan_data_awal.nomor_surat',
                 },
                 {
                     data: 'status',
