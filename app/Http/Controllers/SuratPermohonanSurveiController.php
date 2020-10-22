@@ -47,7 +47,7 @@ class SuratPermohonanSurveiController extends Controller
         $countAllSurat = SuratPermohonanSurvei::join('pengajuan_surat_permohonan_survei','surat_permohonan_survei.id_pengajuan','=','pengajuan_surat_permohonan_survei.id')
                                                  ->whereNotIn('status',['diajukan'])
                                                  ->count();
-             
+
         return view($this->segmentUser.'.surat_permohonan_survei',compact('countAllPengajuan','perPage','countAllSurat'));
     }
 

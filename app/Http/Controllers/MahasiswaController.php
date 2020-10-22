@@ -101,7 +101,24 @@ class MahasiswaController extends Controller
                                                                       ->count();
         }
 
-        return view($this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllPendaftaran','countAllSuratKegiatan'));
+        $countAllSuratLulus = PengajuanSuratKeteranganLulus::where('nim',Auth::user()->nim)
+                                                             ->count();
+
+        $countAllSuratMaterial = PengajuanSuratPermohonanPengambilanMaterial::join('daftar_kelompok_pengambilan_material','pengajuan_surat_permohonan_pengambilan_material.id','=','daftar_kelompok_pengambilan_material.id_pengajuan')
+                                                                              ->join('mahasiswa','mahasiswa.nim','=','daftar_kelompok_pengambilan_material.nim')
+                                                                              ->where('daftar_kelompok_pengambilan_material.nim',Auth::user()->nim)
+                                                                              ->count();
+
+        $countAllSuratSurvei = PengajuanSuratPermohonanSurvei::where('nim',Auth::user()->nim)
+                                                               ->count();
+
+        $countAllSuratPenelitian = PengajuanSuratRekomendasiPenelitian::where('nim',Auth::user()->nim)
+                                                                        ->count();
+
+        $countAllSuratDataAwal = PengajuanSuratPermohonanPengambilanDataAwal::where('nim',Auth::user()->nim)
+                                                                              ->count();
+
+        return view($this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllPendaftaran','countAllSuratKegiatan','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal'));
     }
 
     public function getAllMahasiswa(){

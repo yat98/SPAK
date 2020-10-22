@@ -17,12 +17,17 @@ use App\SuratKeterangan;
 use App\SuratRekomendasi;
 use App\SuratPengantarCuti;
 use Illuminate\Http\Request;
+use App\SuratKeteranganLulus;
+use App\SuratPermohonanSurvei;
 use App\SuratKegiatanMahasiswa;
 use App\SuratPengantarBeasiswa;
 use App\SuratPersetujuanPindah;
+use App\SuratRekomendasiPenelitian;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\OperatorRequest;
+use App\SuratPermohonanPengambilanDataAwal;
+use App\SuratPermohonanPengambilanMaterial;
 
 class OperatorController extends Controller
 {
@@ -76,13 +81,33 @@ class OperatorController extends Controller
         $countAllSuratKegiatan = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','surat_kegiatan_mahasiswa.id_pengajuan','=','pengajuan_surat_kegiatan_mahasiswa.id')
                                                         ->where('status','selesai')
                                                         ->count();
+
+        $countAllSuratLulus = SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','surat_keterangan_lulus.id_pengajuan','=','pengajuan_surat_keterangan_lulus.id')
+                                                    ->whereNotIn('status',['diajukan'])
+                                                    ->count();
+
+        $countAllSuratMaterial = SuratPermohonanPengambilanMaterial::join('pengajuan_surat_permohonan_pengambilan_material','surat_permohonan_pengambilan_material.id_pengajuan','=','pengajuan_surat_permohonan_pengambilan_material.id')
+                                                                     ->whereNotIn('status',['diajukan'])
+                                                                     ->count();
+
+        $countAllSuratSurvei = SuratPermohonanSurvei::join('pengajuan_surat_permohonan_survei','surat_permohonan_survei.id_pengajuan','=','pengajuan_surat_permohonan_survei.id')
+                                                      ->whereNotIn('status',['diajukan'])
+                                                      ->count();
+
+        $countAllSuratPenelitian = SuratRekomendasiPenelitian::join('pengajuan_surat_rekomendasi_penelitian','surat_rekomendasi_penelitian.id_pengajuan','=','pengajuan_surat_rekomendasi_penelitian.id')
+                                                               ->whereNotIn('status',['diajukan'])
+                                                               ->count();
+
+        $countAllSuratDataAwal = SuratPermohonanPengambilanDataAwal::join('pengajuan_surat_permohonan_pengambilan_data_awal','surat_permohonan_pengambilan_data_awal.id_pengajuan','=','pengajuan_surat_permohonan_pengambilan_data_awal.id')
+                                                                     ->whereNotIn('status',['diajukan'])
+                                                                     ->count();
         
         $countAllWaktuCuti = WaktuCuti::count();
 
         $countAllPendaftaran = PendaftaranCuti::where('status','selesai')
                                                 ->count();
 
-        return view($this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','kodeSuratAktif','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti'));
+        return view($this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','kodeSuratAktif','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal'));
     }
 
     public function getAllOperator(){

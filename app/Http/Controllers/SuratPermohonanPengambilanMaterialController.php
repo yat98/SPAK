@@ -45,8 +45,8 @@ class SuratPermohonanPengambilanMaterialController extends Controller
         $countAllPengajuan = $countAllPengajuan->count();
 
         $countAllSurat = SuratPermohonanPengambilanMaterial::join('pengajuan_surat_permohonan_pengambilan_material','surat_permohonan_pengambilan_material.id_pengajuan','=','pengajuan_surat_permohonan_pengambilan_material.id')
-                                                 ->whereNotIn('status',['diajukan'])
-                                                 ->count();
+                                                             ->whereNotIn('status',['diajukan'])
+                                                             ->count();
 
         return view($this->segmentUser.'.surat_permohonan_pengambilan_material',compact('countAllPengajuan','perPage','countAllSurat'));
     }

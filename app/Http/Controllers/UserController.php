@@ -215,8 +215,28 @@ class UserController extends Controller
 
         $countAllPendaftaran = PendaftaranCuti::where('status','selesai')
                                                 ->count();
+        
+        $countAllSuratLulus = SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','surat_keterangan_lulus.id_pengajuan','=','pengajuan_surat_keterangan_lulus.id')
+                                                    ->whereIn('pengajuan_surat_keterangan_lulus.status',['selesai','verifikasi kabag','menunggu tanda tangan'])
+                                                    ->count();
 
-        return view('user.'.$this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','kodeSuratAktif','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti'));
+        $countAllSuratMaterial = SuratPermohonanPengambilanMaterial::join('pengajuan_surat_permohonan_pengambilan_material','surat_permohonan_pengambilan_material.id_pengajuan','=','pengajuan_surat_permohonan_pengambilan_material.id')
+                                                                    ->whereIn('pengajuan_surat_permohonan_pengambilan_material.status',['selesai','verifikasi kabag','menunggu tanda tangan'])
+                                                                    ->count();
+
+        $countAllSuratSurvei = SuratPermohonanSurvei::join('pengajuan_surat_permohonan_survei','surat_permohonan_survei.id_pengajuan','=','pengajuan_surat_permohonan_survei.id')
+                                                      ->whereIn('pengajuan_surat_permohonan_survei.status',['selesai','verifikasi kabag','menunggu tanda tangan'])
+                                                      ->count();
+
+        $countAllSuratPenelitian = SuratRekomendasiPenelitian::join('pengajuan_surat_rekomendasi_penelitian','surat_rekomendasi_penelitian.id_pengajuan','=','pengajuan_surat_rekomendasi_penelitian.id')
+                                                               ->whereIn('pengajuan_surat_rekomendasi_penelitian.status',['selesai','verifikasi kabag','menunggu tanda tangan'])
+                                                               ->count();
+
+        $countAllSuratDataAwal = SuratPermohonanPengambilanDataAwal::join('pengajuan_surat_permohonan_pengambilan_data_awal','surat_permohonan_pengambilan_data_awal.id_pengajuan','=','pengajuan_surat_permohonan_pengambilan_data_awal.id')
+                                                                     ->whereIn('pengajuan_surat_permohonan_pengambilan_data_awal.status',['selesai','verifikasi kabag','menunggu tanda tangan'])
+                                                                     ->count();
+
+        return view('user.'.$this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','kodeSuratAktif','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal'));
     }
 
     public function indexPimpinan(){
@@ -271,6 +291,26 @@ class UserController extends Controller
                                                          ->where('status','selesai')
                                                          ->count();
 
+        $countAllSuratLulus = SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','surat_keterangan_lulus.id_pengajuan','=','pengajuan_surat_keterangan_lulus.id')
+                                                    ->where('pengajuan_surat_keterangan_lulus.status','selesai')
+                                                    ->count();
+     
+        $countAllSuratMaterial = SuratPermohonanPengambilanMaterial::join('pengajuan_surat_permohonan_pengambilan_material','surat_permohonan_pengambilan_material.id_pengajuan','=','pengajuan_surat_permohonan_pengambilan_material.id')
+                                                                     ->where('pengajuan_surat_permohonan_pengambilan_material.status','selesai')
+                                                                     ->count();
+
+        $countAllSuratSurvei = SuratPermohonanSurvei::join('pengajuan_surat_permohonan_survei','surat_permohonan_survei.id_pengajuan','=','pengajuan_surat_permohonan_survei.id')
+                                                      ->where('pengajuan_surat_permohonan_survei.status','selesai')
+                                                      ->count();
+
+        $countAllSuratPenelitian = SuratRekomendasiPenelitian::join('pengajuan_surat_rekomendasi_penelitian','surat_rekomendasi_penelitian.id_pengajuan','=','pengajuan_surat_rekomendasi_penelitian.id')
+                                                               ->where('pengajuan_surat_rekomendasi_penelitian.status','selesai')
+                                                               ->count();
+
+        $countAllSuratDataAwal = SuratPermohonanPengambilanDataAwal::join('pengajuan_surat_permohonan_pengambilan_data_awal','surat_permohonan_pengambilan_data_awal.id_pengajuan','=','pengajuan_surat_permohonan_pengambilan_data_awal.id')
+                                                                     ->where('pengajuan_surat_permohonan_pengambilan_data_awal.status','selesai')
+                                                                     ->count();
+
         $countAllWaktuCuti = WaktuCuti::count();
 
         $countAllPendaftaran = PendaftaranCuti::where('status','selesai')
@@ -280,7 +320,7 @@ class UserController extends Controller
 
         $chartPendidikanPengajaran = $this->getChartPendidikanDanPengajaran($bulan,$tahun); 
               
-        return view('user.'.$this->segmentUser.'.dashboard',compact('perPageDashboard','bulanList','tahunList','tgl','tahunAkademikAktif','waktuCuti','kodeSuratAktif','countAllKodeSurat','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti','chartKemahasiswaan','chartPendidikanPengajaran'));
+        return view('user.'.$this->segmentUser.'.dashboard',compact('perPageDashboard','bulanList','tahunList','tgl','tahunAkademikAktif','waktuCuti','kodeSuratAktif','countAllKodeSurat','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti','chartKemahasiswaan','chartPendidikanPengajaran','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal'));
     }
 
     public function searchChartKemahasiswaan(Request $request){
@@ -289,6 +329,14 @@ class UserController extends Controller
 
         $chartKemahasiswaan = $this->getChartKemahasiswaan($bulan,$tahun);
         return $chartKemahasiswaan;
+    }
+
+    public function searchChartPendidikanPengajaran(Request $request){
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+
+        $chartPendidikanPengajaran = $this->getChartPendidikanDanPengajaran($bulan,$tahun);
+        return $chartPendidikanPengajaran;
     }
 
     public function indexTandaTangan(){

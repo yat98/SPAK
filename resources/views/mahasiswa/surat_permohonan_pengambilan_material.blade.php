@@ -159,7 +159,7 @@
                                 if(row.status == 'Diajukan' || row.status == 'Ditolak'){
                                     action += `<a href="${link+'/'+row.id}" class="dropdown-item pengajuan-surat-material-detail" data-toggle="modal" data-target="#suratMaterial">Detail</a>`;
                                 }else{
-                                    action += `<a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-keterangan-lulus-detail" data-toggle="modal" data-target="#suratMaterial">
+                                    action += `<a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-material-detail" data-toggle="modal" data-target="#suratMaterial">
                                                 Detail</a>`;
                                 }
 

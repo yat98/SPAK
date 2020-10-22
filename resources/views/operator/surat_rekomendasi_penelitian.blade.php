@@ -343,7 +343,7 @@
                         },
                         {
                             "targets": 1,
-                            "data": "surat_keterangan_lulus.nomor_surat",
+                            "data": "surat_rekomendasi_penelitian.nomor_surat",
                             "render": function ( data, type, row, meta ) {
                                 return `${row.surat_rekomendasi_penelitian.nomor_surat}/${row.surat_rekomendasi_penelitian.kode_surat.kode_surat}`;
                             }

@@ -398,7 +398,7 @@ $('.table-responsive').on('click','.simpan-tanda-tangan',function(e){
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Tanda tangan',
+        confirmButtonText: 'Tanda Tangan',
         cancelButtonText: 'Tidak'
     }).then((result) => {
         if (result.value) {

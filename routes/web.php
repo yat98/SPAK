@@ -657,6 +657,7 @@ Route::group(['prefix' => 'pimpinan'], function () {
         // Dashboard
         Route::get('/','UserController@indexPimpinan');
         Route::get('search/kemahasiswaan','UserController@searchChartKemahasiswaan');
+        Route::get('search/pendidikan-pengajaran','UserController@searchChartPendidikanPengajaran');
         // Kode Surat
         Route::get('kode-surat/all','KodeSuratController@getAllKodeSurat');
         Route::get('kode-surat/limit','KodeSuratController@getLimitKodeSurat');
