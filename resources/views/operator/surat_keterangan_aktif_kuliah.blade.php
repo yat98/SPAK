@@ -303,7 +303,7 @@
                                                     </button>
                                                 </form>`;
                                     }else{
-                                        aksi = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item surat-keterangan-detail" data-toggle="modal" data-target="#suratKeterangan">Detail</a>`;
+                                        aksi = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item surat-keterangan-detail" data-toggle="modal" data-target="#suratKeteranganDetail">Detail</a>`;
                                     }
 
                                     return `<div class="d-inline-block">

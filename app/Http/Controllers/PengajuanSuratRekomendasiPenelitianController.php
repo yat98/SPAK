@@ -101,6 +101,26 @@ class PengajuanSuratRekomendasiPenelitianController extends Controller
         }
     }
 
+    public function getAllPengajuanByNim(Mahasiswa $mahasiswa){
+        return DataTables::of(PengajuanSuratRekomendasiPenelitian::where('pengajuan_surat_rekomendasi_penelitian.nim',$mahasiswa->nim)
+                                    ->join('mahasiswa','pengajuan_surat_rekomendasi_penelitian.nim','=','mahasiswa.nim')
+                                    ->select('mahasiswa.nama','pengajuan_surat_rekomendasi_penelitian.*','mahasiswa.nim')
+                                    ->with(['mahasiswa']))
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();                            
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->make(true);
+    }
+
     public function createPengajuan(){
         if(isset(Auth::user()->nim)){
             if(!$this->isSuratDiajukanExists()){

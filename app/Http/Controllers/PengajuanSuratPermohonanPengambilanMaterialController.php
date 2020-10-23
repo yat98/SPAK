@@ -99,6 +99,26 @@ class PengajuanSuratPermohonanPengambilanMaterialController extends Controller
         }
     }
 
+    public function getAllPengajuanByNim(Mahasiswa $mahasiswa){
+        return DataTables::of(PengajuanSuratPermohonanPengambilanMaterial::join('daftar_kelompok_pengambilan_material','pengajuan_surat_permohonan_pengambilan_material.id','=','daftar_kelompok_pengambilan_material.id_pengajuan')
+                                    ->join('mahasiswa','mahasiswa.nim','=','daftar_kelompok_pengambilan_material.nim')
+                                    ->where('daftar_kelompok_pengambilan_material.nim',$mahasiswa->nim)
+                                    ->select('pengajuan_surat_permohonan_pengambilan_material.*'))
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();                            
+                        })
+                        ->make(true);
+    }
+
     public function createPengajuan()
     {   
         $mahasiswa = $this->generateMahasiswa();

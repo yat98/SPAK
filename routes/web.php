@@ -56,7 +56,7 @@ Route::group(['prefix' => 'mahasiswa'],function(){
         Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan_lulus}/cetak','SuratKeteranganKelakuanBaikController@cetak');
         Route::group(['prefix'=>'surat-keterangan-kelakuan-baik/pengajuan'],function(){
             Route::get('/all', 'PengajuanSuratKeteranganController@getAllPengajuanKelakuanBaik');
-            Route::get('/create', 'PengajuanSuratKeteranganController@createPengajuan');
+            Route::get('/create', 'PengajuanSuratKeteranganController@createPengajuanKelakuanBaik');
             Route::get('/{pengajuan_surat_keterangan}', 'PengajuanSuratKeteranganController@show');
             Route::get('/{pengajuan_surat_keterangan}/progress', 'SuratKeteranganController@progress');
             Route::post('/', 'PengajuanSuratKeteranganController@storePengajuanKelakuanBaik');
@@ -669,6 +669,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
         // Surat Keterangan Aktif Kuliah
         Route::get('surat-keterangan-aktif-kuliah','SuratKeteranganAktifKuliahController@indexPimpinan');
         Route::get('surat-keterangan-aktif-kuliah/all','SuratKeteranganController@getAllSuratKeteranganAktif');
+        Route::get('surat-keterangan-aktif-kuliah/pengajuan/mahasiswa/{nim}','PengajuanSuratKeteranganController@getAllPengajuanAktifByNim');
+        Route::get('surat-keterangan-aktif-kuliah/pengajuan/{pengajuan_surat_keterangan}','PengajuanSuratKeteranganController@show');
         Route::get('surat-keterangan-aktif-kuliah/{surat_keterangan}/cetak','SuratKeteranganAktifKuliahController@cetak');
         Route::get('surat-keterangan-aktif-kuliah/verifikasi/all','PengajuanSuratKeteranganController@getAllPengajuanAktif');
         Route::get('surat-keterangan-aktif-kuliah/tanda-tangan/all','SuratKeteranganController@getAllTandaTanganKeteranganAktif');
@@ -678,6 +680,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
         // Surat Keterangan Kelakuan Baik
         Route::get('surat-keterangan-kelakuan-baik','SuratKeteranganKelakuanBaikController@indexPimpinan');
         Route::get('surat-keterangan-kelakuan-baik/all','SuratKeteranganController@getAllSuratKelakuanBaik');
+        Route::get('surat-keterangan-kelakuan-baik/pengajuan/mahasiswa/{nim}','PengajuanSuratKeteranganController@getAllPengajuanKelakuanBaikByNim');
+        Route::get('surat-keterangan-kelakuan-baik/pengajuan/{pengajuan_surat_keterangan}','PengajuanSuratKeteranganController@show');
         Route::get('surat-keterangan-kelakuan-baik/{surat_keterangan}/cetak','SuratKeteranganKelakuanBaikController@cetak');
         Route::get('surat-keterangan-kelakuan-baik/verifikasi/all','PengajuanSuratKeteranganController@getAllPengajuanKelakuanBaik');
         Route::get('surat-keterangan-kelakuan-baik/tanda-tangan/all','SuratKeteranganController@getAllTandaTanganKelakuanBaik');
@@ -687,6 +691,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
         // Surat Dispensasi
         Route::get('surat-dispensasi', 'SuratDispensasiController@indexPimpinan');
         Route::get('surat-dispensasi/all','SuratDispensasiController@getAllSuratDispensasi');
+        Route::get('surat-dispensasi/pengajuan/mahasiswa/{nim}','PengajuanSuratDispensasiController@getAllPengajuanByNim');
+        Route::get('surat-dispensasi/pengajuan/{pengajuan_surat_dispensasi}','PengajuanSuratDispensasiController@show');
         Route::get('surat-dispensasi/{surat_dispensasi}/cetak','SuratDispensasiController@cetak');
         Route::get('surat-dispensasi/verifikasi/all','PengajuanSuratDispensasiController@getAllPengajuan');
         Route::get('surat-dispensasi/tanda-tangan/all','SuratDispensasiController@getAllTandaTangan');
@@ -696,6 +702,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
         // Surat Rekomendasi
         Route::get('surat-rekomendasi', 'SuratRekomendasiController@indexPimpinan');
         Route::get('surat-rekomendasi/all','SuratRekomendasiController@getAllSuratRekomendasi');
+        Route::get('surat-rekomendasi/pengajuan/mahasiswa/{nim}','PengajuanSuratRekomendasiController@getAllPengajuanByNim');
+        Route::get('surat-rekomendasi/pengajuan/{pengajuan_surat_rekomendasi}','PengajuanSuratRekomendasiController@show');
         Route::get('surat-rekomendasi/{surat_rekomendasi}/cetak','SuratRekomendasiController@cetak');
         Route::get('surat-rekomendasi/verifikasi/all','PengajuanSuratRekomendasiController@getAllPengajuan');
         Route::get('surat-rekomendasi/tanda-tangan/all','SuratRekomendasiController@getAllTandaTangan');
@@ -705,6 +713,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
         // Surat Tugas
         Route::get('surat-tugas', 'SuratTugasController@indexPimpinan');
         Route::get('surat-tugas/all','SuratTugasController@getAllSuratTugas');
+        Route::get('surat-tugas/pengajuan/mahasiswa/{nim}','PengajuanSuratTugasController@getAllPengajuanByNim');
+        Route::get('surat-tugas/pengajuan/{pengajuan_surat_tugas}','PengajuanSuratTugasController@show');
         Route::get('surat-tugas/{surat_tugas}/cetak','SuratTugasController@cetak');
         Route::get('surat-tugas/verifikasi/all','PengajuanSuratTugasController@getAllPengajuan');
         Route::get('surat-tugas/tanda-tangan/all','SuratTugasController@getAllTandaTangan');
@@ -714,6 +724,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
         // Surat Persetujuan Pindah
         Route::get('surat-persetujuan-pindah', 'SuratPersetujuanPindahController@indexPimpinan');
         Route::get('surat-persetujuan-pindah/all','SuratPersetujuanPindahController@getAllSurat');
+        Route::get('surat-persetujuan-pindah/pengajuan/mahasiswa/{nim}','PengajuanSuratPersetujuanPindahController@getAllPengajuanByNim');
+        Route::get('surat-persetujuan-pindah/pengajuan/{pengajuan_surat_pindah}','PengajuanSuratPersetujuanPindahController@show');
         Route::get('surat-persetujuan-pindah/{surat_persetujuan_pindah}/cetak','SuratPersetujuanPindahController@cetak');
         Route::get('surat-persetujuan-pindah/verifikasi/all','PengajuanSuratPersetujuanPindahController@getAllPengajuan');
         Route::get('surat-persetujuan-pindah/tanda-tangan/all','SuratPersetujuanPindahController@getAllTandaTangan');
@@ -723,6 +735,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
         // Surat Pengantar Cuti
         Route::get('surat-pengantar-cuti', 'SuratPengantarCutiController@indexPimpinan');
         Route::get('surat-pengantar-cuti/all','SuratPengantarCutiController@getAllSurat');
+        Route::get('surat-pengantar-cuti/pengajuan/mahasiswa/{nim}','SuratPengantarCutiController@getAllPengajuanByNim');
+        Route::get('surat-pengantar-cuti/pengajuan/{surat_pengantar_cuti}','SuratPengantarCutiController@show');
         Route::get('surat-pengantar-cuti/{surat_pengantar_cuti}/cetak','SuratPengantarCutiController@cetak');
         Route::get('surat-pengantar-cuti/verifikasi/all','SuratPengantarCutiController@getAllPengajuan');
         Route::get('surat-pengantar-cuti/tanda-tangan/all','SuratPengantarCutiController@getAllTandaTangan');
@@ -740,6 +754,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
         //  Surat Pengantar Beasiswa
         Route::get('surat-pengantar-beasiswa', 'SuratPengantarBeasiswaController@indexPimpinan');
         Route::get('surat-pengantar-beasiswa/all','SuratPengantarBeasiswaController@getAllSurat');
+        Route::get('surat-pengantar-beasiswa/pengajuan/mahasiswa/{nim}','SuratPengantarBeasiswaController@getAllPengajuanByNim');
+        Route::get('surat-pengantar-beasiswa/pengajuan/{surat_pengantar_cuti}','SuratPengantarBeasiswaController@show');
         Route::get('surat-pengantar-beasiswa/{surat_pengantar_beasiswa}/cetak','SuratPengantarBeasiswaController@cetak');
         Route::get('surat-pengantar-beasiswa/verifikasi/all','SuratPengantarBeasiswaController@getAllPengajuan');
         Route::get('surat-pengantar-beasiswa/tanda-tangan/all','SuratPengantarBeasiswaController@getAllTandaTangan');
@@ -749,6 +765,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
         //  Surat Kegiatan Mahasiswa
         Route::get('surat-kegiatan-mahasiswa','SuratKegiatanMahasiswaController@indexPimpinan');
         Route::get('surat-kegiatan-mahasiswa/all','SuratKegiatanMahasiswaController@getAllSurat');
+        Route::get('surat-kegiatan-mahasiswa/pengajuan/mahasiswa/{nim}','PengajuanSuratKegiatanMahasiswaController@getAllPengajuanByNim');
+        Route::get('surat-kegiatan-mahasiswa/pengajuan/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@show');
         Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}/cetak','SuratKegiatanMahasiswaController@cetak');
         Route::get('surat-kegiatan-mahasiswa/verifikasi/all','PengajuanSuratKegiatanMahasiswaController@getAllPengajuan');
         Route::get('surat-kegiatan-mahasiswa/disposisi/all','PengajuanSuratKegiatanMahasiswaController@getAllDisposisiPimpinan');
@@ -763,6 +781,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
         // Surat Keterangan Lulus
         Route::get('surat-keterangan-lulus','SuratKeteranganLulusController@indexPimpinan');
         Route::get('surat-keterangan-lulus/all','SuratKeteranganLulusController@getAllSurat');
+        Route::get('surat-keterangan-lulus/pengajuan/mahasiswa/{nim}','PengajuanSuratKeteranganLulusController@getAllPengajuanByNim');
+        Route::get('surat-keterangan-lulus/pengajuan/{pengajuan_surat_lulus}','PengajuanSuratKeteranganLulusController@show');
         Route::get('surat-keterangan-lulus/{surat_keterangan_lulus}/cetak','SuratKeteranganLulusController@cetak');
         Route::get('surat-keterangan-lulus/verifikasi/all','PengajuanSuratKeteranganLulusController@getAllPengajuan');
         Route::get('surat-keterangan-lulus/tanda-tangan/all','SuratKeteranganLulusController@getAllTandaTangan');
@@ -772,6 +792,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
         // Surat Permohonan Pengambilan Material
         Route::get('surat-permohonan-pengambilan-material','SuratPermohonanPengambilanMaterialController@indexPimpinan');
         Route::get('surat-permohonan-pengambilan-material/all','SuratPermohonanPengambilanMaterialController@getAllSurat');
+        Route::get('surat-permohonan-pengambilan-material/pengajuan/mahasiswa/{nim}','PengajuanSuratPermohonanPengambilanMaterialController@getAllPengajuanByNim');
+        Route::get('surat-permohonan-pengambilan-material/pengajuan/{pengajuan_surat_material}','PengajuanSuratPermohonanPengambilanMaterialController@show');
         Route::get('surat-permohonan-pengambilan-material/{surat_material}/cetak','SuratPermohonanPengambilanMaterialController@cetak');
         Route::get('surat-permohonan-pengambilan-material/verifikasi/all','PengajuanSuratPermohonanPengambilanMaterialController@getAllPengajuan');
         Route::get('surat-permohonan-pengambilan-material/tanda-tangan/all','SuratPermohonanPengambilanMaterialController@getAllTandaTangan');
@@ -781,6 +803,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
         // Surat Permohonan Survei
         Route::get('surat-permohonan-survei','SuratPermohonanSurveiController@indexPimpinan');
         Route::get('surat-permohonan-survei/all','SuratPermohonanSurveiController@getAllSurat');
+        Route::get('surat-permohonan-survei/pengajuan/mahasiswa/{nim}','PengajuanSuratPermohonanSurveiController@getAllPengajuanByNim');
+        Route::get('surat-permohonan-survei/pengajuan/{pengajuan_surat_survei}','PengajuanSuratPermohonanSurveiController@show');
         Route::get('surat-permohonan-survei/{surat_permohonan_survei}/cetak','SuratPermohonanSurveiController@cetak');
         Route::get('surat-permohonan-survei/verifikasi/all','PengajuanSuratPermohonanSurveiController@getAllPengajuan');
         Route::get('surat-permohonan-survei/tanda-tangan/all','SuratPermohonanSurveiController@getAllTandaTangan');
@@ -790,6 +814,10 @@ Route::group(['prefix' => 'pimpinan'], function () {
         // Surat Rekomendasi Penelitian
         Route::get('surat-rekomendasi-penelitian','SuratRekomendasiPenelitianController@indexPimpinan');
         Route::get('surat-rekomendasi-penelitian/all','SuratRekomendasiPenelitianController@getAllSurat');
+        Route::get('surat-rekomendasi-penelitian/pengajuan/mahasiswa/{nim}','PengajuanSuratRekomendasiPenelitianController@getAllPengajuanByNim');
+        Route::get('surat-rekomendasi-penelitian/pengajuan/{pengajuan_surat_penelitian}','PengajuanSuratRekomendasiPenelitianController@show');
+        Route::get('surat-rekomendasi-penelitian/pengajuan/mahasiswa/{nim}','PengajuanSuratRekomendasiPenelitianController@getAllPengajuanByNim');
+        Route::get('surat-rekomendasi-penelitian/pengajuan/{pengajuan_surat_penelitian}','PengajuanSuratRekomendasiPenelitianController@show');
         Route::get('surat-rekomendasi-penelitian/{surat_rekomendasi_penelitian}/cetak','SuratRekomendasiPenelitianController@cetak');
         Route::get('surat-rekomendasi-penelitian/verifikasi/all','PengajuanSuratRekomendasiPenelitianController@getAllPengajuan');
         Route::get('surat-rekomendasi-penelitian/tanda-tangan/all','SuratRekomendasiPenelitianController@getAllTandaTangan');
@@ -799,6 +827,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
         // Surat Permohonan Pengambilan Data Awal
         Route::get('surat-permohonan-pengambilan-data-awal','SuratPermohonanPengambilanDataAwalController@indexPimpinan');
         Route::get('surat-permohonan-pengambilan-data-awal/all','SuratPermohonanPengambilanDataAwalController@getAllSurat');
+        Route::get('surat-permohonan-pengambilan-data-awal/pengajuan/mahasiswa/{nim}','PengajuanSuratPermohonanPengambilanDataAwalController@getAllPengajuanByNim');
+        Route::get('surat-permohonan-pengambilan-data-awal/pengajuan/{pengajuan_surat_data_awal}','PengajuanSuratPermohonanPengambilanDataAwalController@show');
         Route::get('surat-permohonan-pengambilan-data-awal/{surat_data_awal}/cetak','SuratPermohonanPengambilanDataAwalController@cetak');
         Route::get('surat-permohonan-pengambilan-data-awal/verifikasi/all','PengajuanSuratPermohonanPengambilanDataAwalController@getAllPengajuan');
         Route::get('surat-permohonan-pengambilan-data-awal/tanda-tangan/all','SuratPermohonanPengambilanDataAwalController@getAllTandaTangan');
@@ -807,6 +837,7 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::patch('surat-permohonan-pengambilan-data-awal/verifikasi','PengajuanSuratPermohonanPengambilanDataAwalController@verification'); 
         // Mahasiswa
         Route::get('mahasiswa', 'MahasiswaController@indexPimpinan');
+        Route::get('mahasiswa/all','MahasiswaController@getAllMahasiswa');
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         Route::get('mahasiswa/{mahasiswa}','MahasiswaController@showPimpinan');
          // Notifikasi

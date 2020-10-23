@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use DataTables;
 use App\Operator;
+use App\Mahasiswa;
 use Carbon\Carbon;
 use App\SuratMasuk;
 use App\NotifikasiUser;
@@ -91,6 +92,25 @@ class PengajuanSuratDispensasiController extends Controller
                             })
                             ->make(true);
         }
+    }
+
+    public function getAllPengajuanByNim(Mahasiswa $mahasiswa){
+        return DataTables::of(PengajuanSuratDispensasi::join('daftar_dispensasi_mahasiswa','daftar_dispensasi_mahasiswa.id_pengajuan','=','pengajuan_surat_dispensasi.id_surat_masuk')
+                                    ->where('daftar_dispensasi_mahasiswa.nim',$mahasiswa->nim)
+                                    ->select('pengajuan_surat_dispensasi.*','daftar_dispensasi_mahasiswa.nim'))
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();                            
+                        })
+                        ->make(true);
     }
 
     public function show(PengajuanSuratDispensasi $pengajuanSurat){

@@ -95,7 +95,20 @@ class PengajuanSuratKegiatanMahasiswaController extends Controller
                             return $data->id;
                         })
                         ->editColumn("status", function ($data) {
-                            return ucwords($data->status);
+                            switch($data->status){
+                                case 'disposisi wd1':
+                                    return 'Disposisi WD1';
+                                    break;
+                                case 'disposisi wd2':
+                                    return 'Disposisi WD2';
+                                    break;
+                                case 'disposisi wd3':
+                                    return 'Disposisi WD3';
+                                    break;
+                                default:
+                                    return ucwords($data->status);
+                                    break;
+                            }
                         })
                         ->addColumn("waktu_pengajuan", function ($data) {
                             return $data->created_at->diffForHumans();                            
@@ -138,6 +151,37 @@ class PengajuanSuratKegiatanMahasiswaController extends Controller
                             })
                             ->make(true);
         }
+    }
+
+    public function getAllPengajuanByNim(Mahasiswa $mahasiswa){
+        return DataTables::of(PengajuanSuratKegiatanMahasiswa::join('ormawa','pengajuan_surat_kegiatan_mahasiswa.id_ormawa','=','ormawa.id')
+                                    ->join('pimpinan_ormawa','pimpinan_ormawa.id_ormawa','=','ormawa.id')
+                                    ->where('pimpinan_ormawa.nim',$mahasiswa->nim)
+                                    ->select(['pengajuan_surat_kegiatan_mahasiswa.*','pimpinan_ormawa.nim','ormawa.nama']) 
+                                    ->with(['mahasiswa','ormawa','operator']))
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->editColumn("status", function ($data) {
+                            switch($data->status){
+                                case 'disposisi wd1':
+                                    return 'Disposisi WD1';
+                                    break;
+                                case 'disposisi wd2':
+                                    return 'Disposisi WD2';
+                                    break;
+                                case 'disposisi wd3':
+                                    return 'Disposisi WD3';
+                                    break;
+                                default:
+                                    return ucwords($data->status);
+                                    break;
+                            }
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();                            
+                        })
+                        ->make(true);
     }
 
     public function getAllDisposisiPimpinan(){

@@ -158,7 +158,7 @@
                     </div>
                     @if(Auth::user()->jabatan == 'kabag tata usaha')
                         <div class="col-md-4 stretch-card grid-margin">
-                            <div class="card bg-gradient-primary card-img-holder text-white">
+                            <div class="card bg-gradient-quepal card-img-holder text-white">
                                 <div class="card-body">
                                     <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                         alt="circle-image" />
@@ -176,7 +176,7 @@
                         </div>
                     @else
                         <div class="col-md-4 stretch-card grid-margin">
-                            <div class="card bg-gradient-primary card-img-holder text-white">
+                            <div class="card bg-gradient-quepal card-img-holder text-white">
                                 <div class="card-body">
                                     <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                         alt="circle-image" />
@@ -191,6 +191,21 @@
                             </div>
                         </div>
                     @endif
+                    <div class="col-md-4 stretch-card grid-margin">
+                        <div class="card bg-gradient-primary card-img-holder text-white">
+                            <div class="card-body">
+                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                    alt="circle-image" />
+                                <h4 class="font-weight-normal mb-3">Data Mahasiswa<i
+                                        class="mdi mdi-account mdi-24px float-right"></i>
+                                </h4>
+                                <h2 class="mb-5">
+                                    {{ $countAllMahasiswa > 0 ? $countAllMahasiswa.' Mahasiswa' : 'Data Mahasiswa Kosong' }}
+                                </h2>
+                                <h6 class="card-text"></h6>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-4 stretch-card grid-margin">
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">

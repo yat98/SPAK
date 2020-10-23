@@ -148,105 +148,75 @@ class MahasiswaController extends Controller
 
     public function indexPimpinan(){
         $perPage = $this->perPage;
-        $angkatan = $this->generateAngkatan();
-        $prodiList = $this->generateProdi();
-        $jurusanList = Jurusan::pluck('nama_jurusan','id')->toArray();
-        $mahasiswaList = Mahasiswa::orderBy('nim')->with('prodi.jurusan')->paginate($perPage);
         $countAllMahasiswa = Mahasiswa::count();
-        $countMahasiswa = count($mahasiswaList);
-        return view('user.'.$this->segmentUser.'.mahasiswa',compact('perPage','mahasiswaList','countMahasiswa','prodiList','angkatan','jurusanList','countAllMahasiswa'));
+        return view('user.'.$this->segmentUser.'.mahasiswa',compact('perPage','countAllMahasiswa'));
     }
 
     public function showPimpinan(Mahasiswa $mahasiswa){
         $perPage = $this->perPage;
-        $suratKeteranganAktifList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
-                                        ->orderByDesc('surat_keterangan.updated_at')
-                                        ->where('jenis_surat','surat keterangan aktif kuliah')
-                                        ->where('nim',$mahasiswa->nim)
-                                        ->paginate($perPage);
+        $countAllSuratKegiatan = null;
 
-        $suratKeteranganKelakuanList = SuratKeterangan::join('pengajuan_surat_keterangan','surat_keterangan.id_pengajuan_surat_keterangan','=','pengajuan_surat_keterangan.id')
-                                        ->orderByDesc('surat_keterangan.updated_at')
-                                        ->where('jenis_surat','surat keterangan kelakuan baik')
-                                        ->where('nim',$mahasiswa->nim)
-                                        ->paginate($perPage);
-
-        $suratDispensasiList = SuratDispensasi::join('daftar_dispensasi_mahasiswa','surat_dispensasi.id_surat_masuk','=','daftar_dispensasi_mahasiswa.id_surat_dispensasi')
-                                        ->select('*','surat_dispensasi.created_at','surat_dispensasi.updated_at')                                
-                                        ->orderByDesc('surat_dispensasi.created_at')
-                                        ->where('status','selesai')
-                                        ->where('daftar_dispensasi_mahasiswa.nim',$mahasiswa->nim)
-                                        ->paginate($perPage);
-                                        // dd($suratDispensasiList->first());
-
-        $suratRekomendasiList = SuratRekomendasi::join('daftar_rekomendasi_mahasiswa','surat_rekomendasi.id','=','daftar_rekomendasi_mahasiswa.id_surat_rekomendasi')
-                                        ->orderByDesc('surat_rekomendasi.created_at')
-                                        ->where('status','selesai')
-                                        ->where('nim',$mahasiswa->nim)
-                                        ->paginate($perPage);
-
-        $suratTugasList = SuratTugas::join('daftar_tugas_mahasiswa','surat_tugas.id','=','daftar_tugas_mahasiswa.id_surat_tugas')
-                                        ->select('*','surat_tugas.created_at','surat_tugas.updated_at')                                        
-                                        ->orderByDesc('surat_tugas.created_at')
-                                        ->where('nim',$mahasiswa->nim)
-                                        ->where('status','selesai')
-                                        ->paginate($perPage);
-
-        $suratPersetujuanPindahList = SuratPersetujuanPindah::join('pengajuan_surat_persetujuan_pindah','pengajuan_surat_persetujuan_pindah.id','=','surat_persetujuan_pindah.id_pengajuan_persetujuan_pindah')
-                                        ->orderByDesc('surat_persetujuan_pindah.created_at')
-                                        ->orderByDesc('nomor_surat')
-                                        ->where('nim',$mahasiswa->nim)
-                                        ->paginate($perPage);
-
-        $suratCutiList = SuratPengantarCuti::join('waktu_cuti','waktu_cuti.id','=','surat_pengantar_cuti.id_waktu_cuti')
-                                        ->join('pendaftaran_cuti','pendaftaran_cuti.id_waktu_cuti','=','waktu_cuti.id')
-                                        ->orderByDesc('nomor_surat')
-                                        ->where('nim',$mahasiswa->nim)
-                                        ->paginate($perPage);
-
-        $suratBeasiswaList = SuratPengantarBeasiswa::join('daftar_beasiswa_mahasiswa','surat_pengantar_beasiswa.id','=','daftar_beasiswa_mahasiswa.id_surat_beasiswa')
-                                        ->select('*','surat_pengantar_beasiswa.created_at','surat_pengantar_beasiswa.updated_at')                                                                        
-                                        ->orderBy('status')
-                                        ->where('status','selesai')
-                                        ->where('nim',$mahasiswa->nim)
-                                        ->paginate($perPage);
-
-        $suratKegiatanList =  SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','pengajuan_surat_kegiatan_mahasiswa.id','=','surat_kegiatan_mahasiswa.id_pengajuan_kegiatan')
-                                ->where('status','selesai')
+        $countAllSuratAktif = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
                                 ->where('nim',$mahasiswa->nim)
-                                ->paginate($perPage);
+                                ->count();
 
-        $suratLulusList =  SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','pengajuan_surat_keterangan_lulus.id','=','surat_keterangan_lulus.id_pengajuan_surat_lulus')
-                            ->whereIn('status',['selesai'])
-                            ->where('nim',$mahasiswa->nim)
-                            ->orderBy('status')
-                            ->paginate($perPage);
+        $countAllSuratBaik = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
+                                ->where('nim',$mahasiswa->nim)
+                                ->count();
 
-        $suratMaterialList =  SuratPermohonanPengambilanMaterial::join('pengajuan_surat_permohonan_pengambilan_material','pengajuan_surat_permohonan_pengambilan_material.id','=','surat_permohonan_pengambilan_material.id_pengajuan')
-                            ->whereIn('status',['selesai'])
-                            ->where('nim',$mahasiswa->nim)
-                            ->orderBy('status')
-                            ->paginate($perPage);     
-        
-        $suratSurveiList = SuratPermohonanSurvei::join('pengajuan_surat_permohonan_survei','pengajuan_surat_permohonan_survei.id','=','surat_permohonan_survei.id_pengajuan')
-                            ->where('status','selesai')
-                            ->where('nim',$mahasiswa->nim)
-                            ->orderBy('status')
-                            ->paginate($perPage);
-                            
-        $suratPenelitianList = SuratRekomendasiPenelitian::join('pengajuan_surat_rekomendasi_penelitian','pengajuan_surat_rekomendasi_penelitian.id','=','surat_rekomendasi_penelitian.id_pengajuan')
-                            ->where('status','selesai')
-                            ->where('nim',$mahasiswa->nim)
-                            ->orderBy('status')
-                            ->paginate($perPage);
+        $countAllSuratDispensasi = PengajuanSuratDispensasi::join('daftar_dispensasi_mahasiswa','daftar_dispensasi_mahasiswa.id_pengajuan','=','pengajuan_surat_dispensasi.id_surat_masuk')
+                                        ->where('daftar_dispensasi_mahasiswa.nim',$mahasiswa->nim)
+                                        ->count();
 
-        $suratDataAwalList =  SuratPermohonanPengambilanDataAwal::join('pengajuan_surat_permohonan_pengambilan_data_awal','pengajuan_surat_permohonan_pengambilan_data_awal.id','=','surat_permohonan_pengambilan_data_awal.id_pengajuan')
-                            ->whereIn('status',['selesai','menunggu tanda tangan'])
-                            ->where('nim',$mahasiswa->nim)
-                            ->orderBy('status')
-                            ->paginate($perPage);
-                            
-        return view('user.pimpinan.detail_mahasiswa',compact('mahasiswa','suratKeteranganAktifList','suratKeteranganKelakuanList','suratDispensasiList','suratRekomendasiList','suratTugasList','suratPersetujuanPindahList','suratCutiList','suratBeasiswaList','suratKegiatanList','suratLulusList','suratMaterialList','suratSurveiList','suratPenelitianList','suratDataAwalList'));
+        $countAllSuratRekomendasi = PengajuanSuratRekomendasi::join('daftar_rekomendasi_mahasiswa','daftar_rekomendasi_mahasiswa.id_pengajuan','=','pengajuan_surat_rekomendasi.id')
+                                        ->where('daftar_rekomendasi_mahasiswa.nim',$mahasiswa->nim)
+                                        ->count();
+
+        $countAllSuratTugas = PengajuanSuratTugas::join('daftar_tugas_mahasiswa','daftar_tugas_mahasiswa.id_pengajuan','=','pengajuan_surat_tugas.id')
+                                    ->where('daftar_tugas_mahasiswa.nim',$mahasiswa->nim)
+                                    ->count();
+
+        $countAllSuratPindah = PengajuanSuratPersetujuanPindah::where('nim',$mahasiswa->nim)
+                                        ->count();
+
+        $countAllSuratCuti = SuratPengantarCuti::join('waktu_cuti','waktu_cuti.id','=','surat_pengantar_cuti.id_waktu_cuti')
+                                ->join('tahun_akademik','waktu_cuti.id_tahun_akademik','=','tahun_akademik.id')
+                                ->join('pendaftaran_cuti','pendaftaran_cuti.id_waktu_cuti','=','surat_pengantar_cuti.id_waktu_cuti')
+                                ->where('pendaftaran_cuti.nim',$mahasiswa->nim)
+                                ->count();
+
+        $countAllSuratBeasiswa = SuratPengantarBeasiswa::join('daftar_beasiswa_mahasiswa','daftar_beasiswa_mahasiswa.id_surat_beasiswa','=','surat_pengantar_beasiswa.id')
+                                    ->where('daftar_beasiswa_mahasiswa.nim',$mahasiswa->nim)
+                                    ->count();
+
+        $countAllPendaftaran = PendaftaranCuti::where('nim',$mahasiswa->nim)
+                                        ->count();
+
+        if($mahasiswa->pimpinanOrmawa != null){
+            $countAllSuratKegiatan = PengajuanSuratKegiatanMahasiswa::join('ormawa','pengajuan_surat_kegiatan_mahasiswa.id_ormawa','=','ormawa.id')
+                                                ->join('pimpinan_ormawa','pimpinan_ormawa.id_ormawa','=','ormawa.id')
+                                                ->where('pimpinan_ormawa.nim',$mahasiswa->nim)
+                                                ->count();
+        }
+
+        $countAllSuratLulus = PengajuanSuratKeteranganLulus::where('nim',$mahasiswa->nim)
+                                                             ->count();
+
+        $countAllSuratMaterial = PengajuanSuratPermohonanPengambilanMaterial::join('daftar_kelompok_pengambilan_material','pengajuan_surat_permohonan_pengambilan_material.id','=','daftar_kelompok_pengambilan_material.id_pengajuan')
+                                                                              ->join('mahasiswa','mahasiswa.nim','=','daftar_kelompok_pengambilan_material.nim')
+                                                                              ->where('daftar_kelompok_pengambilan_material.nim',$mahasiswa->nim)
+                                                                              ->count();
+
+        $countAllSuratSurvei = PengajuanSuratPermohonanSurvei::where('nim',$mahasiswa->nim)
+                                                               ->count();
+
+        $countAllSuratPenelitian = PengajuanSuratRekomendasiPenelitian::where('nim',$mahasiswa->nim)
+                                                                        ->count();
+
+        $countAllSuratDataAwal = PengajuanSuratPermohonanPengambilanDataAwal::where('nim',$mahasiswa->nim)
+                                                                              ->count();
+
+        return view('user.pimpinan.detail_mahasiswa',compact('perPage','mahasiswa','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllPendaftaran','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal'));
     }
 
     public function create()

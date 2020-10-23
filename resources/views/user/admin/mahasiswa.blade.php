@@ -134,7 +134,6 @@
 </div>
 @endsection
 
-
 @section('datatables-javascript')
 <script>
     let link = "{{ url('admin/mahasiswa/') }}";

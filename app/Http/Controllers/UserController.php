@@ -6,6 +6,7 @@ use Session;
 use App\User;
 use DataTables;
 use App\KodeSurat;
+use App\Mahasiswa;
 use App\WaktuCuti;
 use Carbon\Carbon;
 use App\SuratMasuk;
@@ -319,8 +320,10 @@ class UserController extends Controller
         $chartKemahasiswaan = $this->getChartKemahasiswaan($bulan,$tahun);
 
         $chartPendidikanPengajaran = $this->getChartPendidikanDanPengajaran($bulan,$tahun); 
-              
-        return view('user.'.$this->segmentUser.'.dashboard',compact('perPageDashboard','bulanList','tahunList','tgl','tahunAkademikAktif','waktuCuti','kodeSuratAktif','countAllKodeSurat','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti','chartKemahasiswaan','chartPendidikanPengajaran','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal'));
+        
+        $countAllMahasiswa = Mahasiswa::count();
+
+        return view('user.'.$this->segmentUser.'.dashboard',compact('perPageDashboard','bulanList','tahunList','tgl','tahunAkademikAktif','waktuCuti','kodeSuratAktif','countAllKodeSurat','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti','chartKemahasiswaan','chartPendidikanPengajaran','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal','countAllMahasiswa'));
     }
 
     public function searchChartKemahasiswaan(Request $request){

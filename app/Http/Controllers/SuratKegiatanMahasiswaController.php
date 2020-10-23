@@ -64,7 +64,7 @@ class SuratKegiatanMahasiswaController extends Controller
 
         if(Auth::user()->jabatan != 'kabag tata usaha'){
            $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::whereIn('status',['disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi selesai','verifikasi kasubag','verifikasi kabag'])
-                                ->count();
+                                    ->count();
         }
                                             
         $countAllSurat = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','surat_kegiatan_mahasiswa.id_pengajuan','=','pengajuan_surat_kegiatan_mahasiswa.id')

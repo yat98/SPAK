@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use PDF;
 use Session;
 use App\User;
-use App\Operator;
 use DataTables;
+use App\Operator;
 use App\KodeSurat;
+use App\Mahasiswa;
 use App\SuratMasuk;
 use App\NotifikasiUser;
 use App\NotifikasiOperator;
@@ -88,6 +89,25 @@ class SuratPengantarBeasiswaController extends Controller
         }else if(Auth::user()->jabatan == 'kabag tata usaha'){
             $suratBeasiswa = $suratBeasiswa->where('status','verifikasi kabag');
         }
+
+        return DataTables::of($suratBeasiswa)
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->make(true);
+    }
+
+    public function getAllPengajuanByNim(Mahasiswa $mahasiswa){
+        $suratBeasiswa = SuratPengantarBeasiswa::join('daftar_beasiswa_mahasiswa','daftar_beasiswa_mahasiswa.id_surat_beasiswa','=','surat_pengantar_beasiswa.id')
+                            ->where('daftar_beasiswa_mahasiswa.nim',$mahasiswa->nim)
+                            ->select(['surat_pengantar_beasiswa.*'])
+                            ->with(['mahasiswa','user','kodeSurat','operator']);
 
         return DataTables::of($suratBeasiswa)
                         ->addColumn('aksi', function ($data) {

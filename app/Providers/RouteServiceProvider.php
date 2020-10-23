@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\KodeSurat;
+use App\Mahasiswa;
 use App\SuratTugas;
 use App\ProgramStudi;
 use App\TahunAkademik;
@@ -63,6 +64,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('tahun_akademik', TahunAkademik::class);
         Route::model('kode_surat', KodeSurat::class);
         Route::model('pimpinan_ormawa', PimpinanOrmawa::class);
+        Route::model('nim', Mahasiswa::class);
         Route::model('pengajuan_surat_keterangan', PengajuanSuratKeterangan::class);
         Route::model('surat_tugas', SuratTugas::class);
         Route::model('pengajuan_persetujuan_pindah', PengajuanSuratPersetujuanPindah::class);

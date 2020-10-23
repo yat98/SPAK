@@ -101,6 +101,26 @@ class PengajuanSuratPermohonanSurveiController extends Controller
         }
     }
 
+    public function getAllPengajuanByNim(Mahasiswa $mahasiswa){
+        return DataTables::of(PengajuanSuratPermohonanSurvei::where('pengajuan_surat_permohonan_survei.nim',$mahasiswa->nim)
+                                    ->join('mahasiswa','pengajuan_surat_permohonan_survei.nim','=','mahasiswa.nim')
+                                    ->select('mahasiswa.nama','pengajuan_surat_permohonan_survei.*','mahasiswa.nim')
+                                    ->with(['mahasiswa']))
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();                            
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->make(true);
+    }
+
     public function show(PengajuanSuratPermohonanSurvei $pengajuanSuratSurvei)
     {
         $pengajuan = collect($pengajuanSuratSurvei->load('mahasiswa.prodi.jurusan','operator'));

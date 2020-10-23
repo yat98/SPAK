@@ -458,11 +458,6 @@
                         </li>
                     @elseif(Session::get('jabatan') == 'subbagian kemahasiswaan')
                         <li class="nav-item">
-                            <a class="nav-link {{ ($halaman == 'surat-masuk') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-masuk') }}">
-                                Surat Masuk
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link {{ ($halaman == 'surat-keterangan-aktif-kuliah') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-aktif-kuliah') }}">
                                 Surat Keterangan <br> Aktif Kuliah
                             </a>

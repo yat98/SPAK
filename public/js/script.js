@@ -123,7 +123,7 @@ $('.table-responsive').on('click','.btn-verification', function (e) {
     e.preventDefault();
     Swal.fire({
         title: 'Yakin?',
-        text: "Surat akan diverifikasi!",
+        text: "Surat akan diverifikasi",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',

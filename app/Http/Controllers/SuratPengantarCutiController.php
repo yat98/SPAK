@@ -7,6 +7,7 @@ use App\User;
 use DataTables;
 use App\Operator;
 use App\KodeSurat;
+use App\Mahasiswa;
 use App\WaktuCuti;
 use App\NotifikasiUser;
 use App\NotifikasiOperator;
@@ -117,6 +118,33 @@ class SuratPengantarCutiController extends Controller
                             return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
                         })
                         ->make(true);
+    }
+
+    public function getAllPengajuanByNim(Mahasiswa $mahasiswa){
+        $suratCuti = SuratPengantarCuti::join('waktu_cuti','waktu_cuti.id','=','surat_pengantar_cuti.id_waktu_cuti')
+                        ->join('tahun_akademik','waktu_cuti.id_tahun_akademik','=','tahun_akademik.id')
+                        ->join('pendaftaran_cuti','pendaftaran_cuti.id_waktu_cuti','=','surat_pengantar_cuti.id_waktu_cuti')
+                        ->where('pendaftaran_cuti.nim',$mahasiswa->nim)
+                        ->select(['surat_pengantar_cuti.*','tahun_akademik.semester','tahun_akademik.tahun_akademik'])
+                        ->with(['waktuCuti.tahunAkademik','user','kodeSurat']);
+
+        return DataTables::of($suratCuti)
+            ->addColumn('aksi', function ($data) {
+                return $data->id;
+            })
+            ->addColumn('semester', function ($data) {
+                return ucwords($data->waktuCuti->tahunAkademik->semester);
+            })
+            ->editColumn("tahun_akademik", function ($data) {
+                return $data->waktuCuti->tahunAkademik->toArray();
+            })
+            ->editColumn("status", function ($data) {
+                return ucwords($data->status);
+            })
+            ->editColumn("created_at", function ($data) {
+                return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+            })
+            ->make(true);
     }
 
     public function getAllTandaTangan(){

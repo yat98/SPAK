@@ -16,7 +16,7 @@ class AddRelationshipToNotifikasiOperatorTable extends Migration
         Schema::table('notifikasi_operator', function (Blueprint $table) {
             $table->foreign('id_operator')
                   ->references('id')
-                  ->on('notifikasi_operator')
+                  ->on('operator')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
         });

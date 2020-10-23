@@ -14,8 +14,8 @@
                         </span> Mahasiswa</h3>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 stretch-card grid-margin">
-                        <div class="card bg-gradient-primary card-img-holder text-white">
+                    <div class="col-md-6 stretch-card grid-margin">
+                        <div class="card bg-gradient-quepal card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
                                     alt="circle-image" />
@@ -40,68 +40,18 @@
                                     </div>
                                 </div>
                                 <hr class="mb-4">
-                                <div class="row mb-3">
-                                    <div class="col-12">
-                                        {{ Form::open(['url'=>'pimpinan/mahasiswa/search','method'=>'GET']) }}
-                                        <div class="form-row">
-                                            <div class="col-sm-12 col-md-6">
-                                                {{ Form::text('keyword',(request()->get('keyword') != null) ? request()->get('keyword'):null,['placeholder'=>'Cari Nama Mahasiswa...','class'=>'form-control']) }}
-                                            </div>
-                                            <div class="col-sm-12 col-md">
-                                                {{ Form::select('jurusan',$jurusanList,(request()->get('jurusan') != null) ? request()->get('jurusan'):null,['class'=>'btn-margin form-control','placeholder'=> '-- Pilih Jurusan --']) }}
-                                            </div>
-                                            <div class="col-sm-12 col-md">
-                                                {{ Form::select('prodi',$prodiList,(request()->get('prodi') != null) ? request()->get('prodi'):null,['class'=>'form-control','placeholder'=> '-- Pilih Program Studi --']) }}
-                                            </div>
-                                            <div class="col-sm-12 col-md mt-xs-2 mt-md-0 btn-margin ">
-                                                {{ Form::select('angkatan',$angkatan,(request()->get('angkatan')!= null) ? request()->get('angkatan'):null,['class'=>'form-control','placeholder'=> '-- Pilih Angkatan --']) }}
-                                            </div>
-                                            <div class="col-sm-12 col-md">
-                                                <button class="btn btn-success btn-tambah" type="submit">
-                                                    <i class="mdi mdi-magnify btn-icon-prepend"></i>
-                                                    Cari
-                                                </button>
-                                            </div>
-                                        </div>
-                                        {{ Form::close() }}
-                                    </div>
-                                </div>
-                                @if ($countMahasiswa > 0)
+                                @if ($countAllMahasiswa > 0)
                                 <div class="table-responsive">
-                                    <table class="table">
+                                    <table class="table display no-warp" id='datatables' width="100%">
                                         <thead>
                                             <tr>
-                                                <th> No. </th>
-                                                <th> NIM</th>
-                                                <th> Nama</th>
+                                                <th data-priority="1"> Nama</th>
                                                 <th> Jurusan</th>
                                                 <th> Angkatan</th>
-                                                <th> Aksi</th>
+                                                <th data-priority="1"> Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            @foreach ($mahasiswaList as $mahasiswa)
-                                            <tr>
-                                                <td> {{ $loop->iteration + $perPage * ($mahasiswaList->currentPage() - 1)  }}
-                                                </td>
-                                                <td> {{ $mahasiswa->nim  }}</td>
-                                                <td> {{ ucwords($mahasiswa->nama)  }}</td>
-                                                <td>{{ $mahasiswa->prodi->jurusan->nama_jurusan }}</td>
-                                                <td> {{ $mahasiswa->angkatan  }}</td>
-                                                <td>
-                                                    <a href="{{ url('pimpinan/mahasiswa/'.$mahasiswa->nim) }}"
-                                                        class="btn btn-outline-info btn-sm">
-                                                        <i class="mdi mdi-account btn-icon-prepend"></i>
-                                                        Detail
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
                                     </table>
-                                    <div class="col">
-                                        {{ $mahasiswaList->links() }}
-                                    </div>
                                 </div>
                                 @else
                                 <div class="row">
@@ -111,7 +61,7 @@
                                             {{ (Session::has('search-title')) ? Session::get('search-title') : 'Data Mahasiswa Kosong!' }}
                                         </h4>
                                         <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : 'Silahkan mengisi data mahasiswa terlebih dahulu.' }}
+                                            {{ (Session::has('search')) ? Session::get('search') : 'Data mahasiswa belum ada.' }}
                                         </p>
                                     </div>
                                 </div>
@@ -125,21 +75,61 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-        <div class="modal-content bg-white">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Detail Mahasiswa</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id='mahasiswa-detail-content'></div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+@endsection
+
+@section('datatables-javascript')
+<script>
+    let link = "{{ url('pimpinan/mahasiswa/') }}";
+
+    let datatables = $('#datatables').DataTable({
+        responsive: true,
+        columnDefs: [{
+                        "targets": 0,
+                        "data": "nim",
+                        "render": function ( data, type, row, meta ) {
+                            return `<div class="mb-1">${row.nama}</div>
+                                    <span class="text-muted small">NIM. ${row.nim}</span>`;
+                        }
+                    },{
+                        "targets": [4],
+                        "visible": false,
+                    },
+                    {
+                        "targets": 3,
+                        "data": "aksi",
+                        "render": function ( data, type, row, meta ) {
+                            return `<div class="d-inline-block">
+                                        <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                            <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                        </a>
+                                        <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                            <a href="${link+'/'+row.nim}" class="dropdown-item">Detail</a>
+                                        </div>
+                                    </div>`;
+                    }
+        }],
+        autoWidth: false,
+        language: bahasa,
+        processing: true,
+        serverSide: true,
+        ajax: '{{ url('pimpinan/mahasiswa/all') }}',
+        columns: [{
+                data: 'nim',
+            },
+            {
+                data: 'prodi.jurusan.nama_jurusan',
+            },
+            {
+                data: 'angkatan',
+            },
+            {
+                data: 'aksi', name: 'aksi', orderable: false, searchable: false
+            },
+            {
+                data: 'nama',
+            },
+        ],
+        "pageLength": {{ $perPage }}
+    });   
+</script>
 @endsection

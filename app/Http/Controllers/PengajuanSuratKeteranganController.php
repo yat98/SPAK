@@ -23,9 +23,11 @@ class PengajuanSuratKeteranganController extends Controller
 {
     public function indexKeteranganAktifMahasiswa(){
         $perPage = $this->perPage;
+
         $countAllPengajuan = PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
                                 ->where('nim',Auth::user()->nim)
                                 ->count();
+
         return view($this->segmentUser.'.surat_keterangan_aktif_kuliah',compact('countAllPengajuan','perPage'));
     }
 
@@ -135,8 +137,9 @@ class PengajuanSuratKeteranganController extends Controller
         DB::beginTransaction();
         try{ 
             PengajuanSuratKeterangan::create($input);
+            
             NotifikasiOperator::create([
-                'id_operator'=>$operator->id,
+                'id_operator'=>'2',
                 'judul_notifikasi'=>'Surat Keterangan Aktif Kuliah',
                 'isi_notifikasi'=>$isiNotifikasi,
                 'link_notifikasi'=>url('operator/surat-keterangan-aktif-kuliah')
@@ -318,6 +321,52 @@ class PengajuanSuratKeteranganController extends Controller
                             })
                             ->make(true);
         }
+    }
+
+    public function getAllPengajuanAktifByNim(Mahasiswa $mahasiswa){
+        return DataTables::of(PengajuanSuratKeterangan::where('jenis_surat','surat keterangan aktif kuliah')
+                                    ->where('pengajuan_surat_keterangan.nim',$mahasiswa->nim)
+                                    ->select('mahasiswa.nama','tahun_akademik.tahun_akademik','tahun_akademik.semester','pengajuan_surat_keterangan.*','mahasiswa.nim')
+                                    ->join('mahasiswa','pengajuan_surat_keterangan.nim','=','mahasiswa.nim')
+                                    ->join('tahun_akademik','pengajuan_surat_keterangan.id_tahun_akademik','=','tahun_akademik.id')
+                                    ->with(['mahasiswa','tahunAkademik']))
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->addColumn('tahun', function ($data) {
+                            return $data->tahunAkademik->tahun_akademik.' - '.ucwords($data->tahunAkademik->semester);
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();                            
+                        })
+                        ->make(true);
+    }
+
+    public function getAllPengajuanKelakuanBaikByNim(Mahasiswa $mahasiswa){
+        return DataTables::of(PengajuanSuratKeterangan::where('jenis_surat','surat keterangan kelakuan baik')
+                                    ->where('pengajuan_surat_keterangan.nim',$mahasiswa->nim)
+                                    ->select('mahasiswa.nama','pengajuan_surat_keterangan.*','mahasiswa.nim')
+                                    ->join('mahasiswa','pengajuan_surat_keterangan.nim','=','mahasiswa.nim')
+                                    ->with(['mahasiswa']))
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();                            
+                        })
+                        ->make(true);
     }
 
     public function verification(Request $request){
