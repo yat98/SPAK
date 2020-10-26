@@ -583,6 +583,60 @@ $('.table-responsive').on('click','.btn-surat-kegiatan-progress', function (e) {
         });
 });
 
+
+$('.table-responsive').on('click','.btn-surat-perpustakaan-progress', function (e) {
+    e.preventDefault();
+    $('#surat-progress-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let pengajuanSurat = result;
+            let progressPercent = '0';
+            let bgColor = 'bg-gradient-info';
+            let icon = `<i class="mdi mdi-marker-check icon-sm text-info"></i>`;
+
+            switch (pengajuanSurat.status) {
+                case 'Selesai':
+                    progressPercent = '100';
+                    bgColor = 'bg-gradient-success';
+                    icon = `<i class="mdi mdi-marker-check icon-sm text-success"></i>`;
+                    break;
+                case 'Diajukan':
+                    progressPercent = '30';
+                    break;
+                case 'Menunggu Tanda Tangan':
+                    progressPercent = '70';
+                    break;
+                case 'Ditolak':
+                    progressPercent = '100';
+                    bgColor = 'bg-gradient-danger';
+                    icon = `<i class="mdi mdi-close-circle icon-sm text-danger"></i>`
+                    break;
+            }
+
+            let html = `<div class="row">
+                            <div class="col-12 mt-2">
+                                <p class="text-center text-muted mb-0">${progressPercent}%</p>
+                                <div class="progress">
+                                    <div class="progress-bar mt-0 ${bgColor} " role="progressbar" style="width: ${progressPercent}%" aria-valuenow="${progressPercent}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                            <div class="col-12 mt-4">
+                                <p class="h6 m-0 mb-1 text-dark text-center">
+                                    ${icon}
+                                    ${pengajuanSurat.status}
+                                </p> 
+                                <p class="text-muted text-center mt-2 mb-0"><small>${pengajuanSurat.tanggal}</small></p>
+                            </div>
+                        </div>`;
+            $('#surat-progress-content').html(html);
+        })
+        .catch(() => {
+            errorMessage('Terjadi Kesalahan','Periksa koneksi anda kemudian refresh browser anda');
+        });
+});
+
 $('#tanggal_surat_masuk').datetimepicker({
     format:'Y-m-d',
     formatDate:'Y-m-d',
@@ -595,13 +649,13 @@ $('.tanggal').datetimepicker({
     timepicker:false,
 });
 
- $(document).on('click','.tanggal', function(){
+$(document).on('click','.tanggal', function(){
     $(this).datetimepicker({
         format:'Y-m-d',
         formatDate:'Y-m-d',
         timepicker:false,
     }).focus();
- });
+});
 
 $('.table-responsive').on('click','.btn-surat-masuk-detail',function(e){
     e.preventDefault();
@@ -2089,6 +2143,319 @@ $('.table-responsive').on('click','.pengajuan-surat-keterangan-lulus-detail',fun
                             </table>
                         </div>`;
             $('#surat-keterangan-lulus-detail-content').html(html);
+        });
+});
+
+$('.table-responsive').on('click','.pengajuan-surat-perlengkapan-detail',function(e){
+    e.preventDefault();
+    $('#surat-perlengkapan-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let suratPerlengkapan = result;
+            let label;
+
+            if (suratPerlengkapan.status == 'Selesai'){
+                label=`<label class="badge badge-gradient-info">${suratPerlengkapan.status}</label>`;
+            }else if (suratPerlengkapan.status == 'Ditolak'){
+                label=`<label class="badge badge-gradient-danger">${suratPerlengkapan.status}</label>`;
+            }else{
+                label=`<label class="badge badge-gradient-warning text-dark">${suratPerlengkapan.status}</label>`;
+            }
+
+            if(suratPerlengkapan.id_operator == null){
+                diajukan = suratPerlengkapan.mahasiswa.nama;
+            }else{
+                diajukan = suratPerlengkapan.operator.nama;
+            }
+
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>NIM</th>
+                                    <td>${suratPerlengkapan.mahasiswa.nim}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nama</th>
+                                    <td>${suratPerlengkapan.mahasiswa.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Program Studi</th>
+                                    <td>${suratPerlengkapan.mahasiswa.prodi.strata} - ${suratPerlengkapan.mahasiswa.prodi.nama_prodi}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jurusan</th>
+                                    <td>${suratPerlengkapan.mahasiswa.prodi.jurusan.nama_jurusan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>${label}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diajukan Oleh</th>
+                                    <td>${diajukan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Keterangan</th>
+                                    <td>${suratPerlengkapan.keterangan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Di Buat</th>
+                                    <td>${suratPerlengkapan.dibuat}</td>
+                                </tr>
+                            </table>
+                        </div>`;
+            $('#surat-perlengkapan-detail-content').html(html);
+        });
+});
+
+$('.table-responsive').on('click','.pengajuan-surat-perpustakaan-detail',function(e){
+    e.preventDefault();
+    $('#surat-perpustakaan-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let suratPerpustakaan = result;
+            let label;
+
+            if (suratPerpustakaan.status == 'Selesai'){
+                label=`<label class="badge badge-gradient-info">${suratPerpustakaan.status}</label>`;
+            }else if (suratPerpustakaan.status == 'Ditolak'){
+                label=`<label class="badge badge-gradient-danger">${suratPerpustakaan.status}</label>`;
+            }else{
+                label=`<label class="badge badge-gradient-warning text-dark">${suratPerpustakaan.status}</label>`;
+            }
+
+            if(suratPerpustakaan.id_operator == null){
+                diajukan = suratPerpustakaan.mahasiswa.nama;
+            }else{
+                diajukan = suratPerpustakaan.operator.nama;
+            }
+
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>NIM</th>
+                                    <td>${suratPerpustakaan.mahasiswa.nim}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nama</th>
+                                    <td>${suratPerpustakaan.mahasiswa.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Program Studi</th>
+                                    <td>${suratPerpustakaan.mahasiswa.prodi.strata} - ${suratPerpustakaan.mahasiswa.prodi.nama_prodi}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jurusan</th>
+                                    <td>${suratPerpustakaan.mahasiswa.prodi.jurusan.nama_jurusan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Alamat</th>
+                                    <td>${suratPerpustakaan.alamat}</td>
+                                </tr>
+                                <tr>
+                                    <th>Telp</th>
+                                    <td>${suratPerpustakaan.telp}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>${label}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diajukan Oleh</th>
+                                    <td>${diajukan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Keterangan</th>
+                                    <td>${suratPerpustakaan.keterangan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Di Buat</th>
+                                    <td>${suratPerpustakaan.dibuat}</td>
+                                </tr>
+                            </table>
+                        </div>`;
+            $('#surat-perpustakaan-detail-content').html(html);
+        });
+});
+
+
+$('.table-responsive').on('click','.btn-surat-perpustakaan-detail',function(e){
+    e.preventDefault();
+    $('#surat-perpustakaan-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let suratPerpustakaan = result.pengajuan_surat_keterangan_bebas_perpustakaan;
+            let label;
+
+            if (result.status == 'Selesai'){
+                label=`<label class="badge badge-gradient-info">${result.status}</label>`;
+            }else if (result.status == 'Ditolak'){
+                label=`<label class="badge badge-gradient-danger">${result.status}</label>`;
+            }else{
+                label=`<label class="badge badge-gradient-warning text-dark">${result.status}</label>`;
+            }
+
+            if(suratPerpustakaan.id_operator == null){
+                diajukan = suratPerpustakaan.mahasiswa.nama;
+            }else{
+                diajukan = suratPerpustakaan.operator.nama;
+            }
+
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>NIM</th>
+                                    <td>${suratPerpustakaan.mahasiswa.nim}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nama</th>
+                                    <td>${suratPerpustakaan.mahasiswa.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Program Studi</th>
+                                    <td>${suratPerpustakaan.mahasiswa.prodi.strata} - ${suratPerpustakaan.mahasiswa.prodi.nama_prodi}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jurusan</th>
+                                    <td>${suratPerpustakaan.mahasiswa.prodi.jurusan.nama_jurusan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Alamat</th>
+                                    <td>${suratPerpustakaan.alamat}</td>
+                                </tr>
+                                <tr>
+                                    <th>Telp</th>
+                                    <td>${suratPerpustakaan.telp}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nomor Surat</th>
+                                    <td>${result.nomor_surat}</td>
+                                </tr>
+                                <tr>
+                                    <th>Kode Surat</th>
+                                    <td>${result.kode_surat}</td>
+                                </tr>
+                                <tr>
+                                    <th>Tahun</th>
+                                    <td>${result.tahun}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>${label}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diajukan Oleh</th>
+                                    <td>${diajukan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Di Tandangani Oleh</th>
+                                    <td>${result.user.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jumlah Cetak</th>
+                                    <td>${result.jumlah_cetak}</td>
+                                </tr>
+                                <tr>
+                                    <th>Keterangan</th>
+                                    <td>${suratPerpustakaan.keterangan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Di Buat</th>
+                                    <td>${result.dibuat}</td>
+                                </tr>
+                            </table>
+                        </div>`;
+            $('#surat-perpustakaan-detail-content').html(html);
+        });
+});
+
+$('.table-responsive').on('click','.btn-surat-perlengkapan-detail',function(e){``
+    e.preventDefault();
+    $('#surat-perlengkapan-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+            let suratPerlengkapan = result.pengajuan_surat_keterangan_bebas_perlengkapan;
+            let label;
+        
+            if (result.status == 'Selesai'){
+                label=`<label class="badge badge-gradient-info">${result.status}</label>`;
+            }else if (result.status == 'Ditolak'){
+                label=`<label class="badge badge-gradient-danger">${result.status}</label>`;
+            }else{
+                label=`<label class="badge badge-gradient-warning text-dark">${result.status}</label>`;
+            }
+            
+            if(suratPerlengkapan.id_operator == null){
+                diajukan = suratPerlengkapan.mahasiswa.nama;
+            }else{
+                diajukan = suratPerlengkapan.operator.nama;
+            }
+
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>NIM</th>
+                                    <td>${suratPerlengkapan.mahasiswa.nim}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nama</th>
+                                    <td>${suratPerlengkapan.mahasiswa.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Program Studi</th>
+                                    <td>${suratPerlengkapan.mahasiswa.prodi.strata} - ${suratPerlengkapan.mahasiswa.prodi.nama_prodi}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jurusan</th>
+                                    <td>${suratPerlengkapan.mahasiswa.prodi.jurusan.nama_jurusan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nomor Surat</th>
+                                    <td>${result.nomor_surat}</td>
+                                </tr>
+                                <tr>
+                                    <th>Kode Surat</th>
+                                    <td>${result.kode_surat.kode_surat}</td>
+                                </tr>
+                                <tr>
+                                    <th>Tahun</th>
+                                    <td>${result.tahun}</td>
+                                </tr>
+                                <tr>
+                                    <th>Status</th>
+                                    <td>${label}</td>
+                                </tr>
+                                <tr>
+                                    <th>Diajukan Oleh</th>
+                                    <td>${diajukan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Di Tandangani Oleh</th>
+                                    <td>${result.user.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Jumlah Cetak</th>
+                                    <td>${result.jumlah_cetak}</td>
+                                </tr>
+                                <tr>
+                                    <th>Keterangan</th>
+                                    <td>${suratPerlengkapan.keterangan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Di Buat</th>
+                                    <td>${result.dibuat}</td>
+                                </tr>
+                            </table>
+                        </div>`;
+            $('#surat-perlengkapan-detail-content').html(html);
         });
 });
 

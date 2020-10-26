@@ -93,4 +93,12 @@ class Operator extends Authenticable
     public function pengajuanSuratPermohonanPengambilanDataAwal(){
         return $this->hasMany('App\PengajuanSuratPermohonanPengambilanDataAwal','id_operator');
     }
+
+    public function pengajuanSuratKeteranganBebasPerlengkapan(){
+        return $this->hasMany('App\PengajuanSuratKeteranganBebasPerlengkapan','id_operator');
+    }
+
+    public function pengajuanSuratKeteranganBebasPerpustakaan(){
+        return $this->hasMany('App\PengajuanSuratKeteranganBebasPerpustakaan','id_operator');
+    }
 }

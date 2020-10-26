@@ -13,15 +13,15 @@ class CreateSuratKeteranganBebasPerlengkapanTable extends Migration
      */
     public function up()
     {
-        // Schema::create('surat_keterangan_bebas_perlengkapan', function (Blueprint $table) {
-        //     $table->increments('id');
-        //     $table->integer('id_pengajuan')->unsigned();
-        //     $table->char('nomor_surat',6);
-        //     $table->char('nip',18)->nullable();
-        //     $table->integer('id_kode_surat')->unsigned();
-        //     $table->integer('jumlah_cetak')->default(0);
-        //     $table->timestamps();
-        // });
+        Schema::create('surat_keterangan_bebas_perlengkapan', function (Blueprint $table) {
+            $table->integer('id_pengajuan')->unsigned()->primary();
+            $table->char('nomor_surat',6);
+            $table->char('nip',18)->nullable();
+            $table->integer('id_kode_surat')->unsigned();
+            $table->integer('id_operator')->unsigned();
+            $table->integer('jumlah_cetak')->default(0);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -31,6 +31,6 @@ class CreateSuratKeteranganBebasPerlengkapanTable extends Migration
      */
     public function down()
     {
-        // Schema::dropIfExists('surat_keterangan_bebas_perlengkapan');
+        Schema::dropIfExists('surat_keterangan_bebas_perlengkapan');
     }
 }

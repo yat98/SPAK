@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
         <div class="form-group">
             {{ Form::label('nama','Nama') }}
             @if ($errors->any())
@@ -13,7 +13,7 @@
             {{ Form::text('nama',null,['class'=>'form-control form-control-lg','id'=>'nama']) }}
             @endif
         </div>
-         <div class="form-group">
+        <div class="form-group">
             {{ Form::label('username','Username') }}
             @if ($errors->any())
             @if ($errors->has('username'))

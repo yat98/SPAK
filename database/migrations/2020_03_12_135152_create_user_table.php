@@ -16,7 +16,7 @@ class CreateUserTable extends Migration
         Schema::create('user', function (Blueprint $table) {
             $table->char('nip',18)->primary();
             $table->string('nama',100);
-            $table->enum('jabatan',['dekan','wd1','wd2','wd3','kasubag kemahasiswaan','kasubag pendidikan dan pengajaran','kasubag umum & bmn','kabag tata usaha']);
+            $table->enum('jabatan',['dekan','wd1','wd2','wd3','kasubag kemahasiswaan','kasubag pendidikan dan pengajaran','kasubag umum & bmn','kabag tata usaha','kepala perpustakaan']);
             $table->enum('pangkat',['penata muda','penata muda tkt. I','penata','penata tkt. I','pembina','pembina tkt. I','pembina utama muda','pembina utama madya','pembina utama']);
             $table->enum('golongan',['III/a','III/b','III/c','III/d','IV/a','IV/b','IV/c','IV/d','IV/e']);
             $table->enum('status_aktif',['aktif','non aktif']);

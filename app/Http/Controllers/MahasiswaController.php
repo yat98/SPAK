@@ -43,6 +43,8 @@ use App\PengajuanSuratPersetujuanPindah;
 use App\SuratPermohonanPengambilanDataAwal;
 use App\SuratPermohonanPengambilanMaterial;
 use App\PengajuanSuratRekomendasiPenelitian;
+use App\PengajuanSuratKeteranganBebasPerlengkapan;
+use App\PengajuanSuratKeteranganBebasPerpustakaan;
 use App\PengajuanSuratPermohonanPengambilanDataAwal;
 use App\PengajuanSuratPermohonanPengambilanMaterial;
 use Maatwebsite\Excel\Validators\ValidationException;
@@ -118,7 +120,13 @@ class MahasiswaController extends Controller
         $countAllSuratDataAwal = PengajuanSuratPermohonanPengambilanDataAwal::where('nim',Auth::user()->nim)
                                                                               ->count();
 
-        return view($this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllPendaftaran','countAllSuratKegiatan','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal'));
+        $countAllSuratPerpustakaan = PengajuanSuratKeteranganBebasPerpustakaan::where('nim',Auth::user()->nim)
+                                                                              ->count();
+
+        $countAllSuratPerlengkapan = PengajuanSuratKeteranganBebasPerlengkapan::where('nim',Auth::user()->nim)
+                                                                              ->count();
+
+        return view($this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllPendaftaran','countAllSuratKegiatan','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal','countAllSuratPerpustakaan','countAllSuratPerlengkapan'));
     }
 
     public function getAllMahasiswa(){

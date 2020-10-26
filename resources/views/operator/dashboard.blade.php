@@ -70,7 +70,7 @@
                     @endif
                 @endif
                 <div class="row">
-                    <div class="col-md-4 stretch-card grid-margin">
+                    <div class="@if(Auth::user()->bagian != 'operator perpustakaan') col-md-4 @else col-md-6 @endif stretch-card grid-margin">
                         <div class="card bg-gradient-danger card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
@@ -84,7 +84,7 @@
                             </div>
                         </div>
                     </div>
-                    @if(Auth::user()->bagian == 'subbagian kemahasiswaan')
+                    @if(Auth::user()->bagian != 'operator perpustakaan')
                         <div class="col-md-4 stretch-card grid-margin">
                             <div class="card bg-gradient-quepal card-img-holder text-white">
                                 <div class="card-body">
@@ -100,24 +100,42 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
-                    <div class="col-md-4 stretch-card grid-margin">
-                        <div class="card bg-gradient-info card-img-holder text-white">
-                            <div class="card-body">
-                                <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
-                                    alt="circle-image" />
-                                <h4 class="font-weight-normal mb-3">Surat Masuk<i
-                                        class="mdi mdi-file-document-box mdi-24px float-right"></i>
-                                </h4>
-                                <h2 class="mb-5">
-                                    {{ $countAllSuratMasuk > 0 ? $countAllSuratMasuk.' Surat' : 'Data Surat Kosong' }}
-                                </h2>
-                                <h6 class="card-text">
-                                    <a href="{{ url('operator/surat-masuk') }}" class="text-white">Lihat data surat</a>
-                                </h6>
+                        <div class="col-md-4 stretch-card grid-margin">
+                            <div class="card bg-gradient-info card-img-holder text-white">
+                                <div class="card-body">
+                                    <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                        alt="circle-image" />
+                                    <h4 class="font-weight-normal mb-3">Surat Masuk<i
+                                            class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                    </h4>
+                                    <h2 class="mb-5">
+                                        {{ $countAllSuratMasuk > 0 ? $countAllSuratMasuk.' Surat' : 'Data Surat Kosong' }}
+                                    </h2>
+                                    <h6 class="card-text">
+                                        <a href="{{ url('operator/surat-masuk') }}" class="text-white">Lihat data surat</a>
+                                    </h6>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @else
+                        <div class="col-md-6 stretch-card grid-margin">
+                            <div class="card bg-gradient-info card-img-holder text-white">
+                                <div class="card-body">
+                                    <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                        alt="circle-image" />
+                                    <h4 class="font-weight-normal mb-3">Surat Keterangan Bebas Perpustakaan<i
+                                            class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                    </h4>
+                                    <h2 class="mb-5">
+                                        {{ $countAllSuratPerpustakaan > 0 ? $countAllSuratPerpustakaan.' Surat' : 'Data Surat Kosong' }}
+                                    </h2>
+                                    <h6 class="card-text">
+                                        <a href="{{ url('operator/surat-keterangan-bebas-perpustakaan') }}" class="text-white">Lihat data surat</a>
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                     @if(Auth::user()->bagian == 'front office' || Auth::user()->bagian == 'subbagian kemahasiswaan')
                         <div class="col-md-4 stretch-card grid-margin">
                             <div class="card bg-gradient-info card-img-holder text-white">
@@ -383,6 +401,25 @@
                             </div>
                         </div>
                     @endif
+                    @if(Auth::user()->bagian == 'front office' || Auth::user()->bagian == 'subbagian umum & bmn')
+                        <div class="col-md-4 stretch-card grid-margin">
+                            <div class="card bg-gradient-info card-img-holder text-white">
+                                <div class="card-body">
+                                    <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                        alt="circle-image" />
+                                    <h4 class="font-weight-normal mb-3">Surat Keterangan Bebas Perlengkapan<i
+                                            class="mdi mdi-file-document-box mdi-24px float-right"></i>
+                                    </h4>
+                                    <h2 class="mb-5">
+                                        {{ $countAllSuratPerlengkapan > 0 ? $countAllSuratPerlengkapan.' Surat' : 'Data Surat Kosong' }}
+                                    </h2>
+                                    <h6 class="card-text">
+                                        <a href="{{ url('operator/surat-keterangan-bebas-perlengkapan') }}" class="text-white">Lihat data surat</a>
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                     @if(Auth::user()->bagian == 'front office' || Auth::user()->bagian == 'subbagian kemahasiswaan')
                         <div class="col-md-4 stretch-card grid-margin">
                             <div class="card bg-gradient-dark card-img-holder text-white">
@@ -403,47 +440,49 @@
                         </div>
                     @endif
                 </div>
-                <div class="row">
-                    <div class="col-12 grid-margin">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row mb-3">
-                                    <div class="col-12 col-md-6">
-                                        <h4>Surat Masuk</h4>
+                @if(Auth::user()->bagian != 'operator perpustakaan')
+                    <div class="row">
+                        <div class="col-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="col-12 col-md-6">
+                                            <h4>Surat Masuk</h4>
+                                        </div>
                                     </div>
-                                </div>
-                                <hr class="mb-4">
-                                @if ($countAllSuratMasuk > 0)
-                                <div class="table-responsive dashboard">
-                                    <table class="table display no-warp" id='datatables' width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th data-priority="1"> Nomor Surat</th>
-                                                <th data-priority="2"> Instansi</th>
-                                                <th> Perihal</th>
-                                                <th> Tanggal Surat Masuk</th>
-                                                <th data-priority="3"> Aksi</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-                                @else
-                                <div class="row">
-                                    <div class="col text-center">
-                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
-                                        <h4 class="display-4 mt-3">
-                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
-                                        </h4>
-                                        <p class="text-muted">
-                                            {{ (Session::has('search')) ? Session::get('search') : ' Data surat masuk belum ada.' }}
-                                        </p>
+                                    <hr class="mb-4">
+                                    @if ($countAllSuratMasuk > 0)
+                                    <div class="table-responsive dashboard">
+                                        <table class="table display no-warp" id='datatables' width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th data-priority="1"> Nomor Surat</th>
+                                                    <th data-priority="2"> Instansi</th>
+                                                    <th> Perihal</th>
+                                                    <th> Tanggal Surat Masuk</th>
+                                                    <th data-priority="3"> Aksi</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
                                     </div>
+                                    @else
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                            <h4 class="display-4 mt-3">
+                                                {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
+                                            </h4>
+                                            <p class="text-muted">
+                                                {{ (Session::has('search')) ? Session::get('search') : ' Data surat masuk belum ada.' }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    @endif
                                 </div>
-                                @endif
                             </div>
                         </div>
                     </div>
-                </div>
+                @endif
                 @if(Auth::user()->bagian == 'front office' || Auth::user()->bagian == 'subbagian kemahasiswaan')
                     <div class="row">
                         <div class="col-12 grid-margin">
@@ -1065,7 +1104,92 @@
                         </div>
                     </div>        
                 @endif
-
+                @if(Auth::user()->bagian == 'front office' || Auth::user()->bagian == 'subbagian umum & bmn')
+                    <div class="row">
+                        <div class="col-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="col-12 col-md-6">
+                                            <h4>Surat Keterangan Bebas Perlengkapan</h4>
+                                        </div>
+                                    </div>
+                                    <hr class="mb-4">
+                                    @if ($countAllSuratPerlengkapan > 0)
+                                    <div class="table-responsive dashboard">
+                                        <table class="table display no-warp" id='datatables17' width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th data-priority="1"> Nama</th>
+                                                    <th> Nomor Surat</th>
+                                                    <th data-priority="2"> Status</th>
+                                                    <th> Waktu Pengajuan</th>
+                                                    <th data-priority="3"> Aksi</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    @else
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                            <h4 class="display-4 mt-3">
+                                                {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
+                                            </h4>
+                                            <p class="text-muted">
+                                                {{ (Session::has('search')) ? Session::get('search') : ' Data surat keterangan bebas perlengkapan belum ada.' }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>        
+                @endif
+                @if(Auth::user()->bagian == 'front office' || Auth::user()->bagian == 'operator perpustakaan')
+                    <div class="row">
+                        <div class="col-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="col-12 col-md-6">
+                                            <h4>Surat Keterangan Bebas Perpustakaan</h4>
+                                        </div>
+                                    </div>
+                                    <hr class="mb-4">
+                                    @if ($countAllSuratPerpustakaan > 0)
+                                    <div class="table-responsive dashboard">
+                                        <table class="table display no-warp" id='datatables18' width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th data-priority="1"> Nama</th>
+                                                    <th> Nomor Surat</th>
+                                                    <th data-priority="2"> Status</th>
+                                                    <th> Waktu Pengajuan</th>
+                                                    <th data-priority="3"> Aksi</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    @else
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                            <h4 class="display-4 mt-3">
+                                                {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
+                                            </h4>
+                                            <p class="text-muted">
+                                                {{ (Session::has('search')) ? Session::get('search') : ' Data surat keterangan bebas perpustakaan belum ada.' }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>   
+                @endif
                 @if(Auth::user()->bagian == 'front office' || Auth::user()->bagian == 'subbagian kemahasiswaan')
                     <div class="row">
                         <div class="col-12 grid-margin">
@@ -1437,6 +1561,42 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="suratPerlengkapan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='surat-perlengkapan-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="suratPerpustakaan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='surat-perpustakaan-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('datatables-javascript')
@@ -1464,6 +1624,14 @@
             let linkSuratSurvei = "{{ url('operator/surat-permohonan-survei') }}";
             let linkSuratPenelitian = "{{ url('operator/surat-rekomendasi-penelitian') }}";
             let linkSuratDataAwal = "{{ url('operator/surat-permohonan-pengambilan-data-awal') }}";
+        @endif
+
+        @if(Auth::user()->bagian == 'front office' || Auth::user()->bagian == 'subbagian umum & bmn')
+            let linkSuratPerlengkapan = "{{ url('operator/surat-keterangan-bebas-perlengkapan') }}";
+        @endif
+
+        @if(Auth::user()->bagian == 'front office' || Auth::user()->bagian == 'operator perpustakaan')
+            let linkSuratPerpustakaan = "{{ url('operator/surat-keterangan-bebas-perpustakaan') }}";
         @endif
 
         $('#datatables').DataTable({
@@ -3042,6 +3210,234 @@
                     },
                     {
                         data: 'surat_permohonan_pengambilan_data_awal.nomor_surat',
+                    },
+                    {
+                        data: 'status',
+                    },
+                    {
+                        data: 'created_at',
+                    },
+                    {
+                        data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                    },
+                    {
+                        data: 'nim',
+                    },
+                ],
+                "pageLength": {{ $perPageDashboard }},
+                "order": [[1,'desc']],
+            });
+        @endif
+
+        @if(Auth::user()->bagian == 'front office' || Auth::user()->bagian == 'subbagian umum & bmn')
+            $('#datatables17').DataTable({
+                responsive: true,
+                columnDefs: [{
+                                "targets": 0,
+                                "data": "mahasiswa.nama",
+                                "render": function ( data, type, row, meta ) {
+                                    return `<a href="${linkMhs}/${row.mahasiswa.nim}" class="btn-detail text-dark" data-toggle="modal" data-target="#mahasiswa">
+                                                <div class="mb-1">${row.mahasiswa.nama}</div>
+                                                <span class="text-muted small">NIM. ${row.mahasiswa.nim}</span>
+                                            </a>`;
+                                }
+                            },
+                            {
+                                "targets": 1,
+                                "data": "surat_keterangan_bebas_perlengkapan.nomor_surat",
+                                "render": function ( data, type, row, meta ) {
+                                    return `${row.surat_keterangan_bebas_perlengkapan.nomor_surat}/${row.surat_keterangan_bebas_perlengkapan.kode_surat.kode_surat}`;
+                                }
+                            },
+                            {
+                                "targets": 2,
+                                "data": "status",
+                                "render": function ( data, type, row, meta ) {
+                                    if(row.status == 'Ditolak'){
+                                        return ` <label class="badge badge-gradient-danger">
+                                                    ${row.status}
+                                                </label>`;
+                                    }else if(row.status == 'Selesai'){
+                                        return ` <label class="badge badge-gradient-info">
+                                                ${row.status}
+                                            </label>`;
+                                    }else{
+                                        return ` <label class="badge badge-gradient-warning text-dark">
+                                                    ${row.status}
+                                                </label>`;
+                                    }
+                                }
+                            },
+                            {
+                                "targets": 3,
+                                "data": "created_at",
+                                "render": function ( data, type, row, meta ) {
+                                    return row.waktu_pengajuan;
+                                }
+                            },
+                            {
+                                "targets": 4,
+                                "data": "aksi",
+                                "render": function ( data, type, row, meta ) {
+                                    @if(Auth::user()->bagian != 'front office')
+                                        return `<div class="d-inline-block">
+                                                    <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                        <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                        <a href="${linkSuratPerlengkapan+'/'+row.id}" class="dropdown-item btn-surat-perlengkapan-detail" data-toggle="modal" data-target="#suratPerlengkapan">
+                                                                Detail</a>
+                                                        <a href="${linkSuratPerlengkapan+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
+                                                    </div>
+                                                </div>`;
+                                    @else
+                                        let action = `<a href="${linkSuratPerlengkapan+'/'+row.id}" class="dropdown-item btn-surat-perlengkapan-detail" data-toggle="modal" data-target="#suratPerlengkapan">
+                                                        Detail</a>`;
+
+                                        if(row.status == 'Selesai'){
+                                            action += `<a href="${linkSuratPerlengkapan+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
+                                        }
+                                        
+                                        return `<div class="d-inline-block">
+                                                    <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                        <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                        ${action}
+                                                    </div>
+                                                </div>`;
+                                    @endif
+                                },
+                            },
+                            {
+                                "targets": [5],
+                                "visible": false,
+                            }
+                ],
+                autoWidth: false,
+                language: bahasa,
+                processing: true,
+                serverSide: true,
+                ajax: '{{ url('operator/surat-keterangan-bebas-perlengkapan/all') }}',
+                columns: [{
+                        data: 'mahasiswa.nama',
+                    },
+                    {
+                        data: 'surat_keterangan_bebas_perlengkapan.nomor_surat',
+                    },
+                    {
+                        data: 'status',
+                    },
+                    {
+                        data: 'created_at',
+                    },
+                    {
+                        data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                    },
+                    {
+                        data: 'nim',
+                    },
+                ],
+                "pageLength": {{ $perPageDashboard }},
+                "order": [[1,'desc']],
+            });
+        @endif
+
+        @if(Auth::user()->bagian == 'front office' || Auth::user()->bagian == 'operator perpustakaan')
+            $('#datatables18').DataTable({
+                responsive: true,
+                columnDefs: [{
+                                "targets": 0,
+                                "data": "mahasiswa.nama",
+                                "render": function ( data, type, row, meta ) {
+                                    return `<a href="${linkMhs}/${row.mahasiswa.nim}" class="btn-detail text-dark" data-toggle="modal" data-target="#mahasiswa">
+                                                <div class="mb-1">${row.mahasiswa.nama}</div>
+                                                <span class="text-muted small">NIM. ${row.mahasiswa.nim}</span>
+                                            </a>`;
+                                }
+                            },
+                            {
+                                "targets": 1,
+                                "data": "surat_keterangan_bebas_perpustakaan.nomor_surat",
+                                "render": function ( data, type, row, meta ) {
+                                    return `${row.surat_keterangan_bebas_perpustakaan.nomor_surat}/${row.surat_keterangan_bebas_perpustakaan.kode_surat}`;
+                                }
+                            },
+                            {
+                                "targets": 2,
+                                "data": "status",
+                                "render": function ( data, type, row, meta ) {
+                                    if(row.status == 'Ditolak'){
+                                        return ` <label class="badge badge-gradient-danger">
+                                                    ${row.status}
+                                                </label>`;
+                                    }else if(row.status == 'Selesai'){
+                                        return ` <label class="badge badge-gradient-info">
+                                                ${row.status}
+                                            </label>`;
+                                    }else{
+                                        return ` <label class="badge badge-gradient-warning text-dark">
+                                                    ${row.status}
+                                                </label>`;
+                                    }
+                                }
+                            },
+                            {
+                                "targets": 3,
+                                "data": "created_at",
+                                "render": function ( data, type, row, meta ) {
+                                    return row.waktu_pengajuan;
+                                }
+                            },
+                            {
+                                "targets": 4,
+                                "data": "aksi",
+                                "render": function ( data, type, row, meta ) {
+                                    @if(Auth::user()->bagian != 'front office')
+                                        return `<div class="d-inline-block">
+                                                    <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                        <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                        <a href="${linkSuratPerpustakaan+'/'+row.id}" class="dropdown-item btn-surat-perpustakaan-detail" data-toggle="modal" data-target="#suratPerpustakaan">
+                                                                Detail</a>
+                                                        <a href="${linkSuratPerpustakaan+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
+                                                    </div>
+                                                </div>`;
+                                    @else
+                                        let action = `<a href="${linkSuratPerpustakaan+'/'+row.id}" class="dropdown-item btn-surat-perpustakaan-detail" data-toggle="modal" data-target="#suratPerpustakaan">
+                                                        Detail</a>`;
+
+                                        if(row.status == 'Selesai'){
+                                            action += `<a href="${linkSuratPerpustakaan+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
+                                        }
+                                        
+                                        return `<div class="d-inline-block">
+                                                    <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                        <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                        ${action}
+                                                    </div>
+                                                </div>`;
+                                    @endif
+                                },
+                            },
+                            {
+                                "targets": [5],
+                                "visible": false,
+                            }
+                ],
+                autoWidth: false,
+                language: bahasa,
+                processing: true,
+                serverSide: true,
+                ajax: '{{ url('operator/surat-keterangan-bebas-perpustakaan/all') }}',
+                columns: [{
+                        data: 'mahasiswa.nama',
+                    },
+                    {
+                        data: 'surat_keterangan_bebas_perpustakaan.nomor_surat',
                     },
                     {
                         data: 'status',

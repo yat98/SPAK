@@ -10,12 +10,17 @@ class PengajuanSuratKeteranganBebasPerlengkapan extends Model
 
     protected $fillable = [
         'nim',
+        'id_operator',
         'status',
         'keterangan',
     ];
 
     public function mahasiswa(){
         return $this->belongsTo('App\Mahasiswa','nim');
+    }
+
+    public function operator(){
+        return $this->belongsTo('App\Operator','id_operator');
     }
 
     public function suratKeteranganBebasPerlengkapan(){

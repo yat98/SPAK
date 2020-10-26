@@ -15,11 +15,16 @@ class SuratKeteranganBebasPerlengkapan extends Model
         'nomor_surat',
         'nip',
         'id_kode_surat',
-        'jumlah_cetak'
+        'id_operator',
+        'jumlah_cetak',
     ];
 
     public function user(){
         return $this->belongsTo('App\User','nip');
+    }
+
+    public function operator(){
+        return $this->belongsTo('App\Operator','id_operator');
     }
 
     public function kodeSurat(){

@@ -1097,6 +1097,48 @@
                             </div>
                         </div>
                     </div>        
+                @elseif(Auth::user()->jabatan == 'kasubag umum & bmn')
+                    <div class="row">
+                        <div class="col-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="col-12 col-md-6">
+                                            <h4>Surat Keterangan Bebas Perlengkapan</h4>
+                                        </div>
+                                    </div>
+                                    <hr class="mb-4">
+                                    @if ($countAllSuratPerlengkapan > 0)
+                                    <div class="table-responsive dashboard">
+                                        <table class="table display no-warp" id='datatables17' width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th data-priority="1"> Nama</th>
+                                                    <th> Nomor Surat</th>
+                                                    <th data-priority="2"> Status</th>
+                                                    <th> Waktu Pengajuan</th>
+                                                    <th data-priority="3"> Aksi</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    @else
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                            <h4 class="display-4 mt-3">
+                                                {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
+                                            </h4>
+                                            <p class="text-muted">
+                                                {{ (Session::has('search')) ? Session::get('search') : ' Data surat keterangan bebas perlengkapan belum ada.' }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 @endif
 
             </div>
@@ -1410,6 +1452,24 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="suratPerlengkapan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='surat-perlengkapan-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('timer-javascript')
@@ -1445,6 +1505,8 @@
             let linkSuratSurvei = "{{ url('pegawai/surat-permohonan-survei') }}";
             let linkSuratPenelitian = "{{ url('pegawai/surat-rekomendasi-penelitian') }}";
             let linkSuratDataAwal = "{{ url('pegawai/surat-permohonan-pengambilan-data-awal') }}";
+        @elseif(Auth::user()->jabatan == 'kasubag umum & bmn')
+            let linkSuratPerlengkapan = "{{ url('pegawai/surat-keterangan-bebas-perlengkapan') }}";
         @endif
 
         $('#datatables').DataTable({
@@ -2939,6 +3001,104 @@
                     },
                     {
                         data: 'surat_permohonan_pengambilan_data_awal.nomor_surat',
+                    },
+                    {
+                        data: 'status',
+                    },
+                    {
+                        data: 'created_at',
+                    },
+                    {
+                        data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                    },
+                    {
+                        data: 'nim',
+                    },
+                ],
+                "pageLength": {{ $perPageDashboard }},
+                "order": [[1,'desc']],
+            });
+        @endif
+
+        @if(Auth::user()->jabatan == 'kasubag umum & bmn')
+            $('#datatables17').DataTable({
+                responsive: true,
+                columnDefs: [{
+                                "targets": 0,
+                                "data": "mahasiswa.nama",
+                                "render": function ( data, type, row, meta ) {
+                                    return `<a href="${linkMhs}/${row.mahasiswa.nim}" class="btn-detail text-dark" data-toggle="modal" data-target="#mahasiswa">
+                                                <div class="mb-1">${row.mahasiswa.nama}</div>
+                                                <span class="text-muted small">NIM. ${row.mahasiswa.nim}</span>
+                                            </a>`;
+                                }
+                            },
+                            {
+                                "targets": 1,
+                                "data": "surat_keterangan_bebas_perlengkapan.nomor_surat",
+                                "render": function ( data, type, row, meta ) {
+                                    return `${row.surat_keterangan_bebas_perlengkapan.nomor_surat}/${row.surat_keterangan_bebas_perlengkapan.kode_surat.kode_surat}`;
+                                }
+                            },
+                            {
+                                "targets": 2,
+                                "data": "status",
+                                "render": function ( data, type, row, meta ) {
+                                    if(row.status == 'Ditolak'){
+                                        return ` <label class="badge badge-gradient-danger">
+                                                    ${row.status}
+                                                </label>`;
+                                    }else if(row.status == 'Selesai'){
+                                        return ` <label class="badge badge-gradient-info">
+                                                ${row.status}
+                                            </label>`;
+                                    }else{
+                                        return ` <label class="badge badge-gradient-warning text-dark">
+                                                    ${row.status}
+                                                </label>`;
+                                    }
+                                }
+                            },
+                                {
+                                "targets": 3,
+                                "data": "nomor_surat",
+                                "render": function ( data, type, row, meta ) {
+                                    return row.waktu_pengajuan;
+                                }
+                            },
+                            {
+                                "targets": 4,
+                                "data": "aksi",
+                                "render": function ( data, type, row, meta ) {
+                                    let action = `<a href="${linkSuratPerlengkapan+'/'+row.id}" class="dropdown-item btn-surat-perlengkapan-detail" data-toggle="modal" data-target="#suratPerlengkapan">
+                                                    Detail</a>
+                                                <a href="${linkSuratPerlengkapan+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
+                                    
+                                    return `<div class="d-inline-block">
+                                                <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                    <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                                </a>
+                                                <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                    ${action}
+                                                </div>
+                                            </div>`;
+                                },
+                            },
+                            {
+                                "targets": [5],
+                                "visible": false,
+                            }
+                ],
+                autoWidth: false,
+                language: bahasa,
+                processing: true,
+                serverSide: true,
+                ajax: '{{ url('pegawai/surat-keterangan-bebas-perlengkapan/all') }}',
+                columns: [{
+                        data: 'mahasiswa.nama',
+                    },
+                    {
+                        data: 'surat_keterangan_bebas_perlengkapan.nomor_surat',
                     },
                     {
                         data: 'status',

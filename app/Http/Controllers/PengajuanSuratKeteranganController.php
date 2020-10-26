@@ -139,7 +139,7 @@ class PengajuanSuratKeteranganController extends Controller
             PengajuanSuratKeterangan::create($input);
             
             NotifikasiOperator::create([
-                'id_operator'=>'2',
+                'id_operator'=>$operator->id,
                 'judul_notifikasi'=>'Surat Keterangan Aktif Kuliah',
                 'isi_notifikasi'=>$isiNotifikasi,
                 'link_notifikasi'=>url('operator/surat-keterangan-aktif-kuliah')

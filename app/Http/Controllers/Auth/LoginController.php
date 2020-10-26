@@ -76,7 +76,7 @@ class LoginController extends Controller
                 if(($user->jabatan == 'kasubag kemahasiswaan' || $user->jabatan == 'kasubag pendidikan dan pengajaran' || $user->jabatan == 'kasubag umum & bmn') && $jenisUser != 'pegawai'){
                     $this->errorLogin($request);
                     return redirect('/');
-                }else if(($user->jabatan == 'dekan' || $user->jabatan == 'wd1' || $user->jabatan == 'wd2' ||$user->jabatan == 'wd3' || $user->jabatan == 'kabag tata usaha') && $jenisUser != 'pimpinan'){
+                }else if(($user->jabatan == 'dekan' || $user->jabatan == 'wd1' || $user->jabatan == 'wd2' ||$user->jabatan == 'wd3' || $user->jabatan == 'kabag tata usaha' || $user->jabatan == 'kepala perpustakaan') && $jenisUser != 'pimpinan'){
                     $this->errorLogin($request);
                     return redirect('/');
                 }

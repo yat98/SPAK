@@ -170,6 +170,29 @@ Route::group(['prefix' => 'mahasiswa'],function(){
             Route::get('/{pengajuan_surat_data_awal}/progress', 'SuratPermohonanPengambilanDataAwalController@progress');
             Route::post('/', 'PengajuanSuratPermohonanPengambilanDataAwalController@storePengajuan');
         });
+        // Surat Keterangan Bebas Perlengkapan
+        Route::get('surat-keterangan-bebas-perlengkapan','PengajuanSuratKeteranganBebasPerlengkapanController@indexMahasiswa');
+        Route::get('surat-keterangan-bebas-perlengkapan/{surat_perlengkapan}','SuratKeteranganBebasPerlengkapanController@show');
+        Route::get('surat-keterangan-bebas-perlengkapan/{surat_perlengkapan}/cetak','SuratKeteranganBebasPerlengkapanController@cetak');
+        Route::group(['prefix'=>'surat-keterangan-bebas-perlengkapan/pengajuan'],function(){
+            Route::get('/all','PengajuanSuratKeteranganBebasPerlengkapanController@getAllPengajuan');
+            Route::get('/create','PengajuanSuratKeteranganBebasPerlengkapanController@createPengajuan');
+            Route::get('/{pengajuan_surat_perlengkapan}','PengajuanSuratKeteranganBebasPerlengkapanController@show');
+            Route::get('/{pengajuan_surat_perlengkapan}/progress','SuratKeteranganBebasPerlengkapanController@progress');
+            Route::post('/','PengajuanSuratKeteranganBebasPerlengkapanController@storePengajuan');
+        });
+        // Surat Keterangan Bebas Perpustakaan
+        Route::get('surat-keterangan-bebas-perpustakaan','PengajuanSuratKeteranganBebasPerpustakaanController@indexMahasiswa');
+        Route::get('surat-keterangan-bebas-perpustakaan/{surat_perpustakaan}','SuratKeteranganBebasPerpustakaanController@show');
+        Route::get('surat-keterangan-bebas-perpustakaan/{surat_perpustakaan}/cetak','SuratKeteranganBebasPerpustakaanController@cetak');
+        Route::group(['prefix'=>'surat-keterangan-bebas-perpustakaan/pengajuan'],function(){
+            Route::get('/all','PengajuanSuratKeteranganBebasPerpustakaanController@getAllPengajuan');
+            Route::get('/create','PengajuanSuratKeteranganBebasPerpustakaanController@createPengajuan');
+            Route::get('/{pengajuan_surat_perpustakaan}','PengajuanSuratKeteranganBebasPerpustakaanController@show');
+            Route::get('/{pengajuan_surat_perpustakaan}/progress','SuratKeteranganBebasPerpustakaanController@progress');
+            Route::post('/','PengajuanSuratKeteranganBebasPerpustaka
+            anController@storePengajuan');
+        });
         // Notifikasi
         Route::get('notifikasi','NotifikasiMahasiswaController@index');
         Route::get('notifikasi/all','NotifikasiMahasiswaController@getAllNotifikasi');
@@ -257,14 +280,14 @@ Route::group(['prefix' => 'operator'],function(){
         Route::post('surat-rekomendasi','SuratRekomendasiController@storeSurat');
         Route::get('surat-rekomendasi/{surat_rekomendasi}/cetak','SuratRekomendasiController@cetak');
         Route::group(['prefix'=>'surat-rekomendasi/pengajuan'],function(){
-             Route::get('/create','PengajuanSuratRekomendasiController@create');
-             Route::get('/all','PengajuanSuratRekomendasiController@getAllPengajuan');
-             Route::patch('/{pengajuan_surat_rekomendasi}','PengajuanSuratRekomendasiController@update');
-             Route::get('/{pengajuan_surat_rekomendasi}/edit','PengajuanSuratRekomendasiController@edit');
-             Route::get('/{pengajuan_surat_rekomendasi}/progress','SuratRekomendasiController@progress');
-             Route::post('','PengajuanSuratRekomendasiController@store');
-             Route::get('/{pengajuan_surat_rekomendasi}','PengajuanSuratRekomendasiController@show');
-             Route::delete('/{pengajuan_surat_rekomendasi}','PengajuanSuratRekomendasiController@destroy');
+            Route::get('/create','PengajuanSuratRekomendasiController@create');
+            Route::get('/all','PengajuanSuratRekomendasiController@getAllPengajuan');
+            Route::patch('/{pengajuan_surat_rekomendasi}','PengajuanSuratRekomendasiController@update');
+            Route::get('/{pengajuan_surat_rekomendasi}/edit','PengajuanSuratRekomendasiController@edit');
+            Route::get('/{pengajuan_surat_rekomendasi}/progress','SuratRekomendasiController@progress');
+            Route::post('','PengajuanSuratRekomendasiController@store');
+            Route::get('/{pengajuan_surat_rekomendasi}','PengajuanSuratRekomendasiController@show');
+            Route::delete('/{pengajuan_surat_rekomendasi}','PengajuanSuratRekomendasiController@destroy');
         });
         // Surat Tugas
         Route::get('surat-tugas','SuratTugasController@indexOperator');
@@ -274,14 +297,14 @@ Route::group(['prefix' => 'operator'],function(){
         Route::post('surat-tugas','SuratTugasController@storeSurat');
         Route::get('surat-tugas/{surat_tugas}/cetak','SuratTugasController@cetak');
         Route::group(['prefix'=>'surat-tugas/pengajuan'],function(){
-             Route::get('/create','PengajuanSuratTugasController@create');
-             Route::get('/all','PengajuanSuratTugasController@getAllPengajuan');
-             Route::patch('/{pengajuan_surat_tugas}','PengajuanSuratTugasController@update');
-             Route::get('/{pengajuan_surat_tugas}/edit','PengajuanSuratTugasController@edit');
-             Route::get('/{pengajuan_surat_tugas}/progress','SuratTugasController@progress');
-             Route::post('/','PengajuanSuratTugasController@store');
-             Route::get('/{pengajuan_surat_tugas}','PengajuanSuratTugasController@show');
-             Route::delete('/{pengajuan_surat_tugas}','PengajuanSuratTugasController@destroy');
+            Route::get('/create','PengajuanSuratTugasController@create');
+            Route::get('/all','PengajuanSuratTugasController@getAllPengajuan');
+            Route::patch('/{pengajuan_surat_tugas}','PengajuanSuratTugasController@update');
+            Route::get('/{pengajuan_surat_tugas}/edit','PengajuanSuratTugasController@edit');
+            Route::get('/{pengajuan_surat_tugas}/progress','SuratTugasController@progress');
+            Route::post('/','PengajuanSuratTugasController@store');
+            Route::get('/{pengajuan_surat_tugas}','PengajuanSuratTugasController@show');
+            Route::delete('/{pengajuan_surat_tugas}','PengajuanSuratTugasController@destroy');
         });
         // Surat Persetujuan Pindah
         Route::get('surat-persetujuan-pindah','SuratPersetujuanPindahController@indexOperator');
@@ -432,6 +455,42 @@ Route::group(['prefix' => 'operator'],function(){
             Route::post('/','PengajuanSuratPermohonanPengambilanDataAwalController@storePengajuan');
             Route::delete('/{pengajuan_surat_data_awal}','PengajuanSuratPermohonanPengambilanDataAwalController@destroy');
         });
+        // Surat Keterangan Bebas Perlengkapan
+        Route::get('surat-keterangan-bebas-perlengkapan','SuratKeteranganBebasPerlengkapanController@indexOperator');
+        Route::get('surat-keterangan-bebas-perlengkapan/all','SuratKeteranganBebasPerlengkapanController@getAllSurat');
+        Route::get('surat-keterangan-bebas-perlengkapan/{surat_perlengkapan}','SuratKeteranganBebasPerlengkapanController@show');
+        Route::get('surat-keterangan-bebas-perlengkapan/create/{pengajuan_surat_perlengkapan}','SuratKeteranganBebasPerlengkapanController@createSurat');
+        Route::post('surat-keterangan-bebas-perlengkapan','SuratKeteranganBebasPerlengkapanController@storeSurat');
+        Route::get('surat-keterangan-bebas-perlengkapan/{surat_perlengkapan}/cetak','SuratKeteranganBebasPerlengkapanController@cetak');
+        Route::group(['prefix'=>'surat-keterangan-bebas-perlengkapan/pengajuan'],function(){
+            Route::get('/create','PengajuanSuratKeteranganBebasPerlengkapanController@createPengajuan');
+            Route::get('/all','PengajuanSuratKeteranganBebasPerlengkapanController@getAllPengajuan');
+            Route::patch('/tolak-pengajuan/{pengajuan_surat_perlengkapan}','SuratKeteranganBebasPerlengkapanController@tolakPengajuan');
+            Route::get('/{pengajuan_surat_perlengkapan}/edit','PengajuanSuratKeteranganBebasPerlengkapanController@edit');
+            Route::get('/{pengajuan_surat_perlengkapan}/progress','SuratKeteranganBebasPerlengkapanController@progress');
+            Route::get('/{pengajuan_surat_perlengkapan}','PengajuanSuratKeteranganBebasPerlengkapanController@show');
+            Route::patch('/{pengajuan_surat_perlengkapan}','PengajuanSuratKeteranganBebasPerlengkapanController@update');
+            Route::post('/','PengajuanSuratKeteranganBebasPerlengkapanController@storePengajuan');
+            Route::delete('/{pengajuan_surat_perlengkapan}','PengajuanSuratKeteranganBebasPerlengkapanController@destroy');
+        });
+        // Surat Keterangan Bebas Perpustakaan
+        Route::get('surat-keterangan-bebas-perpustakaan','SuratKeteranganBebasPerpustakaanController@indexOperator');
+        Route::get('surat-keterangan-bebas-perpustakaan/all','SuratKeteranganBebasPerpustakaanController@getAllSurat');
+        Route::get('surat-keterangan-bebas-perpustakaan/{surat_perpustakaan}','SuratKeteranganBebasPerpustakaanController@show');
+        Route::get('surat-keterangan-bebas-perpustakaan/create/{pengajuan_surat_perpustakaan}','SuratKeteranganBebasPerpustakaanController@createSurat');
+        Route::post('surat-keterangan-bebas-perpustakaan','SuratKeteranganBebasPerpustakaanController@storeSurat');
+        Route::get('surat-keterangan-bebas-perpustakaan/{surat_perpustakaan}/cetak','SuratKeteranganBebasPerpustakaanController@cetak');
+        Route::group(['prefix'=>'surat-keterangan-bebas-perpustakaan/pengajuan'],function(){
+            Route::get('/create','PengajuanSuratKeteranganBebasPerpustakaanController@createPengajuan');
+            Route::get('/all','PengajuanSuratKeteranganBebasPerpustakaanController@getAllPengajuan');
+            Route::patch('/tolak-pengajuan/{pengajuan_surat_perpustakaan}','SuratKeteranganBebasPerpustakaanController@tolakPengajuan');
+            Route::get('/{pengajuan_surat_perpustakaan}/edit','PengajuanSuratKeteranganBebasPerpustakaanController@edit');
+            Route::get('/{pengajuan_surat_perpustakaan}/progress','SuratKeteranganBebasPerpustakaanController@progress');
+            Route::get('/{pengajuan_surat_perpustakaan}','PengajuanSuratKeteranganBebasPerpustakaanController@show');
+            Route::patch('/{pengajuan_surat_perpustakaan}','PengajuanSuratKeteranganBebasPerpustakaanController@update');
+            Route::post('/','PengajuanSuratKeteranganBebasPerpustakaanController@storePengajuan');
+            Route::delete('/{pengajuan_surat_perpustakaan}','PengajuanSuratKeteranganBebasPerpustakaanController@destroy');
+        });
         // Detail Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Profil
@@ -456,6 +515,9 @@ Route::group(['prefix' => 'pegawai'],function(){
     Route::middleware(['auth:user','pegawai'])->group(function(){
         // Dashboard
         Route::get('/','UserController@indexPegawai');
+        // Tanda Tangan
+        Route::get('tanda-tangan','UserController@indexTandaTangan');
+        Route::post('tanda-tangan','UserController@updateTandaTangan');
         // Surat Masuk
         Route::get('surat-masuk/all','SuratMasukController@getAllSuratMasuk');
         Route::resource('surat-masuk','SuratMasukController');
@@ -565,6 +627,15 @@ Route::group(['prefix' => 'pegawai'],function(){
         Route::get('surat-permohonan-pengambilan-data-awal/verifikasi/all','PengajuanSuratPermohonanPengambilanDataAwalController@getAllPengajuan');
         Route::get('surat-permohonan-pengambilan-data-awal/{surat_data_awal}','SuratPermohonanPengambilanDataAwalController@show');
         Route::get('surat-permohonan-pengambilan-data-awal/{surat_data_awal}/cetak','SuratPermohonanPengambilanDataAwalController@cetak');
+        // Surat Keterangan Bebas Perlengkapan
+        Route::get('surat-keterangan-bebas-perlengkapan','SuratKeteranganBebasPerlengkapanController@index');
+        Route::get('surat-keterangan-bebas-perlengkapan/all','SuratKeteranganBebasPerlengkapanController@getAllSurat');
+        Route::patch('surat-keterangan-bebas-perlengkapan/verifikasi','PengajuanSuratKeteranganBebasPerlengkapanController@verification');
+        Route::get('surat-keterangan-bebas-perlengkapan/tanda-tangan/all','SuratKeteranganBebasPerlengkapanController@getAllTandaTangan');
+        Route::get('surat-keterangan-bebas-perlengkapan/verifikasi/all','PengajuanSuratKeteranganBebasPerlengkapanController@getAllPengajuan');
+        Route::get('surat-keterangan-bebas-perlengkapan/{surat_perlengkapan}','SuratKeteranganBebasPerlengkapanController@show');
+        Route::get('surat-keterangan-bebas-perlengkapan/{surat_perlengkapan}/cetak','SuratKeteranganBebasPerlengkapanController@cetak');
+        Route::post('surat-keterangan-bebas-perlengkapan/tanda-tangan','SuratKeteranganBebasPerlengkapanController@tandaTangan');
         // Detail Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
         // Laporan
@@ -658,6 +729,8 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::get('/','UserController@indexPimpinan');
         Route::get('search/kemahasiswaan','UserController@searchChartKemahasiswaan');
         Route::get('search/pendidikan-pengajaran','UserController@searchChartPendidikanPengajaran');
+        Route::get('search/umum-bmn','UserController@searchChartUmumBmn');
+        Route::get('search/perpustakaan','UserController@searchChartUmumBmn');
         // Kode Surat
         Route::get('kode-surat/all','KodeSuratController@getAllKodeSurat');
         Route::get('kode-surat/limit','KodeSuratController@getLimitKodeSurat');
@@ -835,6 +908,26 @@ Route::group(['prefix' => 'pimpinan'], function () {
         Route::post('surat-permohonan-pengambilan-data-awal/tanda-tangan','SuratPermohonanPengambilanDataAwalController@tandaTangan');
         Route::get('surat-permohonan-pengambilan-data-awal/{surat_data_awal}','SuratPermohonanPengambilanDataAwalController@show');
         Route::patch('surat-permohonan-pengambilan-data-awal/verifikasi','PengajuanSuratPermohonanPengambilanDataAwalController@verification'); 
+        // Surat Keterangan Bebas Perlengkapan
+        Route::get('surat-keterangan-bebas-perlengkapan','SuratKeteranganBebasPerlengkapanController@indexPimpinan');
+        Route::get('surat-keterangan-bebas-perlengkapan/all','SuratKeteranganBebasPerlengkapanController@getAllSurat');
+        Route::get('surat-keterangan-bebas-perlengkapan/pengajuan/mahasiswa/{nim}','PengajuanSuratKeteranganBebasPerlengkapanController@getAllPengajuanByNim');
+        Route::get('surat-keterangan-bebas-perlengkapan/pengajuan/{pengajuan_surat_perlengkapan}','PengajuanSuratKeteranganBebasPerlengkapanController@show');
+        Route::get('surat-keterangan-bebas-perlengkapan/{surat_perlengkapan}/cetak','SuratKeteranganBebasPerlengkapanController@cetak');
+        Route::get('surat-keterangan-bebas-perlengkapan/verifikasi/all','PengajuanSuratKeteranganBebasPerlengkapanController@getAllPengajuan');
+        Route::get('surat-keterangan-bebas-perlengkapan/tanda-tangan/all','SuratKeteranganBebasPerlengkapanController@getAllTandaTangan');
+        Route::post('surat-keterangan-bebas-perlengkapan/tanda-tangan','SuratKeteranganBebasPerlengkapanController@tandaTangan');
+        Route::get('surat-keterangan-bebas-perlengkapan/{surat_perlengkapan}','SuratKeteranganBebasPerlengkapanController@show');
+        Route::patch('surat-keterangan-bebas-perlengkapan/verifikasi','PengajuanSuratKeteranganBebasPerlengkapanController@verification'); 
+        // Surat Keterangan Bebas Perpustakaan
+        Route::get('surat-keterangan-bebas-perpustakaan','SuratKeteranganBebasPerpustakaanController@indexPimpinan');
+        Route::get('surat-keterangan-bebas-perpustakaan/all','SuratKeteranganBebasPerpustakaanController@getAllSurat');
+        Route::get('surat-keterangan-bebas-perpustakaan/pengajuan/mahasiswa/{nim}','PengajuanSuratKeteranganBebasPerpustakaanController@getAllPengajuanByNim');
+        Route::get('surat-keterangan-bebas-perpustakaan/pengajuan/{pengajuan_surat_perpustakaan}','PengajuanSuratKeteranganBebasPerpustakaanController@show');
+        Route::get('surat-keterangan-bebas-perpustakaan/{surat_perpustakaan}/cetak','SuratKeteranganBebasPerpustakaanController@cetak');
+        Route::get('surat-keterangan-bebas-perpustakaan/tanda-tangan/all','SuratKeteranganBebasPerpustakaanController@getAllTandaTangan');
+        Route::post('surat-keterangan-bebas-perpustakaan/tanda-tangan','SuratKeteranganBebasPerpustakaanController@tandaTangan');
+        Route::get('surat-keterangan-bebas-perpustakaan/{surat_perpustakaan}','SuratKeteranganBebasPerpustakaanController@show');
         // Mahasiswa
         Route::get('mahasiswa', 'MahasiswaController@indexPimpinan');
         Route::get('mahasiswa/all','MahasiswaController@getAllMahasiswa');

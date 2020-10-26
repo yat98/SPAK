@@ -25,9 +25,13 @@ use App\PengajuanSuratKeteranganLulus;
 use App\PengajuanSuratPermohonanSurvei;
 use App\PengajuanSuratKegiatanMahasiswa;
 use App\PengajuanSuratPersetujuanPindah;
+use App\SuratKeteranganBebasPerlengkapan;
+use App\SuratKeteranganBebasPerpustakaan;
 use App\SuratPermohonanPengambilanDataAwal;
 use App\SuratPermohonanPengambilanMaterial;
 use App\PengajuanSuratRekomendasiPenelitian;
+use App\PengajuanSuratKeteranganBebasPerlengkapan;
+use App\PengajuanSuratKeteranganBebasPerpustakaan;
 use App\PengajuanSuratPermohonanPengambilanDataAwal;
 use App\PengajuanSuratPermohonanPengambilanMaterial;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -88,6 +92,10 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('surat_permohonan_survei', SuratPermohonanSurvei::class);
         Route::model('surat_rekomendasi_penelitian',SuratRekomendasiPenelitian::class);
         Route::model('surat_data_awal',SuratPermohonanPengambilanDataAwal::class);
+        Route::model('pengajuan_surat_perlengkapan',PengajuanSuratKeteranganBebasPerlengkapan::class);
+        Route::model('surat_perlengkapan',SuratKeteranganBebasPerlengkapan::class);
+        Route::model('pengajuan_surat_perpustakaan',PengajuanSuratKeteranganBebasPerpustakaan::class);
+        Route::model('surat_perpustakaan',SuratKeteranganBebasPerpustakaan::class); 
 }
 
     /**

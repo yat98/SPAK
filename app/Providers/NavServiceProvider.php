@@ -103,6 +103,8 @@ class NavServiceProvider extends ServiceProvider
             if ($segment == '') {
                 $show = false;
                 $halaman = 'dashboard-pegawai';
+            } else if ($segment == 'tanda-tangan') {
+                $halaman = 'tanda-tangan';
             } else if ($segment == 'surat-keterangan-aktif-kuliah') {
                 $halaman = 'surat-keterangan-aktif-kuliah';
             } else if ($segment == 'surat-keterangan-kelakuan-baik') {
@@ -144,6 +146,8 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-permohonan-pengambilan-data-awal';
             } else if ($segment == 'surat-keterangan-bebas-perpustakaan') {
                 $halaman = 'surat-keterangan-bebas-perpustakaan';
+            } else if ($segment == 'surat-keterangan-bebas-perlengkapan') {
+                $halaman = 'surat-keterangan-bebas-perlengkapan';
             } else if ($segment == 'laporan') {
                 $show = false;
                 $halaman = 'laporan';
@@ -198,7 +202,11 @@ class NavServiceProvider extends ServiceProvider
                 $halaman = 'surat-rekomendasi-penelitian';
             } else if ($segment == 'surat-permohonan-pengambilan-data-awal') {
                 $halaman = 'surat-permohonan-pengambilan-data-awal';
-            } else if ($segment == 'waktu-cuti') {
+            } else if ($segment == 'surat-keterangan-bebas-perpustakaan') {
+                $halaman = 'surat-keterangan-bebas-perpustakaan';
+            } else if ($segment == 'surat-keterangan-bebas-perlengkapan') {
+                $halaman = 'surat-keterangan-bebas-perlengkapan';
+            }else if ($segment == 'waktu-cuti') {
                 $show = false;
                 $halaman = 'waktu-cuti';
             }
@@ -258,7 +266,13 @@ class NavServiceProvider extends ServiceProvider
             } else if ($segment == 'surat-permohonan-pengambilan-data-awal') {
                 $show = true;
                 $halaman = 'surat-permohonan-pengambilan-data-awal';
-            } 
+            } else if ($segment == 'surat-keterangan-bebas-perpustakaan') {
+                $show = true;
+                $halaman = 'surat-keterangan-bebas-perpustakaan';
+            } else if ($segment == 'surat-keterangan-bebas-perlengkapan') {
+                $show = true;
+                $halaman = 'surat-keterangan-bebas-perlengkapan';
+            }
         }
         if ($segment == 'notifikasi') {
             $show = false;

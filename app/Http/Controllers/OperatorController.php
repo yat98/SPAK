@@ -26,6 +26,8 @@ use App\SuratRekomendasiPenelitian;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\OperatorRequest;
+use App\SuratKeteranganBebasPerlengkapan;
+use App\SuratKeteranganBebasPerpustakaan;
 use App\SuratPermohonanPengambilanDataAwal;
 use App\SuratPermohonanPengambilanMaterial;
 
@@ -101,13 +103,20 @@ class OperatorController extends Controller
         $countAllSuratDataAwal = SuratPermohonanPengambilanDataAwal::join('pengajuan_surat_permohonan_pengambilan_data_awal','surat_permohonan_pengambilan_data_awal.id_pengajuan','=','pengajuan_surat_permohonan_pengambilan_data_awal.id')
                                                                      ->whereNotIn('status',['diajukan'])
                                                                      ->count();
+
+        $countAllSuratPerlengkapan = SuratKeteranganBebasPerlengkapan::join('pengajuan_surat_keterangan_bebas_perlengkapan','surat_keterangan_bebas_perlengkapan.id_pengajuan','=','pengajuan_surat_keterangan_bebas_perlengkapan.id')
+                                                                     ->whereNotIn('status',['diajukan'])
+                                                                     ->count();  
+        $countAllSuratPerpustakaan = SuratKeteranganBebasPerpustakaan::join('pengajuan_surat_keterangan_bebas_perpustakaan','surat_keterangan_bebas_perpustakaan.id_pengajuan','=','pengajuan_surat_keterangan_bebas_perpustakaan.id')
+                                                                     ->whereNotIn('status',['diajukan'])
+                                                                     ->count();                                       
         
         $countAllWaktuCuti = WaktuCuti::count();
 
         $countAllPendaftaran = PendaftaranCuti::where('status','selesai')
                                                 ->count();
 
-        return view($this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','kodeSuratAktif','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal'));
+        return view($this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','kodeSuratAktif','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal','countAllSuratPerlengkapan','countAllSuratPerpustakaan'));
     }
 
     public function getAllOperator(){

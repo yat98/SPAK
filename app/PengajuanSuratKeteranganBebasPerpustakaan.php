@@ -10,6 +10,7 @@ class PengajuanSuratKeteranganBebasPerpustakaan extends Model
 
     protected $fillable = [
         'nim',
+        'id_operator',
         'status',
         'alamat',
         'telp',
@@ -18,6 +19,10 @@ class PengajuanSuratKeteranganBebasPerpustakaan extends Model
 
     public function mahasiswa(){
         return $this->belongsTo('App\Mahasiswa','nim');
+    }
+
+    public function operator(){
+        return $this->belongsTo('App\Operator','id_operator');
     }
 
     public function suratKeteranganBebasPerpustakaan(){

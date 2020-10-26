@@ -29,6 +29,8 @@ use App\SuratRekomendasiPenelitian;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\PengajuanSuratKegiatanMahasiswa;
+use App\SuratKeteranganBebasPerlengkapan;
+use App\SuratKeteranganBebasPerpustakaan;
 use App\SuratPermohonanPengambilanDataAwal;
 use App\SuratPermohonanPengambilanMaterial;
 
@@ -237,7 +239,11 @@ class UserController extends Controller
                                                                      ->whereIn('pengajuan_surat_permohonan_pengambilan_data_awal.status',['selesai','verifikasi kabag','menunggu tanda tangan'])
                                                                      ->count();
 
-        return view('user.'.$this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','kodeSuratAktif','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal'));
+        $countAllSuratPerlengkapan = SuratKeteranganBebasPerlengkapan::join('pengajuan_surat_keterangan_bebas_perlengkapan','surat_keterangan_bebas_perlengkapan.id_pengajuan','=','pengajuan_surat_keterangan_bebas_perlengkapan.id')
+                                                                     ->whereIn('pengajuan_surat_keterangan_bebas_perlengkapan.status',['selesai','verifikasi kabag','menunggu tanda tangan'])
+                                                                     ->count();
+
+        return view('user.'.$this->segmentUser.'.dashboard',compact('perPageDashboard','tgl','tahunAkademikAktif','waktuCuti','kodeSuratAktif','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal','countAllSuratPerlengkapan'));
     }
 
     public function indexPimpinan(){
@@ -321,9 +327,21 @@ class UserController extends Controller
 
         $chartPendidikanPengajaran = $this->getChartPendidikanDanPengajaran($bulan,$tahun); 
         
+        $chartUmumBmn = $this->getChartUmumBmn($bulan,$tahun); 
+
+        $chartPerpustakaan = $this->getChartPerpustakaan($bulan,$tahun); 
+        
         $countAllMahasiswa = Mahasiswa::count();
 
-        return view('user.'.$this->segmentUser.'.dashboard',compact('perPageDashboard','bulanList','tahunList','tgl','tahunAkademikAktif','waktuCuti','kodeSuratAktif','countAllKodeSurat','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti','chartKemahasiswaan','chartPendidikanPengajaran','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal','countAllMahasiswa'));
+        $countAllSuratPerlengkapan = SuratKeteranganBebasPerlengkapan::join('pengajuan_surat_keterangan_bebas_perlengkapan','surat_keterangan_bebas_perlengkapan.id_pengajuan','=','pengajuan_surat_keterangan_bebas_perlengkapan.id')
+                                                                     ->where('pengajuan_surat_keterangan_bebas_perlengkapan.status','selesai')
+                                                                     ->count();
+
+        $countAllSuratPerpustakaan = SuratKeteranganBebasPerpustakaan::join('pengajuan_surat_keterangan_bebas_perpustakaan','surat_keterangan_bebas_perpustakaan.id_pengajuan','=','pengajuan_surat_keterangan_bebas_perpustakaan.id')
+                                                                     ->where('pengajuan_surat_keterangan_bebas_perpustakaan.status','selesai')
+                                                                     ->count();
+
+        return view('user.'.$this->segmentUser.'.dashboard',compact('perPageDashboard','bulanList','tahunList','tgl','tahunAkademikAktif','waktuCuti','kodeSuratAktif','countAllKodeSurat','countAllSuratMasuk','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllPendaftaran','countAllWaktuCuti','chartKemahasiswaan','chartPendidikanPengajaran','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal','countAllMahasiswa','countAllSuratPerpustakaan','countAllSuratPerlengkapan','chartUmumBmn','chartPerpustakaan'));
     }
 
     public function searchChartKemahasiswaan(Request $request){
@@ -340,6 +358,22 @@ class UserController extends Controller
 
         $chartPendidikanPengajaran = $this->getChartPendidikanDanPengajaran($bulan,$tahun);
         return $chartPendidikanPengajaran;
+    }
+
+    public function searchChartUmumBmn(Request $request){
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+
+        $chartUmumBmn = $this->getChartUmumBmn($bulan,$tahun);
+        return $chartUmumBmn;
+    }
+
+    public function searchPerpustakaan(Request $request){
+        $bulan = $request->bulan;
+        $tahun = $request->tahun;
+
+        $chartUmumBmn = $this->getChartPerpustakaan($bulan,$tahun);
+        return $chartUmumBmn;
     }
 
     public function indexTandaTangan(){
@@ -486,33 +520,53 @@ class UserController extends Controller
         ];
     }
 
-    private function getChartPendidikanDanPengajaran($bln,$thn){
+    private function getChartPendidikanDanPengajaran($bulan,$tahun){
         return [
             'Surat Keterangan Lulus'=> SuratKeteranganLulus::join('pengajuan_surat_keterangan_lulus','pengajuan_surat_keterangan_lulus.id','=','surat_keterangan_lulus.id_pengajuan')
                                             ->whereIn('status',['selesai'])
-                                            ->whereYear('surat_keterangan_lulus.created_at',$thn)
-                                            ->whereMonth('surat_keterangan_lulus.created_at',$bln)
+                                            ->whereYear('surat_keterangan_lulus.created_at',$tahun)
+                                            ->whereMonth('surat_keterangan_lulus.created_at',$bulan)
                                             ->count(),
             'Surat Permohonan Pengambilan Material'=> SuratPermohonanPengambilanMaterial::join('pengajuan_surat_permohonan_pengambilan_material','pengajuan_surat_permohonan_pengambilan_material.id','=','surat_permohonan_pengambilan_material.id_pengajuan')
                                             ->whereIn('status',['selesai'])
-                                            ->whereYear('surat_permohonan_pengambilan_material.created_at',$thn)
-                                            ->whereMonth('surat_permohonan_pengambilan_material.created_at',$bln)
+                                            ->whereYear('surat_permohonan_pengambilan_material.created_at',$tahun)
+                                            ->whereMonth('surat_permohonan_pengambilan_material.created_at',$bulan)
                                             ->count(),
             'Surat Permohonan Survei'=> SuratPermohonanSurvei::join('pengajuan_surat_permohonan_survei','pengajuan_surat_permohonan_survei.id','=','surat_permohonan_survei.id_pengajuan')
                                             ->where('status','selesai')
-                                            ->whereYear('surat_permohonan_survei.created_at',$thn)
-                                            ->whereMonth('surat_permohonan_survei.created_at',$bln)
+                                            ->whereYear('surat_permohonan_survei.created_at',$tahun)
+                                            ->whereMonth('surat_permohonan_survei.created_at',$bulan)
                                             ->count(),
             'Surat Rekomendasi Penelitian'=>  SuratRekomendasiPenelitian::join('pengajuan_surat_rekomendasi_penelitian','pengajuan_surat_rekomendasi_penelitian.id','=','surat_rekomendasi_penelitian.id_pengajuan')
                                                 ->where('status','selesai')
-                                                ->whereYear('surat_rekomendasi_penelitian.created_at',$thn)
-                                                ->whereMonth('surat_rekomendasi_penelitian.created_at',$bln)
+                                                ->whereYear('surat_rekomendasi_penelitian.created_at',$tahun)
+                                                ->whereMonth('surat_rekomendasi_penelitian.created_at',$bulan)
                                                 ->count(),
             'Surat Permohonan Pengambilan Data Awal'=>SuratPermohonanPengambilanDataAwal::join('pengajuan_surat_permohonan_pengambilan_data_awal','pengajuan_surat_permohonan_pengambilan_data_awal.id','=','surat_permohonan_pengambilan_data_awal.id_pengajuan')
                                                         ->whereIn('status',['selesai','menunggu tanda tangan'])
-                                                        ->whereYear('surat_permohonan_pengambilan_data_awal.created_at',$thn)
-                                                        ->whereMonth('surat_permohonan_pengambilan_data_awal.created_at',$bln)
+                                                        ->whereYear('surat_permohonan_pengambilan_data_awal.created_at',$tahun)
+                                                        ->whereMonth('surat_permohonan_pengambilan_data_awal.created_at',$bulan)
                                                         ->count()
+        ];
+    }
+
+    private function getChartUmumBmn($bln,$thn){
+        return [
+            'Surat Keterangan Bebas Perlengkapan'=> SuratKeteranganBebasPerlengkapan::join('pengajuan_surat_keterangan_bebas_perlengkapan', 'pengajuan_surat_keterangan_bebas_perlengkapan.id', '=', 'surat_keterangan_bebas_perlengkapan.id_pengajuan')
+                                            ->whereIn('status', ['selesai'])
+                                            ->whereYear('surat_keterangan_bebas_perlengkapan.created_at', $thn)
+                                            ->whereMonth('surat_keterangan_bebas_perlengkapan.created_at', $bln)
+                                            ->count(),
+        ];
+    }
+
+    private function getChartPerpustakaan($bln,$thn){
+        return [
+            'Surat Keterangan Bebas Perpustakaan'=> SuratKeteranganBebasPerpustakaan::join('pengajuan_surat_keterangan_bebas_perpustakaan', 'pengajuan_surat_keterangan_bebas_perpustakaan.id', '=', 'surat_keterangan_bebas_perpustakaan.id_pengajuan')
+                                            ->whereIn('status', ['selesai'])
+                                            ->whereYear('surat_keterangan_bebas_perpustakaan.created_at', $thn)
+                                            ->whereMonth('surat_keterangan_bebas_perpustakaan.created_at', $bln)
+                                            ->count(),
         ];
     }
 }

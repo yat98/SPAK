@@ -13,12 +13,16 @@ class SuratKeteranganBebasPerpustakaan extends Model
     protected $fillable = [
         'id_pengajuan',
         'nomor_surat',
-        'id_kode_surat',
+        'nip',
+        'id_operator',
+        'nokta',
+        'kode_surat',
+        'kewajiban',
         'jumlah_cetak'
     ];
 
-    public function kodeSurat(){
-        return $this->belongsTo('App\KodeSurat','id_kode_surat');
+    public function user(){
+        return $this->belongsTo('App\User','nip');
     }
 
     public function pengajuanSuratKeteranganBebasPerpustakaan(){

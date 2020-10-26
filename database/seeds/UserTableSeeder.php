@@ -101,6 +101,17 @@ class UserTableSeeder extends Seeder
             'password'=>Hash::make('19710401200012001')
         ]);
 
-        $this->command->info('Berhasil menambahkan 4 data pada table admin');
+        User::create([
+            'nip'=>'198903162019132011',
+            'nama'=>'Indhitya R. Padiku, S. Kom., M. Kom.',
+            'jabatan'=>'kepala perpustakaan',
+            'status_aktif'=>'aktif',
+            'pangkat'=>'pembina',
+            'golongan'=>'IV/a',
+            'tanda_tangan'=>null,
+            'password'=>Hash::make('198903162019132011')
+        ]);
+
+        $this->command->info('Berhasil menambahkan 9 data pada table admin');
     }
 }

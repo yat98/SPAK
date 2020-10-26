@@ -21,6 +21,7 @@ use App\SuratPengantarBeasiswa;
 use App\SuratPersetujuanPindah;
 use App\SuratRekomendasiPenelitian;
 use Illuminate\Support\Facades\Auth;
+use App\SuratKeteranganBebasPerlengkapan;
 use App\SuratPermohonanPengambilanDataAwal;
 use App\SuratPermohonanPengambilanMaterial;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -132,6 +133,7 @@ class Controller extends BaseController
         $nomorSurat[] = SuratPermohonanSurvei::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
         $nomorSurat[] = SuratRekomendasiPenelitian::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
         $nomorSurat[] = SuratPermohonanPengambilanDataAwal::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
+        $nomorSurat[] = SuratKeteranganBebasPerlengkapan::all()->sortByDesc('nomor_surat')->first()->nomor_surat ?? 0;
 
         $nomorSuratBaru = max($nomorSurat);
         return ++$nomorSuratBaru;
@@ -154,6 +156,28 @@ class Controller extends BaseController
         $pimpinan = User::whereIn('jabatan',['dekan','wd1','kabag tata usaha'])
                         ->where('status_aktif','aktif')
                         ->orderBy('jabatan')
+                        ->get();
+        foreach ($pimpinan as $p) {
+            $user[$p->nip] = strtoupper($p->jabatan).' - '.$p->nama;
+        }
+        return $user;
+    }
+
+    protected function generateTandaTanganUmumDanBMN(){
+        $user = [];
+        $pimpinan = User::whereIn('jabatan',['dekan','kabag tata usaha','kasubag umum & bmn'])
+                        ->where('status_aktif','aktif')
+                        ->get();
+        foreach ($pimpinan as $p) {
+            $user[$p->nip] = strtoupper($p->jabatan).' - '.$p->nama;
+        }
+        return $user;
+    }
+
+    protected function generateTandaTanganPerpustakaan(){
+        $user = [];
+        $pimpinan = User::whereIn('jabatan',['kepala perpustakaan'])
+                        ->where('status_aktif','aktif')
                         ->get();
         foreach ($pimpinan as $p) {
             $user[$p->nip] = strtoupper($p->jabatan).' - '.$p->nama;
