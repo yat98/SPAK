@@ -22,21 +22,19 @@
                                 {{ Form::hidden('id',$pengajuanKegiatan->id) }}
                                 <div class="row">
                                     <div class="col-md-12">
-                                        @if(Auth::user()->jabatan != 'wd3')
-                                            <div class="form-group">
-                                                {{ Form::label('nip_disposisi','Disposisi Kepada') }}
-                                                @if ($errors->any())
-                                                @if ($errors->has('nip_disposisi'))
-                                                {{ Form::select('nip_disposisi',$userDisposisi,null,['class'=>'form-control form-control-lg is-invalid','id'=>'nip_disposisi']) }}
-                                                <div class="invalid-feedback">{{ $errors->first('nip_disposisi') }}</div>
-                                                @else
-                                                {{ Form::select('nip_disposisi',$userDisposisi,null,['class'=>'form-control form-control-lg is-valid','id'=>'nip_disposisi']) }}
-                                                @endif
-                                                @else
-                                                {{ Form::select('nip_disposisi',$userDisposisi,null,['class'=>'form-control form-control-lg','id'=>'nip_disposisi']) }}
-                                                @endif
-                                            </div>
-                                        @endif
+                                        <div class="form-group">
+                                            {{ Form::label('nip_disposisi','Disposisi Kepada') }}
+                                            @if ($errors->any())
+                                            @if ($errors->has('nip_disposisi'))
+                                            {{ Form::select('nip_disposisi',$userDisposisi,null,['class'=>'form-control form-control-lg is-invalid','id'=>'nip_disposisi']) }}
+                                            <div class="invalid-feedback">{{ $errors->first('nip_disposisi') }}</div>
+                                            @else
+                                            {{ Form::select('nip_disposisi',$userDisposisi,null,['class'=>'form-control form-control-lg is-valid','id'=>'nip_disposisi']) }}
+                                            @endif
+                                            @else
+                                            {{ Form::select('nip_disposisi',$userDisposisi,null,['class'=>'form-control form-control-lg','id'=>'nip_disposisi']) }}
+                                            @endif
+                                        </div>
                                         <div class="form-group">
                                             {{ Form::label('catatan','Catatan') }}
                                             @if ($errors->any())

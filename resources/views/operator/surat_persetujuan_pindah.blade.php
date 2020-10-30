@@ -280,6 +280,8 @@
                                                         Tolak Pengajuan
                                                     </button>
                                                 </form>`;
+                                    }else if(row.status == 'Ditolak'){
+                                        aksi = `<a href="${link+'/'+row.id}" class="dropdown-item pengajuan-surat-pindah-detail" data-toggle="modal" data-target="#suratPindah">Detail</a>`;
                                     }else{
                                         aksi = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item btn-surat-pindah-detail" data-toggle="modal" data-target="#suratPindah">Detail</a>`;
                                     }

@@ -15,7 +15,8 @@ class CreatePengajuanSuratTugasTable extends Migration
     {
         Schema::create('pengajuan_surat_tugas', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_operator')->unsigned();
+            $table->integer('id_operator')->unsigned()->nullable();
+            $table->char('nim',25)->index()->nullable();
             $table->string('nama_kegiatan',100);
             $table->string('jenis_kegiatan',100);
             $table->string('tempat_kegiatan',100);

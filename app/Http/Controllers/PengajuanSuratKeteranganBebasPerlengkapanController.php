@@ -100,6 +100,26 @@ class PengajuanSuratKeteranganBebasPerlengkapanController extends Controller
         }
     }
 
+    public function getAllPengajuanByNim(Mahasiswa $mahasiswa){
+        return DataTables::of(PengajuanSuratKeteranganBebasPerlengkapan::where('pengajuan_surat_keterangan_bebas_perlengkapan.nim',$mahasiswa->nim)
+                                    ->select('mahasiswa.nama','pengajuan_surat_keterangan_bebas_perlengkapan.*','mahasiswa.nim')
+                                    ->join('mahasiswa','pengajuan_surat_keterangan_bebas_perlengkapan.nim','=','mahasiswa.nim')
+                                    ->with(['mahasiswa']))
+                        ->addColumn('aksi', function ($data) {
+                            return $data->id;
+                        })
+                        ->editColumn("status", function ($data) {
+                            return ucwords($data->status);
+                        })
+                        ->editColumn("created_at", function ($data) {
+                            return $data->created_at->isoFormat('D MMMM YYYY HH:mm:ss');
+                        })
+                        ->addColumn("waktu_pengajuan", function ($data) {
+                            return $data->created_at->diffForHumans();                            
+                        })
+                        ->make(true);
+    }
+
     public function createPengajuan(){
         if(isset(Auth::user()->nim)){
             if(!$this->isSuratDiajukanExists()){

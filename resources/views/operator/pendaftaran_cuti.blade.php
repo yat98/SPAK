@@ -237,27 +237,35 @@
                             "targets": 6,
                             "data": "aksi",
                             "render": function ( data, type, row, meta ) {
+                                let aksi;
+
+                                if(row.status == 'Diajukan'){
+                                    aksi =`<a href="${link+'/'+row.id}" class="dropdown-item btn-pendaftaran-cuti-detail" data-toggle="modal" data-target="#exampleModal">Detail</a>
+                                           <form action="${link+'/verifikasi/'+row.id}" method="post">
+                                               <input name="_method" type="hidden" value="PATCH">
+                                               <input name="_token" type="hidden" value="{{ @csrf_token() }}">
+                                               <button type="submit" class="dropdown-item">
+                                                   Verifikasi Pendaftaran
+                                               </button>
+                                           </form>
+                                           <form action="${link+'/tolak/'+row.id}" method="post">
+                                               <input name="_method" type="hidden" value="PATCH">
+                                               <input name="_token" type="hidden" value="{{ @csrf_token() }}">
+                                               <input name="keterangan" type="hidden" value="-" id="keterangan_surat">
+                                               <button type="submit" class="dropdown-item btn-tolak">
+                                                   Tolak Pendaftaran
+                                               </button>
+                                           </form>`;
+                                }else{
+                                     aksi =`<a href="${link+'/'+row.id}" class="dropdown-item btn-pendaftaran-cuti-detail" data-toggle="modal" data-target="#exampleModal">Detail</a>`;
+                                }
+
                                 return `<div class="d-inline-block">
                                             <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
                                                 <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
                                             </a>
                                             <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
-                                                <a href="${link+'/'+row.id}" class="dropdown-item btn-pendaftaran-cuti-detail" data-toggle="modal" data-target="#exampleModal">Detail</a>
-                                                <form action="${link+'/verifikasi/'+row.id}" method="post">
-                                                    <input name="_method" type="hidden" value="PATCH">
-                                                    <input name="_token" type="hidden" value="{{ @csrf_token() }}">
-                                                    <button type="submit" class="dropdown-item">
-                                                        Verifikasi Pendaftaran
-                                                    </button>
-                                                </form>
-                                                <form action="${link+'/tolak/'+row.id}" method="post">
-                                                    <input name="_method" type="hidden" value="PATCH">
-                                                    <input name="_token" type="hidden" value="{{ @csrf_token() }}">
-                                                    <input name="keterangan" type="hidden" value="-" id="keterangan_surat">
-                                                    <button type="submit" class="dropdown-item btn-tolak">
-                                                        Tolak Pendaftaran
-                                                    </button>
-                                                </form>
+                                                ${aksi}
                                             </div>
                                         </div>`;
                         }

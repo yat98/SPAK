@@ -14,7 +14,7 @@
                         </span> Surat Kegiatan Mahasiswa</h3>
                 </div>
                 <div class="row">
-                    <div class="col-md-6 stretch-card grid-margin">
+                    <div class="@if(Auth::user()->bagian == 'front office') col-md-6 @else col-md-4 @endif stretch-card grid-margin">
                         <div class="card bg-gradient-warning card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
@@ -29,7 +29,24 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 stretch-card grid-margin">
+                    @if(Auth::user()->bagian != 'front office')
+                        <div class="col-md-4 stretch-card grid-margin">
+                            <div class="card bg-gradient-orange card-img-holder text-white">
+                                <div class="card-body">
+                                    <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
+                                        alt="circle-image" />
+                                    <h4 class="font-weight-normal mb-3">Disposisi Surat<i
+                                            class="mdi mdi-file-document-box menu-icon mdi-24px float-right"></i>
+                                    </h4>
+                                    <h2 class="mb-5">
+                                        {{ $countAllDisposisi > 0 ? $countAllDisposisi.' Disposisi Surat' : 'Disposisi Kosong' }}
+                                    </h2>
+                                    <h6 class="card-text"></h6>
+                                </div>
+                            </div>
+                        </div>   
+                    @endif
+                    <div class="@if(Auth::user()->bagian == 'front office') col-md-6 @else col-md-4 @endif stretch-card grid-margin">
                         <div class="card bg-gradient-info card-img-holder text-white">
                             <div class="card-body">
                                 <img src="{{ asset('image/circle.svg') }}" class="card-img-absolute"
@@ -95,6 +112,50 @@
                         </div>
                     </div>
                 </div>
+                @if(Auth::user()->bagian != 'front office')
+                    <div class="row">
+                        <div class="col-12 grid-margin">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row mb-3">
+                                        <div class="col-12 col-md-6">
+                                            <h4>Disposisi Surat Kegiatan Mahasiswa</h4>
+                                        </div>
+                                    </div>
+                                    <hr class="mb-4">
+                                    @if ($countAllDisposisi > 0)
+                                    <div class="table-responsive">
+                                        <table class="table display no-warp" id='datatables1' width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th data-priority="1"> Nama Kegiatan</th>
+                                                    <th> Ormawa</th>
+                                                    <th> Status</th>
+                                                    <th> Waktu Pengajuan</th>
+                                                    <th> Keterangan</th>
+                                                    <th data-priority="2"> Aksi</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                    @else
+                                    <div class="row">
+                                        <div class="col text-center">
+                                            <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                            <h4 class="display-4 mt-3">
+                                                {{ (Session::has('search-title')) ? Session::get('search-title') : ' Disposisi Surat Kosong!' }}
+                                            </h4>
+                                            <p class="text-muted">
+                                                {{ (Session::has('search')) ? Session::get('search') : ' Disposisi pengajuan surat kegiatan mahasiswa belum ada.' }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="card">
@@ -107,7 +168,7 @@
                                 <hr class="mb-4">
                                 @if ($countAllSurat > 0)
                                 <div class="table-responsive">
-                                    <table class="table display no-warp" id='datatables1' width="100%">
+                                    <table class="table display no-warp" id='datatables2' width="100%">
                                         <thead>
                                             <tr>
                                                 <th data-priority="1"> Nama Kegiatan</th>
@@ -170,6 +231,24 @@
                 </button>
             </div>
             <div class="modal-body" id='disposisi-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="disposisiPengajuan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail Disposisi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='disposisi-pengajuan-detail-content'></div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
             </div>
@@ -244,7 +323,7 @@
                                     let aksi = '';
                                     if(row.status == 'Diajukan'){
                                         aksi = `<a href="${link+'/'+row.id}" class="dropdown-item">Detail</a>
-                                                <a href="${linkSurat+'/disposisi/'+row.id}" class="dropdown-item">Disposisi Pengajuan</a>
+                                                <a href="${linkSurat+'/disposisi/create/'+row.id}" class="dropdown-item">Buat Disposisi</a>
                                                     <form action="${link+'/tolak-pengajuan/'+row.id}" method="post">
                                                     <input name="_method" type="hidden" value="PATCH">
                                                     <input name="_token" type="hidden" value="{{ @csrf_token() }}">
@@ -253,16 +332,10 @@
                                                         Tolak Pengajuan
                                                     </button>
                                                 </form>`;
-                                    }else if(row.status == 'Disposisi Dekan' || row.status == 'Disposisi WD1' || row.status == 'Disposisi WD2' || row.status == 'Disposisi WD3' || row.status == 'Ditolak'){
+                                    }else{
                                         aksi = `<a href="${link+'/'+row.id}" class="dropdown-item">Detail</a>`;
                                     }
-
-                                    if(row.status == 'Disposisi Selesai'){
-                                        aksi = `<a href="${link+'/'+row.id}" class="dropdown-item">Detail</a>
-                                                <a href="${linkSurat+'/pengajuan/disposisi/'+row.id}" class="dropdown-item btn-disposisi-detail" data-toggle="modal" data-target="#disposisi">Lihat Disposisi</a>
-                                                <a href="${linkSurat+'/create/'+row.id}" class="dropdown-item">Buat Surat</a>`;
-                                    }
-
+                                    
                                     return `<div class="d-inline-block">
                                                     <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
                                                         <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
@@ -305,6 +378,85 @@
         });
 
         $('#datatables1').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 2,
+                            "data": "status",
+                            "render": function ( data, type, row, meta ) {
+                                if(row.status == 'Ditolak'){
+                                    return ` <label class="badge badge-gradient-danger">
+                                                ${row.status}
+                                            </label>`;
+                                }else if(row.status == 'Selesai'){
+                                    return ` <label class="badge badge-gradient-info">
+                                            ${row.status}
+                                        </label>`;
+                                }else{
+                                    return ` <label class="badge badge-gradient-warning text-dark">
+                                                ${row.status}
+                                            </label>`;
+                                }
+                            }
+                        },
+                        {
+                            "targets": 3,
+                            "data": "created_at",
+                            "render": function ( data, type, row, meta ) {
+                                return row.waktu_pengajuan;
+                            }
+                        },
+                        {
+                            "targets": 5,
+                            "data": "aksi",
+                            "render": function ( data, type, row, meta ) {
+                                    let aksi = `<a href="${link+'/'+row.id}" class="dropdown-item">Detail</a>
+                                                <a href="${linkSurat+'/disposisi/'+row.id+'/cetak'}" class="dropdown-item">Cetak Disposisi</a>
+                                                <a href="${linkSurat+'/disposisi/'+row.id}" class="dropdown-item btn-disposisi-pengajuan-detail" data-toggle="modal" data-target="#disposisiPengajuan">Detail Disposisi</a>`;
+
+                                    if(row.status == 'Disposisi Selesai'){
+                                        aksi += `<a href="${linkSurat+'/create/'+row.id}" class="dropdown-item">Buat Surat</a>`;
+                                    }
+
+                                    return `<div class="d-inline-block">
+                                                <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                    <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                                </a>
+                                                <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                    ${aksi}
+                                                </div>
+                                            </div>`;           
+                            }
+                        },
+            ],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('operator/surat-kegiatan-mahasiswa/disposisi/all') }}',
+            columns: [{
+                    data: 'nama_kegiatan',
+                },
+                {
+                    data: 'ormawa.nama',
+                },
+                {
+                    data: 'status',
+                },
+                {
+                    data: 'created_at',
+                },
+                {
+                    data: 'keterangan',
+                },
+                {
+                    data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                },
+            ],
+            "pageLength": {{ $perPage }},
+            "order": order,
+        });
+
+        $('#datatables2').DataTable({
             responsive: true,
             columnDefs: [{
                             "targets": 1,
@@ -350,12 +502,13 @@
                                                 </a>
                                                 <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
                                                     <a href="${linkSurat+'/'+row.id}" class="dropdown-item">Detail</a>
+                                                    <a href="${linkSurat+'/pengajuan/disposisi/'+row.id}" class="dropdown-item btn-disposisi-detail" data-toggle="modal" data-target="#disposisi">Lihat Disposisi</a>
                                                     <a href="${linkSurat+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>
+                                                    <a href="${linkSurat+'/disposisi/'+row.id+'/cetak'}" class="dropdown-item">Cetak Disposisi</a>
                                                 </div>
                                             </div>`;
                                 @else
-                                    let action = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item">Detail</a>
-                                                  <a href="${linkSurat+'/pengajuan/disposisi/'+row.id}" class="dropdown-item btn-disposisi-detail" data-toggle="modal" data-target="#disposisi">Lihat Disposisi</a>`;
+                                    let action = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item">Detail</a>`;
 
                                     if(row.status == 'Selesai'){
                                         action += `<a href="${linkSurat+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;

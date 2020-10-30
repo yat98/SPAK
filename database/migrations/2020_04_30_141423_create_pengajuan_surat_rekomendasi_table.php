@@ -15,7 +15,8 @@ class CreatePengajuanSuratRekomendasiTable extends Migration
     {
         Schema::create('pengajuan_surat_rekomendasi', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('id_operator')->unsigned();
+            $table->integer('id_operator')->unsigned()->nullable();
+            $table->char('nim',25)->index()->nullable();
             $table->string('nama_kegiatan',100);
             $table->date('tanggal_awal_kegiatan');
             $table->date('tanggal_akhir_kegiatan');

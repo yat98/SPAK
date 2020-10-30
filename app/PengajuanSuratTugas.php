@@ -10,6 +10,7 @@ class PengajuanSuratTugas extends Model
 
     protected $fillable = [
         'id_operator',
+        'nim',
         'nama_kegiatan',
         'jenis_kegiatan',
         'tempat_kegiatan',
@@ -31,5 +32,9 @@ class PengajuanSuratTugas extends Model
 
     public function suratTugas(){
         return $this->hasOne('App\SuratTugas','id_pengajuan');
+    }
+
+    public function mhs(){
+        return $this->belongsTo('App\Mahasiswa', 'nim');
     }
 }

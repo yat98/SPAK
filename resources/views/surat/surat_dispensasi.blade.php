@@ -105,7 +105,7 @@
         <div class="content">
             <p class="m-0">Memperhatikan surat dari {{ ucwords($suratDispensasi->pengajuanSuratDispensasi->suratMasuk->instansi) }} Nomor : {{ $suratDispensasi->pengajuanSuratDispensasi->suratMasuk->nomor_surat }}, {{ $suratDispensasi->pengajuanSuratDispensasi->suratMasuk->tanggal_surat_masuk->isoFormat('D MMMM Y') }} perihal <b>{{ $suratDispensasi->pengajuanSuratDispensasi->suratMasuk->perihal }}</b> maka dengan ini Dekan Fakultas Teknik Memberikan dispensasi kepada:</p>
             @if($suratDispensasi->pengajuanSuratDispensasi->mahasiswa->count() > 0)
-                    <table class="m-0 text-center table table-margin">
+                <table class="m-0 text-center table table-margin">
                     <tr class="table">
                         <th class="table">NO</th>
                         <th class="table">NAMA</th>
@@ -122,7 +122,7 @@
                             <td class="table">{{ $mahasiswa->prodi->jurusan->nama_jurusan }}</td>
                         </tr>
                     @endforeach
-                    </table>
+                </table>
             @endif
             <p class="m-0">Sebagai peserta pada kegiatan <b>{{ ucwords($suratDispensasi->pengajuanSuratDispensasi->nama_kegiatan) }}</b>, dengan tahapan pelaksanaan sebagai berikut:</p>
             @if($suratDispensasi->pengajuanSuratDispensasi->tahapanKegiatanDispensasi->count() > 0)

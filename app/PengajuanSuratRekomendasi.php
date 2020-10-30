@@ -10,6 +10,7 @@ class PengajuanSuratRekomendasi extends Model
 
     protected $fillable = [
         'id_operator',
+        'nim',
         'nama_kegiatan',
         'tanggal_awal_kegiatan',
         'tanggal_akhir_kegiatan',
@@ -30,5 +31,9 @@ class PengajuanSuratRekomendasi extends Model
 
     public function suratRekomendasi(){
         return $this->hasOne('App\SuratRekomendasi','id_pengajuan');
+    }
+
+    public function mhs(){
+        return $this->belongsTo('App\Mahasiswa', 'nim');
     }
 }

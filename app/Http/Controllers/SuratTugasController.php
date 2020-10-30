@@ -187,7 +187,7 @@ class SuratTugasController extends Controller
 
     public function show(SuratTugas $suratTugas)
     {
-        $surat = collect($suratTugas->load(['pengajuanSuratTugas.operator','pengajuanSuratTugas.mahasiswa.prodi.jurusan','user','kodeSurat']));
+        $surat = collect($suratTugas->load(['pengajuanSuratTugas.operator','pengajuanSuratTugas.mahasiswa.prodi.jurusan','user','kodeSurat','pengajuanSuratTugas.mhs']));
         $kodeSurat = explode('/',$suratTugas->kodeSurat->kode_surat);
         if($suratTugas->pengajuanSuratTugas->tanggal_awal_kegiatan->equalTo($suratTugas->pengajuanSuratTugas->tanggal_akhir_kegiatan)){
             $tanggal = $suratTugas->pengajuanSuratTugas->tanggal_awal_kegiatan->isoFormat('D MMMM Y');
@@ -242,6 +242,34 @@ class SuratTugasController extends Controller
     {
         $suratTugas->delete();
         $this->setFlashData('success','Berhasil','Surat tugas berhasil dihapus');
+        return redirect($this->segmentUser.'/surat-tugas');
+    }
+
+    public function tolakPengajuan(Request $request, PengajuanSuratTugas $pengajuanSuratTugas){
+        $keterangan = $request->keterangan ?? '-';
+        DB::beginTransaction();
+        try{
+            $pengajuanSuratTugas->update([
+                'status'=>'ditolak',
+                'keterangan'=>$keterangan,
+            ]);
+            if ($pengajuanSuratTugas->nim != null) {
+                $pesan = 'Pengajuan surat tugas mahasiswa dengan nama '.$pengajuanSuratTugas->mhs->nama.' ditolak';
+                NotifikasiMahasiswa::create([
+                    'nim'=>$pengajuanSuratTugas->nim,
+                    'judul_notifikasi'=>'Surat Tugas',
+                    'isi_notifikasi'=>'Pengajuan surat tugas di tolak.',
+                    'link_notifikasi'=>url('mahasiswa/surat-tugas')
+                ]);
+            }else{
+                $pesan = 'Pengajuan surat tugas ditolak';
+            }
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Gagal','Pengajuan surat tugas gagal ditolak.');
+        }
+        DB::commit();
+        $this->setFlashData('success','Berhasil',$pesan);
         return redirect($this->segmentUser.'/surat-tugas');
     }
 

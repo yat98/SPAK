@@ -75,12 +75,12 @@ class User extends Authenticable
         return $this->hasMany('App\SuratKeteranganBebasPerlengkapan','nip');
     }
 
-    public function disposisiSuratKegiatanMahasiswa(){
-        return $this->hasMany('App\DisposisiSuratKegiatanMahasiswa','nip');
+    public function daftarDisposisiSuratKegiatanMahasiswa(){
+        return $this->hasMany('App\DaftarDisposisiSuratKegiatanMahasiswa','nip');
     }
 
-    public function disposisiSuratKegiatanMahasiswaPimpinan(){
-        return $this->hasMany('App\DisposisiSuratKegiatanMahasiswa','nip_disposisi');
+    public function daftarDisposisiSuratKegiatanMahasiswaPimpinan(){
+        return $this->hasMany('App\DaftarDisposisiSuratKegiatanMahasiswa','nip_disposisi');
     }
 
     public function suratKeteranganBebasPerpustakaan(){

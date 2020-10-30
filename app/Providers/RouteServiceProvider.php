@@ -23,6 +23,7 @@ use App\SuratRekomendasiPenelitian;
 use Illuminate\Support\Facades\Route;
 use App\PengajuanSuratKeteranganLulus;
 use App\PengajuanSuratPermohonanSurvei;
+use App\DisposisiSuratKegiatanMahasiswa;
 use App\PengajuanSuratKegiatanMahasiswa;
 use App\PengajuanSuratPersetujuanPindah;
 use App\SuratKeteranganBebasPerlengkapan;
@@ -96,6 +97,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::model('surat_perlengkapan',SuratKeteranganBebasPerlengkapan::class);
         Route::model('pengajuan_surat_perpustakaan',PengajuanSuratKeteranganBebasPerpustakaan::class);
         Route::model('surat_perpustakaan',SuratKeteranganBebasPerpustakaan::class); 
+        Route::model('disposisi_surat_kegiatan',DisposisiSuratKegiatanMahasiswa::class); 
 }
 
     /**

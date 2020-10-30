@@ -112,7 +112,7 @@ class PengajuanSuratRekomendasiController extends Controller
     }
 
     public function show(PengajuanSuratRekomendasi $pengajuanSurat){
-        $surat = collect($pengajuanSurat->load(['mahasiswa.prodi.jurusan','operator']));
+        $surat = collect($pengajuanSurat->load(['mahasiswa.prodi.jurusan','operator','mhs']));
         if($pengajuanSurat->tanggal_awal_kegiatan->equalTo($pengajuanSurat->tanggal_akhir_kegiatan)){
             $tanggal = $pengajuanSurat->tanggal_awal_kegiatan->isoFormat('D MMMM Y');
         }elseif($pengajuanSurat->tanggal_awal_kegiatan->isSameMonth($pengajuanSurat->tanggal_akhir_kegiatan)){  
@@ -128,6 +128,11 @@ class PengajuanSuratRekomendasiController extends Controller
 
     public function create(){
         $mahasiswa = $this->generateMahasiswa();
+        if(isset(Auth::user()->nim)){
+            if(!$this->isSuratDiajukanExists()){
+                return redirect($this->segmentUser.'/surat-rekomendasi');
+            }
+        }
         return view($this->segmentUser.'.tambah_pengajuan_surat_rekomendasi',compact('mahasiswa'));
     }
 
@@ -162,8 +167,16 @@ class PengajuanSuratRekomendasiController extends Controller
 
     public function store(PengajuanSuratRekomendasiRequest $request){
         $input = $request->all();
-        $input['id_operator'] = Auth::user()->id;
         $operator = Operator::where('bagian','subbagian kemahasiswaan')->where('status_aktif','aktif')->first();
+
+        if(isset(Auth::user()->nim)){
+            $input['nim'] = Auth::user()->nim;
+            $mahasiswa = Mahasiswa::findOrFail(Auth::user()->nim);
+            $isiNotifikasi = 'Mahasiswa dengan nama '.$mahasiswa->nama.' membuat pengajuan surat rekomendasi.';
+        } else if(isset(Auth::user()->id)){
+            $input['id_operator'] = Auth::user()->id;
+            $isiNotifikasi = 'Front office membuat pengajuan surat rekomendasi.';
+        }
 
         DB::beginTransaction();
         try{
@@ -172,7 +185,7 @@ class PengajuanSuratRekomendasiController extends Controller
             NotifikasiOperator::create([
                 'id_operator'=>$operator->id,
                 'judul_notifikasi'=>'Surat Rekomendasi',
-                'isi_notifikasi'=>'Front office membuat pengajuan surat rekomendasi.',
+                'isi_notifikasi'=>$isiNotifikasi,
                 'link_notifikasi'=>url('operator/surat-rekomendasi')
             ]);
 
@@ -242,5 +255,14 @@ class PengajuanSuratRekomendasiController extends Controller
         DB::commit();
         $this->setFlashData('success','Berhasil','Surat rekomendasi berhasil diverifikasi');
         return redirect($this->segmentUser.'/surat-rekomendasi');
+    }
+
+    private function isSuratDiajukanExists(){
+        $suratRekomendasi = PengajuanSuratRekomendasi::where('status','diajukan')->exists();
+        if($suratRekomendasi){
+            $this->setFlashData('info','Pengajuan Surat','Pengajuan surat rekomendasi sementara diproses!');
+            return false;
+        }
+        return true;
     }
 }

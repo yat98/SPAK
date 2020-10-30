@@ -199,6 +199,12 @@ class Controller extends BaseController
             case 'wd2':
                 $pimpinan->where('jabatan','wd3');
                 break;
+            case 'wd3':
+                $pimpinan->where('jabatan','kabag tata usaha');
+                break;
+            case 'kabag tata usaha':
+                $pimpinan->where('jabatan','kasubag kemahasiswaan');
+                break;
         }
 
         $pimpinan = $pimpinan->get();

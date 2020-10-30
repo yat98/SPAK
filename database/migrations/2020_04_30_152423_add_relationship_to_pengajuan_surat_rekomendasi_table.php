@@ -19,6 +19,12 @@ class AddRelationshipToPengajuanSuratRekomendasiTable extends Migration
                   ->on('operator')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
+
+            $table->foreign('nim')
+                  ->references('nim')
+                  ->on('mahasiswa')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
         });
     }
 
@@ -31,6 +37,7 @@ class AddRelationshipToPengajuanSuratRekomendasiTable extends Migration
     {
         Schema::table('pengajuan_surat_rekomendasi', function (Blueprint $table) {
             $table->dropForeign(['id_operator']);
+            $table->dropForeign(['nim']);
         });
     }
 }

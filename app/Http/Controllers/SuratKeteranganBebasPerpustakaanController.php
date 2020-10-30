@@ -231,8 +231,31 @@ class SuratKeteranganBebasPerpustakaanController extends Controller
                 ]);
             }      
         }
-        // return view('surat.surat_keterangan_bebas_perpustakaan',compact('suratPerpustakaan','qrCode'));
         $pdf = PDF::loadview('surat.surat_keterangan_bebas_perpustakaan',compact('suratPerpustakaan','qrCode'))->setPaper('a4', 'potrait');
         return $pdf->stream('surat-keterangan-bebas_perpustakaan'.' - '.$suratPerpustakaan->created_at->format('dmY-Him').'.pdf');
+    }
+
+    public function tolakPengajuan(Request $request, PengajuanSuratKeteranganBebasPerpustakaan $pengajuanSuratPerpustakaan){
+        $keterangan = $request->keterangan ?? '-';
+        DB::beginTransaction();
+        try{
+            $pengajuanSuratPerpustakaan->update([
+                'status'=>'ditolak',
+                'keterangan'=>$keterangan,
+            ]);
+            
+            NotifikasiMahasiswa::create([
+                'nim'=>$pengajuanSuratPerpustakaan->nim,
+                'judul_notifikasi'=>'Surat Keterangan Bebas Perpustakaan',
+                'isi_notifikasi'=>'Pengajuan surat keterangan bebas perpustakaan di tolak.',
+                'link_notifikasi'=>url('mahasiswa/surat-keterangan bebas perpustakaan')
+            ]);
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Gagal','Pengajuan surat keterangan bebas perpustakaan gagal ditolak.');
+        }
+        DB::commit();
+        $this->setFlashData('success','Berhasil','Pengajuan surat keterangan bebas perpustakaan mahasiswa dengan nama '.$pengajuanSuratPerpustakaan->mahasiswa->nama.' ditolak');
+        return redirect($this->segmentUser.'/surat-keterangan-bebas-perpustakaan');
     }
 }

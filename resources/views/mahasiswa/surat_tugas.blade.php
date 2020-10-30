@@ -38,6 +38,12 @@
                                     <div class="col-12 col-md-6">
                                         <h4>Surat Tugas</h4>
                                     </div>
+                                    <div class="col-12 col-md-6 text-right">
+                                        <a href="{{ url('mahasiswa/surat-tugas/pengajuan/create')}}"
+                                            class="btn-sm btn btn-info btn-tambah mt-4 mt-md-0 mt-lg-0">
+                                            <i class="mdi mdi mdi-plus btn-icon-prepend"></i>
+                                            Tambah Pengajuan</a>
+                                    </div>
                                 </div>
                                 <hr class="mb-4">
                                 @if ($countAllSurat > 0)

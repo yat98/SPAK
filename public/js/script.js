@@ -419,7 +419,7 @@ $('.table-responsive').on('click', '.tolak-surat', function(e){
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Tolak Surat',
+        confirmButtonText: 'Tolak Pengajuan',
         cancelButtonText: 'Tidak'
     }).then((result) => {
         if (result.value) {
@@ -531,28 +531,34 @@ $('.table-responsive').on('click','.btn-surat-kegiatan-progress', function (e) {
                     icon = `<i class="mdi mdi-marker-check icon-sm text-success"></i>`;
                     break;
                 case 'Diajukan':
-                    progressPercent = '15';
+                    progressPercent = '10';
                     break;
                 case 'Disposisi Dekan':
-                    progressPercent = '25';
+                    progressPercent = '20';
                     break;
                 case 'Disposisi Wd1':
-                    progressPercent = '35';
+                    progressPercent = '30';
                     break;
                 case 'Disposisi Wd2':
-                    progressPercent = '45';
+                    progressPercent = '40';
                     break;
                 case 'Disposisi Wd3':
-                    progressPercent = '55';
+                    progressPercent = '50';
+                    break;
+                case 'Disposisi Kabag':
+                    progressPercent = '60';
+                    break;
+                case 'Disposisi Kasubag':
+                    progressPercent = '70';
                     break;
                 case 'Verifikasi Kasubag':
-                    progressPercent = '65';
+                    progressPercent = '80';
                     break;
                 case 'Verifikasi Kabag':
-                    progressPercent = '75';
+                    progressPercent = '90';
                     break;
                 case 'Menunggu Tanda Tangan':
-                    progressPercent = '85';
+                    progressPercent = '95';
                     break;
                 case 'Ditolak':
                     progressPercent = '100';
@@ -582,7 +588,6 @@ $('.table-responsive').on('click','.btn-surat-kegiatan-progress', function (e) {
             errorMessage('Terjadi Kesalahan','Periksa koneksi anda kemudian refresh browser anda');
         });
 });
-
 
 $('.table-responsive').on('click','.btn-surat-perpustakaan-progress', function (e) {
     e.preventDefault();
@@ -1014,6 +1019,12 @@ $('.table-responsive').on('click','.btn-pengajuan-surat-rekomendasi-detail',func
                         label=`<label class="badge badge-gradient-warning text-dark">${suratRekomendasi.status}</label>`;
                     }
 
+                    if(suratRekomendasi.id_operator == null){
+                        diajukan = suratRekomendasi.mhs.nama;
+                    }else{
+                        diajukan = suratRekomendasi.operator.nama;
+                    }
+
                     suratRekomendasi.mahasiswa.forEach((mahasiswa) => {
                         tableMahasiswa+=`<tr>
                                             <td>${mahasiswa.nim}</td>
@@ -1041,7 +1052,7 @@ $('.table-responsive').on('click','.btn-pengajuan-surat-rekomendasi-detail',func
                                                 </tr>
                                                 <tr>
                                                     <th>Diajukan Oleh</th>
-                                                    <td>${suratRekomendasi.operator.nama}</td>
+                                                    <td>${diajukan}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Status</th>
@@ -1094,6 +1105,12 @@ $('.table-responsive').on('click','.btn-surat-rekomendasi-detail',function(e){
                         label=`<label class="badge badge-gradient-warning text-dark">${suratRekomendasi.status}</label>`;
                     }
 
+                    if(suratRekomendasi.pengajuan_surat_rekomendasi.id_operator == null){
+                        diajukan = suratRekomendasi.pengajuan_surat_rekomendasi.mhs.nama;
+                    }else{
+                        diajukan = suratRekomendasi.pengajuan_surat_rekomendasi.operator.nama;
+                    }
+
                     suratRekomendasi.pengajuan_surat_rekomendasi.mahasiswa.forEach((mahasiswa) => {
                         tableMahasiswa+=`<tr>
                                             <td>${mahasiswa.nim}</td>
@@ -1133,7 +1150,7 @@ $('.table-responsive').on('click','.btn-surat-rekomendasi-detail',function(e){
                                                 </tr>
                                                 <tr>
                                                     <th>Diajukan Oleh</th>
-                                                    <td>${suratRekomendasi.pengajuan_surat_rekomendasi.operator.nama}</td>
+                                                    <td>${diajukan}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Tanda Tangan</th>
@@ -1194,6 +1211,12 @@ $('.table-responsive').on('click','.btn-pengajuan-surat-tugas-detail',function(e
                         label=`<label class="badge badge-gradient-warning text-dark">${suratTugas.status}</label>`;
                     }
 
+                    if(suratTugas.id_operator == null){
+                        diajukan = suratTugas.mhs.nama;
+                    }else{
+                        diajukan = suratTugas.operator.nama;
+                    }
+
                     suratTugas.mahasiswa.forEach((mahasiswa) => {
                         tableMahasiswa+=`<tr>
                                             <td>${mahasiswa.nim}</td>
@@ -1225,7 +1248,7 @@ $('.table-responsive').on('click','.btn-pengajuan-surat-tugas-detail',function(e
                                                 </tr>
                                                 <tr>
                                                     <th>Diajukan Oleh</th>
-                                                    <td>${suratTugas.operator.nama}</td>
+                                                    <td>${diajukan}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Status</th>
@@ -1278,6 +1301,12 @@ $('.table-responsive').on('click','.btn-surat-tugas-detail',function(e){
                         label=`<label class="badge badge-gradient-warning text-dark">${suratTugas.status}</label>`;
                     }
 
+                    if(suratTugas.pengajuan_surat_tugas.id_operator == null){
+                        diajukan = suratTugas.pengajuan_surat_tugas.mhs.nama;
+                    }else{
+                        diajukan = suratTugas.pengajuan_surat_tugas.operator.nama;
+                    }
+
                     suratTugas.pengajuan_surat_tugas.mahasiswa.forEach((mahasiswa) => {
                         tableMahasiswa+=`<tr>
                                             <td>${mahasiswa.nim}</td>
@@ -1321,7 +1350,7 @@ $('.table-responsive').on('click','.btn-surat-tugas-detail',function(e){
                                                 </tr>
                                                 <tr>
                                                     <th>Diajukan Oleh</th>
-                                                    <td>${suratTugas.pengajuan_surat_tugas.operator.nama}</td>
+                                                    <td>${diajukan}</td>
                                                 </tr>
                                                 <tr>
                                                     <th>Tanda Tangan</th>
@@ -2066,6 +2095,51 @@ $('.table-responsive').on('click','.btn-disposisi-detail',function(e){
             $('#disposisi-detail-content').html(html);
         });
 })
+
+$('.table-responsive').on('click','.btn-disposisi-pengajuan-detail',function(e){
+    e.preventDefault();
+    $('#disposisi-pengajuan-detail-content').empty();
+    let url = $(this).attr('href');
+    let a = fetch(url)
+        .then(response => response.json())
+        .then(result => {
+
+            let html = `<div class="table-responsive">
+                            <table class="table">
+                                <tr>
+                                    <th>Nomor Agenda</th>
+                                    <td>${result.nomor_agenda}</td>
+                                </tr>
+                                <tr>
+                                    <th>Tanggal Surat</th>
+                                    <td>${result.tanggal_surat}</td>
+                                </tr>
+                                <tr>
+                                    <th>Tanggal Terima</th>
+                                    <td>${result.tanggal_terima}</td>
+                                </tr>
+                                <tr>
+                                    <th>Nomor Surat</th>
+                                    <td>${result.pengajuan_surat_kegiatan_mahasiswa.nomor_surat_permohonan_kegiatan}</td>
+                                </tr>
+                                <tr>
+                                    <th>Asal</th>
+                                    <td>${result.pengajuan_surat_kegiatan_mahasiswa.ormawa.nama}</td>
+                                </tr>
+                                <tr>
+                                    <th>Hal</th>
+                                    <td>${result.hal}</td>
+                                </tr>
+                                <tr>
+                                    <th>Di Buat</th>
+                                    <td>${result.dibuat}</td>
+                                </tr>
+                            </table>
+                        </div>`;
+            $('#disposisi-pengajuan-detail-content').html(html);
+        });
+})
+
 $('.table-responsive').on('click','.pengajuan-surat-keterangan-lulus-detail',function(e){
     e.preventDefault();
     $('#surat-keterangan-lulus-detail-content').empty();
@@ -2281,7 +2355,6 @@ $('.table-responsive').on('click','.pengajuan-surat-perpustakaan-detail',functio
             $('#surat-perpustakaan-detail-content').html(html);
         });
 });
-
 
 $('.table-responsive').on('click','.btn-surat-perpustakaan-detail',function(e){
     e.preventDefault();

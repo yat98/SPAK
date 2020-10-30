@@ -37,7 +37,11 @@ class PengajuanSuratKegiatanMahasiswa extends Model
         return $this->hasOne('App\SuratKegiatanMahasiswa','id_pengajuan');
     }
 
-    public function disposisiUser(){
-        return $this->belongsToMany('App\User','disposisi_surat_kegiatan_mahasiswa','id_pengajuan','nip')->withPivot(['nip','catatan'])->withTimestamps();
+    public function disposisiSuratKegiatanMahasiswa(){
+        return $this->hasOne('App\DisposisiSuratKegiatanMahasiswa','id_pengajuan');
+    }
+
+    public function daftarDisposisiSuratKegiatanMahasiswa(){
+        return $this->belongsToMany('App\User','daftar_disposisi_surat_kegiatan_mahasiswa','id_disposisi','nip')->withPivot(['nip','catatan'])->withTimestamps();
     }
 }

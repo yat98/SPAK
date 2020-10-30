@@ -6,8 +6,8 @@ use PDF;
 use Session;
 use Storage;
 use App\User;
-use DataTables;
 use App\Ormawa;
+use DataTables;
 use App\KodeSurat;
 use App\NotifikasiUser;
 use App\PimpinanOrmawa;
@@ -17,6 +17,7 @@ use App\SuratKegiatanMahasiswa;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\PengajuanSuratKegiatanMahasiswa;
+use App\DaftarDisposisiSuratKegiatanMahasiswa;
 use App\Http\Requests\SuratKegiatanMahasiswaRequest;
 use App\Http\Requests\PengajuanSuratKegiatanMahasiswaRequest;
 
@@ -34,25 +35,30 @@ class SuratKegiatanMahasiswaController extends Controller
                                                       ->where('pengajuan_surat_kegiatan_mahasiswa.status','verifikasi kasubag')
                                                       ->count();
 
-        return view('user.'.$this->segmentUser.'.surat_kegiatan_mahasiswa',compact('perPage','countAllSurat','countAllVerifikasi'));
+        $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::whereIn('status',['disposisi kasubag','disposisi selesai'])
+                                                      ->count();
+
+        return view('user.'.$this->segmentUser.'.surat_kegiatan_mahasiswa',compact('perPage','countAllSurat','countAllVerifikasi','countAllDisposisi'));
     }
 
     public function indexOperator(){
         $perPage = $this->perPage;
                                    
-        $countAllPengajuan = PengajuanSuratKegiatanMahasiswa::whereIn('status',['diajukan','ditolak','disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi selesai']);
+        $countAllPengajuan = PengajuanSuratKegiatanMahasiswa::whereIn('status',['diajukan','ditolak'])
+                                ->count();
 
         if(Auth::user()->bagian == 'front office'){
             $countAllPengajuan = $countAllPengajuan->where('id_operator',Auth::user()->id);
         }
 
-        $countAllPengajuan = $countAllPengajuan->count();
+        $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::whereIn('status',['disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi kabag','disposisi kasubag','disposisi selesai'])
+                                    ->count();
 
         $countAllSurat = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','surat_kegiatan_mahasiswa.id_pengajuan','=','pengajuan_surat_kegiatan_mahasiswa.id')
                                             ->whereNotIn('pengajuan_surat_kegiatan_mahasiswa.status',['diajukan'])
                                             ->count();
                                                                          
-        return view($this->segmentUser.'.surat_kegiatan_mahasiswa',compact('countAllPengajuan','perPage','countAllSurat'));
+        return view($this->segmentUser.'.surat_kegiatan_mahasiswa',compact('countAllPengajuan','countAllDisposisi','perPage','countAllSurat'));
     }
 
     public function indexPimpinan(){
@@ -63,10 +69,13 @@ class SuratKegiatanMahasiswaController extends Controller
                                 ->count();
 
         if(Auth::user()->jabatan != 'kabag tata usaha'){
-           $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::whereIn('status',['disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi selesai','verifikasi kasubag','verifikasi kabag'])
-                                    ->count();
+            $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::whereIn('status',['disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi kabag','disposisi kasubag','disposisi selesai','verifikasi kasubag','verifikasi kabag'])
+                                        ->count();
+        }else{
+            $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::whereIn('status',['disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi kabag','disposisi kasubag','disposisi selesai'])
+                                        ->count();
         }
-                                            
+
         $countAllSurat = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','surat_kegiatan_mahasiswa.id_pengajuan','=','pengajuan_surat_kegiatan_mahasiswa.id')
                             ->where('status','selesai')
                             ->count();
@@ -287,6 +296,28 @@ class SuratKegiatanMahasiswaController extends Controller
 
         $pdf = PDF::loadview('surat.surat_kegiatan_mahasiswa',compact('suratKegiatan','qrCode'))->setPaper('a4', 'potrait');
         return $pdf->stream('surat-kegiatan-mahasiswa'.' - '.$suratKegiatan->created_at->format('dmY-Him').'.pdf');
+    }
+
+    public function cetakDisposisi(PengajuanSuratKegiatanMahasiswa $pengajuanKegiatan){
+        $daftarDisposisi = DaftarDisposisiSuratKegiatanMahasiswa::where('id_disposisi',$pengajuanKegiatan->id)
+                                ->orderBy('created_at')
+                                ->get();
+        if($daftarDisposisi->count() > 0){
+            $dekan = DaftarDisposisiSuratKegiatanMahasiswa::join('user','daftar_disposisi_surat_kegiatan_mahasiswa.nip','=','user.nip')
+                        ->where('id_disposisi',$pengajuanKegiatan->id)
+                        ->where('user.jabatan','dekan')
+                        ->select(['daftar_disposisi_surat_kegiatan_mahasiswa.*'])
+                        ->orderBy('created_at')
+                        ->first();
+            $dekan = $dekan->user;
+        }else{
+            $dekan = User::where('jabatan','dekan')
+                           ->where('status_aktif','aktif')
+                           ->first();
+        }
+        
+        $pdf = PDF::loadview('lampiran.lampiran_disposisi_surat_kegiatan_mahasiswa',compact('pengajuanKegiatan','daftarDisposisi','dekan'))->setPaper('a4', 'potrait');
+        return $pdf->stream('lampiran-disposisi'.' - '.$pengajuanKegiatan->created_at->format('dmY-Him').'.pdf');
     }
 
     private function uploadImage($imageFieldName, $request, $uploadPath){

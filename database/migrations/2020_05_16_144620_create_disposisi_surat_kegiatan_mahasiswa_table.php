@@ -14,10 +14,12 @@ class CreateDisposisiSuratKegiatanMahasiswaTable extends Migration
     public function up()
     {
         Schema::create('disposisi_surat_kegiatan_mahasiswa', function (Blueprint $table) {
-            $table->integer('id_pengajuan')->unsigned();
-            $table->char('nip',18)->index();
-            $table->char('nip_disposisi',18)->index()->nullable();
-            $table->string('catatan');
+            $table->integer('id_pengajuan')->unsigned()->primary();
+            $table->integer('nomor_agenda');
+            $table->string('hal');
+            $table->date('tanggal_terima');
+            $table->date('tanggal_surat');
+            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }

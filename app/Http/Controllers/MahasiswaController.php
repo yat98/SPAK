@@ -224,7 +224,12 @@ class MahasiswaController extends Controller
         $countAllSuratDataAwal = PengajuanSuratPermohonanPengambilanDataAwal::where('nim',$mahasiswa->nim)
                                                                               ->count();
 
-        return view('user.pimpinan.detail_mahasiswa',compact('perPage','mahasiswa','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllPendaftaran','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal'));
+        $countAllSuratPerlengkapan = PengajuanSuratKeteranganBebasPerlengkapan::where('nim',$mahasiswa->nim)
+                                                                              ->count(); 
+
+        $countAllSuratPerpustakaan = PengajuanSuratKeteranganBebasPerpustakaan::where('nim',$mahasiswa->nim)
+                                                                              ->count();
+        return view('user.pimpinan.detail_mahasiswa',compact('perPage','mahasiswa','countAllSuratAktif','countAllSuratBaik','countAllSuratDispensasi','countAllSuratRekomendasi','countAllSuratTugas','countAllSuratPindah','countAllPendaftaran','countAllSuratKegiatan','countAllSuratCuti','countAllSuratBeasiswa','countAllSuratLulus','countAllSuratMaterial','countAllSuratSurvei','countAllSuratPenelitian','countAllSuratDataAwal','countAllSuratPerlengkapan','countAllSuratPerpustakaan'));
     }
 
     public function create()

@@ -664,6 +664,82 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingFifteen" style="background-color:white !important;">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-link text-dark text-decoration-none" type="button" data-toggle="collapse" data-target="#collapseFifteen" aria-expanded="true" aria-controls="collapseFifteen">
+                                                Surat Keterangan Bebas Perlengkapan
+                                            </button>
+                                        </h2>
+                                    </div>
+                                    <div id="collapseFifteen" class="collapse" aria-labelledby="headingFifteen" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            @if ($countAllSuratPerlengkapan > 0)
+                                                <div class="table-responsive">
+                                                    <table class="table display no-warp" id='datatables14' width="100%">
+                                                        <thead>
+                                                            <th data-priority="1"> Nama </th>
+                                                            <th> Status</th>
+                                                            <th> Waktu Pengajuan</th>
+                                                            <th> Keterangan</th>
+                                                            <th data-priority="2"> Aksi</th>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            @else
+                                                <div class="row">
+                                                    <div class="col text-center">
+                                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                                        <h4 class="display-4 mt-3">
+                                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
+                                                        </h4>
+                                                        <p class="text-muted">
+                                                            {{ (Session::has('search')) ? Session::get('search') : ' Data surat keterangan bebas perlengkapan belum ada.' }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header" id="headingSixteen" style="background-color:white !important;">
+                                        <h2 class="mb-0">
+                                            <button class="btn btn-link text-dark text-decoration-none" type="button" data-toggle="collapse" data-target="#collapsesixTeen" aria-expanded="true" aria-controls="collapsesixTeen">
+                                                Surat Keterangan Bebas Perlengkapan
+                                            </button>
+                                        </h2>
+                                    </div>
+                                    <div id="collapsesixTeen" class="collapse" aria-labelledby="headingSixteen" data-parent="#accordionExample">
+                                        <div class="card-body">
+                                            @if ($countAllSuratPerpustakaan > 0)
+                                                <div class="table-responsive">
+                                                    <table class="table display no-warp" id='datatables15' width="100%">
+                                                        <thead>
+                                                            <th data-priority="1"> Nama </th>
+                                                            <th> Status</th>
+                                                            <th> Waktu Pengajuan</th>
+                                                            <th> Keterangan</th>
+                                                            <th data-priority="2"> Aksi</th>
+                                                        </thead>
+                                                    </table>
+                                                </div>
+                                            @else
+                                                <div class="row">
+                                                    <div class="col text-center">
+                                                        <img src="{{ asset('image/no_data.svg')}}" class="illustration-no-data">
+                                                        <h4 class="display-4 mt-3">
+                                                            {{ (Session::has('search-title')) ? Session::get('search-title') : ' Data Surat Kosong!' }}
+                                                        </h4>
+                                                        <p class="text-muted">
+                                                            {{ (Session::has('search')) ? Session::get('search') : ' Data surat keterangan bebas perpustakaan belum ada.' }}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -925,6 +1001,42 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="suratPerlengkapan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='surat-perlengkapan-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="suratPerpustakaan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content bg-white">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id='surat-perpustakaan-detail-content'></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('datatables-javascript')
@@ -967,6 +1079,12 @@
 
         let linkDataAwal = "{{ url('pimpinan/surat-permohonan-pengambilan-data-awal/pengajuan') }}";
         let linkSuratDataAwal = "{{ url('pimpinan/surat-permohonan-pengambilan-data-awal') }}";
+
+        let linkPerlengkapan = "{{ url('pimpinan/surat-keterangan-bebas-perlengkapan/pengajuan') }}";
+        let linkSuratPerlengkapan = "{{ url('pimpinan/surat-keterangan-bebas-perlengkapan') }}";
+
+        let linkPerpustakaan = "{{ url('pimpinan/surat-keterangan-bebas-perpustakaan/pengajuan') }}";
+        let linkSuratPerpustakaan = "{{ url('pimpinan/surat-keterangan-bebas-perpustakaan') }}";
 
         $('#datatables').DataTable({
             responsive: true,
@@ -2165,6 +2283,196 @@
             processing: true,
             serverSide: true,
             ajax: '{{ url('pimpinan/surat-permohonan-pengambilan-data-awal/pengajuan/mahasiswa/'.$mahasiswa->nim) }}',
+            columns: [{
+                    data: 'mahasiswa.nim',
+                },
+                {
+                    data: 'status',
+                },
+                {
+                    data: 'created_at',
+                },
+                {
+                    data: 'keterangan',
+                },
+                {
+                    data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                },
+                {
+                    data: 'mahasiswa.nama',
+                }, 
+            ],
+            "pageLength": {{ $perPage }},
+            "order": [[ 2, 'desc' ]],
+        });
+
+        $('#datatables14').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 0,
+                            "data": "nim",
+                            "render": function ( data, type, row, meta ) {
+                                return `<div class="mb-1">${row.mahasiswa.nama}</div>
+                                        <span class="text-muted small">NIM. ${row.mahasiswa.nim}</span>`;
+                            }
+                        },
+                        {
+                            "targets": 1,
+                            "data": "status",
+                            "render": function ( data, type, row, meta ) {
+                                if(row.status == 'Ditolak'){
+                                    return ` <label class="badge badge-gradient-danger">
+                                                ${row.status}
+                                            </label>`;
+                                }else if(row.status == 'Selesai'){
+                                    return ` <label class="badge badge-gradient-info">
+                                            ${row.status}
+                                        </label>`;
+                                }else{
+                                    return ` <label class="badge badge-gradient-warning text-dark">
+                                                ${row.status}
+                                            </label>`;
+                                }
+                            }
+                        },
+                        {
+                            "targets": 2,
+                            "data": "created_at",
+                            "render": function ( data, type, row, meta ) {
+                                return row.waktu_pengajuan;
+                            }
+                        },
+                        {
+                            "targets": 4,
+                            "data": "aksi",
+                            "render": function ( data, type, row, meta ) {
+                                let action = ``;
+
+                                if(row.status == 'Diajukan' || row.status == 'Ditolak'){
+                                    action += `<a href="${linkPerlengkapan+'/'+row.id}" class="dropdown-item pengajuan-surat-perlengkapan-detail" data-toggle="modal" data-target="#suratPerlengkapan">Detail</a>`;
+                                }else{
+                                    action += `<a href="${linkSuratPerlengkapan+'/'+row.id}" class="dropdown-item btn-surat-perlengkapan-detail" data-toggle="modal" data-target="#suratPerlengkapan">
+                                                Detail</a>`;
+                                }
+
+                                if(row.status == 'Selesai'){
+                                    action += `<a href="${linkSuratPerlengkapan+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
+                                }
+
+                                return `<div class="d-inline-block">
+                                            <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                            </a>
+                                            <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                ${action}
+                                            </div>
+                                        </div>`;
+                        }
+                    },
+                    {
+                        "targets": [5],
+                        "visible": false,
+                    },],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('pimpinan/surat-keterangan-bebas-perlengkapan/pengajuan/mahasiswa/'.$mahasiswa->nim) }}',
+            columns: [{
+                    data: 'mahasiswa.nim',
+                },
+                {
+                    data: 'status',
+                },
+                {
+                    data: 'created_at',
+                },
+                {
+                    data: 'keterangan',
+                },
+                {
+                    data: 'aksi', name: 'aksi', orderable: false, searchable: false
+                },
+                {
+                    data: 'mahasiswa.nama',
+                }, 
+            ],
+            "pageLength": {{ $perPage }},
+            "order": [[ 2, 'desc' ]],
+        });
+
+        $('#datatables15').DataTable({
+            responsive: true,
+            columnDefs: [{
+                            "targets": 0,
+                            "data": "nim",
+                            "render": function ( data, type, row, meta ) {
+                                return `<div class="mb-1">${row.mahasiswa.nama}</div>
+                                        <span class="text-muted small">NIM. ${row.mahasiswa.nim}</span>`;
+                            }
+                        },
+                        {
+                            "targets": 1,
+                            "data": "status",
+                            "render": function ( data, type, row, meta ) {
+                                if(row.status == 'Ditolak'){
+                                    return ` <label class="badge badge-gradient-danger">
+                                                ${row.status}
+                                            </label>`;
+                                }else if(row.status == 'Selesai'){
+                                    return ` <label class="badge badge-gradient-info">
+                                            ${row.status}
+                                        </label>`;
+                                }else{
+                                    return ` <label class="badge badge-gradient-warning text-dark">
+                                                ${row.status}
+                                            </label>`;
+                                }
+                            }
+                        },
+                        {
+                            "targets": 2,
+                            "data": "created_at",
+                            "render": function ( data, type, row, meta ) {
+                                return row.waktu_pengajuan;
+                            }
+                        },
+                        {
+                            "targets": 4,
+                            "data": "aksi",
+                            "render": function ( data, type, row, meta ) {
+                                let action = ``;
+
+                                if(row.status == 'Diajukan' || row.status == 'Ditolak'){
+                                    action += `<a href="${linkPerpustakaan+'/'+row.id}" class="dropdown-item pengajuan-surat-perpustakaan-detail" data-toggle="modal" data-target="#suratPerpustakaan">Detail</a>`;
+                                }else{
+                                    action += `<a href="${linkSuratPerpustakaan+'/'+row.id}" class="dropdown-item btn-surat-perpustakaan-detail" data-toggle="modal" data-target="#suratPerpustakaan">
+                                                Detail</a>`;
+                                }
+
+                                if(row.status == 'Selesai'){
+                                    action += `<a href="${linkSuratPerpustakaan+'/'+row.id+'/cetak'}" class="dropdown-item">Cetak</a>`;
+                                }
+
+                                return `<div class="d-inline-block">
+                                            <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
+                                                <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>
+                                            </a>
+                                            <div class="dropdown-menu navbar-dropdown border border-dark" aria-labelledby="aksi">
+                                                ${action}
+                                            </div>
+                                        </div>`;
+                        }
+                    },
+                    {
+                        "targets": [5],
+                        "visible": false,
+                    },],
+            autoWidth: false,
+            language: bahasa,
+            processing: true,
+            serverSide: true,
+            ajax: '{{ url('pimpinan/surat-keterangan-bebas-perpustakaan/pengajuan/mahasiswa/'.$mahasiswa->nim) }}',
             columns: [{
                     data: 'mahasiswa.nim',
                 },

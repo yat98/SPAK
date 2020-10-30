@@ -113,6 +113,11 @@ class PengajuanSuratTugasController extends Controller
 
     public function create(){
         $mahasiswa = $this->generateMahasiswa();
+        if(isset(Auth::user()->nim)){
+            if(!$this->isSuratDiajukanExists()){
+                return redirect($this->segmentUser.'/surat-tugas');
+            }
+        }
         return view($this->segmentUser.'.tambah_pengajuan_surat_tugas',compact('mahasiswa'));
     }
 
@@ -139,7 +144,7 @@ class PengajuanSuratTugasController extends Controller
     }
 
     public function show(PengajuanSuratTugas $pengajuanSurat){
-        $surat = collect($pengajuanSurat->load(['mahasiswa.prodi.jurusan','operator']));
+        $surat = collect($pengajuanSurat->load(['mahasiswa.prodi.jurusan','operator','mhs']));
         if($pengajuanSurat->tanggal_awal_kegiatan->equalTo($pengajuanSurat->tanggal_akhir_kegiatan)){
             $tanggal = $pengajuanSurat->tanggal_awal_kegiatan->isoFormat('D MMMM Y');
         }elseif($pengajuanSurat->tanggal_awal_kegiatan->isSameMonth($pengajuanSurat->tanggal_akhir_kegiatan)){  
@@ -155,8 +160,16 @@ class PengajuanSuratTugasController extends Controller
 
     public function store(PengajuanSuratTugasRequest $request){
         $input = $request->all();
-        $input['id_operator'] = Auth::user()->id;
         $operator = Operator::where('bagian','subbagian kemahasiswaan')->where('status_aktif','aktif')->first();
+
+        if(isset(Auth::user()->nim)){
+            $input['nim'] = Auth::user()->nim;
+            $mahasiswa = Mahasiswa::findOrFail(Auth::user()->nim);
+            $isiNotifikasi = 'Mahasiswa dengan nama '.$mahasiswa->nama.' membuat pengajuan surat tugas.';
+        } else if(isset(Auth::user()->id)){
+            $input['id_operator'] = Auth::user()->id;
+            $isiNotifikasi = 'Front office membuat pengajuan surat tugas.';
+        }
 
         DB::beginTransaction();
         try{
@@ -165,7 +178,7 @@ class PengajuanSuratTugasController extends Controller
             NotifikasiOperator::create([
                 'id_operator'=>$operator->id,
                 'judul_notifikasi'=>'Surat Tugas',
-                'isi_notifikasi'=>'Front office membuat pengajuan surat tugas.',
+                'isi_notifikasi'=>$isiNotifikasi,
                 'link_notifikasi'=>url('operator/surat-tugas')
             ]);
 
@@ -242,5 +255,14 @@ class PengajuanSuratTugasController extends Controller
         DB::commit();
         $this->setFlashData('success','Berhasil','Surat tugas berhasil diverifikasi');
         return redirect($this->segmentUser.'/surat-tugas');
+    }
+
+    private function isSuratDiajukanExists(){
+        $suratTugas = PengajuanSuratTugas::where('status','diajukan')->exists();
+        if($suratTugas){
+            $this->setFlashData('info','Pengajuan Surat','Pengajuan surat tugas sementara diproses!');
+            return false;
+        }
+        return true;
     }
 }

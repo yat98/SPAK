@@ -119,4 +119,12 @@ class Mahasiswa extends Authenticable
     public function pengajuanSuratKeteranganBebasPerlengkapan(){
         return $this->hasMany('App\PengajuanSuratKeteranganBebasPerlengkapan', 'nim');
     }
+
+    public function pengajuanSuratRekomendasiMhs(){
+        return $this->hasMany('App\PengajuanSuratRekomendasi', 'nim');
+    }
+
+    public function pengajuanSuratTugasMhs(){
+        return $this->hasMany('App\PengajuanSuratTugas', 'nim');
+    }
 }

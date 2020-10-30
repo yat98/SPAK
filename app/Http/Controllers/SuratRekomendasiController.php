@@ -150,7 +150,7 @@ class SuratRekomendasiController extends Controller
 
     public function show(SuratRekomendasi $suratRekomendasi)
     {
-        $surat = collect($suratRekomendasi->load(['pengajuanSuratRekomendasi.operator','pengajuanSuratRekomendasi.mahasiswa.prodi.jurusan','user','kodeSurat']));
+        $surat = collect($suratRekomendasi->load(['pengajuanSuratRekomendasi.operator','pengajuanSuratRekomendasi.mahasiswa.prodi.jurusan','user','kodeSurat','pengajuanSuratRekomendasi.mhs']));
         $kodeSurat = explode('/',$suratRekomendasi->kodeSurat->kode_surat);
         if($suratRekomendasi->pengajuanSuratRekomendasi->tanggal_awal_kegiatan->equalTo($suratRekomendasi->pengajuanSuratRekomendasi->tanggal_akhir_kegiatan)){
             $tanggal = $suratRekomendasi->pengajuanSuratRekomendasi->tanggal_awal_kegiatan->isoFormat('D MMMM Y');
@@ -263,6 +263,34 @@ class SuratRekomendasiController extends Controller
     {
         $suratRekomendasi->delete();
         $this->setFlashData('success','Berhasil','Surat rekomendasi berhasil dihapus');
+        return redirect($this->segmentUser.'/surat-rekomendasi');
+    }
+
+    public function tolakPengajuan(Request $request, PengajuanSuratRekomendasi $pengajuanSuratRekomendasi){
+        $keterangan = $request->keterangan ?? '-';
+        DB::beginTransaction();
+        try{
+            $pengajuanSuratRekomendasi->update([
+                'status'=>'ditolak',
+                'keterangan'=>$keterangan,
+            ]);
+            if($pengajuanSuratRekomendasi->nim != null){
+                $pesan = 'Pengajuan surat rekomendasi mahasiswa dengan nama '.$pengajuanSuratRekomendasi->mhs->nama.' ditolak';
+                NotifikasiMahasiswa::create([
+                    'nim'=>$pengajuanSuratRekomendasi->nim,
+                    'judul_notifikasi'=>'Surat Rekomendasi',
+                    'isi_notifikasi'=>'Pengajuan surat rekomendasi di tolak.',
+                    'link_notifikasi'=>url('mahasiswa/surat-rekomendasi')
+                ]);
+            }else{
+                $pesan = 'Pengajuan surat rekomendasi mahasiswa ditolak';
+            }
+        }catch(Exception $e){
+            DB::rollback();
+            $this->setFlashData('error','Gagal','Pengajuan surat rekomendasi gagal ditolak.');
+        }
+        DB::commit();
+        $this->setFlashData('success','Berhasil',$pesan);
         return redirect($this->segmentUser.'/surat-rekomendasi');
     }
 

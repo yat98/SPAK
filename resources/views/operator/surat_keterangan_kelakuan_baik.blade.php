@@ -298,6 +298,8 @@
                                                         Tolak Pengajuan
                                                     </button>
                                                 </form>`;
+                                    }else if(row.status == 'Ditolak'){
+                                        aksi = `<a href="${link+'/'+row.id}" class="dropdown-item pengajuan-surat-keterangan-detail" data-toggle="modal" data-target="#suratKeterangan">Detail</a>`;
                                     }else{
                                         aksi = `<a href="${linkSurat+'/'+row.id}" class="dropdown-item surat-keterangan-detail" data-toggle="modal" data-target="#suratKeterangan">Detail</a>`;
                                     }

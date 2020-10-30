@@ -2,31 +2,26 @@
 
 namespace App;
 
-use App\Traits\CompositeKey;
 use Illuminate\Database\Eloquent\Model;
 
 class DisposisiSuratKegiatanMahasiswa extends Model
 {
-    use CompositeKey;
-    
     protected $table = 'disposisi_surat_kegiatan_mahasiswa';
 
-    protected $primaryKey = ['id_pengajuan', 'nip'];
+    protected $primaryKey = 'id_pengajuan';
 
-    public $incrementing = false;
+    protected $dates = ['tanggal_terima','tanggal_surat'];
 
     protected $fillable = [
         'id_pengajuan',
-        'nip',
-        'nip_disposisi',
-        'catatan',
+        'nomor_agenda',
+        'hal',
+        'tanggal_terima',
+        'tanggal_surat',
+        'keterangan',
     ];
 
-    public function user(){
-        return $this->belongsTo('App\User','nip');
-    }
-
-    public function userDisposisi(){
-        return $this->belongsTo('App\User','nip_disposisi');
+    public function pengajuanSuratKegiatanMahasiswa(){
+        return $this->belongsTo('App\PengajuanSuratKegiatanMahasiswa','id_pengajuan');
     }
 }
