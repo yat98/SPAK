@@ -405,6 +405,12 @@
                 </a>
             </li>
         @endif
+        <li class="nav-item {{ ($halaman == 'laporan') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/laporan') }}">
+                <span class="menu-title">Laporan</span>
+                <i class="mdi mdi mdi mdi-file-pdf menu-icon"></i>
+            </a>
+        </li>
         <li class="nav-item {{ ($halaman == 'profil') ? 'active':'' }}">
             <a class="nav-link" href="{{ url(Request::segment(1).'/profil') }}">
                 <span class="menu-title">Ubah Profil</span>
@@ -557,6 +563,14 @@
             <a class="nav-link" href="{{ url(Request::segment(1).'/pendaftaran-cuti') }}">
                 <span class="menu-title">Pendaftaran Cuti</span>
                 <i class="mdi mdi mdi mdi-playlist-check menu-icon"></i>
+            </a>
+        </li>
+        @endif
+        @if(Session::get('jabatan') == 'subbagian pendidikan dan pengajaran' || Session::get('jabatan') == 'subbagian kemahasiswaan' || Session::get('jabatan') == 'subbagian umum & bmn' || Session::get('jabatan') == 'operator perpustakaan')
+        <li class="nav-item {{ ($halaman == 'laporan') ? 'active':'' }}">
+            <a class="nav-link" href="{{ url(Request::segment(1).'/laporan') }}">
+                <span class="menu-title">Laporan</span>
+                <i class="mdi mdi mdi mdi-file-pdf menu-icon"></i>
             </a>
         </li>
         @endif

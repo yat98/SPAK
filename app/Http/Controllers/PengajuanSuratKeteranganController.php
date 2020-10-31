@@ -395,7 +395,7 @@ class PengajuanSuratKeteranganController extends Controller
                 'nip'=>$user->nip,
                 'judul_notifikasi'=>ucwords($jenisSurat),
                 'isi_notifikasi'=>$isiNotifikasi,
-                'link_notifikasi'=>url('pimpinan/'.str_replace(' ', '_', $jenisSurat))
+                'link_notifikasi'=>url('pimpinan/'.str_replace(' ', '-', $jenisSurat))
             ]);
         }catch(Exception $e){
             DB::rollback();

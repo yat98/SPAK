@@ -233,7 +233,7 @@
                             "targets": 4,
                             "data": "aksi",
                             "render": function ( data, type, row, meta ) {
-                                 @if(Auth::user()->bagian == 'front office')
+                                @if(Auth::user()->bagian == 'front office')
                                     return `<div class="d-inline-block">
                                                 <a href="#" class="nav-link" id="aksi" data-toggle="dropdown" aria-expanded="true">    
                                                     <i class="mdi mdi mdi-arrow-down-drop-circle mdi-24px text-dark"></i>

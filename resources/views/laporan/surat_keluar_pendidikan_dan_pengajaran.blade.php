@@ -103,11 +103,12 @@
         <div class="border"></div>
         <h2 class="text-center" style="margin-bottom:30px">Laporan Surat Keluar <br> Subbagian Pendidikan Dan Pengajaran Tahun {{ $tahun }}</h2>
         <p style="margin-bottom:10px">1. Surat Keterangan Aktif Kuliah</p>
-         <table class="table">
+        <table class="table text-center">
             <thead>
                 <tr class="table">
                     <th class="table"> No. </th>
                     <th class="table"> Nomor Surat</th>
+                    <th class="table"> Kode Surat</th>
                     <th class="table"> Nama Mahasiswa</th>
                     <th class="table"> IPK</th>
                     <th class="table"> Dibuat</th>
@@ -116,24 +117,23 @@
             <tbody>
                 @foreach ($suratLulusList as $suratLulus)
                 <tr class="table">
-                    @php
-                        $kode = explode('/',$suratLulus->kodeSurat->kode_surat);
-                    @endphp
                     <td class="table"> {{ $loop->iteration }}</td>
-                    <td class="table"> {{ 'B/'.$suratLulus->nomor_surat.'/'.$kode[0].'.4/'.$kode[1].'/'.$suratLulus->created_at->year }}</td>
+                    <td class="table"> {{ $suratLulus->nomor_surat }}</td>
+                    <td class="table"> {{ $suratLulus->kodeSurat->kode_surat }}</td>
                     <td class="table"> {{ $suratLulus->pengajuanSuratKeteranganLulus->mahasiswa->nama }}</td>
-                    <td class="table"> {{ $suratLulus->pengajuanSuratKeteranganLulus->ipk }}</td>
+                    <td class="table"> {{ $suratLulus->pengajuanSuratKeteranganLulus->mahasiswa->ipk }}</td>
                     <td class="table"> {{ $suratLulus->created_at->isoFormat('D MMMM Y') }}</td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
         <p style="margin-bottom:10px;margin-top:10px">2. Surat Permohonan Pengambilan Material</p>
-         <table class="table">
+         <table class="table text-center">
             <thead>
                 <tr class="table">
                     <th class="table"> No. </th>
                     <th class="table"> Nomor Surat</th>
+                    <th class="table"> Kode Surat</th>
                     <th class="table"> Nama Kegiatan</th>
                     <th class="table"> Dibuat</th>
                 </tr>
@@ -141,11 +141,9 @@
             <tbody>
                 @foreach ($suratMaterialList as $suratMaterial)
                 <tr class="table">
-                    @php
-                        $kode = explode('/',$suratMaterial->kodeSurat->kode_surat);
-                    @endphp
                     <td class="table"> {{ $loop->iteration }}</td>
-                    <td class="table"> {{ 'B/'.$suratMaterial->nomor_surat.'/'.$kode[0].'.4/'.$kode[1].'/'.$suratMaterial->created_at->year }}</td>
+                    <td class="table"> {{ $suratMaterial->nomor_surat }}</td>
+                    <td class="table"> {{ $suratMaterial->kodeSurat->kode_surat }}</td>
                     <td class="table"> {{ $suratMaterial->pengajuanSuratPermohonanPengambilanMaterial->nama_kegiatan }}</td>
                     <td class="table"> {{ $suratMaterial->created_at->isoFormat('D MMMM Y') }}</td>
                 </tr>
@@ -153,11 +151,12 @@
             </tbody>
         </table>
         <p style="margin-bottom:10px;margin-top:10px">3. Surat Permohonan Survei</p>
-        <table class="table">
+        <table class="table text-center">
             <thead>
                 <tr>
                     <th class="table"> No. </th>
                     <th class="table"> Nomor Surat</th>
+                    <th class="table"> Kode Surat</th>
                     <th class="table"> Nama Mahasiswa</th>
                     <th class="table"> Dibuat</th>
                 </tr>
@@ -165,11 +164,9 @@
             <tbody>
                 @foreach ($suratSurveiList as $suratSurvei)
                 <tr>
-                    @php
-                        $kode = explode('/',$suratSurvei->kodeSurat->kode_surat);
-                    @endphp
                     <td class="table"> {{ $loop->iteration  }}</td>
-                    <td class="table"> {{ 'B/'.$suratSurvei->nomor_surat.'/'.$kode[0].'.1/'.$kode[1].'/'.$suratSurvei->created_at->year }}</td>
+                    <td class="table"> {{ $suratSurvei->nomor_surat }}</td>
+                    <td class="table"> {{ $suratSurvei->kodeSurat->kode_surat }}</td>
                     <td class="table"> {{ $suratSurvei->pengajuanSuratPermohonanSurvei->mahasiswa->nama }}</td>
                     <td class="table"> {{ $suratSurvei->created_at->isoFormat('D MMMM Y') }}</td>
                 </tr>
@@ -177,11 +174,12 @@
             </tbody>
         </table>
         <p style="margin-bottom:10px;margin-top:10px">4. Surat Rekomendasi Penelitian</p>
-        <table class="table">
+        <table class="table text-center">
             <thead>
                 <tr class="table">
                     <th class="table"> No. </th>
                     <th class="table"> Nomor Surat</th>
+                    <th class="table"> Kode Surat</th>
                     <th class="table"> Nama Mahasiswa</th>
                     <th class="table"> Judul</th>
                     <th class="table"> Dibuat</th>
@@ -190,12 +188,9 @@
             <tbody>
                 @foreach ($suratPenelitianList as $suratPenelitian)
                 <tr>
-                    @php
-                        $kode = explode('/',$suratPenelitian->kodeSurat->kode_surat);
-                    @endphp
                     <td class="table"> {{ $loop->iteration }}</td>
-                    <td class="table"> {{ 'B/'.$suratPenelitian->nomor_surat.'/'.$kode[0].'.1/'.$kode[1].'/'.$suratPenelitian->created_at->year }}</td>
-                    <td class="table"> {{ $suratPenelitian->pengajuanSuratRekomendasiPenelitian->mahasiswa->nama }}</td>
+                    <td class="table"> {{ $suratPenelitian->nomor_surat }}</td>
+                    <td class="table"> {{ $suratPenelitian->kodeSurat->kode_surat }}</td>
                     <td class="table"> {{ $suratPenelitian->pengajuanSuratRekomendasiPenelitian->mahasiswa->nama }}</td>
                     <td class="table"> {{ $suratPenelitian->pengajuanSuratRekomendasiPenelitian->judul }}</td>
                     <td class="table"> {{ $suratPenelitian->created_at->isoFormat('D MMMM Y') }}</td>
@@ -204,11 +199,12 @@
             </tbody>
         </table>
         <p style="margin-bottom:10px;margin-top:10px">5. Surat Permohonan Pengambilan Data Awal</p>
-         <table class="table">
+         <table class="table text-center">
             <thead>
                 <tr class="table">
                     <th class="table"> No. </th>
                     <th class="table"> Nomor Surat</th>
+                    <th class="table"> Kode Surat</th>
                     <th class="table"> Nama Mahasiswa</th>
                     <th class="table"> Dibuat</th>
                 </tr>
@@ -216,11 +212,9 @@
             <tbody>
                 @foreach ($suratDataAwalList as $suratDataAwal)
                 <tr class="table">
-                    @php
-                        $kode = explode('/',$suratDataAwal->kodeSurat->kode_surat);
-                    @endphp
                     <td class="table"> {{ $loop->iteration }}</td>
-                    <td class="table"> {{ 'B/'.$suratDataAwal->nomor_surat.'/'.$kode[0].'.1/'.$kode[1].'/'.$suratDataAwal->created_at->year }}</td>
+                    <td class="table"> {{ $suratDataAwal->nomor_surat }}</td>
+                    <td class="table"> {{ $suratDataAwal->kodeSurat->kode_surat }}</td>
                     <td class="table"> {{ $suratDataAwal->pengajuanSuratPermohonanPengambilanDataAwal->mahasiswa->nama }}</td>
                     <td class="table"> {{ $suratDataAwal->created_at->isoFormat('D MMMM Y') }}</td>
                 </tr>

@@ -504,6 +504,9 @@ Route::group(['prefix' => 'operator'],function(){
         });
         // Detail Mahasiswa
         Route::get('detail/mahasiswa/{mahasiswa}','MahasiswaController@show');
+        // Laporan
+        Route::get('laporan','LaporanController@index');
+        Route::post('laporan','LaporanController@post');
         // Profil
         Route::get('profil','OperatorController@profil');
         Route::get('profil/password','OperatorController@profilPassword');
@@ -962,6 +965,9 @@ Route::group(['prefix' => 'pimpinan'], function () {
         // Tanda Tangan
         Route::get('tanda-tangan','UserController@indexTandaTangan');
         Route::post('tanda-tangan','UserController@updateTandaTangan');
+        // Laporan
+        Route::get('laporan','LaporanController@index');
+        Route::post('laporan','LaporanController@post');
         // Profil
         Route::get('profil','UserController@profil');
         Route::get('profil/password','UserController@profilPassword');

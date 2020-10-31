@@ -25,7 +25,7 @@
                                 <hr class="mb-4">
                                 <div class="row mb-3">
                                     <div class="col-sm-12">
-                                        {{ Form::open(['url'=>'pegawai/laporan']) }}
+                                        {{ Form::open(['url'=>'operator/laporan']) }}
                                         <div class="form-row">
                                             <div class="form-group col-md-4">
                                                 <label for="jenis_surat">Jenis Surat</label>

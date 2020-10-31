@@ -101,25 +101,26 @@
    <div class="container">
         @include('surat.kop_surat')
         <div class="border"></div>
-        <h2 class="text-center" style="margin-bottom:30px">Laporan Surat Masuk <br> Subbagian Kemahasiswaan Tahun {{ $tahun }}</h2>
-         <table class="table">
+        <h2 class="text-center" style="margin-bottom:30px">Laporan Surat Keluar <br> Subbagian Umum Dan BMN Tahun {{ $tahun }}</h2>
+        <p style="margin-bottom:10px">1. Surat Keterangan Bebas Perlengkapan</p>
+         <table class="table text-center">
             <thead>
-                <tr>
+                <tr class="table">
                     <th class="table"> No. </th>
                     <th class="table"> Nomor Surat</th>
-                    <th class="table"> Perihal</th>
-                    <th class="table"> Instansi</th>
+                    <th class="table"> Kode Surat</th>
+                    <th class="table"> Nama Mahasiswa</th>
                     <th class="table"> Dibuat</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($suratMasukList as $suratMasuk)
-                <tr>
-                    <td> {{ $loop->iteration + $perPage * ($suratMasukList->currentPage() - 1)  }}</td>
-                    <td> {{ $suratMasuk->nomor_surat }}</td>
-                    <td> {{ $suratMasuk->perihal }}</td>
-                    <td> {{ $suratMasuk->instansi }}</td>
-                    <td> {{ $suratMasuk->created_at->isoFormat('D MMMM Y') }}</td>
+                @foreach ($suratPerlengkapanList as $suratPerlengkapan)
+                <tr class="table">
+                    <td class="table"> {{ $loop->iteration }}</td>
+                    <td class="table"> {{ $suratPerlengkapan->nomor_surat }}</td>
+                    <td class="table"> {{ $suratPerlengkapan->kodeSurat->kode_surat }}</td>
+                    <td class="table"> {{ $suratPerlengkapan->pengajuanSuratKeteranganBebasPerlengkapan->mahasiswa->nama }}</td>
+                    <td class="table"> {{ $suratPerlengkapan->created_at->isoFormat('D MMMM Y') }}</td>
                 </tr>
                 @endforeach
             </tbody>

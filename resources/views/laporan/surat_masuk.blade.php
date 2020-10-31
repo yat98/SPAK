@@ -101,7 +101,7 @@
    <div class="container">
         @include('surat.kop_surat')
         <div class="border"></div>
-        <h2 class="text-center" style="margin-bottom:30px">Laporan Surat Masuk <br> Subbagian Pendidikan Dan Pengajaran Tahun {{ $tahun }}</h2>
+        <h2 class="text-center" style="margin-bottom:30px">Laporan Surat Masuk {{ $tahun }}</h2>
          <table class="table">
             <thead>
                 <tr>
@@ -115,11 +115,11 @@
             <tbody>
                 @foreach ($suratMasukList as $suratMasuk)
                 <tr>
-                    <td> {{ $loop->iteration + $perPage * ($suratMasukList->currentPage() - 1)  }}</td>
-                    <td> {{ $suratMasuk->nomor_surat }}</td>
-                    <td> {{ $suratMasuk->perihal }}</td>
-                    <td> {{ $suratMasuk->instansi }}</td>
-                    <td> {{ $suratMasuk->created_at->isoFormat('D MMMM Y') }}</td>
+                    <td class="table"> {{ $loop->iteration }}</td>
+                    <td class="table"> {{ $suratMasuk->nomor_surat }}</td>
+                    <td class="table"> {{ $suratMasuk->perihal }}</td>
+                    <td class="table"> {{ $suratMasuk->instansi }}</td>
+                    <td class="table"> {{ $suratMasuk->created_at->isoFormat('D MMMM Y') }}</td>
                 </tr>
                 @endforeach
             </tbody>

@@ -209,6 +209,9 @@ class NavServiceProvider extends ServiceProvider
             }else if ($segment == 'waktu-cuti') {
                 $show = false;
                 $halaman = 'waktu-cuti';
+            } else if ($segment == 'laporan') {
+                $show = false;
+                $halaman = 'laporan';
             }
         } else if (request()->segment(1) == 'operator'){
             $posisi = 'operator';
@@ -272,6 +275,8 @@ class NavServiceProvider extends ServiceProvider
             } else if ($segment == 'surat-keterangan-bebas-perlengkapan') {
                 $show = true;
                 $halaman = 'surat-keterangan-bebas-perlengkapan';
+            } else if ($segment == 'laporan') {
+                $halaman = 'laporan';
             }
         }
         if ($segment == 'notifikasi') {
