@@ -51,8 +51,12 @@ class SuratKegiatanMahasiswaController extends Controller
             $countAllPengajuan = $countAllPengajuan->where('id_operator',Auth::user()->id);
         }
 
-        $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::whereIn('status',['disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi kabag','disposisi kasubag','disposisi selesai'])
+        if(Auth::user()->bagian == 'subbagian kemahasiswaan'){
+            $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::whereIn('status',['disposisi','disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi kabag','disposisi kasubag','disposisi selesai'])
                                     ->count();
+        }else{
+            $countAllDisposisi = PengajuanSuratKegiatanMahasiswa::count();
+        }
 
         $countAllSurat = SuratKegiatanMahasiswa::join('pengajuan_surat_kegiatan_mahasiswa','surat_kegiatan_mahasiswa.id_pengajuan','=','pengajuan_surat_kegiatan_mahasiswa.id')
                                             ->whereNotIn('pengajuan_surat_kegiatan_mahasiswa.status',['diajukan'])

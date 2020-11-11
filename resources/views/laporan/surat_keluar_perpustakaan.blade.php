@@ -118,7 +118,7 @@
                 <tr class="table">
                     <td class="table"> {{ $loop->iteration }}</td>
                     <td class="table"> {{ $suratPerpustakaan->nomor_surat }}</td>
-                    <td class="table"> {{ $suratPerpustakaan->kodeSurat->kode_surat }}</td>
+                    <td class="table"> {{ $suratPerpustakaan->kode_surat }}</td>
                     <td class="table"> {{ $suratPerpustakaan->pengajuanSuratKeteranganBebasPerpustakaan->mahasiswa->nama }}</td>
                     <td class="table"> {{ $suratPerpustakaan->created_at->isoFormat('D MMMM Y') }}</td>
                 </tr>

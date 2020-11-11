@@ -23,7 +23,7 @@ class CreatePengajuanSuratKegiatanMahasiswaTable extends Migration
             $table->string('file_surat_permohonan_kegiatan');
             $table->string('file_proposal_kegiatan');
             $table->text('lampiran_panitia');
-            $table->enum('status',['diajukan','disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi kabag','disposisi kasubag','disposisi selesai','selesai','ditolak','verifikasi kasubag','verifikasi kabag','menunggu tanda tangan'])->default('diajukan');
+            $table->enum('status',['diajukan','disposisi','disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi kabag','disposisi kasubag','disposisi selesai','selesai','ditolak','verifikasi kasubag','verifikasi kabag','menunggu tanda tangan'])->default('diajukan');
             $table->string('keterangan')->default('-');
             $table->timestamps();
         });

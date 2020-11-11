@@ -219,10 +219,16 @@ return DataTables::of($pengajuanSurat)
 
     public function getAllDisposisiPimpinan(){        
         if(isset(Auth::user()->id)){
-            $pengajuanSurat = PengajuanSuratKegiatanMahasiswa::join('ormawa','pengajuan_surat_kegiatan_mahasiswa.id_ormawa','=','ormawa.id')
-                                    ->whereIn('pengajuan_surat_kegiatan_mahasiswa.status',['disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi kabag','disposisi kasubag','disposisi selesai'])
+            if(Auth::user()->bagian == 'subbagian kemahasiswaan'){
+                $pengajuanSurat = PengajuanSuratKegiatanMahasiswa::join('ormawa','pengajuan_surat_kegiatan_mahasiswa.id_ormawa','=','ormawa.id')
+                                    ->whereIn('pengajuan_surat_kegiatan_mahasiswa.status',['disposisi','disposisi dekan','disposisi wd1','disposisi wd2','disposisi wd3','disposisi kabag','disposisi kasubag','disposisi selesai'])
                                     ->select(['pengajuan_surat_kegiatan_mahasiswa.*','ormawa.nama']) 
                                     ->with(['mahasiswa','ormawa','operator']);
+            }else{
+                $pengajuanSurat = PengajuanSuratKegiatanMahasiswa::join('ormawa','pengajuan_surat_kegiatan_mahasiswa.id_ormawa','=','ormawa.id')
+                                    ->select(['pengajuan_surat_kegiatan_mahasiswa.*','ormawa.nama']) 
+                                    ->with(['mahasiswa','ormawa','operator']);
+            }
         }elseif(isset(Auth::user()->nip)){
             if(Auth::user()->jabatan == 'kabag tata usaha'){
                 $pengajuanSurat = PengajuanSuratKegiatanMahasiswa::join('ormawa','pengajuan_surat_kegiatan_mahasiswa.id_ormawa','=','ormawa.id')
@@ -286,32 +292,52 @@ return DataTables::of($pengajuanSurat)
 
     public function verification(Request $request){
         $status='verifikasi kabag';
-        $suratKegiatan = SuratKegiatanMahasiswa::findOrFail($request->id);
-        $user = $suratKegiatan->user;
-
         $isiNotifikasi = 'Verifikasi surat kegiatan mahasiswa';
 
-        if(Auth::user()->jabatan == 'kabag tata usaha' || $suratKegiatan->user->jabatan == 'kabag tata usaha'){
-            $status='menunggu tanda tangan';
-            $isiNotifikasi = 'Tanda tangan surat kegiatan mahasiswa';
+        if(isset(Auth::user()->nip)){
+            $suratKegiatan = SuratKegiatanMahasiswa::findOrFail($request->id);
+            $user = $suratKegiatan->user;
+            if(Auth::user()->jabatan == 'kabag tata usaha' || $suratKegiatan->user->jabatan == 'kabag tata usaha'){
+                $status='menunggu tanda tangan';
+                $isiNotifikasi = 'Tanda tangan surat kegiatan mahasiswa';
+            }
+        }else{
+            $status='disposisi';
+            $pengajuanKegiatan = PengajuanSuratKegiatanMahasiswa::findOrFail($request->id);
+            $operator = Operator::where('bagian','sespri dekan')->first();
         }
 
         DB::beginTransaction();
         try{
-            $suratKegiatan->pengajuanSuratKegiatanMahasiswa->update([
-                'status'=>$status,
-            ]);
+            if(isset(Auth::user()->nip)){
+                $suratKegiatan->pengajuanSuratKegiatanMahasiswa->update([
+                    'status'=>$status,
+                ]);
+            }else{
+                $pengajuanKegiatan->update([
+                    'status'=>$status,
+                ]);
+            }
             
             if($status == 'verifikasi kabag'){
                 $user = User::where('jabatan','kabag tata usaha')->where('status_aktif','aktif')->first();
             }
 
-            NotifikasiUser::create([
-                'nip'=>$user->nip,
-                'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
-                'isi_notifikasi'=>$isiNotifikasi,
-                'link_notifikasi'=>url('pimpinan/surat-kegiatan-mahasiswa')
-            ]);
+            if (isset(Auth::user()->nip)){
+                NotifikasiUser::create([
+                    'nip'=>$user->nip,
+                    'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
+                    'isi_notifikasi'=>$isiNotifikasi,
+                    'link_notifikasi'=>url('pimpinan/surat-kegiatan-mahasiswa')
+                ]);
+            }else{
+                NotifikasiOperator::create([
+                    'id_operator'=>$operator->id,
+                    'judul_notifikasi'=>'Surat Kegiatan Mahasiswa',
+                    'isi_notifikasi'=>'Buat disposisi surat kegiatan mahasiswa',
+                    'link_notifikasi'=>url('operator/surat-kegiatan-mahasiswa')
+                ]);
+            }
         }catch(Exception $e){
             DB::rollback();
             $this->setFlashData('error','Pengajuan Gagal','Surat kegiatan mahasiswa gagal diverifikasi.');

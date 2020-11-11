@@ -365,6 +365,7 @@ Route::group(['prefix' => 'operator'],function(){
         Route::get('surat-kegiatan-mahasiswa/disposisi/{pengajuan_kegiatan_mahasiswa}/cetak','SuratKegiatanMahasiswaController@cetakDisposisi');
         Route::get('surat-kegiatan-mahasiswa/{surat_kegiatan_mahasiswa}/cetak','SuratKegiatanMahasiswaController@cetak');
         Route::group(['prefix'=>'surat-kegiatan-mahasiswa/pengajuan'],function(){
+            Route::patch('/verifikasi/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@verification');
             Route::get('/disposisi/{pengajuan_kegiatan_mahasiswa}','PengajuanSuratKegiatanMahasiswaController@showDisposisi');
             Route::get('/create','PengajuanSuratKegiatanMahasiswaController@createPengajuan');
             Route::get('/all','PengajuanSuratKegiatanMahasiswaController@getAllPengajuan');

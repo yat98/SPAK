@@ -434,7 +434,7 @@
             </a>
             <div class="collapse {{ ($show) ? 'show':''}}" id="ui-basic">
                 <ul class="nav flex-column sub-menu overflow-hidden">
-                    @if(Session::get('jabatan') != 'operator perpustakaan')
+                    @if(Session::get('jabatan') != 'operator perpustakaan' && Session::get('jabatan') != 'sespri dekan')
                         <li class="nav-item">
                             <a class="nav-link {{ ($halaman == 'surat-masuk') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-masuk') }}">
                                 Surat Masuk
@@ -545,6 +545,10 @@
                             <a class="nav-link {{ ($halaman == 'surat-keterangan-bebas-perpustakaan') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-keterangan-bebas-perpustakaan') }}">
                                 Surat Keterangan <br> Bebas Perpustakaan
                             </a>
+                        </li>
+                    @elseif(Session::get('jabatan') == 'sespri dekan')
+                        <li class="nav-item">
+                            <a class="nav-link {{ ($halaman == 'surat-kegiatan-mahasiswa') ? 'active':'' }}" href="{{ asset(Request::segment(1).'/surat-kegiatan-mahasiswa') }}">Surat Kegiatan Mahasiswa</a>
                         </li>
                     @endif
                 </ul>

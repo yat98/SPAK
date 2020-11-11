@@ -17,7 +17,7 @@ class CreateSuratKegiatanMahasiswaTable extends Migration
             $table->integer('id_pengajuan')->unsigned()->primary();
             $table->integer('id_kode_surat')->unsigned();
             $table->integer('id_operator')->unsigned();
-            $table->char('nip',)->index();
+            $table->char('nip',18)->index();
             $table->char('nomor_surat',6);
             $table->text('menimbang');
             $table->text('mengingat');

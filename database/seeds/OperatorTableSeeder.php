@@ -20,7 +20,8 @@ class OperatorTableSeeder extends Seeder
                         'subbagian pendidikan dan pengajaran',
                         'subbagian umum & bmn',
                         'front office',
-                        'operator perpustakaan'
+                        'operator perpustakaan',
+                        'sespri dekan'
         ];
 
         foreach ($bagianList as $bagian) {
